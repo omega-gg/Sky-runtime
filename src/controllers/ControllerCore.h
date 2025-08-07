@@ -30,13 +30,18 @@
 #include <WController>
 #include <WFileWatcher>
 
+// Application includes
+#include <DataLocal>
+
 // Defines
 #define core ControllerCore::instance()
 
 // Forward declarations
 class WControllerFileReply;
+class WCache;
 class WBackendIndex;
 class WDeclarativePlayer;
+class DataOnline;
 
 class ControllerCore : public WController
 {
@@ -62,6 +67,11 @@ public: // Interface
     Q_INVOKABLE void clearComponentCache() const;
 
 public: // Static functions
+#ifndef SK_NO_TORRENT
+    Q_INVOKABLE static void applyTorrentOptions(int connections,
+                                                int upload, int download, int cache);
+#endif
+
     Q_INVOKABLE static void applyBackend(WDeclarativePlayer * player);
 
     Q_INVOKABLE static QImage generateTagSource(const QString & source);
@@ -89,6 +99,11 @@ private: // Variables
 #ifdef SK_DESKTOP
     QString _argument;
 #endif
+
+    DataLocal    _local;
+    DataOnline * _online;
+
+    WCache * _cache;
 
     QString _path;
 

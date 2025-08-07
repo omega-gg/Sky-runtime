@@ -124,32 +124,11 @@ echo "-------------"
 
 cd "$Sky"
 
-sh deploy.sh $1
+sh deploy.sh $1 tools
 
 cd -
 
 path="$Sky/deploy"
-
-if [ $os = "windows" ]; then
-
-    cp "$path"/*Sk*.dll $deploy
-
-elif [ $1 = "macOS" ]; then
-
-    cp "$path"/libSk*.dylib $deploy
-
-elif [ $1 = "iOS" ]; then
-
-    cp "$path"/libSk*.a $deploy
-
-elif [ $1 = "linux" ]; then
-
-    cp "$path"/libSk*.so $deploy
-
-elif [ $1 = "android" ]; then
-
-    cp "$path"/libSk*_*.so $deploy
-fi
 
 #--------------------------------------------------------------------------------------------------
 # Qt

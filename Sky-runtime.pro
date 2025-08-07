@@ -1,5 +1,13 @@
 SK = $$_PRO_FILE_PWD_/../Sky
 
+SK_CORE       = $$SK/src/SkCore/src
+SK_GUI        = $$SK/src/SkGui/src
+SK_BARCODE    = $$SK/src/SkBarcode/src
+SK_BACKEND    = $$SK/src/SkBackend/src
+SK_MEDIA      = $$SK/src/SkMedia/src
+SK_MULTIMEDIA = $$SK/src/SkMultimedia/src
+SK_TORRENT    = $$SK/src/SkTorrent/src
+
 TARGET = sky
 
 !android:DESTDIR = $$_PRO_FILE_PWD_/bin
@@ -85,6 +93,23 @@ unix:QMAKE_LFLAGS += "-Wl,-rpath,'\$$ORIGIN'"
 include($$SK/src/Sk.pri)
 include(src/global/global.pri)
 include(src/controllers/controllers.pri)
+include(src/kernel/kernel.pri)
+include(src/io/io.pri)
+include(src/thread/thread.pri)
+include(src/network/network.pri)
+include(src/image/image.pri)
+include(src/graphicsview/graphicsview.pri)
+include(src/declarative/declarative.pri)
+include(src/models/models.pri)
+include(src/media/media.pri)
+include(src/vlc/vlc.pri)
+include(src/torrent/torrent.pri)
+
+include(src/3rdparty/qtsingleapplication/qtsingleapplication.pri)
+include(src/3rdparty/zlib/zlib.pri)
+include(src/3rdparty/quazip/quazip.pri)
+include(src/3rdparty/libcharsetdetect/libcharsetdetect.pri)
+include(src/3rdparty/zxing-cpp/zxing-cpp.pri)
 
 INCLUDEPATH += $$SK/include/SkCore \
                $$SK/include/SkGui \
@@ -94,7 +119,7 @@ INCLUDEPATH += $$SK/include/SkCore \
                $$SK/include/SkMultimedia \
                $$SK/include/SkTorrent \
                $$SK/include \
-               src/controllers
+               $$_PRO_FILE_PWD_/include/Sky-runtime
 
 unix:contains(QT_MAJOR_VERSION, 4) {
     INCLUDEPATH += $$SK/include/$$QTX \
@@ -115,25 +140,25 @@ unix:!macx:!ios:!android:greaterThan(QT_MAJOR_VERSION, 4) {
     INCLUDEPATH += $$SK/include/$$QTX/QtDBus
 }
 
-CONFIG(debug, debug|release) {
-    LIBS += -L$$SK/lib -lSkCoreD \
-            -L$$SK/lib -lSkGuiD \
-            -L$$SK/lib -lSkBarcodeD \
-            -L$$SK/lib -lSkBackendD \
-            -L$$SK/lib -lSkMediaD \
-            -L$$SK/lib -lSkMultimediaD
+# CONFIG(debug, debug|release) {
+#     LIBS += -L$$SK/lib -lSkCoreD \
+#             -L$$SK/lib -lSkGuiD \
+#             -L$$SK/lib -lSkBarcodeD \
+#             -L$$SK/lib -lSkBackendD \
+#             -L$$SK/lib -lSkMediaD \
+#             -L$$SK/lib -lSkMultimediaD
 
-    !ios:LIBS += -L$$SK/lib -lSkTorrentD
-} else {
-    LIBS += -L$$SK/lib -lSkCore \
-            -L$$SK/lib -lSkGui \
-            -L$$SK/lib -lSkBarcode \
-            -L$$SK/lib -lSkBackend \
-            -L$$SK/lib -lSkMedia \
-            -L$$SK/lib -lSkMultimedia
+#     !ios:LIBS += -L$$SK/lib -lSkTorrentD
+# } else {
+#     LIBS += -L$$SK/lib -lSkCore \
+#             -L$$SK/lib -lSkGui \
+#             -L$$SK/lib -lSkBarcode \
+#             -L$$SK/lib -lSkBackend \
+#             -L$$SK/lib -lSkMedia \
+#             -L$$SK/lib -lSkMultimedia
 
-    !ios:LIBS += -L$$SK/lib -lSkTorrent
-}
+#     !ios:LIBS += -L$$SK/lib -lSkTorrent
+# }
 
 #win32:contains(QT_MAJOR_VERSION, 5) {
 #    LIBS += -lopengl32
@@ -262,6 +287,7 @@ OTHER_FILES += environment.sh \
                content/generate.sh \
                content/Main.qml \
                content/Gui.qml \
+               include/generate.sh \
                dist/sky.rc \
                dist/script/start.sh \
                dist/iOS/Info.plist \

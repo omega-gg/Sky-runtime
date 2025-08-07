@@ -108,6 +108,9 @@
 #endif
 #include <WBarcodeWriter>
 
+// Application includes
+#include <DataOnline>
+
 W_INIT_CONTROLLER(ControllerCore)
 
 //-------------------------------------------------------------------------------------------------
@@ -115,6 +118,9 @@ W_INIT_CONTROLLER(ControllerCore)
 
 // NOTE: Also check DataLocal_patch, version_windows.
 static const QString CORE_VERSION = "3.0.0-2";
+
+static const int CORE_CACHE        = 1048576 * 100; // 100 megabytes
+static const int CORE_CACHE_PIXMAP = 1048576 *  30; //  30 megabytes
 
 #ifndef SK_DEPLOY
 #ifdef Q_OS_MACOS
@@ -132,6 +138,10 @@ static const QString PATH_BACKEND = "../../backend";
 
 ControllerCore::ControllerCore() : WController()
 {
+    _online = NULL;
+
+    _cache = NULL;
+
     _index = NULL;
 
     //---------------------------------------------------------------------------------------------
@@ -355,7 +365,13 @@ ControllerCore::ControllerCore() : WController()
 
 /* Q_INVOKABLE */ void ControllerCore::load()
 {
-    if (_index) return;
+    if (_cache) return;
+
+    //---------------------------------------------------------------------------------------------
+    // DataLocal
+
+    // NOTE: We make sure the storage folder is created.
+    _local.createPath();
 
     //---------------------------------------------------------------------------------------------
     // Message handler
@@ -372,6 +388,7 @@ ControllerCore::ControllerCore() : WController()
 
     qDebug("Path storage: %s", _path.C_STR);
     qDebug("Path log:     %s", wControllerFile->pathLog().C_STR);
+    qDebug("Path config:  %s", _local.getFilePath().C_STR);
 
     //---------------------------------------------------------------------------------------------
     // Controllers
@@ -389,11 +406,53 @@ ControllerCore::ControllerCore() : WController()
     W_CREATE_CONTROLLER(WControllerMedia);
 #endif
 
+#ifndef SK_NO_TORRENT
+    W_CREATE_CONTROLLER_2(WControllerTorrent, _path + "/torrents", _local._torrentPort);
+#endif
+
     //---------------------------------------------------------------------------------------------
     // Log
 
 #ifndef SK_DEPLOY
     wControllerMedia->startLog();
+#endif
+
+    //---------------------------------------------------------------------------------------------
+    // Cache
+
+    _cache = new WCache(_path + "/cache", CORE_CACHE);
+
+    wControllerFile->setCache(_cache);
+
+    //---------------------------------------------------------------------------------------------
+    // PixmapCache
+
+    WPixmapCache::setSizeMax(CORE_CACHE_PIXMAP);
+
+    //---------------------------------------------------------------------------------------------
+    // LoaderVbml
+
+    wControllerPlaylist->registerLoader(WBackendNetQuery::TypeVbml, new WLoaderVbml(this));
+
+    //---------------------------------------------------------------------------------------------
+    // LoaderBarcode
+
+    wControllerPlaylist->registerLoader(WBackendNetQuery::TypeImage, new WLoaderBarcode(this));
+
+#ifndef SK_NO_TORRENT
+    //---------------------------------------------------------------------------------------------
+    // LoaderTorrent
+
+    WLoaderTorrent * loaderTorrent = new WLoaderTorrent(this);
+
+    wControllerPlaylist->registerLoader(WBackendNetQuery::TypeTorrent, loaderTorrent);
+    wControllerTorrent ->registerLoader(WBackendNetQuery::TypeTorrent, loaderTorrent);
+
+    //---------------------------------------------------------------------------------------------
+    // Torrents
+
+    applyTorrentOptions(_local._torrentConnections,
+                        _local._torrentUpload, _local._torrentDownload, _local._torrentCache);
 #endif
 
     //---------------------------------------------------------------------------------------------
@@ -417,11 +476,20 @@ ControllerCore::ControllerCore() : WController()
     else createIndex();
 
     //---------------------------------------------------------------------------------------------
+    // DataOnline
+
+    _online = new DataOnline(this);
+
+    //---------------------------------------------------------------------------------------------
     // QML
+
+    qmlRegisterType<DataOnline>("Sky", 1,0, "DataOnline");
 
     wControllerDeclarative->setContextProperty("controllerFile",     wControllerFile);
     wControllerDeclarative->setContextProperty("controllerNetwork",  wControllerNetwork);
     wControllerDeclarative->setContextProperty("controllerPlaylist", wControllerPlaylist);
+
+    wControllerDeclarative->setContextProperty("online", _online);
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -450,6 +518,19 @@ ControllerCore::ControllerCore() : WController()
 //-------------------------------------------------------------------------------------------------
 // Static functions
 //-------------------------------------------------------------------------------------------------
+
+#ifndef SK_NO_TORRENT
+
+/* Q_INVOKABLE static */ void ControllerCore::applyTorrentOptions(int connections,
+                                                                  int upload, int download,
+                                                                  int cache)
+{
+    wControllerTorrent->setOptions(connections, upload * 1024, download * 1024);
+
+    wControllerTorrent->setSizeMax(qint64(cache) * 1048576);
+}
+
+#endif
 
 /* Q_INVOKABLE static */ void ControllerCore::applyBackend(WDeclarativePlayer * player)
 {
