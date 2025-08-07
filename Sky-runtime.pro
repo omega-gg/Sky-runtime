@@ -253,7 +253,9 @@ macx:ICON = dist/icon.icns
 
 RC_FILE = dist/sky.rc
 
-OTHER_FILES += configure.sh \
+OTHER_FILES += environment.sh \
+               3rdparty.sh \
+               configure.sh \
                build.sh \
                deploy.sh \
                README.md \
