@@ -119,10 +119,10 @@ static const QString CORE_VERSION = "3.0.0-2";
 #ifndef SK_DEPLOY
 #ifdef Q_OS_MACOS
 static const QString PATH_STORAGE = "/../../../storage";
-static const QString PATH_BACKEND = "../../../../../../../backend";
+static const QString PATH_BACKEND = "../../../../../backend";
 #else
 static const QString PATH_STORAGE = "/storage";
-static const QString PATH_BACKEND = "../../../../backend";
+static const QString PATH_BACKEND = "../../backend";
 #endif
 #endif
 
@@ -356,6 +356,22 @@ ControllerCore::ControllerCore() : WController()
 /* Q_INVOKABLE */ void ControllerCore::load()
 {
     if (_index) return;
+
+    //---------------------------------------------------------------------------------------------
+    // Message handler
+
+    // FIXME Qt4.8.7: qInstallMsgHandler breaks QML 'Keys' events.
+#ifndef QT_4
+    wControllerFile->initMessageHandler();
+#endif
+
+    //---------------------------------------------------------------------------------------------
+    // Paths
+
+    qDebug("Sky runtime %s", sk->version().C_STR);
+
+    qDebug("Path storage: %s", _path.C_STR);
+    qDebug("Path log:     %s", wControllerFile->pathLog().C_STR);
 
     //---------------------------------------------------------------------------------------------
     // Controllers

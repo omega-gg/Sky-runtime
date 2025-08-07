@@ -33,6 +33,11 @@ Item
 
     property bool ui: false
 
+    property int showConsole: 0
+    // 0: hidden
+    // 1: visible
+    // 2: expanded
+
     //---------------------------------------------------------------------------------------------
     // Connections
     //---------------------------------------------------------------------------------------------
@@ -47,6 +52,18 @@ Item
 
     //---------------------------------------------------------------------------------------------
     // Functions
+    //---------------------------------------------------------------------------------------------
+
+    function toggleConsole()
+    {
+        showConsole = (showConsole + 1) % 3
+    }
+
+    function showHelp()
+    {
+
+    }
+
     //---------------------------------------------------------------------------------------------
     // Keys
 
@@ -138,8 +155,117 @@ Item
             }
         }
 
+        Rectangle
+        {
+            id: background
+
+            anchors.fill: itemConsole
+
+            visible: itemConsole.visible
+
+            opacity: 0.9 * itemConsole.opacity
+
+            color: "#161616"
+        }
+
+        Console
+        {
+            id: itemConsole
+
+            anchors.left  : parent.left
+            anchors.right : parent.right
+            anchors.bottom: parent.bottom
+
+            visible: (opacity != 0.0)
+
+            opacity: (showConsole != 0)
+
+            Behavior on opacity
+            {
+                PropertyAnimation
+                {
+                    duration: st.duration_fast
+
+                    easing.type: st.easing
+                }
+            }
+
+            height:
+            {
+                if (showConsole == 0)
+                {
+                    return 0;
+                }
+                else if (showConsole == 1)
+                {
+                    return Math.round(parent.height / 3)
+                }
+                else return parent.height - buttonsWindow.height
+            }
+
+            log: controllerFile.log
+        }
+
+        BorderHorizontal
+        {
+            id: border
+
+            anchors.bottom: itemConsole.top
+
+            visible: itemConsole.visible
+            opacity: itemConsole.opacity
+        }
+
+        ButtonPianoFull
+        {
+            anchors.right: buttonConsole.left
+
+            borderLeft  : borderSize
+            borderBottom: borderSize
+
+            height: buttonsWindow.height
+
+            padding: st.dp16
+
+            text: qsTr("Help")
+
+//#QT_4
+            onPressed: showHelp()
+//#ELSE
+            onPressed: Qt.callLater(showHelp)
+//#END
+        }
+
+        ButtonPianoFull
+        {
+            id: buttonConsole
+
+            anchors.right: buttonsWindow.left
+
+            anchors.rightMargin: st.dp16
+
+            height: buttonsWindow.height
+
+            borderBottom: borderSize
+
+            padding: st.dp16
+
+            checkable: true
+            checked  : (showConsole != 0)
+
+            text: qsTr("Console")
+
+//#QT_4
+            onPressed: toggleConsole()
+//#ELSE
+            onPressed: Qt.callLater(toggleConsole)
+//#END
+        }
+
         ButtonsWindow
         {
+            id: buttonsWindow
+
             anchors.right: parent.right
         }
     }
