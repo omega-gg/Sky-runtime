@@ -1,4 +1,4 @@
-<a href="https://omega.gg/Sky"><img src="dist/pictures/sky.png" alt="sky" width="512px"></a>
+<a href="https://omega.gg/Sky"><img src="dist/pictures/Sky-runtime.png" alt="Sky-runtime" width="512px"></a>
 ---
 [![azure](https://dev.azure.com/bunjee/Sky-runtime/_apis/build/status/omega-gg.Sky-runtime)](https://dev.azure.com/bunjee/Sky-runtime/_build)
 [![appveyor](https://ci.appveyor.com/api/projects/status/yto6yi6aepvvl805?svg=true)](https://ci.appveyor.com/project/3unjee/Sky-runtime)
