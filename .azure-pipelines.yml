@@ -71,30 +71,31 @@ jobs:
 # iOS
 #--------------------------------------------------------------------------------------------------
 
-- job: iOS_qt5
-  pool:
-    # NOTE: macOS Big sur is required for iOS.
-    vmImage: "macOS-14"
-  steps:
-  - bash: |
-      sh build.sh iOS all
-      cd deploy
-      zip -rq ../Sky-runtime.zip *
-  - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
-    artifact: Sky-runtime-iOS-qt5
+# - job: iOS_qt5
+#   pool:
+#     # NOTE: macOS Big sur is required for iOS.
+#     vmImage: "macOS-14"
+#   steps:
+#   - bash: |
+#       sh build.sh iOS all
+#       cd deploy
+#       zip -rq ../Sky-runtime.zip *
+#   - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
+#     artifact: Sky-runtime-iOS-qt5
 
-- job: iOS_qt6
-  pool:
-    # NOTE: macOS Big sur is required for iOS.
-    vmImage: "macOS-14"
-  steps:
-  - bash: |
-      sh environment.sh qt6
-      sh build.sh iOS all
-      cd deploy
-      zip -rq ../Sky-runtime.zip *
-  - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
-    artifact: Sky-runtime-iOS-qt6
+# NOTE iOS: This does not work because we lack FFmpeg libraries for the simulator.
+# - job: iOS_qt6
+#   pool:
+#     # NOTE: macOS Big sur is required for iOS.
+#     vmImage: "macOS-14"
+#   steps:
+#   - bash: |
+#       sh environment.sh qt6
+#       sh build.sh iOS all
+#       cd deploy
+#       zip -rq ../Sky-runtime.zip *
+#   - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
+#     artifact: Sky-runtime-iOS-qt6
 
 #--------------------------------------------------------------------------------------------------
 # Linux
