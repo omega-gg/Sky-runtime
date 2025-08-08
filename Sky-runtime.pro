@@ -284,6 +284,10 @@ OTHER_FILES += environment.sh \
                build.sh \
                deploy.sh \
                README.md \
+               LICENSE.md \
+               AUTHORS.md \
+               .azure-pipelines.yml \
+               .appveyor.yml \
                content/generate.sh \
                content/Main.qml \
                content/Gui.qml \

@@ -1,0 +1,177 @@
+#--------------------------------------------------------------------------------------------------
+# Windows
+#--------------------------------------------------------------------------------------------------
+
+jobs:
+#- job: win32_qt4
+#  pool:
+#    vmImage: "windows-latest"
+#  steps:
+#  - bash: |
+#      sh environment.sh qt4
+#      sh build.sh win32 all
+#      cd deploy
+#      7z a ../Sky-runtime.zip *
+#  - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
+#    artifact: Sky-runtime-win32-qt4
+
+- job: win32_qt5
+  pool:
+    vmImage: "windows-latest"
+  steps:
+  - bash: |
+      sh environment.sh qt5
+      sh build.sh win32 all
+      cd deploy
+      7z a ../Sky-runtime.zip *
+  - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
+    artifact: Sky-runtime-win32-qt5
+
+- job: win64_qt6
+  pool:
+    vmImage: "windows-latest"
+  steps:
+  - bash: |
+      sh environment.sh qt6
+      sh build.sh win64 all
+      cd deploy
+      7z a ../Sky-runtime.zip *
+      cd -
+      sh upload.sh win64
+  - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
+    artifact: Sky-runtime-win64-qt6
+
+#--------------------------------------------------------------------------------------------------
+# macOS
+#--------------------------------------------------------------------------------------------------
+
+# - job: macOS_qt5
+#   pool:
+#     vmImage: "macOS-14"
+#   steps:
+#   - bash: |
+#       sh build.sh macOS all
+#       cd deploy
+#       zip -rq ../Sky-runtime.zip *
+#   - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
+#     artifact: Sky-runtime-macOS-qt5
+
+- job: macOS_qt6
+  pool:
+    vmImage: "macOS-14"
+  steps:
+  - bash: |
+      sh environment.sh qt6
+      sh build.sh macOS all
+      cd deploy
+      zip -rq ../Sky-runtime.zip *
+      cd -
+      sh upload.sh macOS
+  - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
+    artifact: Sky-runtime-macOS-qt6
+
+#--------------------------------------------------------------------------------------------------
+# iOS
+#--------------------------------------------------------------------------------------------------
+
+# - job: iOS_qt5
+#   pool:
+#     # NOTE: macOS Big sur is required for iOS.
+#     vmImage: "macOS-14"
+#   steps:
+#   - bash: |
+#       sh build.sh iOS all
+#       cd deploy
+#       zip -rq ../Sky-runtime.zip *
+#   - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
+#     artifact: Sky-runtime-iOS-qt5
+
+- job: iOS_qt6
+  pool:
+    # NOTE: macOS Big sur is required for iOS.
+    vmImage: "macOS-14"
+  steps:
+  - bash: |
+      sh environment.sh qt6
+      sh build.sh iOS all
+      cd deploy
+      zip -rq ../Sky-runtime.zip *
+  - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
+    artifact: Sky-runtime-iOS-qt6
+
+#--------------------------------------------------------------------------------------------------
+# Linux
+#--------------------------------------------------------------------------------------------------
+# NOTE: awscli requires 'DEBIAN_FRONTEND=noninteractive' to avoid getting prompted.
+
+- job: linux32_qt5
+  pool:
+    vmImage: "ubuntu-latest"
+  steps:
+  - bash: |
+      docker run -d --name ubuntu -v $PWD:/Sky-runtime i386/ubuntu:20.04 tail -f /dev/null
+      docker exec -t ubuntu bash -c "cd /Sky-runtime;
+                                     export DEBIAN_FRONTEND=noninteractive;
+                                     apt-get update;
+                                     apt-get -y install sudo curl zip git awscli;
+                                     sh environment.sh qt5;
+                                     sh build.sh linux all;
+                                     cd deploy;
+                                     zip -rq ../Sky-runtime.zip *"
+  - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
+    artifact: Sky-runtime-linux32-qt5
+
+- job: linux64_qt6
+  pool:
+    vmImage: "ubuntu-latest"
+  steps:
+  # NOTE: We need an older version to package the application.
+  # NOTE Qt6: Ubuntu 20.04 is required for glibc.
+  - bash: |
+      docker run -d --name ubuntu -v $PWD:/Sky-runtime amd64/ubuntu:20.04 tail -f /dev/null
+      docker exec -t ubuntu bash -c "cd /Sky-runtime;
+                                     export DEBIAN_FRONTEND=noninteractive;
+                                     apt-get update;
+                                     apt-get -y install sudo curl zip git awscli;
+                                     sh environment.sh qt6;
+                                     sh build.sh linux all;
+                                     cd deploy;
+                                     zip -rq ../Sky-runtime.zip *;
+                                     cd -;
+                                     sh upload.sh linux64"
+  - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
+    artifact: Sky-runtime-linux64-qt6
+
+#--------------------------------------------------------------------------------------------------
+# Android
+#--------------------------------------------------------------------------------------------------
+
+# NOTE android: Stick to Qt5 until the TextInput is fixed.
+#               https://bugreports.qt.io/browse/QTBUG-134417
+- job: android_qt5
+  pool:
+    vmImage: "ubuntu-latest"
+  steps:
+  - bash: |
+      sh environment.sh qt5
+      sh build.sh android all
+      cd deploy
+      zip -rq ../Sky-runtime.zip *
+      cd -
+      sh upload.sh android
+  - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
+    artifact: Sky-runtime-android-qt5
+
+# - job: android_qt6
+#   pool:
+#     vmImage: "ubuntu-latest"
+#   steps:
+#   - bash: |
+#       sh environment.sh qt6
+#       sh build.sh android all
+#       cd deploy
+#       zip -rq ../Sky-runtime.zip *
+#       cd -
+#       sh upload.sh android
+#   - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
+#     artifact: Sky-runtime-android-qt6
