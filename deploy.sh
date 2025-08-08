@@ -9,7 +9,7 @@ target="sky"
 
 Sky="$PWD/../Sky"
 
-backend="$PWD/../Sky"
+backend="$PWD/../backend"
 
 #--------------------------------------------------------------------------------------------------
 # environment
@@ -734,19 +734,4 @@ if [ $os != "mobile" ]; then
     cp "$backend"/cover/* $deploy/backend/cover
 
     cp "$backend"/*.vbml $deploy/backend
-fi
-
-#--------------------------------------------------------------------------------------------------
-# deploy
-#--------------------------------------------------------------------------------------------------
-
-echo "COPYING to deploy"
-
-path="$Sky/deploy"
-
-if [ $1 = "macOS" ]; then
-
-    cp -r deploy/$target.app $path
-else
-    cp -r deploy/$target* $path
 fi
