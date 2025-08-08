@@ -4,7 +4,7 @@
 
     Author: Benjamin Arnaud. <http://bunjee.me> <bunjee@omega.gg>
 
-    This file is part of MotionBox.
+    This file is part of the Sky kit runtime.
 
     - GNU General Public License Usage:
     This file may be used under the terms of the GNU General Public License version 3 as published
@@ -35,7 +35,7 @@
 //-------------------------------------------------------------------------------------------------
 // Static variables
 
-static const QString ONLINE_PATH = "https://omega.gg/get/sky/1.0.0/data.xml";
+static const QString ONLINE_PATH = "https://omega.gg/get/Sky-runtime/1.0.0/data.xml";
 
 //-------------------------------------------------------------------------------------------------
 // Ctor / dtor
