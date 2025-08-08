@@ -36,8 +36,6 @@ jobs:
       sh build.sh win64 all
       cd deploy
       7z a ../Sky-runtime.zip *
-      cd -
-      sh upload.sh win64
   - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
     artifact: Sky-runtime-win64-qt6
 
@@ -45,16 +43,17 @@ jobs:
 # macOS
 #--------------------------------------------------------------------------------------------------
 
-# - job: macOS_qt5
-#   pool:
-#     vmImage: "macOS-14"
-#   steps:
-#   - bash: |
-#       sh build.sh macOS all
-#       cd deploy
-#       zip -rq ../Sky-runtime.zip *
-#   - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
-#     artifact: Sky-runtime-macOS-qt5
+- job: macOS_qt5
+  pool:
+    vmImage: "macOS-14"
+  steps:
+  - bash: |
+      sh environment.sh qt5
+      sh build.sh macOS all
+      cd deploy
+      zip -rq ../Sky-runtime.zip *
+  - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
+    artifact: Sky-runtime-macOS-qt5
 
 - job: macOS_qt6
   pool:
@@ -65,8 +64,6 @@ jobs:
       sh build.sh macOS all
       cd deploy
       zip -rq ../Sky-runtime.zip *
-      cd -
-      sh upload.sh macOS
   - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
     artifact: Sky-runtime-macOS-qt6
 
@@ -136,9 +133,7 @@ jobs:
                                      sh environment.sh qt6;
                                      sh build.sh linux all;
                                      cd deploy;
-                                     zip -rq ../Sky-runtime.zip *;
-                                     cd -;
-                                     sh upload.sh linux64"
+                                     zip -rq ../Sky-runtime.zip *"
   - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
     artifact: Sky-runtime-linux64-qt6
 
@@ -157,21 +152,17 @@ jobs:
       sh build.sh android all
       cd deploy
       zip -rq ../Sky-runtime.zip *
-      cd -
-      sh upload.sh android
   - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
     artifact: Sky-runtime-android-qt5
 
-# - job: android_qt6
-#   pool:
-#     vmImage: "ubuntu-latest"
-#   steps:
-#   - bash: |
-#       sh environment.sh qt6
-#       sh build.sh android all
-#       cd deploy
-#       zip -rq ../Sky-runtime.zip *
-#       cd -
-#       sh upload.sh android
-#   - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
-#     artifact: Sky-runtime-android-qt6
+- job: android_qt6
+  pool:
+    vmImage: "ubuntu-latest"
+  steps:
+  - bash: |
+      sh environment.sh qt6
+      sh build.sh android all
+      cd deploy
+      zip -rq ../Sky-runtime.zip *
+  - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
+    artifact: Sky-runtime-android-qt6
