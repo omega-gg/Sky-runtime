@@ -20,9 +20,75 @@ content="$PWD/../content"
 bin="$PWD/../bin"
 
 #--------------------------------------------------------------------------------------------------
+# iOS
+
+backendiOS="iOS/backend"
+
+#--------------------------------------------------------------------------------------------------
+# Android
+
+data="android/data"
+
+backendAndroid="android/assets/backend"
+
+#--------------------------------------------------------------------------------------------------
 # environment
 
 qt="qt6"
+
+#--------------------------------------------------------------------------------------------------
+# Functions
+#--------------------------------------------------------------------------------------------------
+
+copyAndroid()
+{
+    cp -r $1 $data/armeabi-v7a
+    cp -r $1 $data/arm64-v8a
+    cp -r $1 $data/x86
+    cp -r $1 $data/x86_64
+}
+
+cleanAndroid()
+{
+    mv $data/$1/libs $data
+
+    rm -rf $data/$1/*
+
+    mv $data/libs $data/$1
+}
+
+applyManifest()
+{
+    manifest="$data/$1/AndroidManifest.xml"
+
+    expression='s/android:versionName=\"/android:versionName=\"'"$version"'/'
+
+    apply $expression $manifest
+
+    expression='s/android:versionCode=\"/android:versionCode=\"'"$2$version_code"'/'
+
+    apply $expression $manifest
+}
+
+apply()
+{
+    if [ $host = "macOS" ]; then
+
+        sed -i "" $1 $2
+    else
+        sed -i $1 $2
+    fi
+}
+
+#--------------------------------------------------------------------------------------------------
+
+getOs()
+{
+    case `uname` in
+    Darwin*) echo "macOS";;
+    *)       echo "other";;
+    esac
+}
 
 #--------------------------------------------------------------------------------------------------
 # Syntax
@@ -44,14 +110,20 @@ fi
 # Configuration
 #--------------------------------------------------------------------------------------------------
 
+host=$(getOs)
+
 if [ $1 = "win32" -o $1 = "win64" ]; then
 
     os="windows"
+
+elif [ $1 = "iOS" -o $1 = "android" ]; then
+
+    os="mobile"
 else
     os="default"
 fi
 
-if [ "$2" = "deploy" ]; then
+if [ $os = "mobile" -o "$2" = "deploy" ]; then
 
     path="qrc"
 else
@@ -68,11 +140,29 @@ if [ "$2" = "clean" ]; then
 
     echo "CLEANING"
 
-    rm -f $bin/*.qml
+    rm -f  $bin/*.qml
+    #rm -rf $bin/pictures
+    rm -rf $bin/icons
 
     rm -rf qrc
     mkdir  qrc
     touch  qrc/.gitignore
+
+    if [ $1 = "iOS" ]; then
+
+        rm -rf $backendiOS/*
+        touch  $backendiOS/.gitignore
+
+    elif [ $1 = "android" ]; then
+
+        cleanAndroid armeabi-v7a
+        cleanAndroid arm64-v8a
+        cleanAndroid x86
+        cleanAndroid x86_64
+
+        rm -rf $backendAndroid/*
+        touch  $backendAndroid/.gitignore
+    fi
 
     exit 0
 fi
@@ -89,13 +179,89 @@ cp $content/*.qml $path
 # Content
 #--------------------------------------------------------------------------------------------------
 
-if [ "$2" = "all" -o "$2" = "deploy" ]; then
+if [ $os = "mobile" -o "$2" = "all" -o "$2" = "deploy" ]; then
 
     if [ $qt = "qt6" ]; then
 
         echo "COPYING shaders"
 
         cp -r "$Sky"/deploy/shaders $path
+    fi
+
+    #echo "COPYING pictures"
+
+    #cp -r $content/pictures $path
+
+    echo "COPYING icons"
+
+    cp -r $content/icons $path
+
+    if [ $1 = "iOS" ]; then
+
+        echo "COPYING backend"
+
+        cp -r "$backend"/cover $backendiOS
+
+        cp "$backend"/*.vbml $backendiOS
+
+        #------------------------------------------------------------------------------------------
+        # NOTE iOS: Torrents are not available.
+
+        rm $backendiOS/index.vbml
+
+        rm $backendiOS/bittorrent.vbml
+
+        rm $backendiOS/cover/bittorrent.png
+
+    elif [ $1 = "android" ]; then
+
+        echo "COPYING android"
+
+        copyAndroid android/res
+
+        if [ $qt = "qt5" ]; then
+
+            qtX="android/qt5"
+        else
+            qtX="android/qt6"
+        fi
+
+        cp -r "$Sky"/dist/android/src/* $qtX/src
+
+        if [ $qt = "qt5" ]; then
+
+            expression='s/org.qtproject.qt./org.qtproject.qt5./g'
+
+            apply $expression $qtX/src/gg/omega/WActivity.java
+        fi
+
+        expression='s/gg.omega.provider/gg.omega.motionmonkey.provider/g'
+
+        apply $expression $qtX/src/gg/omega/WActivity.java
+
+        copyAndroid $qtX/src
+        copyAndroid $qtX/*.xml
+
+        #------------------------------------------------------------------------------------------
+        # NOTE: You can comment these if you want to let Qt generate the gradle files.
+
+        copyAndroid $qtX/*.gradle
+        copyAndroid $qtX/gradle
+
+        #------------------------------------------------------------------------------------------
+
+        applyManifest armeabi-v7a 032
+        applyManifest arm64-v8a   064
+        applyManifest x86         132
+        applyManifest x86_64      164
+
+        echo "COPYING backend"
+
+        cp -r "$backend"/cover $backendAndroid
+
+        cp "$backend"/*.vbml $backendAndroid
+
+        copyAndroid android/assets
     fi
 fi
 
@@ -165,11 +331,20 @@ elif [ $1 = "macOS" ]; then
 
     defines="$defines DESKTOP MAC"
 
+elif [ $1 = "iOS" ]; then
+
+    defines="$defines MOBILE IOS NO_TORRENT"
+
 elif [ $1 = "linux" ]; then
 
     defines="$defines DESKTOP LINUX"
 else
     defines="$defines MOBILE ANDROID"
+fi
+
+if [ "$2" = "deploy" ]; then
+
+    defines="$defines DEPLOY"
 fi
 
 defines="$defines pictures_tag icons_slide icons_scale icons_add icons_external icons_playback"
