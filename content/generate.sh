@@ -13,6 +13,8 @@ SkyComponents="$Sky/src/SkyComponents"
 
 SkyPresentation="$Sky/src/SkyPresentation"
 
+backend="$PWD/../../backend"
+
 #--------------------------------------------------------------------------------------------------
 
 content="$PWD/../content"
