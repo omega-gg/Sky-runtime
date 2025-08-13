@@ -33,9 +33,9 @@
 int main(int argc, char * argv[])
 {
 #ifdef QT_4
-    QApplication * application = WApplication::create(argc, argv);
+    QApplication * application = WApplication::create(argc, argv, Sk::Multiple);
 #else
-    QGuiApplication * application = WApplication::create(argc, argv);
+    QGuiApplication * application = WApplication::create(argc, argv, Sk::Multiple);
 #endif
 
     if (application == NULL) return 0;

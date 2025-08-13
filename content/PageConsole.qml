@@ -78,6 +78,19 @@ Item
         font.family   : st.baseConsole_fontFamily
         font.pixelSize: st.baseConsole_pixelSize
         font.bold     : st.baseConsole_bold
+
+        //-----------------------------------------------------------------------------------------
+        // BaseLineEdit events
+
+        function onKeyPressed(event)
+        {
+            if (event.key == Qt.Key_Return || event.key == Qt.Key_Enter)
+            {
+                event.accepted = true;
+
+                clear();
+            }
+        }
     }
 
     BorderHorizontal
