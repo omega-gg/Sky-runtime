@@ -31,7 +31,10 @@ Item
 
     Rectangle
     {
-        anchors.fill: itemConsole
+        anchors.left  : parent.left
+        anchors.right : parent.right
+        anchors.top   : border.bottom
+        anchors.bottom: parent.bottom
 
         opacity: 0.9
 
@@ -45,9 +48,36 @@ Item
         anchors.left  : parent.left
         anchors.right : parent.right
         anchors.top   : border.bottom
-        anchors.bottom: parent.bottom
+        anchors.bottom: lineEdit.top
 
         log: controllerFile.log
+    }
+
+    LineEditBox
+    {
+        id: lineEdit
+
+        anchors.left  : parent.left
+        anchors.right : parent.right
+        anchors.bottom: parent.bottom
+
+        textDefault: qsTr('>')
+
+        colorA: "transparent"
+        colorB: "transparent"
+
+        colorHoverA: "transparent"
+        colorHoverB: "transparent"
+
+        colorActive: "transparent"
+
+        colorText: st.baseConsole_color
+
+        colorCursor: colorText
+
+        font.family   : st.baseConsole_fontFamily
+        font.pixelSize: st.baseConsole_pixelSize
+        font.bold     : st.baseConsole_bold
     }
 
     BorderHorizontal
