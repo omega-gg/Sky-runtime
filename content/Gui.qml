@@ -54,14 +54,43 @@ Item
     // Functions
     //---------------------------------------------------------------------------------------------
 
+    function process(text)
+    {
+        console.debug("> " + text);
+
+        var list = sk.splitCommand(text);
+
+        var length = list.length;
+
+        if (length == 0) return;
+
+        if (list[0] == "help")
+        {
+            console.debug("Welcome to Sky kit runtime");
+
+            return;
+        }
+    }
+
     function toggleConsole()
     {
-        showConsole = (showConsole + 1) % 3
+        showConsole = (showConsole + 1) % 3;
+
+        focusConsole();
     }
 
     function showHelp()
     {
+        process("help");
+    }
 
+    function focusConsole()
+    {
+        if (showConsole == false) return;
+
+        var item = loader.item;
+
+        if (item) item.setFocus();
     }
 
     //---------------------------------------------------------------------------------------------
@@ -157,6 +186,8 @@ Item
 
         Loader
         {
+            id: loader
+
             anchors.left  : parent.left
             anchors.right : parent.right
             anchors.bottom: parent.bottom
@@ -189,6 +220,8 @@ Item
                     easing.type: st.easing
                 }
             }
+
+            onItemChanged: focusConsole()
         }
 
         ButtonPianoFull

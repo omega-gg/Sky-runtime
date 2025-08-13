@@ -39,7 +39,7 @@ void DataLocal_patch(QString & data, const QString & api);
 //-------------------------------------------------------------------------------------------------
 // Static variables
 
-// NOTE: Defaut streaming port for tevolution.
+// NOTE: Defaut streaming port for Sky-runtime.
 static const int DATALOCAL_PORT = 8400;
 
 // NOTE: Defaut broadcasting port.
