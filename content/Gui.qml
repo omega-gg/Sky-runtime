@@ -155,40 +155,11 @@ Item
             }
         }
 
-        Rectangle
+        Loader
         {
-            id: background
-
-            anchors.fill: itemConsole
-
-            visible: itemConsole.visible
-
-            opacity: 0.9 * itemConsole.opacity
-
-            color: "#161616"
-        }
-
-        Console
-        {
-            id: itemConsole
-
             anchors.left  : parent.left
             anchors.right : parent.right
             anchors.bottom: parent.bottom
-
-            visible: (opacity != 0.0)
-
-            opacity: (showConsole != 0)
-
-            Behavior on opacity
-            {
-                PropertyAnimation
-                {
-                    duration: st.duration_fast
-
-                    easing.type: st.easing
-                }
-            }
 
             height:
             {
@@ -203,17 +174,21 @@ Item
                 else return parent.height - buttonsWindow.height
             }
 
-            log: controllerFile.log
-        }
+            visible: (opacity != 0.0)
 
-        BorderHorizontal
-        {
-            id: border
+            opacity: (showConsole != 0)
 
-            anchors.bottom: itemConsole.top
+            source: (visible) ? Qt.resolvedUrl("PageConsole.qml") : ""
 
-            visible: itemConsole.visible
-            opacity: itemConsole.opacity
+            Behavior on opacity
+            {
+                PropertyAnimation
+                {
+                    duration: st.duration_fast
+
+                    easing.type: st.easing
+                }
+            }
         }
 
         ButtonPianoFull
