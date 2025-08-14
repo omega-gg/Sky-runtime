@@ -31,6 +31,8 @@ Item
     // Properties
     //---------------------------------------------------------------------------------------------
 
+    property QtObject object
+
     property bool ui: false
 
     property int showConsole: 0
@@ -69,15 +71,35 @@ Item
 
     function load()
     {
+        if (object)
+        {
+            object.destroy();
+
+            object = null;
+        }
+
         var argument = core.argument;
 
         if (argument)
         {
-             loader.source = Qt.resolvedUrl(argument);
-        }
-        else loader.source = Qt.resolvedUrl("PageDefault.qml");
+            console.debug("LOADING " + argument);
 
-        loader.item.forceActiveFocus();
+            var data = controllerFile.readAll(Qt.resolvedUrl(argument));
+
+            // PATCH
+
+            object = Qt.createQmlObject(data, loader, argument);
+
+            loader.source = "";
+
+            if (object) object.forceActiveFocus();
+        }
+        else
+        {
+            loader.source = Qt.resolvedUrl("PageDefault.qml");
+
+            loader.item.forceActiveFocus();
+        }
     }
 
     function process(text)
@@ -100,12 +122,10 @@ Item
         }
         else if (command == "help")
         {
-            var item = loader.item;
-
             // NOTE: We check if the 'showHelp' function is defined.
-            if (item && item.showHelp)
+            if (object && object.showHelp)
             {
-                item.showHelp();
+                object.showHelp();
 
                 return;
             }
@@ -122,7 +142,7 @@ Item
     {
         showConsole = (showConsole + 1) % 3;
 
-        focusConsole();
+        setFocusConsole();
     }
 
     function showHelp()
@@ -132,7 +152,23 @@ Item
         process("help");
     }
 
-    function focusConsole()
+    //---------------------------------------------------------------------------------------------
+
+    function setFocus()
+    {
+        if (object)
+        {
+            object.forceActiveFocus();
+
+            return;
+        }
+
+        var item = loader.item;
+
+        if (item) item.forceActiveFocus();
+    }
+
+    function setFocusConsole()
     {
         if (showConsole == false) return;
 
@@ -222,7 +258,7 @@ Item
                 }
             }
 
-            onItemChanged: focusConsole()
+            onItemChanged: setFocusConsole()
         }
 
         ButtonPianoFull

@@ -74,14 +74,14 @@ Application
 
             loader.source = "Gui.qml";
 
-            loader.item.forceActiveFocus();
+            loader.item.setFocus();
         }
 
         viewport.onActiveFocusChanged:
         {
             if (loader.item)
             {
-                loader.item.forceActiveFocus();
+                loader.item.setFocus();
             }
         }
 
