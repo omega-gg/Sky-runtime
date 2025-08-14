@@ -469,7 +469,7 @@ ControllerCore::ControllerCore() : WController()
             return;
         }
 
-        WControllerFileReply * reply = copyBackends(path);
+        WControllerFileReply * reply = copyBackends(path + '/');
 
         connect(reply, SIGNAL(complete(bool)), this, SLOT(onLoaded()));
     }

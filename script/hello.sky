@@ -38,6 +38,6 @@ Rectangle
 
     function showHelp()
     {
-        console.debug("Welcome to hello sky " + sk.versionSky);
+        console.debug("Welcome to Sky runtime " + sk.versionSky);
     }
 }
