@@ -35,7 +35,7 @@ Item
 
     property bool ui: false
 
-    property int showConsole: 0
+    property int stateConsole: 0
     // 0: hidden
     // 1: visible
     // 2: expanded
@@ -82,24 +82,31 @@ Item
 
         if (argument)
         {
-            console.debug("LOADING " + argument);
-
             var data = controllerFile.readAll(Qt.resolvedUrl(argument));
 
             // PATCH
 
             object = Qt.createQmlObject(data, loader, argument);
 
-            loader.source = "";
+            if (object)
+            {
+                object.anchors.fill = loader;
 
-            if (object) object.forceActiveFocus();
-        }
-        else
-        {
-            loader.source = Qt.resolvedUrl("PageDefault.qml");
+                loader.source = "";
 
-            loader.item.forceActiveFocus();
+                object.forceActiveFocus();
+
+                showHelp();
+
+                return;
+            }
         }
+
+        loader.source = Qt.resolvedUrl("PageDefault.qml");
+
+        loader.item.forceActiveFocus();
+
+        showHelp();
     }
 
     function process(text)
@@ -114,7 +121,19 @@ Item
 
         var command = list[0];
 
-        if (command == "clear")
+        if (command == "load")
+        {
+            var argument = list[1];
+
+            if (argument == "") return;
+
+            core.argument = argument;
+        }
+        else if (command == "unload")
+        {
+            core.argument = "";
+        }
+        else if (command == "clear")
         {
             var item = loaderConsole.item;
 
@@ -122,15 +141,7 @@ Item
         }
         else if (command == "help")
         {
-            // NOTE: We check if the 'showHelp' function is defined.
-            if (object && object.showHelp)
-            {
-                object.showHelp();
-
-                return;
-            }
-
-            console.debug("Welcome to Sky kit runtime");
+            showHelp();
         }
         else if (command == "exit")
         {
@@ -138,18 +149,31 @@ Item
         }
     }
 
+    function showConsole()
+    {
+        if (stateConsole == 0) stateConsole = 1;
+    }
+
     function toggleConsole()
     {
-        showConsole = (showConsole + 1) % 3;
+        stateConsole = (stateConsole + 1) % 3;
 
         setFocusConsole();
     }
 
     function showHelp()
     {
-        if (showConsole == 0) showConsole = 1;
+        showConsole();
 
-        process("help");
+        // NOTE: We check if the 'showHelp' function is defined.
+        if (object && object.showHelp)
+        {
+            object.showHelp();
+
+            return;
+        }
+
+        console.debug("Welcome to Sky kit runtime");
     }
 
     //---------------------------------------------------------------------------------------------
@@ -170,7 +194,7 @@ Item
 
     function setFocusConsole()
     {
-        if (showConsole == false) return;
+        if (stateConsole == 0) return;
 
         var item = loaderConsole.item;
 
@@ -182,7 +206,19 @@ Item
 
     function onKeyPressed(event)
     {
-        if (event.key == Qt.Key_F1)
+        if (event.key == Qt.Key_twosuperior)
+        {
+            ui = true;
+
+            showConsole();
+
+            setFocusConsole();
+        }
+        else if (event.key == Qt.Key_Tab || event.key == Qt.Key_Backtab)
+        {
+            setFocusConsole();
+        }
+        else if (event.key == Qt.Key_F1)
         {
             ui = !ui;
         }
@@ -231,11 +267,11 @@ Item
 
             height:
             {
-                if (showConsole == 0)
+                if (stateConsole == 0)
                 {
                     return 0;
                 }
-                else if (showConsole == 1)
+                else if (stateConsole == 1)
                 {
                     return Math.round(parent.height / 3)
                 }
@@ -244,7 +280,7 @@ Item
 
             visible: (opacity != 0.0)
 
-            opacity: (showConsole != 0)
+            opacity: (stateConsole != 0)
 
             source: (visible) ? Qt.resolvedUrl("PageConsole.qml") : ""
 
@@ -263,26 +299,6 @@ Item
 
         ButtonPianoFull
         {
-            anchors.right: buttonConsole.left
-
-            borderLeft  : borderSize
-            borderBottom: borderSize
-
-            height: buttonsWindow.height
-
-            padding: st.dp16
-
-            text: qsTr("Help")
-
-//#QT_4
-            onPressed: showHelp()
-//#ELSE
-            onPressed: Qt.callLater(showHelp)
-//#END
-        }
-
-        ButtonPianoFull
-        {
             id: buttonConsole
 
             anchors.right: buttonsWindow.left
@@ -291,12 +307,13 @@ Item
 
             height: buttonsWindow.height
 
+            borderLeft  : borderSize
             borderBottom: borderSize
 
             padding: st.dp16
 
             checkable: true
-            checked  : (showConsole != 0)
+            checked  : (stateConsole != 0)
 
             text: qsTr("Console")
 

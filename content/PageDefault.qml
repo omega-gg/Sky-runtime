@@ -61,7 +61,11 @@ Item
 
     function onDrop(event)
     {
-        core.argument = event.text;
+        var text = event.text;
+
+        console.debug("> load " + text);
+
+        core.argument = text;
     }
 
     function onDragEnded()
@@ -99,31 +103,19 @@ Item
         font.pixelSize: st.dp20
     }
 
-    TextBase
+    TextDefault
     {
         anchors.left: parent.left
         anchors.top : parent.top
 
-        anchors.margins: st.dp8
-
-        visible: (opacity != 0.0)
-
-        opacity: (gui.ui == false)
-
         text: qsTr("Press F1 for UI")
+    }
 
-        color: st.text3_color
+    TextDefault
+    {
+        anchors.right: parent.right
+        anchors.top  : parent.top
 
-        font.pixelSize: st.dp16
-
-        Behavior on opacity
-        {
-            PropertyAnimation
-            {
-                duration: st.duration_fast
-
-                easing.type: st.easing
-            }
-        }
+        text: qsTr("ESCAPE to quit")
     }
 }

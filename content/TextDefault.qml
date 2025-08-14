@@ -1,4 +1,3 @@
-# sky 3.0.0-2
 //=================================================================================================
 /*
     Copyright (C) 2015-2020 Sky kit authors. <http://omega.gg/Sky>
@@ -21,23 +20,36 @@
 */
 //=================================================================================================
 
-import QtQuick 2.0
+import QtQuick 1.0
 import Sky     1.0
 
-Rectangle
+TextBase
 {
     //---------------------------------------------------------------------------------------------
-    // Properties
+    // Settings
     //---------------------------------------------------------------------------------------------
 
-    color: "red"
+    anchors.margins: st.dp8
+
+    visible: (opacity != 0.0)
+
+    opacity: (gui.ui == false)
+
+    color: st.text3_color
+
+    font.pixelSize: st.dp16
 
     //---------------------------------------------------------------------------------------------
-    // Functions
+    // Animations
     //---------------------------------------------------------------------------------------------
 
-    function showHelp()
+    Behavior on opacity
     {
-        console.debug("Welcome to Sky runtime " + sk.versionSky);
+        PropertyAnimation
+        {
+            duration: st.duration_fast
+
+            easing.type: st.easing
+        }
     }
 }

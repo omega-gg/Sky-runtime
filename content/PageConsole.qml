@@ -79,6 +79,8 @@ Item
 
         textDefault: qsTr('>')
 
+        autoSelect: false
+
         colorA: "transparent"
         colorB: "transparent"
 
