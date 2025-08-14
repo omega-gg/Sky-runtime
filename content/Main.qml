@@ -61,6 +61,8 @@ Application
 
         vsync: true
 
+        dropEnabled: true
+
         st: StyleComponents
         {
             id: st

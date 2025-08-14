@@ -630,11 +630,16 @@ void ControllerCore::onReload()
 // Properties
 //-------------------------------------------------------------------------------------------------
 
-#ifdef SK_DESKTOP
-
 QString ControllerCore::argument() const
 {
     return _argument;
 }
 
-#endif
+void ControllerCore::setArgument(const QString & argument)
+{
+    if (_argument == argument) return;
+
+    _argument = argument;
+
+    emit argumentChanged();
+}

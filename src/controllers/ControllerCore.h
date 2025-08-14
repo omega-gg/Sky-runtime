@@ -47,9 +47,7 @@ class ControllerCore : public WController
 {
     Q_OBJECT
 
-#ifdef SK_DESKTOP
-    Q_PROPERTY(QString argument READ argument CONSTANT)
-#endif
+    Q_PROPERTY(QString argument READ argument WRITE setArgument NOTIFY argumentChanged)
 
 private:
     ControllerCore();
@@ -90,10 +88,12 @@ private slots:
 
     void onReload();
 
+signals:
+    void argumentChanged();
+
 public: // Properties
-#ifdef SK_DESKTOP
     QString argument() const;
-#endif
+    void    setArgument(const QString & argument);
 
 private: // Variables
 #ifdef SK_DESKTOP

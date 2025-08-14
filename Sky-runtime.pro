@@ -291,7 +291,9 @@ OTHER_FILES += environment.sh \
                content/generate.sh \
                content/Main.qml \
                content/Gui.qml \
+               content/PageDefault.qml \
                content/PageConsole.qml \
+               content/sky/hello.sky \
                include/generate.sh \
                dist/sky.rc \
                dist/script/start.sh \

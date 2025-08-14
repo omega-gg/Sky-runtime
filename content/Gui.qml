@@ -68,10 +68,22 @@ Item
 
         if (command == "clear")
         {
-            clearConsole();
+            var item = loaderConsole.item;
+
+            if (item) item.clear();
         }
         else if (command == "help")
         {
+            var item = loader.item;
+
+            // NOTE: We check if the 'showHelp' function is defined.
+            if (item && item.showHelp)
+            {
+                item.showHelp();
+
+                return;
+            }
+
             console.debug("Welcome to Sky kit runtime");
         }
         else if (command == "exit")
@@ -98,16 +110,9 @@ Item
     {
         if (showConsole == false) return;
 
-        var item = loader.item;
+        var item = loaderConsole.item;
 
         if (item) item.setFocus();
-    }
-
-    function clearConsole()
-    {
-        var item = loader.item;
-
-        if (item) item.clear();
     }
 
     //---------------------------------------------------------------------------------------------
@@ -130,58 +135,14 @@ Item
     // Children
     //---------------------------------------------------------------------------------------------
 
-    TextBase
+    Loader
     {
-        id: itemText
+        id: loader
 
-        anchors.centerIn: parent
+        anchors.fill: parent
 
-        text: qsTr("Welcome to Sky kit")
-
-        font.pixelSize: st.dp32
-    }
-
-    TextBase
-    {
-        anchors.top: itemText.bottom
-
-        anchors.topMargin: st.dp16
-
-        anchors.horizontalCenter: parent.horizontalCenter
-
-        text: qsTr("Drop a .sky file to begin")
-
-        color: st.text3_color
-
-        font.pixelSize: st.dp20
-    }
-
-    TextBase
-    {
-        anchors.left: parent.left
-        anchors.top : parent.top
-
-        anchors.margins: st.dp8
-
-        visible: (opacity != 0.0)
-
-        opacity: (ui == false)
-
-        text: qsTr("Press F1 for UI")
-
-        color: st.text3_color
-
-        font.pixelSize: st.dp16
-
-        Behavior on opacity
-        {
-            PropertyAnimation
-            {
-                duration: st.duration_fast
-
-                easing.type: st.easing
-            }
-        }
+        source: (core.argument) ? Qt.resolvedUrl(core.argument)
+                                : Qt.resolvedUrl("PageDefault.qml")
     }
 
     Item
@@ -203,7 +164,7 @@ Item
 
         Loader
         {
-            id: loader
+            id: loaderConsole
 
             anchors.left  : parent.left
             anchors.right : parent.right
@@ -292,6 +253,23 @@ Item
             id: buttonsWindow
 
             anchors.right: parent.right
+        }
+    }
+
+    RectangleBordersDrop
+    {
+        id: bordersDrop
+
+        opacity: (visible)
+
+        Behavior on opacity
+        {
+            PropertyAnimation
+            {
+                duration: st.duration_fast
+
+                easing.type: st.easing
+            }
         }
     }
 }
