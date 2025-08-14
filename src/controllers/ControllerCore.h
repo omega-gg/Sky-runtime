@@ -96,9 +96,7 @@ public: // Properties
     void    setArgument(const QString & argument);
 
 private: // Variables
-#ifdef SK_DESKTOP
     QString _argument;
-#endif
 
     DataLocal    _local;
     DataOnline * _online;
