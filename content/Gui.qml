@@ -39,8 +39,21 @@ Item
     // 2: expanded
 
     //---------------------------------------------------------------------------------------------
+    // Events
+    //---------------------------------------------------------------------------------------------
+
+    Component.onCompleted: load()
+
+    //---------------------------------------------------------------------------------------------
     // Connections
     //---------------------------------------------------------------------------------------------
+
+    Connections
+    {
+        target: core
+
+        /* QML_CONNECTION */ function onArgumentChanged() { load() }
+    }
 
     Connections
     {
@@ -53,6 +66,19 @@ Item
     //---------------------------------------------------------------------------------------------
     // Functions
     //---------------------------------------------------------------------------------------------
+
+    function load()
+    {
+        var argument = core.argument;
+
+        if (argument)
+        {
+             loader.source = Qt.resolvedUrl(argument);
+        }
+        else loader.source = Qt.resolvedUrl("PageDefault.qml");
+
+        loader.item.forceActiveFocus();
+    }
 
     function process(text)
     {
@@ -140,9 +166,6 @@ Item
         id: loader
 
         anchors.fill: parent
-
-        source: (core.argument) ? Qt.resolvedUrl(core.argument)
-                                : Qt.resolvedUrl("PageDefault.qml")
     }
 
     Item

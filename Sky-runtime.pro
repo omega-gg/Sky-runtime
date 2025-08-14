@@ -293,7 +293,7 @@ OTHER_FILES += environment.sh \
                content/Gui.qml \
                content/PageDefault.qml \
                content/PageConsole.qml \
-               content/sky/hello.sky \
+               script/hello.sky \
                include/generate.sh \
                dist/sky.rc \
                dist/script/start.sh \

@@ -29,19 +29,6 @@ Application
     // Functions
     //---------------------------------------------------------------------------------------------
 
-    function load()
-    {
-        var argument = core.argument;
-
-        if (argument == "")
-        {
-             loader.source = "Gui.qml";
-        }
-        else loader.source = argument;
-
-        loader.item.forceActiveFocus();
-    }
-
     function toggleMaximized()
     {
         window.maximized = !(window.maximized);
@@ -67,7 +54,11 @@ Application
         {
             id: st
 
-            // NOTE: We apply the night color right away to avoid the flickering before onFadeIn.
+            //-------------------------------------------------------------------------------------
+            // NOTE: We apply night colors right away to avoid the flickering before onFadeIn.
+
+            border_color: "#242424"
+
             window_color: "#404040"
         }
 
@@ -81,7 +72,9 @@ Application
 
             st.applyNight();
 
-            load();
+            loader.source = "Gui.qml";
+
+            loader.item.forceActiveFocus();
         }
 
         viewport.onActiveFocusChanged:
