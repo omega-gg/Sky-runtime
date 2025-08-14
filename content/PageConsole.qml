@@ -29,6 +29,13 @@ Item
     // Functions
     //---------------------------------------------------------------------------------------------
 
+    function clear()
+    {
+        itemConsole.clear();
+
+        controllerFile.log = "";
+    }
+
     function setFocus()
     {
         lineEdit.setFocus();

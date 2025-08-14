@@ -75,9 +75,9 @@ Application
 
         onFadeIn:
         {
-            st.applyNight();
-
             core.load();
+
+            st.applyNight();
 
             load();
         }

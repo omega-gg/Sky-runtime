@@ -64,11 +64,19 @@ Item
 
         if (length == 0) return;
 
-        if (list[0] == "help")
+        var command = list[0];
+
+        if (command == "clear")
+        {
+            clearConsole();
+        }
+        else if (command == "help")
         {
             console.debug("Welcome to Sky kit runtime");
-
-            return;
+        }
+        else if (command == "exit")
+        {
+            window.close();
         }
     }
 
@@ -81,6 +89,8 @@ Item
 
     function showHelp()
     {
+        if (showConsole == 0) showConsole = 1;
+
         process("help");
     }
 
@@ -91,6 +101,13 @@ Item
         var item = loader.item;
 
         if (item) item.setFocus();
+    }
+
+    function clearConsole()
+    {
+        var item = loader.item;
+
+        if (item) item.clear();
     }
 
     //---------------------------------------------------------------------------------------------
