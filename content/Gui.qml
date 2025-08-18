@@ -86,7 +86,7 @@ Item
 
             // PATCH
 
-            object = Qt.createQmlObject(data, loader, argument);
+            object = Qt.createQmlObject(data, loader, Qt.resolvedUrl("Gui.qml"));
 
             if (object)
             {
