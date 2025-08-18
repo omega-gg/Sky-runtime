@@ -82,6 +82,8 @@ Item
 
         if (argument)
         {
+            console.debug("LOADING " + argument);
+
             var data = controllerFile.readAll(argument);
 
             // PATCH
