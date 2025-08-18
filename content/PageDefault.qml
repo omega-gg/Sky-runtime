@@ -102,20 +102,4 @@ Item
 
         font.pixelSize: st.dp20
     }
-
-    TextDefault
-    {
-        anchors.left: parent.left
-        anchors.top : parent.top
-
-        text: qsTr("Press F1 for UI")
-    }
-
-    TextDefault
-    {
-        anchors.right: parent.right
-        anchors.top  : parent.top
-
-        text: qsTr("ESCAPE to quit")
-    }
 }

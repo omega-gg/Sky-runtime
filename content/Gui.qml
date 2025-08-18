@@ -240,6 +240,22 @@ Item
         anchors.fill: parent
     }
 
+    TextDefault
+    {
+        anchors.left: parent.left
+        anchors.top : parent.top
+
+        text: qsTr("Press F1 for UI")
+    }
+
+    TextDefault
+    {
+        anchors.right: parent.right
+        anchors.top  : parent.top
+
+        text: qsTr("ESCAPE to quit")
+    }
+
     Item
     {
         anchors.fill: parent
