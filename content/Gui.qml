@@ -35,7 +35,7 @@ Item
 
     property bool ui: false
 
-    property int stateConsole: 0
+    property int stateConsole: 1
     // 0: hidden
     // 1: visible
     // 2: expanded
@@ -165,8 +165,6 @@ Item
 
     function showHelp()
     {
-        showConsole();
-
         // NOTE: We check if the 'showHelp' function is defined.
         if (object && object.showHelp)
         {
