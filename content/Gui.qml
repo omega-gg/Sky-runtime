@@ -82,7 +82,7 @@ Item
 
         if (argument)
         {
-            var data = controllerFile.readAll(Qt.resolvedUrl(argument));
+            var data = controllerFile.readAll(argument);
 
             // PATCH
 
