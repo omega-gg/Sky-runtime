@@ -43,11 +43,28 @@ class WBackendIndex;
 class WDeclarativePlayer;
 class DataOnline;
 
+//-------------------------------------------------------------------------------------------------
+// ControllerCoreScript
+//-------------------------------------------------------------------------------------------------
+
+struct ControllerCoreScript
+{
+    QString version;
+
+    QByteArray data;
+};
+
+//-------------------------------------------------------------------------------------------------
+// ControllerCore
+//-------------------------------------------------------------------------------------------------
+
 class ControllerCore : public WController
 {
     Q_OBJECT
 
     Q_PROPERTY(QString argument READ argument WRITE setArgument NOTIFY argumentChanged)
+
+    Q_PROPERTY(int count READ count NOTIFY loaded)
 
 private:
     ControllerCore();
@@ -59,10 +76,17 @@ public: // Interface
 
     Q_INVOKABLE void load();
 
+    Q_INVOKABLE void loadSource(const QString & fileName);
+
     Q_INVOKABLE void updateBackends() const;
     Q_INVOKABLE void resetBackends () const;
 
     Q_INVOKABLE void clearComponentCache() const;
+
+    Q_INVOKABLE void clearScripts();
+
+    Q_INVOKABLE QString    getVersion(int index) const;
+    Q_INVOKABLE QByteArray getData   (int index) const;
 
 public: // Static functions
 #ifndef SK_NO_TORRENT
@@ -82,6 +106,8 @@ private: // Functions
 
     WControllerFileReply * copyBackends(const QString & path) const;
 
+    void loadScript(const QString & fileName);
+
 private slots:
     void onLoaded     ();
     void onIndexLoaded();
@@ -89,11 +115,15 @@ private slots:
     void onReload();
 
 signals:
+    void loaded();
+
     void argumentChanged();
 
 public: // Properties
     QString argument() const;
     void    setArgument(const QString & argument);
+
+    int count() const;
 
 private: // Variables
     QString _argument;
@@ -108,6 +138,8 @@ private: // Variables
     WBackendIndex * _index;
 
     WFileWatcher _watcher;
+
+    QList<ControllerCoreScript> _scripts;
 
 private:
     Q_DISABLE_COPY      (ControllerCore)

@@ -492,6 +492,15 @@ ControllerCore::ControllerCore() : WController()
     wControllerDeclarative->setContextProperty("online", _online);
 }
 
+/* Q_INVOKABLE */ void ControllerCore::loadSource(const QString & fileName)
+{
+    _scripts.clear();
+
+    loadScript(fileName);
+
+    emit loaded();
+}
+
 //-------------------------------------------------------------------------------------------------
 
 /* Q_INVOKABLE */ void ControllerCore::updateBackends() const
@@ -513,6 +522,27 @@ ControllerCore::ControllerCore() : WController()
 /* Q_INVOKABLE */ void ControllerCore::clearComponentCache() const
 {
     wControllerDeclarative->engine()->clearComponentCache();
+}
+
+//-------------------------------------------------------------------------------------------------
+
+/* Q_INVOKABLE */ void ControllerCore::clearScripts()
+{
+    _scripts.clear();
+}
+
+/* Q_INVOKABLE */ QString ControllerCore::getVersion(int index) const
+{
+    if (index < 0 || index >= _scripts.count()) return QString();
+
+    return _scripts.at(index).version;
+}
+
+/* Q_INVOKABLE */ QByteArray ControllerCore::getData(int index) const
+{
+    if (index < 0 || index >= _scripts.count()) return QByteArray();
+
+    return _scripts.at(index).data;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -577,8 +607,6 @@ void ControllerCore::createIndex()
     connect(_index, SIGNAL(loaded()), this, SLOT(onIndexLoaded()));
 }
 
-//-------------------------------------------------------------------------------------------------
-
 WControllerFileReply * ControllerCore::copyBackends(const QString & path) const
 {
 #ifdef SK_DEPLOY
@@ -590,6 +618,46 @@ WControllerFileReply * ControllerCore::copyBackends(const QString & path) const
 #else
     return WControllerPlaylist::copyBackends(WControllerFile::applicationPath(PATH_BACKEND), path);
 #endif
+}
+
+void ControllerCore::loadScript(const QString & fileName)
+{
+    qDebug("LOADING %s", fileName.C_STR);
+
+    QByteArray data = WControllerFile::readAll(fileName);
+
+    QString line = Sk::getLine(data);
+
+    qDebug(line.C_STR);
+
+    line = line.mid(line.indexOf('/') + 2).toLower();
+
+    QStringList list = line.split(':', Qt::SkipEmptyParts);
+
+    if (list.isEmpty()) return;
+
+    int index;
+
+    if (list.count() == 1) index = 0;
+    else                   index = 1;
+
+    QStringList pair = list.at(index).simplified().split(' ', Qt::SkipEmptyParts);
+
+    if (pair.count() != 2) return;
+
+    ControllerCoreScript script;
+
+    script.version = pair.at(1);
+
+    script.data = data;
+
+    _scripts.prepend(script);
+
+    QString parent = pair.at(0);
+
+    if (parent == "sky") return;
+
+    loadScript(_path + "/script/" + parent + ".sky");
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -642,4 +710,9 @@ void ControllerCore::setArgument(const QString & argument)
     _argument = argument;
 
     emit argumentChanged();
+}
+
+int ControllerCore::count() const
+{
+    return _scripts.count();
 }

@@ -1,4 +1,4 @@
-# hello 1.0.0, sky 3.0.0-2
+// hello 1.0.0 : sky 3.0.0-2
 //=================================================================================================
 /*
     Copyright (C) 2015-2020 Sky kit authors. <http://omega.gg/Sky>
@@ -39,10 +39,16 @@ Image
     //---------------------------------------------------------------------------------------------
     // Functions
     //---------------------------------------------------------------------------------------------
+    // Events
 
-    function showHelp()
+    function onHelp()
     {
         console.debug("Welcome to Sky runtime " + sk.versionSky);
+    }
+
+    function getLoader()
+    {
+        return loader;
     }
 
     //---------------------------------------------------------------------------------------------
@@ -61,6 +67,13 @@ Image
         source: sourceLogo
 
         fillMode: Image.PreserveAspectCrop
+    }
+
+    Loader
+    {
+        id: loader
+
+        anchors.fill: parent
     }
 
     TextBase

@@ -31,7 +31,9 @@ Item
     // Properties
     //---------------------------------------------------------------------------------------------
 
-    property QtObject object
+    property list<QtObject> objects: []
+
+    //property QtObject object
 
     property bool ui: false
 
@@ -69,44 +71,63 @@ Item
     // Functions
     //---------------------------------------------------------------------------------------------
 
+    function loadScript(index)
+    {
+        var data = core.getData(index);
+
+        var parent = getParent(index - 1);
+
+        var root;
+
+        if (parent)
+        {
+            if (parent.onPatch)
+            {
+                data = parent.onPatch(data, core.getVersion(index));
+            }
+
+            if (parent.getLoader)
+            {
+                root = parent.getLoader();
+            }
+            else root = loader;
+        }
+        else root = loader;
+
+        var object = Qt.createQmlObject(data, root, Qt.resolvedUrl("Gui.qml"));
+
+        object.anchors.fill = root;
+
+        root.source = "";
+
+        objects.push(object);
+    }
+
     function load()
     {
-        if (object)
+        for (var i = 0; i < objects.length; i++)
         {
-            object.destroy();
-
-            object = null;
+            objects[i].destroy();
         }
+
+        objects = [];
+
+        loader.source = "";
 
         var argument = core.argument;
 
         if (argument)
         {
-            console.debug("LOADING " + argument);
+            core.loadSource(argument);
 
-            var data = controllerFile.readAll(argument);
-
-            // PATCH
-
-            object = Qt.createQmlObject(data, loader, Qt.resolvedUrl("Gui.qml"));
-
-            if (object)
+            for (var i = 0; i < core.count; i++)
             {
-                object.anchors.fill = loader;
-
-                loader.source = "";
-
-                object.forceActiveFocus();
-
-                showHelp();
-
-                return;
+                loadScript(i);
             }
         }
+        else loader.source = Qt.resolvedUrl("PageDefault.qml");
 
-        loader.source = Qt.resolvedUrl("PageDefault.qml");
-
-        loader.item.forceActiveFocus();
+        setFocus();
 
         showHelp();
     }
@@ -129,6 +150,15 @@ Item
 
             if (argument == "") return;
 
+            core.argument = argument;
+        }
+        else if (command == "reload")
+        {
+            /* var */ argument = core.argument;
+
+            if (argument == "") return;
+
+            core.argument = "";
             core.argument = argument;
         }
         else if (command == "unload")
@@ -165,10 +195,11 @@ Item
 
     function showHelp()
     {
-        // NOTE: We check if the 'showHelp' function is defined.
-        if (object && object.showHelp)
+        var object = getObjectHelp();
+
+        if (object)
         {
-            object.showHelp();
+            object.onHelp();
 
             return;
         }
@@ -180,6 +211,8 @@ Item
 
     function setFocus()
     {
+        var object = getObject();
+
         if (object)
         {
             object.forceActiveFocus();
@@ -201,6 +234,40 @@ Item
         if (item) item.setFocus();
     }
 
+    function getObject()
+    {
+        var length = objects.length;
+
+        if (length)
+        {
+            return objects[length - 1];
+        }
+        else return null;
+    }
+
+    function getObjectHelp()
+    {
+        for (var i = objects.length - 1; i >= 0; i--)
+        {
+            var object = objects[i];
+
+            // NOTE: We check if the 'onHelp' function is defined.
+            if (object && object.onHelp)
+            {
+                return object;
+            }
+        }
+
+        return null;
+    }
+
+    function getParent(index)
+    {
+        if (index < 0 || index >= objects.length) return null;
+
+        return objects[index];
+    }
+
     //---------------------------------------------------------------------------------------------
     // Keys
 
@@ -208,6 +275,10 @@ Item
     {
         if (event.key == Qt.Key_twosuperior)
         {
+            if (ui && stateConsole) return;
+
+            event.accepted = true;
+
             ui = true;
 
             showConsole();
@@ -216,11 +287,17 @@ Item
         }
         else if (event.key == Qt.Key_Tab || event.key == Qt.Key_Backtab)
         {
+            event.accepted = true;
+
             setFocusConsole();
         }
         else if (event.key == Qt.Key_F1)
         {
+            event.accepted = true;
+
             ui = !ui;
+
+            setFocusConsole();
         }
     }
 
@@ -298,7 +375,7 @@ Item
 
             opacity: (stateConsole != 0)
 
-            source: (visible) ? Qt.resolvedUrl("PageConsole.qml") : ""
+            source: (stateConsole != 0) ? Qt.resolvedUrl("PageConsole.qml") : ""
 
             Behavior on opacity
             {

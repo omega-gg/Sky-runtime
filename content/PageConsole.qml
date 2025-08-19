@@ -109,6 +109,8 @@ Item
                 gui.process(text);
 
                 clear();
+
+                setFocus();
             }
         }
     }
