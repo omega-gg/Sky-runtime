@@ -31,7 +31,7 @@ Item
     // Properties
     //---------------------------------------------------------------------------------------------
 
-    property list<QtObject> objects: []
+    property variant objects: null
 
     property bool ui: false
 
@@ -73,12 +73,15 @@ Item
 
     function load()
     {
-        for (var i = 0; i < objects.length; i++)
+        if (objects)
         {
-            objects[i].destroy();
+            for (var i = 0; i < objects.length; i++)
+            {
+                objects[i].destroy();
+            }
         }
 
-        objects = [];
+        objects = new Array;
 
         loader.source = "";
 

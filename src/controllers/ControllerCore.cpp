@@ -645,7 +645,7 @@ void ControllerCore::loadScript(const QString & fileName)
 
     line = line.mid(line.indexOf('/') + 2).toLower();
 
-    QStringList list = line.split(':', Qt::SkipEmptyParts);
+    QStringList list = Sk::split(line, ':');
 
     if (list.isEmpty()) return;
 
@@ -654,7 +654,7 @@ void ControllerCore::loadScript(const QString & fileName)
     if (list.count() == 1) index = 0;
     else                   index = 1;
 
-    QStringList pair = list.at(index).simplified().split(' ', Qt::SkipEmptyParts);
+    QStringList pair = Sk::split(list.at(index).simplified(), ' ');
 
     if (pair.count() != 2) return;
 
