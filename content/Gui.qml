@@ -33,8 +33,6 @@ Item
 
     property list<QtObject> objects: []
 
-    //property QtObject object
-
     property bool ui: false
 
     property int stateConsole: 1
