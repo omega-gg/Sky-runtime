@@ -340,12 +340,6 @@ ControllerCore::ControllerCore() : WController()
 
     wControllerDeclarative->setContextProperty("sk",   sk);
     wControllerDeclarative->setContextProperty("core", this);
-
-    //---------------------------------------------------------------------------------------------
-    // Signals
-
-    //connect(&_watcher, SIGNAL(filesModified(const QString &, const QStringList &)),
-    //        this,      SIGNAL(slideUpdated()));
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -490,6 +484,12 @@ ControllerCore::ControllerCore() : WController()
     wControllerDeclarative->setContextProperty("controllerPlaylist", wControllerPlaylist);
 
     wControllerDeclarative->setContextProperty("online", _online);
+
+    //---------------------------------------------------------------------------------------------
+    // Signals
+
+    connect(&_watcher, SIGNAL(filesModified(const QString &, const QStringList &)),
+            this,      SIGNAL(refresh()));
 }
 
 /* Q_INVOKABLE */ void ControllerCore::loadSource(const QString & fileName)
@@ -498,7 +498,20 @@ ControllerCore::ControllerCore() : WController()
 
     loadScript(fileName);
 
+    _watcher.clearFiles();
+
+    _watcher.addFile(fileName);
+
     emit loaded();
+}
+
+/* Q_INVOKABLE */ void ControllerCore::reloadScript(int index)
+{
+    if (index < 0 || index >= _scripts.count()) return;
+
+    ControllerCoreScript & script = _scripts[index];
+
+    script.data = WControllerFile::readAll(script.fileName);
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -647,6 +660,8 @@ void ControllerCore::loadScript(const QString & fileName)
 
     ControllerCoreScript script;
 
+    script.fileName = fileName;
+
     script.version = pair.at(1);
 
     script.data = data;
@@ -676,6 +691,12 @@ void ControllerCore::onIndexLoaded()
 #if defined(SK_BACKEND_LOCAL) && defined(SK_DEPLOY) == false
     // NOTE: This makes sure that we have the latest local vbml loaded.
     resetBackends();
+
+    // NOTE: We want to reload backends when the folder changes.
+    _watcher.addFolder(WControllerFile::applicationPath(PATH_BACKEND));
+
+    connect(&_watcher, SIGNAL(foldersModified(const QString &, const QStringList &)),
+            this,      SLOT(resetBackends()));
 #else
     _index->update();
 #endif

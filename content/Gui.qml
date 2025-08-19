@@ -54,6 +54,8 @@ Item
     {
         target: core
 
+        /* QML_CONNECTION */ function onRefresh() { refresh() }
+
         /* QML_CONNECTION */ function onArgumentChanged() { load() }
     }
 
@@ -68,6 +70,40 @@ Item
     //---------------------------------------------------------------------------------------------
     // Functions
     //---------------------------------------------------------------------------------------------
+
+    function load()
+    {
+        for (var i = 0; i < objects.length; i++)
+        {
+            objects[i].destroy();
+        }
+
+        objects = [];
+
+        loader.source = "";
+
+        var argument = core.argument;
+
+        if (argument)
+        {
+            core.loadSource(argument);
+
+            for (var i = 0; i < core.count; i++)
+            {
+                loadScript(i);
+            }
+        }
+        else loader.source = Qt.resolvedUrl("PageDefault.qml");
+
+        setFocus();
+
+//#DEPLOY
+        showHelp();
+//#ELSE
+        // NOTE: Make sure we show the help after the loading messages in the console.
+        timer.start();
+//#END
+    }
 
     function loadScript(index)
     {
@@ -101,35 +137,6 @@ Item
         objects.push(object);
     }
 
-    function load()
-    {
-        for (var i = 0; i < objects.length; i++)
-        {
-            objects[i].destroy();
-        }
-
-        objects = [];
-
-        loader.source = "";
-
-        var argument = core.argument;
-
-        if (argument)
-        {
-            core.loadSource(argument);
-
-            for (var i = 0; i < core.count; i++)
-            {
-                loadScript(i);
-            }
-        }
-        else loader.source = Qt.resolvedUrl("PageDefault.qml");
-
-        setFocus();
-
-        showHelp();
-    }
-
     function process(text)
     {
         console.debug("> " + text);
@@ -149,6 +156,10 @@ Item
             if (argument == "") return;
 
             core.argument = argument;
+        }
+        else if (command == "refresh")
+        {
+            refresh();
         }
         else if (command == "reload")
         {
@@ -177,6 +188,25 @@ Item
         {
             window.close();
         }
+    }
+
+    function refresh()
+    {
+        var length = objects.length;
+
+        if (length == 0) return;
+
+        var index = length - 1;
+
+        core.reloadScript(index);
+
+        objects[index].destroy();
+
+        objects.pop();
+
+        loadScript(index);
+
+        setFocus();
     }
 
     function showConsole()
@@ -307,6 +337,17 @@ Item
     //---------------------------------------------------------------------------------------------
     // Children
     //---------------------------------------------------------------------------------------------
+
+//#!DEPLOY
+    Timer
+    {
+        id: timer
+
+        interval: 3000
+
+        onTriggered: showHelp()
+    }
+//#END
 
     Loader
     {

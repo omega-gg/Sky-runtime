@@ -49,6 +49,7 @@ class DataOnline;
 
 struct ControllerCoreScript
 {
+    QString fileName;
     QString version;
 
     QByteArray data;
@@ -77,6 +78,8 @@ public: // Interface
     Q_INVOKABLE void load();
 
     Q_INVOKABLE void loadSource(const QString & fileName);
+
+    Q_INVOKABLE void reloadScript(int index);
 
     Q_INVOKABLE void updateBackends() const;
     Q_INVOKABLE void resetBackends () const;
@@ -117,6 +120,8 @@ private slots:
 signals:
     void loaded();
 
+    void refresh();
+
     void argumentChanged();
 
 public: // Properties
@@ -137,9 +142,9 @@ private: // Variables
 
     WBackendIndex * _index;
 
-    WFileWatcher _watcher;
-
     QList<ControllerCoreScript> _scripts;
+
+    WFileWatcher _watcher;
 
 private:
     Q_DISABLE_COPY      (ControllerCore)
