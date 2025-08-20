@@ -330,12 +330,41 @@ Item
 
             setFocusConsole();
         }
+//#!DEPLOY
+        else if (event.key == Qt.Key_F12)
+        {
+            event.accepted = true;
+
+            pTakeShot();
+        }
+//#END
     }
 
     function onKeyReleased(event)
     {
         if (event.isAutoRepeat) return;
     }
+
+//#!DEPLOY
+    //---------------------------------------------------------------------------------------------
+    // Dev
+
+    function pTakeShot() // Desktop
+    {
+        var width = 1024;
+
+        window.width  = width;
+        window.height = width * 0.5625; // 16:9 ratio
+
+        sk.wait(1000);
+
+        var path = "../dist/pictures/Sky-runtime.png";
+
+        window.saveShot(path);
+
+        window.compressShot(path);
+    }
+//#END
 
     //---------------------------------------------------------------------------------------------
     // Children
