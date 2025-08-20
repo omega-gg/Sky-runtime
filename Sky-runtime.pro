@@ -304,6 +304,7 @@ OTHER_FILES += environment.sh \
                content/PageConsole.qml \
                content/TextDefault.qml \
                script/hello.sky \
+               test/hello.sky \
                include/generate.sh \
                dist/sky.rc \
                dist/script/start.sh \
