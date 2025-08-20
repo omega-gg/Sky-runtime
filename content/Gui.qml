@@ -228,16 +228,33 @@ Item
 
     function showHelp()
     {
-        var object = getObjectHelp();
+        console.debug("-------\n" +
+                      "Welcome to Sky kit runtime\n\n" +
+                      "keyboard:\n" +
+                      "- F1        show the user inteface\n" +
+                      "- Escape    quit the application\n" +
+                      "\n" +
+                      "console:\n" +
+                      "> load <source>    load a .sky source\n" +
+                      "> refresh          refresh the top level script\n" +
+                      "> reload           reload everthing in cascade\n" +
+                      "> unload           unload everthing\n" +
+                      "> clear            clear the console\n" +
+                      "> help             show the help\n" +
+                      "> exit             quit the application");
 
-        if (object)
+        for (var i = 0; i < objects.length; i++)
         {
-            object.onHelp();
+            var object = objects[i];
 
-            return;
+            // NOTE: We check if the 'onHelp' function is defined.
+            if (object && object.onHelp)
+            {
+                console.debug("\n-------");
+
+                object.onHelp();
+            }
         }
-
-        console.debug("Welcome to Sky kit runtime");
     }
 
     //---------------------------------------------------------------------------------------------
@@ -276,22 +293,6 @@ Item
             return objects[length - 1];
         }
         else return null;
-    }
-
-    function getObjectHelp()
-    {
-        for (var i = objects.length - 1; i >= 0; i--)
-        {
-            var object = objects[i];
-
-            // NOTE: We check if the 'onHelp' function is defined.
-            if (object && object.onHelp)
-            {
-                return object;
-            }
-        }
-
-        return null;
     }
 
     function getParent(index)
