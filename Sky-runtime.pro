@@ -111,6 +111,15 @@ include(src/3rdparty/quazip/quazip.pri)
 include(src/3rdparty/libcharsetdetect/libcharsetdetect.pri)
 include(src/3rdparty/zxing-cpp/zxing-cpp.pri)
 
+include(bash/ffmpeg/ffmpeg.pri)
+include(bash/youtube-dl/youtube-dl.pri)
+
+include(bash/generate/Runway/Runway.pri)
+include(bash/generate/Freepik/Freepik.pri)
+include(bash/generate/fal/fal.pri)
+include(bash/generate/Luma/Luma.pri)
+include(bash/generate/LivePortrait/LivePortrait.pri)
+
 INCLUDEPATH += $$SK/include/SkCore \
                $$SK/include/SkGui \
                $$SK/include/SkBarcode \
