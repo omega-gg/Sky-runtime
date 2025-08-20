@@ -138,6 +138,8 @@ Item
         root.source = "";
 
         objects.push(object);
+
+        if (object.onCreate) object.onCreate(parent);
     }
 
     function process(text)
