@@ -132,6 +132,8 @@ static const QString PATH_BACKEND = "../../backend";
 #endif
 #endif
 
+static const int CORE_WATCHER_INTERVAL = 200;
+
 //-------------------------------------------------------------------------------------------------
 // Private ctor / dtor
 //-------------------------------------------------------------------------------------------------
@@ -475,6 +477,11 @@ ControllerCore::ControllerCore() : WController()
     _online = new DataOnline(this);
 
     //---------------------------------------------------------------------------------------------
+    // Watcher
+
+    wControllerFile->setWatcherInterval(CORE_WATCHER_INTERVAL);
+
+    //---------------------------------------------------------------------------------------------
     // QML
 
     qmlRegisterType<DataOnline>("Sky", 1,0, "DataOnline");
@@ -731,6 +738,11 @@ void ControllerCore::setArgument(const QString & argument)
     _argument = argument;
 
     emit argumentChanged();
+}
+
+QString ControllerCore::path() const
+{
+    return WControllerFile::folderPath(_argument);
 }
 
 int ControllerCore::count() const

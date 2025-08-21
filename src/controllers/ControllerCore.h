@@ -65,6 +65,8 @@ class ControllerCore : public WController
 
     Q_PROPERTY(QString argument READ argument WRITE setArgument NOTIFY argumentChanged)
 
+    Q_PROPERTY(QString path READ path NOTIFY argumentChanged)
+
     Q_PROPERTY(int count READ count NOTIFY loaded)
 
 private:
@@ -127,6 +129,8 @@ signals:
 public: // Properties
     QString argument() const;
     void    setArgument(const QString & argument);
+
+    QString path() const;
 
     int count() const;
 

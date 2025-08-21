@@ -131,7 +131,21 @@ Item
         }
         else root = loader;
 
-        var object = Qt.createQmlObject(data, root, Qt.resolvedUrl("Gui.qml"));
+        var object;
+
+        try
+        {
+            object = Qt.createQmlObject(data, root, Qt.resolvedUrl("Gui.qml"));
+        }
+        catch (error)
+        {
+            console.debug(error);
+        }
+
+        if (object == null)
+        {
+            object = Qt.createQmlObject("import QtQuick 2.0; Item {}", root);
+        }
 
         object.anchors.fill = root;
 
