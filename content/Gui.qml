@@ -421,6 +421,18 @@ Item
         text: qsTr("ESCAPE to quit")
     }
 
+    ViewDrag
+    {
+        anchors.left : parent.left
+        anchors.right: parent.right
+
+        height: st.dp32
+
+        visible: (window.fullScreen == false)
+
+        onDoubleClicked: toggleMaximized()
+    }
+
     Item
     {
         anchors.fill: parent
