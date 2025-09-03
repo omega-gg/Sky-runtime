@@ -354,7 +354,11 @@ Item
 
             ui = !ui;
 
-            setFocusConsole();
+            if (ui)
+            {
+                setFocusConsole();
+            }
+            else setFocus();
         }
 //#!DEPLOY
         else if (event.key == Qt.Key_F12)
