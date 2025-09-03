@@ -551,6 +551,13 @@ ControllerCore::ControllerCore() : WController()
     _scripts.clear();
 }
 
+/* Q_INVOKABLE */ void ControllerCore::addWatcher(const QString & fileName)
+{
+    _watcher.addFile(fileName);
+}
+
+//-------------------------------------------------------------------------------------------------
+
 /* Q_INVOKABLE */ QString ControllerCore::getVersion(int index) const
 {
     if (index < 0 || index >= _scripts.count()) return QString();
