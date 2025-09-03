@@ -207,6 +207,15 @@ Item
         {
             window.close();
         }
+        else
+        {
+            for (var i = 0; i < objects.length; i++)
+            {
+                var object = objects[i];
+
+                if (object.onConsole && object.onConsole(list)) return;
+            }
+        }
     }
 
     function refresh()
@@ -243,7 +252,7 @@ Item
     function showHelp()
     {
         console.debug("-------\n" +
-                      "Welcome to Sky kit runtime\n\n" +
+                      "Welcome to Sky kit runtime " + sk.versionSky + "\n\n" +
                       "keyboard:\n" +
                       "- F1        show the user inteface\n" +
                       "- Escape    quit the application\n" +
@@ -426,7 +435,7 @@ Item
         anchors.left : parent.left
         anchors.right: parent.right
 
-        height: st.dp32
+        height: st.dp48
 
         visible: (window.fullScreen == false)
 
