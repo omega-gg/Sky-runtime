@@ -441,7 +441,7 @@ Item
 
         height: st.dp48
 
-        visible: (window.fullScreen == false)
+        dragEnabled: (window.fullScreen == false)
 
         onDoubleClicked: toggleMaximized()
     }

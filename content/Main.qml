@@ -31,7 +31,11 @@ Application
 
     function toggleMaximized()
     {
-        window.maximized = !(window.maximized);
+        if (window.fullScreen)
+        {
+            window.fullScreen = false;
+        }
+        else window.maximized = !(window.maximized);
     }
 
     //---------------------------------------------------------------------------------------------
