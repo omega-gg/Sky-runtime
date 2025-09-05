@@ -31,6 +31,8 @@ fi
 
 if [ $pinokio = "true" ]; then
 
+    echo "swap: Using pinokio"
+
     FaceFusion="$pinokio_path/facefusion"
 
     export PATH="$pinokio_path/.env:$pinokio_path/.env/Library/bin:$PATH"
