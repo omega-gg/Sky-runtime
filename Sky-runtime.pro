@@ -119,6 +119,7 @@ include(bash/generate/Freepik/Freepik.pri)
 include(bash/generate/fal/fal.pri)
 include(bash/generate/Luma/Luma.pri)
 include(bash/generate/LivePortrait/LivePortrait.pri)
+include(bash/generate/FaceFusion/FaceFusion.pri)
 
 INCLUDEPATH += $$SK/include/SkCore \
                $$SK/include/SkGui \
