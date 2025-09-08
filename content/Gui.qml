@@ -182,12 +182,7 @@ Item
         }
         else if (command == "reload")
         {
-            /* var */ argument = core.argument;
-
-            if (argument == "") return;
-
-            core.argument = "";
-            core.argument = argument;
+            reload();
         }
         else if (command == "unload")
         {
@@ -216,6 +211,16 @@ Item
                 if (object.onConsole && object.onConsole(list)) return;
             }
         }
+    }
+
+    function reload()
+    {
+        var argument = core.argument;
+
+        if (argument == "") return;
+
+        core.argument = "";
+        core.argument = argument;
     }
 
     function refresh()
@@ -254,8 +259,10 @@ Item
         console.debug("-------\n" +
                       "Welcome to Sky kit runtime " + sk.versionSky + "\n\n" +
                       "keyboard:\n" +
-                      "- F1        show the user inteface\n" +
-                      "- Escape    quit the application\n" +
+                      "- F1           show the user inteface\n" +
+                      "- F5           refresh the top level script\n" +
+                      "- Ctrl + F5    reload everthing in cascade\n" +
+                      "- Escape       quit the application\n" +
                       "\n" +
                       "console:\n" +
                       "> load <source>    load a .sky source\n" +
@@ -359,6 +366,16 @@ Item
                 setFocusConsole();
             }
             else setFocus();
+        }
+        else if (event.key == Qt.Key_F5)
+        {
+            event.accepted = true;
+
+            if (event.modifiers == Qt.ControlModifier)
+            {
+                reload();
+            }
+            else refresh();
         }
 //#!DEPLOY
         else if (event.key == Qt.Key_F12)
@@ -536,6 +553,17 @@ Item
 
             anchors.right: parent.right
         }
+    }
+
+    Popup
+    {
+        id: popup
+
+        anchors.bottom: parent.bottom
+
+        anchors.bottomMargin: st.dp32
+
+        anchors.horizontalCenter: parent.horizontalCenter
     }
 
     RectangleBordersDrop
