@@ -81,6 +81,16 @@ public: // Interface
 
     Q_INVOKABLE void loadSource(const QString & fileName);
 
+    Q_INVOKABLE void render(const QString      & name,
+                            const QVariantList & objects,
+                            int                  width,
+                            int                  height,
+                            qreal                x,
+                            qreal                y,
+                            qreal                scale,
+                            qreal                upscale    = 1.0,
+                            const QColor       & background = Qt::white) const;
+
     Q_INVOKABLE void reloadScript(int index);
 
     Q_INVOKABLE void updateBackends() const;

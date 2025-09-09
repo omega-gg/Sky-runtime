@@ -23,6 +23,7 @@
 #include "ControllerCore.h"
 
 // Qt includes
+#include <QPainter>
 #ifdef QT_4
 #include <QCoreApplication>
 #include <QDeclarativeEngine>
@@ -510,6 +511,55 @@ ControllerCore::ControllerCore() : WController()
     _watcher.addFile(fileName);
 
     emit loaded();
+}
+
+/* Q_INVOKABLE */ void ControllerCore::render(const QString      & name,
+                                              const QVariantList & objects,
+                                              int                  width,
+                                              int                  height,
+                                              qreal                x,
+                                              qreal                y,
+                                              qreal                scale,
+                                              qreal                upscale,
+                                              const QColor       & background) const
+{
+    qreal gapX = (qreal) (width  - width  * scale) / 2.0;
+    qreal gapY = (qreal) (height - height * scale) / 2.0;
+
+    x = x * scale + gapX;
+    y = y * scale + gapY;
+
+    QImage result(width * upscale, height * upscale, QImage::Format_ARGB32);
+
+    result.fill(background);
+
+    QPainter painter(&result);
+
+    foreach (const QVariant & variant, objects)
+    {
+        WDeclarativeImage * object = variant.value<WDeclarativeImage *>();
+
+        if (object == NULL) continue;
+
+        QImage image(object->source());
+
+        image = image.scaled(object->width() * scale * upscale, object->height() * scale * upscale,
+                             Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+        qreal postionX = x + object->x() * scale;
+        qreal postionY = y + object->y() * scale;
+
+        painter.drawImage(QPointF(postionX * upscale, postionY * upscale), image);
+    }
+
+    QString fileName = QDir::fromNativeSeparators(WControllerFile::pathPictures()) + '/' + name;
+
+    QString path = QFileInfo(fileName).absolutePath();
+
+    if (QFile::exists(path) || QDir().mkpath(path))
+    {
+        result.save(fileName, "png");
+    }
 }
 
 /* Q_INVOKABLE */ void ControllerCore::reloadScript(int index)

@@ -378,7 +378,7 @@ Item
             else refresh();
         }
 //#!DEPLOY
-        else if (event.key == Qt.Key_F12)
+        else if (event.key == Qt.Key_F12 && event.modifiers == Qt.ControlModifier)
         {
             event.accepted = true;
 
