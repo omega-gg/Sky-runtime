@@ -529,7 +529,8 @@ ControllerCore::ControllerCore() : WController()
     x = x * scale + gapX;
     y = y * scale + gapY;
 
-    QImage result(width * upscale, height * upscale, QImage::Format_ARGB32);
+    QImage result(qRound(width  * upscale),
+                  qRound(height * upscale), QImage::Format_ARGB32);
 
     result.fill(background);
 
@@ -543,13 +544,15 @@ ControllerCore::ControllerCore() : WController()
 
         QImage image(object->source());
 
-        image = image.scaled(object->width() * scale * upscale, object->height() * scale * upscale,
+        image = image.scaled(qRound(object->width () * scale * upscale),
+                             qRound(object->height() * scale * upscale),
                              Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
         qreal postionX = x + object->x() * scale;
         qreal postionY = y + object->y() * scale;
 
-        painter.drawImage(QPointF(postionX * upscale, postionY * upscale), image);
+        painter.drawImage(QPoint(qRound(postionX * upscale),
+                                 qRound(postionY * upscale)), image);
     }
 
     QString fileName = QDir::fromNativeSeparators(WControllerFile::pathPictures()) + '/' + name;
