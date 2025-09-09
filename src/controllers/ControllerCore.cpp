@@ -513,7 +513,7 @@ ControllerCore::ControllerCore() : WController()
     emit loaded();
 }
 
-/* Q_INVOKABLE */ void ControllerCore::render(const QString      & name,
+/* Q_INVOKABLE */ bool ControllerCore::render(const QString      & name,
                                               const QVariantList & objects,
                                               int                  width,
                                               int                  height,
@@ -558,8 +558,9 @@ ControllerCore::ControllerCore() : WController()
 
     if (QFile::exists(path) || QDir().mkpath(path))
     {
-        result.save(fileName, "png");
+        return result.save(fileName, "png");
     }
+    else return false;
 }
 
 /* Q_INVOKABLE */ void ControllerCore::reloadScript(int index)

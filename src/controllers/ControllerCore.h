@@ -81,7 +81,7 @@ public: // Interface
 
     Q_INVOKABLE void loadSource(const QString & fileName);
 
-    Q_INVOKABLE void render(const QString      & name,
+    Q_INVOKABLE bool render(const QString      & name,
                             const QVariantList & objects,
                             int                  width,
                             int                  height,
