@@ -301,6 +301,7 @@ OTHER_FILES += environment.sh \
                content/generate.sh \
                content/Main.qml \
                content/Gui.qml \
+               content/ItemUi.qml \
                content/PageDefault.qml \
                content/PageConsole.qml \
                content/TextDefault.qml \

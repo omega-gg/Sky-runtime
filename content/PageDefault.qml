@@ -102,4 +102,38 @@ Item
 
         font.pixelSize: st.dp20
     }
+
+    ItemUi
+    {
+        Rectangle
+        {
+            anchors.fill: scrollList
+
+            color: "#323232"
+        }
+
+        ScrollList
+        {
+            id: scrollList
+
+            anchors.top   : parent.top
+            anchors.bottom: parent.bottom
+
+            width: st.dp256
+        }
+
+        BorderHorizontal
+        {
+            anchors.left  : scrollList.left
+            anchors.right : scrollList.right
+            anchors.bottom: scrollList.top
+        }
+
+        BorderVertical
+        {
+            anchors.left  : scrollList.right
+            anchors.top   : scrollList.top
+            anchors.bottom: scrollList.bottom
+        }
+    }
 }

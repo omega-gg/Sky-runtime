@@ -612,6 +612,15 @@ ControllerCore::ControllerCore() : WController()
 
 //-------------------------------------------------------------------------------------------------
 
+/* Q_INVOKABLE */ QString ControllerCore::getName() const
+{
+    if (_scripts.isEmpty())
+    {
+        return tr("Sky runtime");
+    }
+    else return WControllerFile::fileBaseName(_scripts.last().fileName.toLower());
+}
+
 /* Q_INVOKABLE */ QString ControllerCore::getVersion(int index) const
 {
     if (index < 0 || index >= _scripts.count()) return QString();

@@ -46,6 +46,13 @@ Item
 
     Component.onCompleted: load()
 
+    onUiChanged:
+    {
+        if (ui == false) return;
+
+        buttonApplication.text = core.getName();
+    }
+
     //---------------------------------------------------------------------------------------------
     // Connections
     //---------------------------------------------------------------------------------------------
@@ -73,6 +80,8 @@ Item
 
     function load()
     {
+        ui = false;
+
         if (objects)
         {
             for (var i = 0; i < objects.length; i++)
@@ -287,6 +296,11 @@ Item
         }
     }
 
+    function toggleUi()
+    {
+        ui = !(ui);
+    }
+
     //---------------------------------------------------------------------------------------------
 
     function setFocus()
@@ -359,7 +373,7 @@ Item
         {
             event.accepted = true;
 
-            ui = !ui;
+            toggleUi();
 
             if (ui)
             {
@@ -435,24 +449,10 @@ Item
         anchors.fill: parent
     }
 
-    TextDefault
-    {
-        anchors.left: parent.left
-        anchors.top : parent.top
-
-        text: qsTr("Press F1 for UI")
-    }
-
-    TextDefault
-    {
-        anchors.right: parent.right
-        anchors.top  : parent.top
-
-        text: qsTr("ESCAPE to quit")
-    }
-
     ViewDrag
     {
+        id: viewDrag
+
         anchors.left : parent.left
         anchors.right: parent.right
 
@@ -463,9 +463,35 @@ Item
         onDoubleClicked: toggleMaximized()
     }
 
+    TextDefaultLink
+    {
+        anchors.left: parent.left
+        anchors.top : parent.top
+
+        text: qsTr("Press F1 for UI")
+
+        // NOTE: Since the text is fading out on press, we keep it underlined when pressed.
+        font.underline: isHovered
+
+        onClicked: toggleUi()
+    }
+
+    TextDefault
+    {
+        anchors.right: parent.right
+        anchors.top  : parent.top
+
+        text: qsTr("ESCAPE to quit")
+    }
+
     Item
     {
-        anchors.fill: parent
+        id: itemUi
+
+        anchors.left  : parent.left
+        anchors.right : parent.right
+        anchors.top   : parent.top
+        anchors.bottom: parent.bottom
 
         visible: (opacity != 0.0)
         opacity: (ui)
@@ -478,6 +504,22 @@ Item
 
                 easing.type: st.easing
             }
+        }
+
+        ButtonPiano
+        {
+            id: buttonApplication
+
+            maximumWidth: buttonConsole.x - st.dp32
+
+            borderBottom: borderSize
+
+            checkable: true
+            checked  : true
+
+            font.pixelSize: st.dp14
+
+            onClicked: toggleUi()
         }
 
         Loader

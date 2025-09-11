@@ -102,6 +102,8 @@ public: // Interface
 
     Q_INVOKABLE void addWatcher(const QString & fileName);
 
+    Q_INVOKABLE QString getName() const;
+
     Q_INVOKABLE QString    getVersion(int index) const;
     Q_INVOKABLE QByteArray getData   (int index) const;
 
