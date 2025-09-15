@@ -30,7 +30,7 @@ Item
     //---------------------------------------------------------------------------------------------
 
     width : itemUi.width
-    height: itemUi.height - loaderConsole.height
+    height: itemUi.height - loaderConsole.height - y
 
     y: viewDrag.height
 

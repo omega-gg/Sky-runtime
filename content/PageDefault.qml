@@ -197,6 +197,8 @@ Item
 
         BorderHorizontal
         {
+            id: borderA
+
             anchors.left  : list.left
             anchors.right : list.right
             anchors.bottom: list.top
@@ -204,7 +206,7 @@ Item
 
         BorderVertical
         {
-            id: border
+            id: borderB
 
             anchors.left  : list.right
             anchors.top   : list.top
@@ -215,9 +217,9 @@ Item
         {
             id: loader
 
-            anchors.left  : border.right
+            anchors.left  : borderB.right
             anchors.right : parent.right
-            anchors.top   : list.top
+            anchors.top   : borderA.top
             anchors.bottom: list.bottom
 
             source: (currentIndex == -1) ? "" : Qt.resolvedUrl("PageScript.qml")

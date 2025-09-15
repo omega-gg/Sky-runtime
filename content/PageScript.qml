@@ -23,82 +23,90 @@
 import QtQuick 1.0
 import Sky     1.0
 
-Rectangle
+Item
 {
-    //---------------------------------------------------------------------------------------------
-    // Settings
-    //---------------------------------------------------------------------------------------------
-
-    opacity: 0.9
-
-    color: "#161616"
-
     //---------------------------------------------------------------------------------------------
     // Children
     //---------------------------------------------------------------------------------------------
 
-    TextBase
+    Rectangle
     {
-        id: itemTitle
+        anchors.fill: parent
 
-        anchors.left : parent.left
-        anchors.right: parent.right
-        anchors.top  : parent.top
+        opacity: 0.9
 
-        anchors.margins: st.dp16
-
-        text: core.getLibraryName(currentIndex)
-
-        font.pixelSize: st.dp32
+        color: "#161616"
     }
 
-    ButtonPiano
+    ScrollArea
     {
-        id: buttonNew
+        anchors.fill: parent
 
-        anchors.left: itemTitle.left
-        anchors.top : itemTitle.bottom
+        contentHeight: buttonNew.y + buttonNew.height + st.dp16
 
-        anchors.topMargin: st.dp16
+        TextBase
+        {
+            id: itemTitle
 
-        borderLeft  : borderSize
-        borderBottom: borderSize
+            anchors.left : parent.left
+            anchors.right: parent.right
+            anchors.top  : parent.top
 
-        padding: st.dp16
+            anchors.margins: st.dp16
 
-        text: qsTr("New .sky")
-    }
+            text: core.getLibraryName(currentIndex)
 
-    ButtonPiano
-    {
-        id: buttonRun
+            font.pixelSize: st.dp32
+        }
 
-        anchors.left: buttonNew.right
-        anchors.top : buttonNew.top
+        ButtonPiano
+        {
+            id: buttonNew
 
-        anchors.leftMargin: st.dp16
+            anchors.left: itemTitle.left
+            anchors.top : itemTitle.bottom
 
-        borderLeft  : borderSize
-        borderBottom: borderSize
+            anchors.topMargin: st.dp16
 
-        padding: st.dp16
+            borderLeft  : borderSize
+            borderBottom: borderSize
 
-        text: qsTr("Run script")
+            padding: st.dp16
 
-        onClicked: core.argument = core.getLibraryFileName(currentIndex)
-    }
+            text: qsTr("New .sky")
+        }
 
-    ButtonPiano
-    {
-        anchors.left: buttonRun.right
-        anchors.top : buttonRun.top
+        ButtonPiano
+        {
+            id: buttonRun
 
-        borderBottom: borderSize
+            anchors.left: buttonNew.right
+            anchors.top : buttonNew.top
 
-        padding: st.dp16
+            anchors.leftMargin: st.dp16
 
-        text: qsTr("Open folder")
+            borderLeft  : borderSize
+            borderBottom: borderSize
 
-        onClicked: gui.openFile(core.pathLibrary)
+            padding: st.dp16
+
+            text: qsTr("Run script")
+
+            onClicked: core.argument = core.getLibraryFileName(currentIndex)
+        }
+
+        ButtonPiano
+        {
+            anchors.left: buttonRun.right
+            anchors.top : buttonRun.top
+
+            borderBottom: borderSize
+
+            padding: st.dp16
+
+            text: qsTr("Open folder")
+
+            onClicked: gui.openFile(core.pathLibrary)
+        }
     }
 }
