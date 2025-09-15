@@ -55,6 +55,12 @@ struct ControllerCoreScript
     QByteArray data;
 };
 
+struct ControllerCoreItem
+{
+    QString fileName;
+    QString name;
+};
+
 //-------------------------------------------------------------------------------------------------
 // ControllerCore
 //-------------------------------------------------------------------------------------------------
@@ -67,7 +73,13 @@ class ControllerCore : public WController
 
     Q_PROPERTY(QString path READ path NOTIFY argumentChanged)
 
+    Q_PROPERTY(QString pathLibrary READ pathLibrary CONSTANT)
+
     Q_PROPERTY(int count READ count NOTIFY loaded)
+
+    Q_PROPERTY(QString name READ name NOTIFY loaded)
+
+    Q_PROPERTY(int libraryCount READ libraryCount NOTIFY libraryLoaded)
 
 private:
     ControllerCore();
@@ -80,6 +92,8 @@ public: // Interface
     Q_INVOKABLE void load();
 
     Q_INVOKABLE void loadSource(const QString & fileName);
+
+    Q_INVOKABLE void loadLibrary();
 
     Q_INVOKABLE bool render(const QString      & name,
                             const QVariantList & objects,
@@ -102,10 +116,15 @@ public: // Interface
 
     Q_INVOKABLE void addWatcher(const QString & fileName);
 
-    Q_INVOKABLE QString getName() const;
+    Q_INVOKABLE QString getName(int index) const;
 
     Q_INVOKABLE QString    getVersion(int index) const;
     Q_INVOKABLE QByteArray getData   (int index) const;
+
+    Q_INVOKABLE QStringList getLibraryNames() const;
+
+    Q_INVOKABLE QString getLibraryFileName(int index) const;
+    Q_INVOKABLE QString getLibraryName    (int index) const;
 
 public: // Static functions
 #ifndef SK_NO_TORRENT
@@ -136,17 +155,26 @@ private slots:
 signals:
     void loaded();
 
+    void libraryLoaded();
+
     void refresh();
 
     void argumentChanged();
+
+    void scriptsChanged();
 
 public: // Properties
     QString argument() const;
     void    setArgument(const QString & argument);
 
-    QString path() const;
+    QString path       () const;
+    QString pathLibrary() const;
 
     int count() const;
+
+    QString name() const;
+
+    int libraryCount() const;
 
 private: // Variables
     QString _argument;
@@ -161,6 +189,8 @@ private: // Variables
     WBackendIndex * _index;
 
     QList<ControllerCoreScript> _scripts;
+
+    QList<ControllerCoreItem> _library;
 
     WFileWatcher _watcher;
 

@@ -54,17 +54,7 @@ Application
 
         dropEnabled: true
 
-        st: StyleComponents
-        {
-            id: st
-
-            //-------------------------------------------------------------------------------------
-            // NOTE: We apply night colors right away to avoid the flickering before onFadeIn.
-
-            border_color: "#242424"
-
-            window_color: "#404040"
-        }
+        st: StyleApplication { id: st }
 
         //-----------------------------------------------------------------------------------------
         // Events

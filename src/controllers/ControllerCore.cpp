@@ -502,15 +502,40 @@ ControllerCore::ControllerCore() : WController()
 
 /* Q_INVOKABLE */ void ControllerCore::loadSource(const QString & fileName)
 {
-    _scripts.clear();
-
-    loadScript(fileName);
-
     _watcher.clearFiles();
 
-    _watcher.addFile(fileName);
+    _scripts.clear();
+
+    if (fileName.isEmpty() == false)
+    {
+        loadScript(fileName);
+
+        _watcher.addFile(fileName);
+    }
 
     emit loaded();
+}
+
+/* Q_INVOKABLE */ void ControllerCore::loadLibrary()
+{
+    _library.clear();
+
+    QFileInfoList entries = QDir(pathLibrary()).entryInfoList(QDir::Files);
+
+    foreach (QFileInfo info, entries)
+    {
+        if (info.suffix().toLower() != "sky") continue;
+
+        ControllerCoreItem item;
+
+        item.fileName = info.absoluteFilePath();
+
+        item.name = WControllerFile::fileBaseName(info.fileName().toLower());
+
+        _library.append(item);
+    }
+
+    emit libraryLoaded();
 }
 
 /* Q_INVOKABLE */ bool ControllerCore::render(const QString      & name,
@@ -612,13 +637,13 @@ ControllerCore::ControllerCore() : WController()
 
 //-------------------------------------------------------------------------------------------------
 
-/* Q_INVOKABLE */ QString ControllerCore::getName() const
+/* Q_INVOKABLE */ QString ControllerCore::getName(int index) const
 {
-    if (_scripts.isEmpty())
-    {
-        return tr("Sky runtime");
-    }
-    else return WControllerFile::fileBaseName(_scripts.last().fileName.toLower());
+    if (index < 0 || index >= _scripts.count()) return QString();
+
+    QString fileName = _scripts.at(index).fileName.toLower();
+
+    return WControllerFile::fileBaseName(fileName);
 }
 
 /* Q_INVOKABLE */ QString ControllerCore::getVersion(int index) const
@@ -633,6 +658,34 @@ ControllerCore::ControllerCore() : WController()
     if (index < 0 || index >= _scripts.count()) return QByteArray();
 
     return _scripts.at(index).data;
+}
+
+//-------------------------------------------------------------------------------------------------
+
+/* Q_INVOKABLE */ QStringList ControllerCore::getLibraryNames() const
+{
+    QStringList list;
+
+    foreach (const ControllerCoreItem & item, _library)
+    {
+        list.append(item.name);
+    }
+
+    return list;
+}
+
+/* Q_INVOKABLE */ QString ControllerCore::getLibraryFileName(int index) const
+{
+    if (index < 0 || index >= _library.count()) return QString();
+
+    return _library.at(index).fileName;
+}
+
+/* Q_INVOKABLE */ QString ControllerCore::getLibraryName(int index) const
+{
+    if (index < 0 || index >= _library.count()) return QString();
+
+    return _library.at(index).name;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -815,7 +868,28 @@ QString ControllerCore::path() const
     return WControllerFile::folderPath(_argument);
 }
 
+QString ControllerCore::pathLibrary() const
+{
+    return _path + "/script";
+}
+
 int ControllerCore::count() const
 {
     return _scripts.count();
+}
+
+QString ControllerCore::name() const
+{
+    QString name = getName(_scripts.count());
+
+    if (name.isEmpty())
+    {
+        return tr("Sky runtime");
+    }
+    else return name;
+}
+
+int ControllerCore::libraryCount() const
+{
+    return _library.count();
 }

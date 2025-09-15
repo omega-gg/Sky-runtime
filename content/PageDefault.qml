@@ -28,6 +28,18 @@ Item
     id: pageDefault
 
     //---------------------------------------------------------------------------------------------
+    // Aliases
+    //---------------------------------------------------------------------------------------------
+
+    property alias currentIndex: list.currentIndex
+
+    //---------------------------------------------------------------------------------------------
+    // Events
+    //---------------------------------------------------------------------------------------------
+
+    Component.onCompleted: pUpdateList()
+
+    //---------------------------------------------------------------------------------------------
     // Connections
     //---------------------------------------------------------------------------------------------
 
@@ -40,6 +52,13 @@ Item
         /* QML_CONNECTION */ function onDrop       (event) { pageDefault.onDrop       (event) }
 
         /* QML_CONNECTION */ function onDragEnded() { pageDefault.onDragEnded() }
+    }
+
+    Connections
+    {
+        target: core
+
+        /* QML_CONNECTION */ function onLoaded() { pUpdateList() }
     }
 
     //---------------------------------------------------------------------------------------------
@@ -71,6 +90,39 @@ Item
     function onDragEnded()
     {
         bordersDrop.clear();
+    }
+
+    //---------------------------------------------------------------------------------------------
+    // Private
+
+    function pUpdateList()
+    {
+        core.loadLibrary();
+
+        var array = new Array;
+
+        var scripts = core.getLibraryNames();
+
+        for (var i = 0; i < scripts.length; i++)
+        {
+            array.push({ "title": scripts[i] });
+        }
+
+//#QT_4
+        // NOTE Qt4: We can only append items one by one.
+        for (/* var */ i = 0; i < array.length; i++)
+        {
+            model.append(array[i]);
+        }
+//#ELSE
+        // NOTE: It's probably better to append everything at once.
+        model.append(array);
+//#END
+    }
+
+    function pApplyPage(index)
+    {
+
     }
 
     //---------------------------------------------------------------------------------------------
@@ -107,33 +159,68 @@ Item
     {
         Rectangle
         {
-            anchors.fill: scrollList
+            anchors.fill: list
 
-            color: "#323232"
+            opacity: 0.6
+
+            color: "#161616"
         }
 
         ScrollList
         {
-            id: scrollList
+            id: list
 
             anchors.top   : parent.top
             anchors.bottom: parent.bottom
 
             width: st.dp256
+
+            model: ListModel { id: model }
+
+            delegate: ComponentList
+            {
+                function onPress()
+                {
+                    if (list.currentIndex == index)
+                    {
+                        list.currentIndex = -1;
+
+                        return;
+                    }
+
+                    list.currentIndex = index;
+                }
+            }
+
+            onCurrentIndexChanged: pApplyPage(currentIndex)
         }
 
         BorderHorizontal
         {
-            anchors.left  : scrollList.left
-            anchors.right : scrollList.right
-            anchors.bottom: scrollList.top
+            anchors.left  : list.left
+            anchors.right : list.right
+            anchors.bottom: list.top
         }
 
         BorderVertical
         {
-            anchors.left  : scrollList.right
-            anchors.top   : scrollList.top
-            anchors.bottom: scrollList.bottom
+            id: border
+
+            anchors.left  : list.right
+            anchors.top   : list.top
+            anchors.bottom: list.bottom
+        }
+
+        Loader
+        {
+            id: loader
+
+            anchors.left  : border.right
+            anchors.right : parent.right
+            anchors.top   : list.top
+            anchors.bottom: list.bottom
+
+            source: (currentIndex == -1) ? "" : Qt.resolvedUrl("PageScript.qml")
         }
     }
 }

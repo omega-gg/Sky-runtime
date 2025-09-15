@@ -299,11 +299,14 @@ OTHER_FILES += environment.sh \
                .azure-pipelines.yml \
                .appveyor.yml \
                content/generate.sh \
+               content/icons.sh \
+               content/StyleApplication.qml \
                content/Main.qml \
                content/Gui.qml \
                content/ItemUi.qml \
                content/PageDefault.qml \
                content/PageConsole.qml \
+               content/PageScript.qml \
                content/TextDefault.qml \
                content/TextDefaultLink.qml \
                script/hello.sky \

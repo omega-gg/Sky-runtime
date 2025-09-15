@@ -40,18 +40,13 @@ Item
     // 1: visible
     // 2: expanded
 
+    property bool hideUi: true
+
     //---------------------------------------------------------------------------------------------
     // Events
     //---------------------------------------------------------------------------------------------
 
     Component.onCompleted: load()
-
-    onUiChanged:
-    {
-        if (ui == false) return;
-
-        buttonApplication.text = core.getName();
-    }
 
     //---------------------------------------------------------------------------------------------
     // Connections
@@ -80,7 +75,7 @@ Item
 
     function load()
     {
-        ui = false;
+        if (hideUi) ui = false;
 
         if (objects)
         {
@@ -96,10 +91,10 @@ Item
 
         var argument = core.argument;
 
+        core.loadSource(argument);
+
         if (argument)
         {
-            core.loadSource(argument);
-
             for (var i = 0; i < core.count; i++)
             {
                 loadScript(i);
@@ -179,11 +174,7 @@ Item
 
         if (command == "load")
         {
-            var argument = list[1];
-
-            if (argument == "") return;
-
-            core.argument = argument;
+            core.argument = list[1];
         }
         else if (command == "refresh")
         {
@@ -195,7 +186,7 @@ Item
         }
         else if (command == "unload")
         {
-            core.argument = "";
+            unload();
         }
         else if (command == "clear")
         {
@@ -230,6 +221,15 @@ Item
 
         core.argument = "";
         core.argument = argument;
+    }
+
+    function unload()
+    {
+        hideUi = false;
+
+        core.argument = "";
+
+        hideUi = true;
     }
 
     function refresh()
@@ -299,6 +299,11 @@ Item
     function toggleUi()
     {
         ui = !(ui);
+    }
+
+    function openFile(url)
+    {
+        Qt.openUrlExternally(controllerFile.fileUrl(url));
     }
 
     //---------------------------------------------------------------------------------------------
@@ -510,16 +515,39 @@ Item
         {
             id: buttonApplication
 
-            maximumWidth: buttonConsole.x - st.dp32
+            maximumWidth: buttonConsole.x - buttonEject.width - st.dp16
 
             borderBottom: borderSize
 
             checkable: true
             checked  : true
 
+            text: core.name
+
             font.pixelSize: st.dp14
 
             onClicked: toggleUi()
+        }
+
+        ButtonPianoFull
+        {
+            id: buttonEject
+
+            anchors.top : buttonApplication.top
+            anchors.left: buttonApplication.right
+
+            borderBottom: borderSize
+
+            spacing: 0
+
+            enabled: (core.argument != "")
+
+            icon          : st.icon_eject
+            iconSourceSize: st.size12x12
+
+            text: qsTr("Eject")
+
+            onClicked: unload()
         }
 
         Loader
@@ -540,7 +568,7 @@ Item
                 {
                     return Math.round(parent.height / 3)
                 }
-                else return parent.height - buttonsWindow.height
+                else return parent.height - buttonApplication.height
             }
 
             visible: (opacity != 0.0)
@@ -562,7 +590,7 @@ Item
             onItemChanged: setFocusConsole()
         }
 
-        ButtonPianoFull
+        ButtonPiano
         {
             id: buttonConsole
 
