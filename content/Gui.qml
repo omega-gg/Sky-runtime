@@ -269,6 +269,11 @@ Item
         setFocusConsole();
     }
 
+    function toggleLocked()
+    {
+        window.locked = !(window.locked);
+    }
+
     function showHelp()
     {
         console.debug("-------\n" +
@@ -634,11 +639,11 @@ Item
         {
             id: buttonConsole
 
-            anchors.right: buttonsWindow.left
+            anchors.right : buttonLock.left
+            anchors.top   : buttonsWindow.top
+            anchors.bottom: buttonsWindow.bottom
 
             anchors.rightMargin: st.dp16
-
-            height: buttonsWindow.height
 
             borderLeft  : borderSize
             borderBottom: borderSize
@@ -657,11 +662,34 @@ Item
 //#END
         }
 
+        ButtonPianoWindow
+        {
+            id: buttonLock
+
+            anchors.right : buttonsWindow.left
+            anchors.top   : buttonsWindow.top
+            anchors.bottom: buttonsWindow.bottom
+
+            borderLeft  : borderSize
+            borderRight : 0
+            borderBottom: borderSize
+
+            checkable: true
+            checked  : window.locked
+
+            icon          : st.icon_lock
+            iconSourceSize: st.size12x12
+
+            onPressed: toggleLocked()
+        }
+
         ButtonsWindow
         {
             id: buttonsWindow
 
             anchors.right: parent.right
+
+            buttonIconify.borderLeft: 0
         }
     }
 

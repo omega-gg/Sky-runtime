@@ -31,6 +31,7 @@ StyleComponents
     // Icons
 
     property url icon_eject: "icons/eject.svg"
+    property url icon_lock : "icons/lock.svg"
 
     //---------------------------------------------------------------------------------------------
     // Settings
