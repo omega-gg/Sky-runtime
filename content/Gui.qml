@@ -67,6 +67,12 @@ Item
 
         /* QML_CONNECTION */ function onKeyPressed (event) { gui.onKeyPressed (event) }
         /* QML_CONNECTION */ function onKeyReleased(event) { gui.onKeyReleased(event) }
+
+        /* QML_CONNECTION */ function onDragEntered(event) { gui.onDragEntered(event) }
+        /* QML_CONNECTION */ function onDragExited (event) { gui.onDragExited (event) }
+        /* QML_CONNECTION */ function onDrop       (event) { gui.onDrop       (event) }
+
+        /* QML_CONNECTION */ function onDragEnded() { gui.onDragEnded() }
     }
 
     //---------------------------------------------------------------------------------------------
@@ -349,6 +355,35 @@ Item
         if (index < 0 || index >= objects.length) return null;
 
         return objects[index];
+    }
+
+    //---------------------------------------------------------------------------------------------
+    // Events
+
+    function onDragEntered(event)
+    {
+        event.accepted = true;
+
+        bordersDrop.setItem(gui);
+    }
+
+    function onDragExited(event)
+    {
+        bordersDrop.clear();
+    }
+
+    function onDrop(event)
+    {
+        var text = event.text;
+
+        console.debug("> load " + text);
+
+        core.argument = text;
+    }
+
+    function onDragEnded()
+    {
+        bordersDrop.clear();
     }
 
     //---------------------------------------------------------------------------------------------

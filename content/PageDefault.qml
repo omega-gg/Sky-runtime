@@ -25,8 +25,6 @@ import Sky     1.0
 
 Item
 {
-    id: pageDefault
-
     //---------------------------------------------------------------------------------------------
     // Aliases
     //---------------------------------------------------------------------------------------------
@@ -45,17 +43,6 @@ Item
 
     Connections
     {
-        target: window
-
-        /* QML_CONNECTION */ function onDragEntered(event) { pageDefault.onDragEntered(event) }
-        /* QML_CONNECTION */ function onDragExited (event) { pageDefault.onDragExited (event) }
-        /* QML_CONNECTION */ function onDrop       (event) { pageDefault.onDrop       (event) }
-
-        /* QML_CONNECTION */ function onDragEnded() { pageDefault.onDragEnded() }
-    }
-
-    Connections
-    {
         target: core
 
         /* QML_CONNECTION */ function onLoaded() { pUpdateList() }
@@ -63,35 +50,6 @@ Item
 
     //---------------------------------------------------------------------------------------------
     // Functions
-    //---------------------------------------------------------------------------------------------
-    // Events
-
-    function onDragEntered(event)
-    {
-        event.accepted = true;
-
-        bordersDrop.setItem(pageDefault);
-    }
-
-    function onDragExited(event)
-    {
-        bordersDrop.clear();
-    }
-
-    function onDrop(event)
-    {
-        var text = event.text;
-
-        console.debug("> load " + text);
-
-        core.argument = text;
-    }
-
-    function onDragEnded()
-    {
-        bordersDrop.clear();
-    }
-
     //---------------------------------------------------------------------------------------------
     // Private
 
