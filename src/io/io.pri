@@ -28,6 +28,7 @@ HEADERS += $$SK_CORE/io/WAbstractLoader.h \
            $$SK_TORRENT/io/WLoaderTorrent_p.h \
            src/io/DataLocal.h \
            src/io/DataOnline.h \
+           src/io/DataScript.h \
 
 SOURCES += $$SK_CORE/io/WAbstractLoader.cpp \
            $$SK_CORE/io/WLoaderNetwork.cpp \
@@ -48,3 +49,4 @@ SOURCES += $$SK_CORE/io/WAbstractLoader.cpp \
            src/io/DataLocal.cpp \
            src/io/DataLocal_patch.cpp \
            src/io/DataOnline.cpp \
+           src/io/DataScript.cpp \

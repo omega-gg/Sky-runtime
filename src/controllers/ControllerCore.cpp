@@ -111,6 +111,7 @@
 
 // Application includes
 #include <DataOnline>
+#include <DataScript>
 
 W_INIT_CONTROLLER(ControllerCore)
 
@@ -142,6 +143,7 @@ static const int CORE_WATCHER_INTERVAL = 200;
 ControllerCore::ControllerCore() : WController()
 {
     _online = NULL;
+    _script = NULL;
 
     _cache = NULL;
 
@@ -486,6 +488,7 @@ ControllerCore::ControllerCore() : WController()
     // QML
 
     qmlRegisterType<DataOnline>("Sky", 1,0, "DataOnline");
+    qmlRegisterType<DataScript>("Sky", 1,0, "DataScript");
 
     wControllerDeclarative->setContextProperty("controllerFile",     wControllerFile);
     wControllerDeclarative->setContextProperty("controllerNetwork",  wControllerNetwork);
@@ -504,11 +507,15 @@ ControllerCore::ControllerCore() : WController()
 {
     _watcher.clearFiles();
 
-    _scripts.clear();
+    if (_script)
+    {
+        _script->clear();
+    }
+    else _script = new DataScript(this);
 
     if (fileName.isEmpty() == false)
     {
-        loadScript(fileName);
+        loadScript(_script, fileName);
 
         _watcher.addFile(fileName);
     }
@@ -593,11 +600,7 @@ ControllerCore::ControllerCore() : WController()
 
 /* Q_INVOKABLE */ void ControllerCore::reloadScript(int index)
 {
-    if (index < 0 || index >= _scripts.count()) return;
-
-    ControllerCoreScript & script = _scripts[index];
-
-    script.data = WControllerFile::readAll(script.fileName);
+    if (_script) _script->reload(index);
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -627,7 +630,7 @@ ControllerCore::ControllerCore() : WController()
 
 /* Q_INVOKABLE */ void ControllerCore::clearScripts()
 {
-    _scripts.clear();
+    if (_script) _script->clear();
 }
 
 /* Q_INVOKABLE */ void ControllerCore::addWatcher(const QString & fileName)
@@ -639,25 +642,29 @@ ControllerCore::ControllerCore() : WController()
 
 /* Q_INVOKABLE */ QString ControllerCore::getName(int index) const
 {
-    if (index < 0 || index >= _scripts.count()) return QString();
-
-    QString fileName = _scripts.at(index).fileName.toLower();
-
-    return WControllerFile::fileBaseName(fileName);
+    if (_script)
+    {
+        return _script->getName(index);
+    }
+    else return QString();
 }
 
 /* Q_INVOKABLE */ QString ControllerCore::getVersion(int index) const
 {
-    if (index < 0 || index >= _scripts.count()) return QString();
-
-    return _scripts.at(index).version;
+    if (_script)
+    {
+        return _script->getVersion(index);
+    }
+    else return QString();
 }
 
 /* Q_INVOKABLE */ QByteArray ControllerCore::getData(int index) const
 {
-    if (index < 0 || index >= _scripts.count()) return QByteArray();
-
-    return _scripts.at(index).data;
+    if (_script)
+    {
+        return _script->getData(index);
+    }
+    else return QByteArray();
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -763,7 +770,7 @@ WControllerFileReply * ControllerCore::copyBackends(const QString & path) const
 #endif
 }
 
-void ControllerCore::loadScript(const QString & fileName)
+void ControllerCore::loadScript(DataScript * script, const QString & fileName)
 {
     qDebug("LOADING %s", fileName.C_STR);
 
@@ -788,21 +795,21 @@ void ControllerCore::loadScript(const QString & fileName)
 
     if (pair.count() != 2) return;
 
-    ControllerCoreScript script;
+    DataScriptItem item;
 
-    script.fileName = fileName;
+    item.fileName = fileName;
 
-    script.version = pair.at(1);
+    item.version = pair.at(1);
 
-    script.data = data;
+    item.data = data;
 
-    _scripts.prepend(script);
+    script->prepend(item);
 
     QString parent = pair.at(0);
 
     if (parent == "sky") return;
 
-    loadScript(_path + "/script/" + parent + ".sky");
+    loadScript(script, _path + "/script/" + parent + ".sky");
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -875,18 +882,20 @@ QString ControllerCore::pathLibrary() const
 
 int ControllerCore::count() const
 {
-    return _scripts.count();
+    if (_script)
+    {
+        return _script->count();
+    }
+    else return 0;
 }
 
 QString ControllerCore::name() const
 {
-    QString name = getName(_scripts.count());
-
-    if (name.isEmpty())
+    if (_script)
     {
-        return tr("Sky runtime");
+        return _script->name();
     }
-    else return name;
+    else return QString();
 }
 
 int ControllerCore::libraryCount() const

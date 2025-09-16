@@ -42,18 +42,11 @@ class WCache;
 class WBackendIndex;
 class WDeclarativePlayer;
 class DataOnline;
+class DataScript;
 
 //-------------------------------------------------------------------------------------------------
-// ControllerCoreScript
+// ControllerCoreItem
 //-------------------------------------------------------------------------------------------------
-
-struct ControllerCoreScript
-{
-    QString fileName;
-    QString version;
-
-    QByteArray data;
-};
 
 struct ControllerCoreItem
 {
@@ -144,7 +137,7 @@ private: // Functions
 
     WControllerFileReply * copyBackends(const QString & path) const;
 
-    void loadScript(const QString & fileName);
+    void loadScript(DataScript * script, const QString & fileName);
 
 private slots:
     void onLoaded     ();
@@ -181,14 +174,13 @@ private: // Variables
 
     DataLocal    _local;
     DataOnline * _online;
+    DataScript * _script;
 
     WCache * _cache;
 
     QString _path;
 
     WBackendIndex * _index;
-
-    QList<ControllerCoreScript> _scripts;
 
     QList<ControllerCoreItem> _library;
 
