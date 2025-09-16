@@ -481,12 +481,17 @@ Item
         onClicked: toggleUi()
     }
 
-    TextDefault
+    TextDefaultLink
     {
         anchors.right: parent.right
         anchors.top  : parent.top
 
         text: qsTr("ESCAPE to quit")
+
+        // NOTE: Since the text is fading out on press, we keep it underlined when pressed.
+        font.underline: isHovered
+
+        onClicked: window.close()
     }
 
     Item
