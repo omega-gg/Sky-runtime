@@ -78,11 +78,99 @@ Item
     //---------------------------------------------------------------------------------------------
     // Functions
     //---------------------------------------------------------------------------------------------
+    // Interface
 
     function load(argument)
     {
         core.argument = argument;
     }
+
+    function refresh()
+    {
+        var length = objects.length;
+
+        if (length == 0) return;
+
+        var index = length - 1;
+
+        core.reloadScript(index);
+
+        objects[index].destroy();
+
+        objects.pop();
+
+        loadScript(index);
+
+        setFocus();
+    }
+
+    function reload()
+    {
+        var argument = core.argument;
+
+        if (argument == "") return;
+
+        core.argument = "";
+        core.argument = argument;
+    }
+
+    function unload()
+    {
+        hideUi = false;
+
+        core.argument = "";
+
+        hideUi = true;
+    }
+
+    function clear()
+    {
+        var item = loaderConsole.item;
+
+        if (item) item.clear();
+    }
+
+    function help()
+    {
+        console.debug("-------\n" +
+                      "Welcome to Sky kit runtime " + sk.versionSky + "\n\n" +
+                      "keyboard:\n" +
+                      "- F1           show the user inteface\n" +
+                      "- F5           refresh the top level script\n" +
+                      "- Ctrl + F5    reload everthing in cascade\n" +
+                      "- Escape       quit the application\n" +
+                      "\n" +
+                      "console:\n" +
+                      "> load <source>    load a .sky source\n" +
+                      "> refresh          refresh the top level script\n" +
+                      "> reload           reload everthing in cascade\n" +
+                      "> unload           unload everthing\n" +
+                      "> clear            clear the console\n" +
+                      "> help             show the help\n" +
+                      "> exit             quit the application" +
+                      "api:\n" +
+                      "- void setClipboard(text, description)    set the clipboard");
+
+        for (var i = 0; i < objects.length; i++)
+        {
+            var object = objects[i];
+
+            // NOTE: We check if the 'onHelp' function is defined.
+            if (object && object.onHelp)
+            {
+                console.debug("\n-------");
+
+                console.debug(object.onHelp());
+            }
+        }
+    }
+
+    function exit()
+    {
+        window.close();
+    }
+
+    //---------------------------------------------------------------------------------------------
 
     function loadArgument()
     {
@@ -116,7 +204,7 @@ Item
         setFocus();
 
 //#DEPLOY
-        showHelp();
+        help();
 //#ELSE
         // NOTE: Make sure we show the help after the loading messages in the console.
         timer.start();
@@ -235,17 +323,15 @@ Item
         }
         else if (command == "clear")
         {
-            var item = loaderConsole.item;
-
-            if (item) item.clear();
+            clear();
         }
         else if (command == "help")
         {
-            showHelp();
+            help();
         }
         else if (command == "exit")
         {
-            window.close();
+            exit();
         }
         else
         {
@@ -258,43 +344,7 @@ Item
         }
     }
 
-    function reload()
-    {
-        var argument = core.argument;
-
-        if (argument == "") return;
-
-        core.argument = "";
-        core.argument = argument;
-    }
-
-    function unload()
-    {
-        hideUi = false;
-
-        core.argument = "";
-
-        hideUi = true;
-    }
-
-    function refresh()
-    {
-        var length = objects.length;
-
-        if (length == 0) return;
-
-        var index = length - 1;
-
-        core.reloadScript(index);
-
-        objects[index].destroy();
-
-        objects.pop();
-
-        loadScript(index);
-
-        setFocus();
-    }
+    //---------------------------------------------------------------------------------------------
 
     function showConsole()
     {
@@ -311,41 +361,6 @@ Item
     function toggleLocked()
     {
         window.locked = !(window.locked);
-    }
-
-    function showHelp()
-    {
-        console.debug("-------\n" +
-                      "Welcome to Sky kit runtime " + sk.versionSky + "\n\n" +
-                      "keyboard:\n" +
-                      "- F1           show the user inteface\n" +
-                      "- F5           refresh the top level script\n" +
-                      "- Ctrl + F5    reload everthing in cascade\n" +
-                      "- Escape       quit the application\n" +
-                      "\n" +
-                      "console:\n" +
-                      "> load <source>    load a .sky source\n" +
-                      "> refresh          refresh the top level script\n" +
-                      "> reload           reload everthing in cascade\n" +
-                      "> unload           unload everthing\n" +
-                      "> clear            clear the console\n" +
-                      "> help             show the help\n" +
-                      "> exit             quit the application" +
-                      "api:\n" +
-                      "- void setClipboard(text, description)    set the clipboard");
-
-        for (var i = 0; i < objects.length; i++)
-        {
-            var object = objects[i];
-
-            // NOTE: We check if the 'onHelp' function is defined.
-            if (object && object.onHelp)
-            {
-                console.debug("\n-------");
-
-                console.debug(object.onHelp());
-            }
-        }
     }
 
     function toggleUi()
@@ -531,7 +546,7 @@ Item
 
         interval: 3000
 
-        onTriggered: showHelp()
+        onTriggered: help()
     }
 //#END
 

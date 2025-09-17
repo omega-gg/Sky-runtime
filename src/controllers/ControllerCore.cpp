@@ -798,7 +798,7 @@ void ControllerCore::loadData(DataScript * script, const QString & fileName)
 
     QString line = Sk::getLine(data);
 
-    qDebug(line.C_STR);
+    //qDebug(line.C_STR);
 
     line = line.mid(line.indexOf('/') + 2).toLower();
 
