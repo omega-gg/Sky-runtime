@@ -124,6 +124,8 @@ public: // Interface
     Q_INVOKABLE QString getLibraryName    (int index) const;
 
 public: // Static functions
+    Q_INVOKABLE static QString createScript(const QString & text);
+
 #ifndef SK_NO_TORRENT
     Q_INVOKABLE static void applyTorrentOptions(int connections,
                                                 int upload, int download, int cache);

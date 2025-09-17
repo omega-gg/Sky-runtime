@@ -77,6 +77,6 @@ BaseTextEdit
 
         text: qsTr("Copy")
 
-        onClicked: gui.setClipboard(text, qsTr("Text copied to the clipboard"))
+        onClicked: gui.setClipboard(textEditCopy.text, qsTr("Text copied to the clipboard"))
     }
 }

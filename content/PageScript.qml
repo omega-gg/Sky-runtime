@@ -78,6 +78,8 @@ Item
                 padding: st.dp16
 
                 text: qsTr("New .sky")
+
+                onClicked: gui.create(template)
             }
 
             ButtonPiano
@@ -120,7 +122,7 @@ Item
             anchors.left : parent.left
             anchors.right: parent.right
 
-            anchors.margins: st.dp8
+            anchors.margins: st.dp16
 
             visible: (template != "")
 
@@ -150,7 +152,7 @@ Item
             anchors.left : parent.left
             anchors.right: parent.right
 
-            anchors.margins: st.dp8
+            anchors.margins: st.dp16
 
             visible: (help != "")
 

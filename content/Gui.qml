@@ -172,6 +172,13 @@ Item
 
     //---------------------------------------------------------------------------------------------
 
+    function create(text)
+    {
+        var name = core.createScript(text);
+
+        if (name) load(name);
+    }
+
     function loadArgument()
     {
         if (hideUi) ui = false;

@@ -55,7 +55,7 @@
 
     DataScriptItem & item = _items[index];
 
-    item.data = WControllerFile::readAll(item.data);
+    item.data = WControllerFile::readAll(item.fileName);
 }
 
 /* Q_INVOKABLE */ void DataScript::clear()
@@ -114,7 +114,7 @@ int DataScript::count() const
 
 QString DataScript::name() const
 {
-    QString name = getName(count());
+    QString name = getName(count() - 1);
 
     if (name.isEmpty())
     {

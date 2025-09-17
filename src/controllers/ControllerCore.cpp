@@ -719,6 +719,24 @@ ControllerCore::ControllerCore() : WController()
 // Static functions
 //-------------------------------------------------------------------------------------------------
 
+/* Q_INVOKABLE static */ QString ControllerCore::createScript(const QString & text)
+{
+    if (text.isEmpty()) return QString();
+
+    QString name = QFileDialog::getSaveFileName(NULL, tr("Create .sky"),
+                                                WControllerFile::pathDocuments(),
+                                                tr("Sky script (*.sky)"));
+
+    if (name.isEmpty()
+        ||
+        WControllerFile::writeFile(name, text.toUtf8()) == false)
+    {
+        return QString();
+    }
+
+    return name;
+}
+
 #ifndef SK_NO_TORRENT
 
 /* Q_INVOKABLE static */ void ControllerCore::applyTorrentOptions(int connections,
