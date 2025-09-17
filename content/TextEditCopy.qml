@@ -32,9 +32,9 @@ BaseTextEdit
     //---------------------------------------------------------------------------------------------
 
 //#QT_4
-    height: Math.max(st.dp48, paintedHeight)
+    height: Math.max(st.dp56, paintedHeight)
 //#ELSE
-    height: Math.max(st.dp48, contentHeight)
+    height: Math.max(st.dp56, contentHeight)
 //#END
 
     readOnly: true

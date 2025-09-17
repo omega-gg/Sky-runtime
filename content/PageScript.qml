@@ -35,7 +35,7 @@ Item
 
         opacity: 0.9
 
-        color: "#161616"
+        color: "#242424"
     }
 
     ColumnScroll
