@@ -43,7 +43,7 @@ Image
 
     function onHelp()
     {
-        console.debug("Welcome to Sky runtime " + sk.versionSky);
+        return "Welcome to Sky runtime " + sk.versionSky;
     }
 
     function getLoader()

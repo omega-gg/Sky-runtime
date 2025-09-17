@@ -38,11 +38,12 @@ Item
         color: "#161616"
     }
 
-    ScrollArea
+    ColumnScroll
     {
         anchors.fill: parent
 
-        contentHeight: buttonNew.y + buttonNew.height + st.dp16
+        column.padding: st.dp16
+        column.spacing: st.dp16
 
         TextBase
         {
@@ -50,7 +51,6 @@ Item
 
             anchors.left : parent.left
             anchors.right: parent.right
-            anchors.top  : parent.top
 
             anchors.margins: st.dp16
 
@@ -59,54 +59,102 @@ Item
             font.pixelSize: st.dp32
         }
 
-        ButtonPiano
+        Item
         {
-            id: buttonNew
+            anchors.left : parent.left
+            anchors.right: parent.right
 
-            anchors.left: itemTitle.left
-            anchors.top : itemTitle.bottom
+            anchors.margins: st.dp16
 
-            anchors.topMargin: st.dp16
+            height: buttonNew.height
 
-            borderLeft  : borderSize
-            borderBottom: borderSize
+            ButtonPiano
+            {
+                id: buttonNew
 
-            padding: st.dp16
+                borderLeft  : borderSize
+                borderBottom: borderSize
 
-            text: qsTr("New .sky")
+                padding: st.dp16
+
+                text: qsTr("New .sky")
+            }
+
+            ButtonPiano
+            {
+                id: buttonRun
+
+                anchors.left: buttonNew.right
+
+                anchors.leftMargin: st.dp16
+
+                borderLeft  : borderSize
+                borderBottom: borderSize
+
+                padding: st.dp16
+
+                text: qsTr("Run script")
+
+                onClicked: gui.load(core.getLibraryFileName(currentIndex))
+            }
+
+            ButtonPiano
+            {
+                anchors.left: buttonRun.right
+                anchors.top : buttonRun.top
+
+                borderBottom: borderSize
+
+                padding: st.dp16
+
+                text: qsTr("Open folder")
+
+                onClicked: gui.openFile(core.pathLibrary)
+            }
         }
 
-        ButtonPiano
+        TextEditCopy
         {
-            id: buttonRun
+            id: textTemplate
 
-            anchors.left: buttonNew.right
-            anchors.top : buttonNew.top
+            anchors.left : parent.left
+            anchors.right: parent.right
 
-            anchors.leftMargin: st.dp16
+            anchors.margins: st.dp8
 
-            borderLeft  : borderSize
-            borderBottom: borderSize
+            visible: (template != "")
 
-            padding: st.dp16
-
-            text: qsTr("Run script")
-
-            onClicked: core.argument = core.getLibraryFileName(currentIndex)
+            text: template
         }
 
-        ButtonPiano
+        TextBase
         {
-            anchors.left: buttonRun.right
-            anchors.top : buttonRun.top
+            id: itemHelp
 
-            borderBottom: borderSize
+            anchors.left : parent.left
+            anchors.right: parent.right
 
-            padding: st.dp16
+            anchors.margins: st.dp16
 
-            text: qsTr("Open folder")
+            visible: textHelp.visible
 
-            onClicked: gui.openFile(core.pathLibrary)
+            text: qsTr("Help")
+
+            font.pixelSize: st.dp20
+        }
+
+        TextEditCopy
+        {
+            id: textHelp
+
+            anchors.left : parent.left
+            anchors.right: parent.right
+
+            anchors.margins: st.dp8
+
+            visible: (help != "")
+
+            text: help
         }
     }
 }

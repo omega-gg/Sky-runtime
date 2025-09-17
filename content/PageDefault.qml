@@ -30,6 +30,7 @@ Item
     //---------------------------------------------------------------------------------------------
 
     /* read */ property string template
+    /* read */ property string help
 
     //---------------------------------------------------------------------------------------------
     // Aliases
@@ -86,6 +87,9 @@ Item
 
     function pApplyPage(index)
     {
+        template = "";
+        help     = "";
+
         if (index == -1) return;
 
         var fileName = core.getLibraryFileName(index);
@@ -129,6 +133,8 @@ Item
 
         }
         else template = object.onTemplate();
+
+        if (object.onHelp) help = object.onHelp();
 
         for (/* var */ i = 0; i < objects.length; i++)
         {

@@ -304,11 +304,12 @@ OTHER_FILES += environment.sh \
                content/Main.qml \
                content/Gui.qml \
                content/ItemUi.qml \
+               content/TextDefault.qml \
+               content/TextDefaultLink.qml \
+               content/TextEditCopy.qml \
                content/PageDefault.qml \
                content/PageConsole.qml \
                content/PageScript.qml \
-               content/TextDefault.qml \
-               content/TextDefaultLink.qml \
                script/hello.sky \
                test/hello.sky \
                include/generate.sh \

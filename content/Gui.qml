@@ -46,7 +46,7 @@ Item
     // Events
     //---------------------------------------------------------------------------------------------
 
-    Component.onCompleted: load()
+    Component.onCompleted: loadArgument()
 
     //---------------------------------------------------------------------------------------------
     // Connections
@@ -58,7 +58,7 @@ Item
 
         /* QML_CONNECTION */ function onRefresh() { refresh() }
 
-        /* QML_CONNECTION */ function onArgumentChanged() { load() }
+        /* QML_CONNECTION */ function onArgumentChanged() { loadArgument() }
     }
 
     Connections
@@ -79,7 +79,12 @@ Item
     // Functions
     //---------------------------------------------------------------------------------------------
 
-    function load()
+    function load(argument)
+    {
+        core.argument = argument;
+    }
+
+    function loadArgument()
     {
         if (hideUi) ui = false;
 
@@ -214,7 +219,7 @@ Item
 
         if (command == "load")
         {
-            core.argument = list[1];
+            load(list[1]);
         }
         else if (command == "refresh")
         {
@@ -325,7 +330,9 @@ Item
                       "> unload           unload everthing\n" +
                       "> clear            clear the console\n" +
                       "> help             show the help\n" +
-                      "> exit             quit the application");
+                      "> exit             quit the application" +
+                      "api:\n" +
+                      "- void setClipboard(text, description)    set the clipboard");
 
         for (var i = 0; i < objects.length; i++)
         {
@@ -336,7 +343,7 @@ Item
             {
                 console.debug("\n-------");
 
-                object.onHelp();
+                console.debug(object.onHelp());
             }
         }
     }
@@ -349,6 +356,13 @@ Item
     function openFile(url)
     {
         Qt.openUrlExternally(controllerFile.fileUrl(url));
+    }
+
+    function setClipboard(text, description)
+    {
+        sk.setClipboardText(text);
+
+        if (description) popup.showText(description);
     }
 
     //---------------------------------------------------------------------------------------------
@@ -417,7 +431,7 @@ Item
 
         console.debug("> load " + text);
 
-        core.argument = text;
+        load(text);
     }
 
     function onDragEnded()
