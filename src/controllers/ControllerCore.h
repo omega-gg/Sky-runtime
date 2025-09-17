@@ -86,6 +86,8 @@ public: // Interface
 
     Q_INVOKABLE void loadSource(const QString & fileName);
 
+    Q_INVOKABLE DataScript * loadScript(const QString & fileName);
+
     Q_INVOKABLE void loadLibrary();
 
     Q_INVOKABLE bool render(const QString      & name,
@@ -111,8 +113,10 @@ public: // Interface
 
     Q_INVOKABLE QString getName(int index) const;
 
-    Q_INVOKABLE QString    getVersion(int index) const;
-    Q_INVOKABLE QByteArray getData   (int index) const;
+    Q_INVOKABLE QString getVersion      (int index) const;
+    Q_INVOKABLE QString getVersionParent(int index) const;
+
+    Q_INVOKABLE QByteArray getData(int index) const;
 
     Q_INVOKABLE QStringList getLibraryNames() const;
 
@@ -137,7 +141,7 @@ private: // Functions
 
     WControllerFileReply * copyBackends(const QString & path) const;
 
-    void loadScript(DataScript * script, const QString & fileName);
+    void loadData(DataScript * script, const QString & fileName);
 
 private slots:
     void onLoaded     ();

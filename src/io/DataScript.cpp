@@ -82,11 +82,25 @@
     return _items.at(index).version;
 }
 
+/* Q_INVOKABLE */ QString DataScript::getVersionParent(int index) const
+{
+    if (index < 0 || index >= count()) return QString();
+
+    return _items.at(index).versionParent;
+}
+
 /* Q_INVOKABLE */ QByteArray DataScript::getData(int index) const
 {
     if (index < 0 || index >= count()) return QByteArray();
 
     return _items.at(index).data;
+}
+
+//-------------------------------------------------------------------------------------------------
+
+/* Q_INVOKABLE */ void DataScript::deleteNow()
+{
+    delete this;
 }
 
 //-------------------------------------------------------------------------------------------------

@@ -515,12 +515,23 @@ ControllerCore::ControllerCore() : WController()
 
     if (fileName.isEmpty() == false)
     {
-        loadScript(_script, fileName);
+        loadData(_script, fileName);
 
         _watcher.addFile(fileName);
     }
 
     emit loaded();
+}
+
+/* Q_INVOKABLE */ DataScript * ControllerCore::loadScript(const QString & fileName)
+{
+    if (fileName.isEmpty()) return NULL;
+
+    DataScript * script = new DataScript(this);
+
+    loadData(script, fileName);
+
+    return script;
 }
 
 /* Q_INVOKABLE */ void ControllerCore::loadLibrary()
@@ -658,6 +669,15 @@ ControllerCore::ControllerCore() : WController()
     else return QString();
 }
 
+/* Q_INVOKABLE */ QString ControllerCore::getVersionParent(int index) const
+{
+    if (_script)
+    {
+        return _script->getVersionParent(index);
+    }
+    else return QString();
+}
+
 /* Q_INVOKABLE */ QByteArray ControllerCore::getData(int index) const
 {
     if (_script)
@@ -770,7 +790,7 @@ WControllerFileReply * ControllerCore::copyBackends(const QString & path) const
 #endif
 }
 
-void ControllerCore::loadScript(DataScript * script, const QString & fileName)
+void ControllerCore::loadData(DataScript * script, const QString & fileName)
 {
     qDebug("LOADING %s", fileName.C_STR);
 
@@ -795,21 +815,35 @@ void ControllerCore::loadScript(DataScript * script, const QString & fileName)
 
     if (pair.count() != 2) return;
 
+    QString parent = pair.at(0);
+
     DataScriptItem item;
 
     item.fileName = fileName;
 
-    item.version = pair.at(1);
+    item.versionParent = pair.at(1);
+
+    QString version = list.at(0).simplified();
+
+    if (index)
+    {
+        pair = Sk::split(version, ' ');
+
+        if (pair.count() == 2)
+        {
+            item.version = pair.at(1);
+        }
+        else item.version = version;
+    }
+    else item.version = "1.0.0";
 
     item.data = data;
 
     script->prepend(item);
 
-    QString parent = pair.at(0);
-
     if (parent == "sky") return;
 
-    loadScript(script, _path + "/script/" + parent + ".sky");
+    loadData(script, _path + "/script/" + parent + ".sky");
 }
 
 //-------------------------------------------------------------------------------------------------

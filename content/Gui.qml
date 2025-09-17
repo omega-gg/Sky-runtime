@@ -101,7 +101,7 @@ Item
 
         if (argument)
         {
-            for (var i = 0; i < core.count; i++)
+            for (/* var */ i = 0; i < core.count; i++)
             {
                 loadScript(i);
             }
@@ -130,7 +130,7 @@ Item
         {
             if (parent.onPatch)
             {
-                data = parent.onPatch(data, core.getVersion(index));
+                data = parent.onPatch(data, core.getVersionParent(index));
             }
 
             if (parent.getLoader)
@@ -160,6 +160,40 @@ Item
         object.anchors.fill = root;
 
         root.source = "";
+
+        objects.push(object);
+
+        if (object.onCreate) object.onCreate(parent);
+    }
+
+    function loadObjects(objects, script, index)
+    {
+        var data = script.getData(index);
+
+        var parent = getParent(index - 1);
+
+        if (parent && parent.onPatch)
+        {
+            data = parent.onPatch(data, script.getVersionParent(index));
+        }
+
+        var object;
+
+        try
+        {
+            object = Qt.createQmlObject(data, gui, Qt.resolvedUrl("Gui.qml"));
+        }
+        catch (error)
+        {
+            console.debug(error);
+        }
+
+        if (object == null)
+        {
+            object = Qt.createQmlObject("import QtQuick 2.0; Item {}", gui);
+        }
+
+        object.visible = false;
 
         objects.push(object);
 

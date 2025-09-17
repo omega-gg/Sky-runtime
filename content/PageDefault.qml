@@ -26,6 +26,12 @@ import Sky     1.0
 Item
 {
     //---------------------------------------------------------------------------------------------
+    // Properties
+    //---------------------------------------------------------------------------------------------
+
+    /* read */ property string template
+
+    //---------------------------------------------------------------------------------------------
     // Aliases
     //---------------------------------------------------------------------------------------------
 
@@ -80,7 +86,56 @@ Item
 
     function pApplyPage(index)
     {
+        if (index == -1) return;
 
+        var fileName = core.getLibraryFileName(index);
+
+        var script = core.loadScript(fileName);
+
+        if (script == null) return;
+
+        var count = script.count;
+
+        var objects = new Array;
+
+        for (var i = 0; i < script.count; i++)
+        {
+            gui.loadObjects(objects, script, i);
+        }
+
+        if (objects.length != count)
+        {
+            script.deleteNow();
+
+            return;
+        }
+
+        index = script.count - 1;
+
+        var object = objects[count - 1];
+
+        if (object.onTemplate == undefined)
+        {
+            var name = script.getName(index) + " " + script.getVersion(index);
+
+            template = "// " + name + "\n" +
+                       "\n" +
+                       "import QtQuick 2.0\n" +
+                       "import Sky     1.0\n\n" +
+                       "Item\n" +
+                       "{\n" +
+                       "    function onCreate(ui) {}\n"+
+                       "}\n"
+
+        }
+        else template = object.onTemplate();
+
+        for (/* var */ i = 0; i < objects.length; i++)
+        {
+            objects[i].destroy();
+        }
+
+        script.deleteNow();
     }
 
     //---------------------------------------------------------------------------------------------

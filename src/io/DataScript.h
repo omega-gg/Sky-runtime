@@ -33,7 +33,9 @@
 struct DataScriptItem
 {
     QString fileName;
+
     QString version;
+    QString versionParent;
 
     QByteArray data;
 };
@@ -59,9 +61,14 @@ public: // Interface
 
     Q_INVOKABLE void clear();
 
-    Q_INVOKABLE QString    getName   (int index) const;
-    Q_INVOKABLE QString    getVersion(int index) const;
-    Q_INVOKABLE QByteArray getData   (int index) const;
+    Q_INVOKABLE QString getName(int index) const;
+
+    Q_INVOKABLE QString getVersion      (int index) const;
+    Q_INVOKABLE QString getVersionParent(int index) const;
+
+    Q_INVOKABLE QByteArray getData(int index) const;
+
+    Q_INVOKABLE void deleteNow();
 
 signals:
     void countChanged();
