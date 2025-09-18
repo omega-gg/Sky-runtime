@@ -722,6 +722,7 @@ ControllerCore::ControllerCore() : WController()
 
 /* Q_INVOKABLE static */ QString ControllerCore::createScript(const QString & text)
 {
+#ifdef SK_DESKTOP
     if (text.isEmpty()) return QString();
 
     QString name = QFileDialog::getSaveFileName(NULL, tr("Create .sky"),
@@ -736,6 +737,11 @@ ControllerCore::ControllerCore() : WController()
     }
 
     return name;
+#else
+    Q_UNUSED(text);
+
+    return QString();
+#endif
 }
 
 #ifndef SK_NO_TORRENT
