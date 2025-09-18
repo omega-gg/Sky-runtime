@@ -515,7 +515,8 @@ ControllerCore::ControllerCore() : WController()
 
     if (fileName.isEmpty() == false)
     {
-        loadData(_script, fileName);
+        // NOTE: fromNativeSeparators is important for fileBaseName.
+        loadData(_script, QDir::fromNativeSeparators(fileName));
 
         _watcher.addFile(fileName);
     }
@@ -954,3 +955,19 @@ int ControllerCore::libraryCount() const
 {
     return _library.count();
 }
+
+#if defined(SK_DESKTOP) && defined(SK_CONSOLE) == false
+
+bool ControllerCore::associateSky() const
+{
+    return Sk::typeIsAssociated("sky");
+}
+
+void ControllerCore::setAssociateSky(bool associate)
+{
+    if (Sk::associateType("sky", associate) == false) return;
+
+    emit associateSkyChanged();
+}
+
+#endif

@@ -43,6 +43,11 @@ Item
     property bool hideUi: true
 
     //---------------------------------------------------------------------------------------------
+    // Private
+
+    property bool pVersion: (online.version && online.version != sk.version)
+
+    //---------------------------------------------------------------------------------------------
     // Events
     //---------------------------------------------------------------------------------------------
 
@@ -375,6 +380,13 @@ Item
         ui = !(ui);
     }
 
+    function openUrl(url)
+    {
+        url = controllerNetwork.generateScheme(url);
+
+        Qt.openUrlExternally(controllerNetwork.encodedUrl(url));
+    }
+
     function openFile(url)
     {
         Qt.openUrlExternally(controllerFile.fileUrl(url));
@@ -583,12 +595,20 @@ Item
         anchors.left: parent.left
         anchors.top : parent.top
 
-        text: qsTr("Press F1 for UI")
+        text: (pVersion) ? qsTr("Update available")
+                         : qsTr("Press F1 for UI")
 
         // NOTE: Since the text is fading out on press, we keep it underlined when pressed.
         font.underline: isHovered
 
-        onClicked: toggleUi()
+        onClicked:
+        {
+            if (pVersion)
+            {
+                openUrl("https://omega.gg/Sky/get");
+            }
+            else toggleUi();
+        }
     }
 
     TextDefaultLink
@@ -630,7 +650,8 @@ Item
         {
             id: buttonApplication
 
-            maximumWidth: buttonConsole.x - buttonEject.width - st.dp16
+            maximumWidth: (st.isTight) ? buttonConsole.x - st.dp16
+                                       : buttonConsole.x - buttonEject.width - st.dp16
 
             borderBottom: borderSize
 
@@ -654,6 +675,8 @@ Item
             borderBottom: borderSize
 
             spacing: 0
+
+            visible: (st.isTight == false)
 
             enabled: (core.argument != "")
 

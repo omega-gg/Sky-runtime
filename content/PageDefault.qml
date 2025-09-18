@@ -42,7 +42,20 @@ Item
     // Events
     //---------------------------------------------------------------------------------------------
 
-    Component.onCompleted: pUpdateList()
+    Component.onCompleted:
+    {
+        pUpdateList();
+
+//#DESKTOP+!LINUX
+//#WINDOWS
+        if (sk.isUwp || core.associateSky) return;
+//#ELSE
+        if (core.associateSky) return;
+//#END
+
+        areaPanel.showPanel("PanelAssociate.qml");
+//#END
+    }
 
     //---------------------------------------------------------------------------------------------
     // Connections
@@ -243,5 +256,14 @@ Item
 
             source: (currentIndex == -1) ? "" : Qt.resolvedUrl("PageScript.qml")
         }
+    }
+
+    AreaPanel
+    {
+        id: areaPanel
+
+        anchors.fill: parent
+
+        marginTop: st.dp48
     }
 }

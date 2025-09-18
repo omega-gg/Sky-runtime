@@ -74,6 +74,11 @@ class ControllerCore : public WController
 
     Q_PROPERTY(int libraryCount READ libraryCount NOTIFY libraryLoaded)
 
+#if defined(SK_DESKTOP) && defined(SK_CONSOLE) == false
+    Q_PROPERTY(bool associateSky READ associateSky WRITE setAssociateSky
+               NOTIFY associateSkyChanged)
+#endif
+
 private:
     ControllerCore();
 
@@ -162,6 +167,10 @@ signals:
 
     void scriptsChanged();
 
+#if defined(SK_DESKTOP) && defined(SK_CONSOLE) == false
+    void associateSkyChanged();
+#endif
+
 public: // Properties
     QString argument() const;
     void    setArgument(const QString & argument);
@@ -174,6 +183,11 @@ public: // Properties
     QString name() const;
 
     int libraryCount() const;
+
+#if defined(SK_DESKTOP) && defined(SK_CONSOLE) == false
+    bool associateSky   () const;
+    void setAssociateSky(bool associate);
+#endif
 
 private: // Variables
     QString _argument;

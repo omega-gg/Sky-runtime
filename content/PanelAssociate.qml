@@ -23,27 +23,33 @@
 import QtQuick 1.0
 import Sky     1.0
 
-StyleComponents
+Panel
 {
-    //---------------------------------------------------------------------------------------------
-    // Properties
-    //---------------------------------------------------------------------------------------------
-    // Global
-
-    property bool isTight: (window.contentWidth < dp480)
-
-    //---------------------------------------------------------------------------------------------
-    // Icons
-
-    property url icon_eject: "icons/eject.svg"
-    property url icon_lock : "icons/lock.svg"
-
     //---------------------------------------------------------------------------------------------
     // Settings
     //---------------------------------------------------------------------------------------------
-    // NOTE: We apply night colors right away to avoid the flickering before onFadeIn.
 
-    border_color: "#242424"
+    width: button.itemText.x + sk.textWidth(button.font, button.text) + button.button.width
+           +
+           st.dp16 + borderSizeWidth
 
-    window_color: "#404040"
+    height: button.height + borderSizeHeight
+
+    //---------------------------------------------------------------------------------------------
+    // Children
+    //---------------------------------------------------------------------------------------------
+
+    ButtonCheckText
+    {
+        id: button
+
+        anchors.left : parent.left
+        anchors.right: parent.right
+
+        checked: false
+
+        text: qsTr("Associate .sky files")
+
+        onCheckedChanged: core.associateSky = checked
+    }
 }

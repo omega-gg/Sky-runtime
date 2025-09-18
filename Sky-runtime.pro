@@ -307,6 +307,7 @@ OTHER_FILES += environment.sh \
                content/TextDefault.qml \
                content/TextDefaultLink.qml \
                content/TextEditCopy.qml \
+               content/PanelAssociate.qml \
                content/PageDefault.qml \
                content/PageConsole.qml \
                content/PageScript.qml \
