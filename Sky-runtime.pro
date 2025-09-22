@@ -111,6 +111,7 @@ include(src/3rdparty/quazip/quazip.pri)
 include(src/3rdparty/libcharsetdetect/libcharsetdetect.pri)
 include(src/3rdparty/zxing-cpp/zxing-cpp.pri)
 
+include(bash/image/image.pri)
 include(bash/ffmpeg/ffmpeg.pri)
 include(bash/youtube-dl/youtube-dl.pri)
 
