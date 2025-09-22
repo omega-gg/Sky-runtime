@@ -752,6 +752,9 @@ ControllerCore::ControllerCore() : WController()
 
     QPainter painter(&result);
 
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+    painter.setRenderHint(QPainter::Antialiasing);
+
     foreach (const QVariant & variant, objects)
     {
         WDeclarativeImage * object = variant.value<WDeclarativeImage *>();
@@ -764,11 +767,44 @@ ControllerCore::ControllerCore() : WController()
                              qRound(object->height() * scale * upscale),
                              Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
-        qreal postionX = x + object->x() * scale;
-        qreal postionY = y + object->y() * scale;
+        qreal postionX = (x + object->x() * scale) * upscale;
+        qreal postionY = (y + object->y() * scale) * upscale;
 
-        painter.drawImage(QPoint(qRound(postionX * upscale),
-                                 qRound(postionY * upscale)), image);
+#ifdef QT_OLD
+        painter.drawImage(QPoint(qRound(postionX),
+                                 qRound(postionY)), image);
+#else
+        qreal rotation = object->rotation();
+
+        if (rotation)
+        {
+            painter.save();
+
+            painter.translate(qRound(postionX),
+                              qRound(postionY));
+
+#ifdef QT_5
+            QPointF origin(object->width() * 0.5, object->height() * 0.5);
+#else
+            QPointF origin = object->transformOriginPoint();
+#endif
+
+            int rotateX = qRound(origin.x() * scale * upscale);
+            int rotateY = qRound(origin.y() * scale * upscale);
+
+            painter.translate(rotateX, rotateY);
+
+            painter.rotate(rotation);
+
+            painter.translate(-rotateX, -rotateY);
+
+            painter.drawImage(QPoint(0, 0), image);
+
+            painter.restore();
+        }
+        else painter.drawImage(QPoint(qRound(postionX),
+                                      qRound(postionY)), image);
+#endif
     }
 
     QString fileName = QDir::fromNativeSeparators(WControllerFile::pathPictures()) + '/' + name;
