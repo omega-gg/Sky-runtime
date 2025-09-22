@@ -4,8 +4,8 @@
 [![appveyor](https://ci.appveyor.com/api/projects/status/yto6yi6aepvvl805?svg=true)](https://ci.appveyor.com/project/3unjee/Sky-runtime)
 [![GPLv3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl.html)
 
-The Sky runtime is a software runtime designed to run QML .sky files in tandem with Sky kit C++
-API(s) and UI components. It allows for versatile use cases while keeping things simple and
+The Sky runtime is a project driven aplication designed to run QML .sky files in tandem with Sky
+kit C++ API(s) and UI components. It allows for versatile use cases while keeping things simple and
 minimalistic.
 
 ## Technology
