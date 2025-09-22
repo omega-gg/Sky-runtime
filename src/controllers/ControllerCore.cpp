@@ -692,31 +692,38 @@ ControllerCore::ControllerCore() : WController()
 }
 
 /* Q_INVOKABLE static */ QQuickItem * ControllerCore::pickItem(const QVariantList & objects,
-                                                               qreal                targetX,
-                                                               qreal                targetY,
                                                                qreal                x,
-                                                               qreal                y,
-                                                               qreal                scale)
+                                                               qreal                y)
 {
-    x *= scale;
-    y *= scale;
-
-    targetX = qRound(x + targetX * scale);
-    targetY = qRound(y + targetY * scale);
-
     for (int i = objects.count() - 1; i >= 0; i--)
     {
-        QQuickItem * object = objects.at(i).value<QQuickItem *>();
+        QVariant variant = objects.at(i);
+
+        QQuickItem * object = variant.value<QQuickItem *>();
 
         if (object == NULL) continue;
 
-        qreal postionX = x + object->x() * scale;
-        qreal postionY = y + object->y() * scale;
+        int width  = object->width ();
+        int height = object->height();
 
-        if (QRect(qRound(postionX),
-                  qRound(postionY),
-                  qRound(object->width () * scale),
-                  qRound(object->height() * scale)).contains(targetX, targetY)) return object;
+        int positionX = object->x();
+        int positionY = object->y();
+
+        if (QRect(positionX, positionY, width, height).contains(x, y) == false) continue;
+
+        WDeclarativeImage * itemImage = variant.value<WDeclarativeImage *>();
+
+        if (itemImage == NULL) return object;
+
+        QImage image(itemImage->source());
+
+        image = image.scaled(width, height, Qt::IgnoreAspectRatio, Qt::FastTransformation);
+
+        // NOTE: When we pick a transparent pixel we skip the item.
+        if (qAlpha(image.pixel(x - positionX,
+                               y - positionY)) == 0) continue;
+
+        return object;
     }
 
     return NULL;

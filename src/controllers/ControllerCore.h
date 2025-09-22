@@ -127,12 +127,7 @@ public: // Interface
 public: // Static functions
     Q_INVOKABLE static QString createScript(const QString & text);
 
-    Q_INVOKABLE static QQuickItem * pickItem(const QVariantList & objects,
-                                             qreal                targetX,
-                                             qreal                targetY,
-                                             qreal                x,
-                                             qreal                y,
-                                             qreal                scale);
+    Q_INVOKABLE static QQuickItem * pickItem(const QVariantList & objects, qreal x, qreal y);
 
     Q_INVOKABLE static bool render(const QString      & name,
                                    const QVariantList & objects,
