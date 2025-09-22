@@ -36,10 +36,16 @@
 // Defines
 #define core ControllerCore::instance()
 
+#ifdef QT_4
+typedef QDeclarativeItem QQuickItem;
+#endif
+
 // Forward declarations
+class QQuickItem;
 class WControllerFileReply;
 class WCache;
 class WBackendIndex;
+class WDeclarativeImage;
 class WDeclarativePlayer;
 class DataOnline;
 class DataScript;
@@ -95,16 +101,6 @@ public: // Interface
 
     Q_INVOKABLE void loadLibrary();
 
-    Q_INVOKABLE bool render(const QString      & name,
-                            const QVariantList & objects,
-                            int                  width,
-                            int                  height,
-                            qreal                x,
-                            qreal                y,
-                            qreal                scale,
-                            qreal                upscale    = 1.0,
-                            const QColor       & background = Qt::white) const;
-
     Q_INVOKABLE void reloadScript(int index);
 
     Q_INVOKABLE void updateBackends() const;
@@ -130,6 +126,23 @@ public: // Interface
 
 public: // Static functions
     Q_INVOKABLE static QString createScript(const QString & text);
+
+    Q_INVOKABLE static QQuickItem * pickItem(const QVariantList & objects,
+                                             qreal                targetX,
+                                             qreal                targetY,
+                                             qreal                x,
+                                             qreal                y,
+                                             qreal                scale);
+
+    Q_INVOKABLE static bool render(const QString      & name,
+                                   const QVariantList & objects,
+                                   int                  width,
+                                   int                  height,
+                                   qreal                x,
+                                   qreal                y,
+                                   qreal                scale,
+                                   qreal                upscale    = 1.0,
+                                   const QColor       & background = Qt::white);
 
 #ifndef SK_NO_TORRENT
     Q_INVOKABLE static void applyTorrentOptions(int connections,

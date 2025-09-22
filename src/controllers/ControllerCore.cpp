@@ -557,59 +557,6 @@ ControllerCore::ControllerCore() : WController()
     emit libraryLoaded();
 }
 
-/* Q_INVOKABLE */ bool ControllerCore::render(const QString      & name,
-                                              const QVariantList & objects,
-                                              int                  width,
-                                              int                  height,
-                                              qreal                x,
-                                              qreal                y,
-                                              qreal                scale,
-                                              qreal                upscale,
-                                              const QColor       & background) const
-{
-    qreal gapX = (qreal) (width  - width  * scale) / 2.0;
-    qreal gapY = (qreal) (height - height * scale) / 2.0;
-
-    x = x * scale + gapX;
-    y = y * scale + gapY;
-
-    QImage result(qRound(width  * upscale),
-                  qRound(height * upscale), QImage::Format_ARGB32);
-
-    result.fill(background);
-
-    QPainter painter(&result);
-
-    foreach (const QVariant & variant, objects)
-    {
-        WDeclarativeImage * object = variant.value<WDeclarativeImage *>();
-
-        if (object == NULL) continue;
-
-        QImage image(object->source());
-
-        image = image.scaled(qRound(object->width () * scale * upscale),
-                             qRound(object->height() * scale * upscale),
-                             Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-
-        qreal postionX = x + object->x() * scale;
-        qreal postionY = y + object->y() * scale;
-
-        painter.drawImage(QPoint(qRound(postionX * upscale),
-                                 qRound(postionY * upscale)), image);
-    }
-
-    QString fileName = QDir::fromNativeSeparators(WControllerFile::pathPictures()) + '/' + name;
-
-    QString path = QFileInfo(fileName).absolutePath();
-
-    if (QFile::exists(path) || QDir().mkpath(path))
-    {
-        return result.save(fileName, "png");
-    }
-    else return false;
-}
-
 /* Q_INVOKABLE */ void ControllerCore::reloadScript(int index)
 {
     if (_script) _script->reload(index);
@@ -742,6 +689,90 @@ ControllerCore::ControllerCore() : WController()
 
     return QString();
 #endif
+}
+
+/* Q_INVOKABLE static */ QQuickItem * ControllerCore::pickItem(const QVariantList & objects,
+                                                               qreal                targetX,
+                                                               qreal                targetY,
+                                                               qreal                x,
+                                                               qreal                y,
+                                                               qreal                scale)
+{
+    x *= scale;
+    y *= scale;
+
+    targetX = qRound(x + targetX * scale);
+    targetY = qRound(y + targetY * scale);
+
+    for (int i = objects.count() - 1; i >= 0; i--)
+    {
+        QQuickItem * object = objects.at(i).value<QQuickItem *>();
+
+        if (object == NULL) continue;
+
+        qreal postionX = x + object->x() * scale;
+        qreal postionY = y + object->y() * scale;
+
+        if (QRect(qRound(postionX),
+                  qRound(postionY),
+                  qRound(object->width () * scale),
+                  qRound(object->height() * scale)).contains(targetX, targetY)) return object;
+    }
+
+    return NULL;
+}
+
+/* Q_INVOKABLE static */ bool ControllerCore::render(const QString      & name,
+                                                     const QVariantList & objects,
+                                                     int                  width,
+                                                     int                  height,
+                                                     qreal                x,
+                                                     qreal                y,
+                                                     qreal                scale,
+                                                     qreal                upscale,
+                                                     const QColor       & background)
+{
+    qreal gapX = (qreal) (width  - width  * scale) / 2.0;
+    qreal gapY = (qreal) (height - height * scale) / 2.0;
+
+    x = x * scale + gapX;
+    y = y * scale + gapY;
+
+    QImage result(qRound(width  * upscale),
+                  qRound(height * upscale), QImage::Format_ARGB32);
+
+    result.fill(background);
+
+    QPainter painter(&result);
+
+    foreach (const QVariant & variant, objects)
+    {
+        WDeclarativeImage * object = variant.value<WDeclarativeImage *>();
+
+        if (object == NULL) continue;
+
+        QImage image(object->source());
+
+        image = image.scaled(qRound(object->width () * scale * upscale),
+                             qRound(object->height() * scale * upscale),
+                             Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+        qreal postionX = x + object->x() * scale;
+        qreal postionY = y + object->y() * scale;
+
+        painter.drawImage(QPoint(qRound(postionX * upscale),
+                                 qRound(postionY * upscale)), image);
+    }
+
+    QString fileName = QDir::fromNativeSeparators(WControllerFile::pathPictures()) + '/' + name;
+
+    QString path = QFileInfo(fileName).absolutePath();
+
+    if (QFile::exists(path) || QDir().mkpath(path))
+    {
+        return result.save(fileName, "png");
+    }
+    else return false;
 }
 
 #ifndef SK_NO_TORRENT
