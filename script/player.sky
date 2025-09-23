@@ -1,0 +1,245 @@
+// player 1.0.0 : sky 3.0.0-2
+// https://raw.githubusercontent.com/omega-gg/Sky-runtime/refs/heads/master/script/player.sky
+//=================================================================================================
+/*
+    Copyright (C) 2015-2020 Sky kit authors. <http://omega.gg/Sky>
+
+    Author: Benjamin Arnaud. <http://bunjee.me> <bunjee@omega.gg>
+
+    This file is part of the Sky kit runtime.
+
+    - GNU Lesser General Public License Usage:
+    This file may be used under the terms of the GNU Lesser General Public License version 3 as
+    published by the Free Software Foundation and appearing in the LICENSE.md file included in the
+    packaging of this file. Please review the following information to ensure the GNU Lesser
+    General Public License requirements will be met: https://www.gnu.org/licenses/lgpl.html.
+
+    - Private License Usage:
+    Sky kit licensees holding valid private licenses may use this file in accordance with the
+    private license agreement provided with the Software or, alternatively, in accordance with the
+    terms contained in written agreement between you and Sky kit authors. For further information
+    contact us at contact@omega.gg.
+*/
+//=================================================================================================
+
+import QtQuick 2.0
+import Sky     1.0
+
+Player
+{
+    id: player
+
+    //---------------------------------------------------------------------------------------------
+    // Properties
+    //---------------------------------------------------------------------------------------------
+
+    /* read */ property string version: "1.0.0-0"
+
+    property int increment    :  40
+    property int incrementFast: 100
+
+    //---------------------------------------------------------------------------------------------
+    // Aliases
+    //---------------------------------------------------------------------------------------------
+
+    property alias background: background
+
+    //---------------------------------------------------------------------------------------------
+    // Events
+    //---------------------------------------------------------------------------------------------
+
+    Component.onCompleted: core.applyBackend(player)
+
+    volume: 0
+
+    //---------------------------------------------------------------------------------------------
+    // Keys
+    //---------------------------------------------------------------------------------------------
+
+    /* QML_EVENT */ Keys.onPressed: function(event)
+    {
+        if (event.key == Qt.Key_Return || event.key == Qt.Key_Enter)
+        {
+            event.accepted = true;
+
+            window.fullScreen = !(window.fullScreen);
+        }
+        else if (event.key == Qt.Key_Space)
+        {
+            event.accepted = true;
+
+            player.togglePlay();
+        }
+        else if (event.key == Qt.Key_Left)
+        {
+            event.accepted = true;
+
+            if (event.modifiers == sk.keypad(Qt.ShiftModifier))
+            {
+                 sliderStream.moveTo(sliderStream.value - incrementFast);
+            }
+            else sliderStream.moveTo(sliderStream.value - increment);
+        }
+        else if (event.key == Qt.Key_Right)
+        {
+            event.accepted = true;
+
+            if (event.modifiers == sk.keypad(Qt.ShiftModifier))
+            {
+                 sliderStream.moveTo(sliderStream.value + incrementFast);
+            }
+            else sliderStream.moveTo(sliderStream.value + increment);
+        }
+    }
+
+    //---------------------------------------------------------------------------------------------
+    // Functions
+    //---------------------------------------------------------------------------------------------
+    // Interface
+
+    function load(source, time)
+    {
+        if (player.source == source) return;
+
+        pause();
+
+        player.source = "file:///" + source;
+
+        if (time != undefined)
+        {
+            player.seek(time);
+        }
+
+        play();
+
+        while (isLoading) sk.processEvents();
+
+        pause();
+    }
+
+    //---------------------------------------------------------------------------------------------
+    // Events
+
+    function onConsole(list)
+    {
+        var length = list.length;
+
+        var command = list[0];
+
+        if (command == "play")
+        {
+            if (length < 2 || length > 3) return false;
+
+            if (length == 2) play(Number(list[1]));
+            else             play(Number(list[1], list[2]));
+
+            return true;
+        }
+        else if (length == 1)
+        {
+            if (command == "pause")
+            {
+                pause();
+
+                return true;
+            }
+        }
+        else if (length == 2)
+        {
+            if (command == "load")
+            {
+                load(list[1]);
+
+                return true;
+            }
+            else if (command == "seek")
+            {
+                seek(list[1]);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    function onHelp()
+    {
+        return "Welcome to Sky player " + version + "\n" +
+                "\n" +
+                "keyboard:\n" +
+                "- Return    switch to fullscreen\n" +
+                "- Space     toggle play / pause\n" +
+                "- Arrows    seek the timeline\n" +
+                "- Shift     seek faster\n" +
+                "\n" +
+                "console:\n" +
+                "> load <source> [time]    load the video\n" +
+                "> play                    play the video\n" +
+                "> pause                   pause the video\n" +
+                "> seek <time>             seek at the given time";
+    }
+
+    function getLoader()
+    {
+        return loader;
+    }
+
+    //---------------------------------------------------------------------------------------------
+    // Children
+    //---------------------------------------------------------------------------------------------
+
+    Rectangle
+    {
+        id: background
+
+        anchors.fill: parent
+
+        z: -1
+
+        visible: player.hasStarted
+
+        color: "black"
+    }
+
+    SliderStream
+    {
+        id: sliderStream
+
+        anchors.left  : parent.left
+        anchors.right : parent.right
+        anchors.bottom: parent.bottom
+
+        anchors.margins: st.dp16
+
+        active: player.isPlaying
+
+        currentTime: player.currentTime
+
+        duration: player.duration
+
+        progress: player.progress
+
+        onHandleReleased:
+        {
+            if (player.hasStarted == false)
+            {
+                player.play();
+            }
+
+            // NOTE: When clicking on the slider we try to interpolate a chapter position.
+            if (slider.isClicked())
+            {
+                 player.seek(st.getChapterTime(sliderStream, st.dp4));
+            }
+            else player.seek(sliderStream.value);
+        }
+    }
+
+    Loader
+    {
+        id: loader
+
+        anchors.fill: parent
+    }
+}

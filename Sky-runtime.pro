@@ -313,7 +313,9 @@ OTHER_FILES += environment.sh \
                content/PageConsole.qml \
                content/PageScript.qml \
                script/hello.sky \
+               script/player.sky \
                test/hello.sky \
+               test/player.sky \
                include/generate.sh \
                dist/sky.rc \
                dist/script/start.sh \
