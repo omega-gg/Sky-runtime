@@ -50,7 +50,7 @@ Player
 
     Component.onCompleted: core.applyBackend(player)
 
-    volume: 0
+    volume: 0.0
 
     //---------------------------------------------------------------------------------------------
     // Keys
