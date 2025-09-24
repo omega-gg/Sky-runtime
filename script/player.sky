@@ -33,8 +33,6 @@ Player
     // Properties
     //---------------------------------------------------------------------------------------------
 
-    /* read */ property string version: "1.0.0-0"
-
     property int increment    :  40
     property int incrementFast: 100
 
@@ -43,6 +41,10 @@ Player
     //---------------------------------------------------------------------------------------------
 
     property alias background: background
+
+    property alias slider: slider
+
+    property alias loader: loader
 
     //---------------------------------------------------------------------------------------------
     // Events
@@ -78,9 +80,9 @@ Player
 
             if (event.modifiers == sk.keypad(Qt.ShiftModifier))
             {
-                 sliderStream.moveTo(sliderStream.value - incrementFast);
+                 slider.moveTo(slider.value - incrementFast);
             }
-            else sliderStream.moveTo(sliderStream.value - increment);
+            else slider.moveTo(slider.value - increment);
         }
         else if (event.key == Qt.Key_Right)
         {
@@ -88,9 +90,9 @@ Player
 
             if (event.modifiers == sk.keypad(Qt.ShiftModifier))
             {
-                 sliderStream.moveTo(sliderStream.value + incrementFast);
+                 slider.moveTo(slider.value + incrementFast);
             }
-            else sliderStream.moveTo(sliderStream.value + increment);
+            else slider.moveTo(slider.value + increment);
         }
     }
 
@@ -126,6 +128,16 @@ Player
     //---------------------------------------------------------------------------------------------
     // Events
 
+    function onLoader()
+    {
+        return loader;
+    }
+
+    function onRefresh()
+    {
+        player.source = "";
+    }
+
     function onConsole(list)
     {
         var length = list.length;
@@ -146,6 +158,12 @@ Player
             if (command == "pause")
             {
                 pause();
+
+                return true;
+            }
+            else if (command == "stop")
+            {
+                stop();
 
                 return true;
             }
@@ -171,7 +189,7 @@ Player
 
     function onHelp()
     {
-        return "Welcome to Sky player " + version + "\n" +
+        return "Welcome to Sky player " + sk.versionSky + "\n" +
                 "\n" +
                 "keyboard:\n" +
                 "- Return    switch to fullscreen\n" +
@@ -183,12 +201,8 @@ Player
                 "> load <source> [time]    load the video\n" +
                 "> play                    play the video\n" +
                 "> pause                   pause the video\n" +
+                "> stop                    stop the video\n" +
                 "> seek <time>             seek at the given time";
-    }
-
-    function getLoader()
-    {
-        return loader;
     }
 
     //---------------------------------------------------------------------------------------------
@@ -210,7 +224,7 @@ Player
 
     SliderStream
     {
-        id: sliderStream
+        id: slider
 
         anchors.left  : parent.left
         anchors.right : parent.right
@@ -236,9 +250,9 @@ Player
             // NOTE: When clicking on the slider we try to interpolate a chapter position.
             if (slider.isClicked())
             {
-                 player.seek(st.getChapterTime(sliderStream, st.dp4));
+                 player.seek(st.getChapterTime(slider, st.dp4));
             }
-            else player.seek(sliderStream.value);
+            else player.seek(slider.value);
         }
     }
 

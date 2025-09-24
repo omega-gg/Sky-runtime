@@ -104,6 +104,13 @@ Item
 
         objects.pop();
 
+        for (var i = 0; i < objects.length; i++)
+        {
+            var object = objects[i];
+
+            if (object.onRefresh) object.onRefresh();
+        }
+
         loadScript(index);
 
         setFocus();
@@ -238,9 +245,9 @@ Item
                 data = parent.onPatch(data, core.getVersionParent(index));
             }
 
-            if (parent.getLoader)
+            if (parent.onLoader)
             {
-                root = parent.getLoader();
+                root = parent.onLoader();
             }
             else root = loader;
         }
