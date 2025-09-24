@@ -11,25 +11,45 @@ ffmpeg="$PWD/../ffmpeg/bin/ffmpeg"
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
-if [ $# -lt 2 ]; then
+if [ $# -lt 2 ] \
+   || \
+   [ $# -gt 2 -a "$3" != "horizontal" -a "$3" != "vertical" ]; then
 
-    echo "Usage: convert <input> <output> [options...]"
+    echo "Usage: flip <input> <output> [flip = horizontal] [options...]"
     echo ""
     echo "examples:"
-    echo "    convert input.png output.jpg -q:v 2"
-    echo "    convert input.png output.webp -c:v libwebp -lossless 1"
+    echo "    flip input.png output.jpg horizontal -q:v 2"
+    echo "    flip input.png output.webp vertical -c:v libwebp -lossless 1"
 
     exit 1
 fi
 
 #--------------------------------------------------------------------------------------------------
-# Run
+# Configuration
 #--------------------------------------------------------------------------------------------------
 
 input="$1"
 
 output="$2"
 
-shift 2
+if [ $# = 2 ]; then
 
-"$ffmpeg" -y -i "$input" "$@" "$output"
+    flip="hflip"
+
+    shift 2
+else
+    if [ "$3" = "horizontal" ]; then
+
+        flip="hflip"
+    else
+        flip="vflip"
+    fi
+
+    shift 3
+fi
+
+#--------------------------------------------------------------------------------------------------
+# Run
+#--------------------------------------------------------------------------------------------------
+
+"$ffmpeg" -y -i "$input" -vf "$flip" "$@" "$output"
