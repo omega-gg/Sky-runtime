@@ -52,6 +52,8 @@ Player
 
     volume: 0.0
 
+    quality: AbstractBackend.Quality720
+
     //---------------------------------------------------------------------------------------------
     // Keys
     //---------------------------------------------------------------------------------------------
@@ -103,7 +105,11 @@ Player
 
         pause();
 
-        player.source = "file:///" + source;
+        if (controllerNetwork.textIsUrl(source))
+        {
+            player.source = source;
+        }
+        else player.source = "file:///" + source;
 
         if (time != undefined)
         {
@@ -197,7 +203,7 @@ Player
 
         z: -1
 
-        visible: player.hasStarted
+        visible: (player.source != "")
 
         color: "black"
     }
@@ -241,5 +247,24 @@ Player
         id: loader
 
         anchors.fill: parent
+
+        sourceComponent: (background.visible) ? null : componentDefault
+    }
+
+    Component
+    {
+        id: componentDefault
+
+        Item
+        {
+            TextBase
+            {
+                anchors.centerIn: parent
+
+                text: qsTr("Welcome to Sky player")
+
+                font.pixelSize: st.dp32
+            }
+        }
     }
 }
