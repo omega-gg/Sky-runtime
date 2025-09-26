@@ -33,6 +33,8 @@ Player
     // Properties
     //---------------------------------------------------------------------------------------------
 
+    /* read */ property bool isReady: (player.source != "")
+
     property int increment    :  40
     property int incrementFast: 100
 
@@ -133,11 +135,6 @@ Player
         return loader;
     }
 
-    function onRefresh()
-    {
-        player.source = "";
-    }
-
     function onConsole(list)
     {
         var length = list.length;
@@ -217,7 +214,7 @@ Player
 
         z: -1
 
-        visible: (player.source != "")
+        visible: isReady
 
         color: "black"
     }
@@ -244,7 +241,8 @@ Player
         {
             if (player.hasStarted == false)
             {
-                player.play();
+                player.play ();
+                player.pause();
             }
 
             // NOTE: When clicking on the slider we try to interpolate a chapter position.
@@ -262,7 +260,7 @@ Player
 
         anchors.fill: parent
 
-        sourceComponent: (background.visible) ? null : componentDefault
+        sourceComponent: (isReady) ? null : componentDefault
     }
 
     Component

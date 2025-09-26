@@ -113,8 +113,6 @@ Application
 
             anchors.fill: parent
 
-            visible: (window.fullScreen == false)
-
             onDoubleClicked: toggleMaximized()
         }
 

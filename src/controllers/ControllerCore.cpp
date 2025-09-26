@@ -503,27 +503,6 @@ ControllerCore::ControllerCore() : WController()
             this,      SIGNAL(refresh()));
 }
 
-/* Q_INVOKABLE */ void ControllerCore::loadSource(const QString & fileName)
-{
-    _watcher.clearFiles();
-
-    if (_script)
-    {
-        _script->clear();
-    }
-    else _script = new DataScript(this);
-
-    if (fileName.isEmpty() == false)
-    {
-        // NOTE: fromNativeSeparators is important for fileBaseName.
-        loadData(_script, QDir::fromNativeSeparators(fileName));
-
-        _watcher.addFile(fileName);
-    }
-
-    emit loaded();
-}
-
 /* Q_INVOKABLE */ DataScript * ControllerCore::loadScript(const QString & fileName)
 {
     if (fileName.isEmpty()) return NULL;
@@ -562,6 +541,138 @@ ControllerCore::ControllerCore() : WController()
     if (_script) _script->reload(index);
 }
 
+/* Q_INVOKABLE */ bool ControllerCore::render(const QString      & name,
+                                              const QVariantList & objects,
+                                              int                  width,
+                                              int                  height,
+                                              qreal                x,
+                                              qreal                y,
+                                              qreal                scale,
+                                              qreal                upscale,
+                                              const QColor       & background)
+{
+    qreal gapX = (qreal) (width  - width  * scale) / 2.0;
+    qreal gapY = (qreal) (height - height * scale) / 2.0;
+
+    x = x * scale + gapX;
+    y = y * scale + gapY;
+
+    QImage result(qRound(width  * upscale),
+                  qRound(height * upscale), QImage::Format_ARGB32);
+
+    result.fill(background);
+
+    QPainter painter(&result);
+
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    foreach (const QVariant & variant, objects)
+    {
+        WDeclarativeImage * object = variant.value<WDeclarativeImage *>();
+
+        if (object == NULL) continue;
+
+        QImage image(object->source());
+
+        image = image.scaled(qRound(object->width () * scale * upscale),
+                             qRound(object->height() * scale * upscale),
+                             Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+        qreal postionX = (x + object->x() * scale) * upscale;
+        qreal postionY = (y + object->y() * scale) * upscale;
+
+#ifdef QT_OLD
+        painter.drawImage(QPoint(qRound(postionX),
+                                 qRound(postionY)), image);
+#else
+        qreal rotation = object->rotation();
+
+        if (rotation)
+        {
+            painter.save();
+
+            painter.translate(qRound(postionX),
+                              qRound(postionY));
+
+#ifdef QT_5
+            QPointF origin(object->width() * 0.5, object->height() * 0.5);
+#else
+            QPointF origin = object->transformOriginPoint();
+#endif
+
+            int rotateX = qRound(origin.x() * scale * upscale);
+            int rotateY = qRound(origin.y() * scale * upscale);
+
+            painter.translate(rotateX, rotateY);
+
+            painter.rotate(rotation);
+
+            painter.translate(-rotateX, -rotateY);
+
+            painter.drawImage(QPoint(0, 0), image);
+
+            painter.restore();
+        }
+        else painter.drawImage(QPoint(qRound(postionX),
+                                      qRound(postionY)), image);
+#endif
+    }
+
+    return saveImage(name, result);
+}
+
+/* Q_INVOKABLE */ bool ControllerCore::saveImage(const QString & name,
+                                                 const QImage  & image, bool asynchronous)
+{
+    QString fileName = QDir::fromNativeSeparators(name);
+
+    QString path = QFileInfo(fileName).absolutePath();
+
+    if (QFile::exists(path) || QDir().mkpath(path))
+    {
+        QString extension = WControllerNetwork::extractUrlExtension(name);
+
+        QString path = wControllerFile->pathPictures() + "/hypergonar/temp_"
+                       +
+                       sk->currentDateString() + "." + extension;
+
+        if (asynchronous)
+        {
+            ControllerCoreFile file;
+
+            file.origin = path;
+            file.target = fileName;
+
+            WControllerFileReply * reply = wControllerView->startWriteImage(path, image);
+
+            _replies.insert(reply, file);
+
+            connect(reply, SIGNAL(complete(bool)), this, SLOT(onComplete(bool)));
+
+            return true;
+        }
+        else if (image.save(path, "png"))
+        {
+            QFile::remove(name);
+
+            WControllerFile::renameFile(path, name);
+
+            return true;
+        }
+        else return false;
+    }
+    else return false;
+}
+
+/* Q_INVOKABLE */ bool ControllerCore::saveFrame(const QString      & name,
+                                                 WDeclarativePlayer * player, bool asynchronous)
+{
+    if (player == NULL) return false;
+
+    return saveImage(name, player->getFrame(), asynchronous);
+}
+
 //-------------------------------------------------------------------------------------------------
 
 /* Q_INVOKABLE */ void ControllerCore::updateBackends() const
@@ -595,6 +706,16 @@ ControllerCore::ControllerCore() : WController()
 /* Q_INVOKABLE */ void ControllerCore::addWatcher(const QString & fileName)
 {
     _watcher.addFile(fileName);
+}
+
+/* Q_INVOKABLE */ void ControllerCore::clearWatchers()
+{
+    _watcher.clearFiles();
+
+    if (_source.isEmpty() == false)
+    {
+        _watcher.addFile(_source);
+    }
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -727,95 +848,6 @@ ControllerCore::ControllerCore() : WController()
     }
 
     return NULL;
-}
-
-/* Q_INVOKABLE static */ bool ControllerCore::render(const QString      & name,
-                                                     const QVariantList & objects,
-                                                     int                  width,
-                                                     int                  height,
-                                                     qreal                x,
-                                                     qreal                y,
-                                                     qreal                scale,
-                                                     qreal                upscale,
-                                                     const QColor       & background)
-{
-    qreal gapX = (qreal) (width  - width  * scale) / 2.0;
-    qreal gapY = (qreal) (height - height * scale) / 2.0;
-
-    x = x * scale + gapX;
-    y = y * scale + gapY;
-
-    QImage result(qRound(width  * upscale),
-                  qRound(height * upscale), QImage::Format_ARGB32);
-
-    result.fill(background);
-
-    QPainter painter(&result);
-
-    painter.setRenderHint(QPainter::SmoothPixmapTransform);
-    painter.setRenderHint(QPainter::Antialiasing);
-
-    foreach (const QVariant & variant, objects)
-    {
-        WDeclarativeImage * object = variant.value<WDeclarativeImage *>();
-
-        if (object == NULL) continue;
-
-        QImage image(object->source());
-
-        image = image.scaled(qRound(object->width () * scale * upscale),
-                             qRound(object->height() * scale * upscale),
-                             Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-
-        qreal postionX = (x + object->x() * scale) * upscale;
-        qreal postionY = (y + object->y() * scale) * upscale;
-
-#ifdef QT_OLD
-        painter.drawImage(QPoint(qRound(postionX),
-                                 qRound(postionY)), image);
-#else
-        qreal rotation = object->rotation();
-
-        if (rotation)
-        {
-            painter.save();
-
-            painter.translate(qRound(postionX),
-                              qRound(postionY));
-
-#ifdef QT_5
-            QPointF origin(object->width() * 0.5, object->height() * 0.5);
-#else
-            QPointF origin = object->transformOriginPoint();
-#endif
-
-            int rotateX = qRound(origin.x() * scale * upscale);
-            int rotateY = qRound(origin.y() * scale * upscale);
-
-            painter.translate(rotateX, rotateY);
-
-            painter.rotate(rotation);
-
-            painter.translate(-rotateX, -rotateY);
-
-            painter.drawImage(QPoint(0, 0), image);
-
-            painter.restore();
-        }
-        else painter.drawImage(QPoint(qRound(postionX),
-                                      qRound(postionY)), image);
-#endif
-    }
-
-    QString fileName = QDir::fromNativeSeparators(WControllerFile::pathPictures()) + '/' + name;
-
-    QString path = QFileInfo(fileName).absolutePath();
-
-    if (QFile::exists(path) || QDir().mkpath(path))
-    {
-        return result.save(fileName, "png");
-    }
-    else return false;
 }
 
 #ifndef SK_NO_TORRENT
@@ -985,27 +1017,71 @@ void ControllerCore::onReload()
     WBackendUniversal::clearCache();
 }
 
+void ControllerCore::onComplete(bool ok)
+{
+    WControllerFileReply * reply = static_cast<WControllerFileReply *> (sender());
+
+    if (_replies.contains(reply) == false) return;
+
+    ControllerCoreFile file = _replies.take(reply);
+
+    if (ok == false) return;
+
+    QString target = file.target;
+
+    QFile::remove(target);
+
+    qDebug("HELLO COPY %s %s", file.origin.C_STR, target.C_STR);
+
+    WControllerFile::renameFile(file.origin, target);
+}
+
 //-------------------------------------------------------------------------------------------------
 // Properties
 //-------------------------------------------------------------------------------------------------
+
+#ifdef SK_DESKTOP
 
 QString ControllerCore::argument() const
 {
     return _argument;
 }
 
-void ControllerCore::setArgument(const QString & argument)
+#endif
+
+QString ControllerCore::source() const
 {
-    if (_argument == argument) return;
+    return _source;
+}
 
-    _argument = argument;
+void ControllerCore::setSource(const QString & source)
+{
+    if (_source == source) return;
 
-    emit argumentChanged();
+    _source = source;
+
+    _watcher.clearFiles();
+
+    if (_script)
+    {
+        _script->clear();
+    }
+    else _script = new DataScript(this);
+
+    if (source.isEmpty() == false)
+    {
+        // NOTE: fromNativeSeparators is important for fileBaseName.
+        loadData(_script, QDir::fromNativeSeparators(source));
+
+        _watcher.addFile(source);
+    }
+
+    emit sourceChanged();
 }
 
 QString ControllerCore::path() const
 {
-    return WControllerFile::folderPath(_argument);
+    return WControllerFile::folderPath(_source);
 }
 
 QString ControllerCore::pathLibrary() const

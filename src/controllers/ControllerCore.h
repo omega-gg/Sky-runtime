@@ -61,6 +61,16 @@ struct ControllerCoreItem
 };
 
 //-------------------------------------------------------------------------------------------------
+// ControllerCoreFile
+//-------------------------------------------------------------------------------------------------
+
+struct ControllerCoreFile
+{
+    QString origin;
+    QString target;
+};
+
+//-------------------------------------------------------------------------------------------------
 // ControllerCore
 //-------------------------------------------------------------------------------------------------
 
@@ -68,15 +78,19 @@ class ControllerCore : public WController
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString argument READ argument WRITE setArgument NOTIFY argumentChanged)
+#ifdef SK_DESKTOP
+    Q_PROPERTY(QString argument READ argument CONSTANT)
+#endif
 
-    Q_PROPERTY(QString path READ path NOTIFY argumentChanged)
+    Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
+
+    Q_PROPERTY(QString path READ path NOTIFY sourceChanged)
 
     Q_PROPERTY(QString pathLibrary READ pathLibrary CONSTANT)
 
-    Q_PROPERTY(int count READ count NOTIFY loaded)
+    Q_PROPERTY(int count READ count NOTIFY sourceChanged)
 
-    Q_PROPERTY(QString name READ name NOTIFY loaded)
+    Q_PROPERTY(QString name READ name NOTIFY sourceChanged)
 
     Q_PROPERTY(int libraryCount READ libraryCount NOTIFY libraryLoaded)
 
@@ -95,13 +109,27 @@ public: // Interface
 
     Q_INVOKABLE void load();
 
-    Q_INVOKABLE void loadSource(const QString & fileName);
-
     Q_INVOKABLE DataScript * loadScript(const QString & fileName);
 
     Q_INVOKABLE void loadLibrary();
 
     Q_INVOKABLE void reloadScript(int index);
+
+    Q_INVOKABLE bool render(const QString      & name,
+                            const QVariantList & objects,
+                            int                  width,
+                            int                  height,
+                            qreal                x,
+                            qreal                y,
+                            qreal                scale,
+                            qreal                upscale    = 1.0,
+                            const QColor       & background = Qt::white);
+
+    Q_INVOKABLE bool saveImage(const QString & name,
+                               const QImage  & image, bool asynchronous = true);
+
+    Q_INVOKABLE bool saveFrame(const QString      & name,
+                               WDeclarativePlayer * player, bool asynchronous = true);
 
     Q_INVOKABLE void updateBackends() const;
     Q_INVOKABLE void resetBackends () const;
@@ -111,6 +139,8 @@ public: // Interface
     Q_INVOKABLE void clearScripts();
 
     Q_INVOKABLE void addWatcher(const QString & fileName);
+
+    Q_INVOKABLE void clearWatchers();
 
     Q_INVOKABLE QString getName(int index) const;
 
@@ -128,16 +158,6 @@ public: // Static functions
     Q_INVOKABLE static QString createScript(const QString & text);
 
     Q_INVOKABLE static QQuickItem * pickItem(const QVariantList & objects, qreal x, qreal y);
-
-    Q_INVOKABLE static bool render(const QString      & name,
-                                   const QVariantList & objects,
-                                   int                  width,
-                                   int                  height,
-                                   qreal                x,
-                                   qreal                y,
-                                   qreal                scale,
-                                   qreal                upscale    = 1.0,
-                                   const QColor       & background = Qt::white);
 
 #ifndef SK_NO_TORRENT
     Q_INVOKABLE static void applyTorrentOptions(int connections,
@@ -164,14 +184,14 @@ private slots:
 
     void onReload();
 
-signals:
-    void loaded();
+    void onComplete(bool ok);
 
+signals:
     void libraryLoaded();
 
     void refresh();
 
-    void argumentChanged();
+    void sourceChanged();
 
     void scriptsChanged();
 
@@ -180,8 +200,12 @@ signals:
 #endif
 
 public: // Properties
+#ifdef SK_DESKTOP
     QString argument() const;
-    void    setArgument(const QString & argument);
+#endif
+
+    QString source() const;
+    void    setSource(const QString & source);
 
     QString path       () const;
     QString pathLibrary() const;
@@ -200,6 +224,8 @@ public: // Properties
 private: // Variables
     QString _argument;
 
+    QString _source;
+
     DataLocal    _local;
     DataOnline * _online;
     DataScript * _script;
@@ -211,6 +237,8 @@ private: // Variables
     WBackendIndex * _index;
 
     QList<ControllerCoreItem> _library;
+
+    QHash<WControllerFileReply *, ControllerCoreFile> _replies;
 
     WFileWatcher _watcher;
 

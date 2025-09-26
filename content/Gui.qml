@@ -42,6 +42,8 @@ Item
 
     property bool hideUi: true
 
+    property int popupMargin: st.dp32
+
     //---------------------------------------------------------------------------------------------
     // Private
 
@@ -51,7 +53,7 @@ Item
     // Events
     //---------------------------------------------------------------------------------------------
 
-    Component.onCompleted: loadArgument()
+    Component.onCompleted: load(core.argument)
 
     //---------------------------------------------------------------------------------------------
     // Connections
@@ -62,8 +64,6 @@ Item
         target: core
 
         /* QML_CONNECTION */ function onRefresh() { refresh() }
-
-        /* QML_CONNECTION */ function onArgumentChanged() { loadArgument() }
     }
 
     Connections
@@ -85,9 +85,41 @@ Item
     //---------------------------------------------------------------------------------------------
     // Interface
 
-    function load(argument)
+    function load(source)
     {
-        core.argument = argument;
+        if (hideUi) ui = false;
+
+        if (objects)
+        {
+            for (var i = 0; i < objects.length; i++)
+            {
+                objects[i].destroy();
+            }
+        }
+
+        objects = new Array;
+
+        loader.source = "";
+
+        core.source = source;
+
+        if (source)
+        {
+            for (/* var */ i = 0; i < core.count; i++)
+            {
+                loadScript(i);
+            }
+        }
+        else loader.source = Qt.resolvedUrl("PageDefault.qml");
+
+        setFocus();
+
+//#DEPLOY
+        help();
+//#ELSE
+        // NOTE: Make sure we show the help after the loading messages in the console.
+        timer.start();
+//#END
     }
 
     function refresh()
@@ -95,6 +127,8 @@ Item
         var length = objects.length;
 
         if (length == 0) return;
+
+        core.clearWatchers();
 
         var index = length - 1;
 
@@ -104,6 +138,8 @@ Item
 
         objects.pop();
 
+        loadScript(index);
+
         for (var i = 0; i < objects.length; i++)
         {
             var object = objects[i];
@@ -111,26 +147,24 @@ Item
             if (object.onRefresh) object.onRefresh();
         }
 
-        loadScript(index);
-
         setFocus();
     }
 
     function reload()
     {
-        var argument = core.argument;
+        var source = core.source;
 
-        if (argument == "") return;
+        if (source == "") return;
 
-        core.argument = "";
-        core.argument = argument;
+        load("");
+        load(source);
     }
 
     function unload()
     {
         hideUi = false;
 
-        core.argument = "";
+        load("");
 
         hideUi = true;
     }
@@ -189,45 +223,6 @@ Item
         var name = core.createScript(text);
 
         if (name) load(name);
-    }
-
-    function loadArgument()
-    {
-        if (hideUi) ui = false;
-
-        if (objects)
-        {
-            for (var i = 0; i < objects.length; i++)
-            {
-                objects[i].destroy();
-            }
-        }
-
-        objects = new Array;
-
-        loader.source = "";
-
-        var argument = core.argument;
-
-        core.loadSource(argument);
-
-        if (argument)
-        {
-            for (/* var */ i = 0; i < core.count; i++)
-            {
-                loadScript(i);
-            }
-        }
-        else loader.source = Qt.resolvedUrl("PageDefault.qml");
-
-        setFocus();
-
-//#DEPLOY
-        help();
-//#ELSE
-        // NOTE: Make sure we show the help after the loading messages in the console.
-        timer.start();
-//#END
     }
 
     function loadScript(index)
@@ -685,7 +680,7 @@ Item
 
             visible: (st.isTight == false)
 
-            enabled: (core.argument != "")
+            enabled: (core.source != "")
 
             icon          : st.icon_eject
             iconSourceSize: st.size12x12
@@ -799,7 +794,7 @@ Item
 
         anchors.bottom: parent.bottom
 
-        anchors.bottomMargin: st.dp32
+        anchors.bottomMargin: popupMargin
 
         anchors.horizontalCenter: parent.horizontalCenter
     }

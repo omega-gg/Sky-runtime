@@ -65,7 +65,7 @@ Item
     {
         target: core
 
-        /* QML_CONNECTION */ function onLoaded() { pUpdateList() }
+        /* QML_CONNECTION */ function onSourceChanged() { pUpdateList() }
     }
 
     //---------------------------------------------------------------------------------------------
