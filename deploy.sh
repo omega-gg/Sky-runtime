@@ -11,6 +11,8 @@ Sky="$PWD/../Sky"
 
 backend="$PWD/../backend"
 
+script="$PWD/script"
+
 #--------------------------------------------------------------------------------------------------
 # environment
 
@@ -734,4 +736,17 @@ if [ $os != "mobile" ]; then
     cp "$backend"/cover/* $deploy/backend/cover
 
     cp "$backend"/*.vbml $deploy/backend
+fi
+
+#--------------------------------------------------------------------------------------------------
+# script
+#--------------------------------------------------------------------------------------------------
+
+if [ $os != "mobile" ]; then
+
+    echo "COPYING script"
+
+    mkdir -p $deploy/script
+
+    cp "$script"/*.sky $deploy/script
 fi

@@ -128,9 +128,11 @@ static const int CORE_CACHE_PIXMAP = 1048576 *  30; //  30 megabytes
 #ifdef Q_OS_MACOS
 static const QString PATH_STORAGE = "/../../../storage";
 static const QString PATH_BACKEND = "../../../../../backend";
+static const QString PATH_SCRIPT  = "../../../../script";
 #else
 static const QString PATH_STORAGE = "/storage";
 static const QString PATH_BACKEND = "../../backend";
+static const QString PATH_SCRIPT  = "../script";
 #endif
 #endif
 
@@ -152,7 +154,7 @@ ControllerCore::ControllerCore() : WController()
     //---------------------------------------------------------------------------------------------
     // Settings
 
-    sk->setName("Sky runtime");
+    sk->setName("Sky-runtime");
 
     sk->setVersion(CORE_VERSION);
 
@@ -468,11 +470,28 @@ ControllerCore::ControllerCore() : WController()
             return;
         }
 
-        WControllerFileReply * reply = copyBackends(path + '/');
+        WControllerFileReply * reply = copyBackends(path);
 
         connect(reply, SIGNAL(complete(bool)), this, SLOT(onLoaded()));
     }
     else createIndex();
+
+    //---------------------------------------------------------------------------------------------
+    // Script
+
+    path = _path + "/script";
+
+    if (QFile::exists(path) == false)
+    {
+        if (QDir().mkpath(path) == false)
+        {
+            qWarning("ControllerCore::run: Failed to create folder %s.", path.C_STR);
+
+            return;
+        }
+
+        copyScripts(path);
+    }
 
     //---------------------------------------------------------------------------------------------
     // DataOnline
@@ -886,6 +905,19 @@ WControllerFileReply * ControllerCore::copyBackends(const QString & path) const
 #endif
 #else
     return WControllerPlaylist::copyBackends(WControllerFile::applicationPath(PATH_BACKEND), path);
+#endif
+}
+
+WControllerFileReply * ControllerCore::copyScripts(const QString & path) const
+{
+#ifdef SK_DEPLOY
+#ifdef Q_OS_ANDROID
+    return WControllerFile::copyFiles("assets:/script", path, "sky");
+#else
+    return WControllerFile::copyFiles(WControllerFile::applicationPath("script"), path, "sky");
+#endif
+#else
+    return WControllerFile::copyFiles(WControllerFile::applicationPath(PATH_SCRIPT), path, "sky");
 #endif
 }
 
