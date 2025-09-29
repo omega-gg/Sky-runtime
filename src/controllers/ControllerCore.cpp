@@ -1136,7 +1136,7 @@ QString ControllerCore::name() const
     {
         return _script->name();
     }
-    else return QString();
+    else return tr("Sky runtime");
 }
 
 int ControllerCore::libraryCount() const

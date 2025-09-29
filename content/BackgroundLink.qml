@@ -35,7 +35,7 @@ Rectangle
     // Settings
     //---------------------------------------------------------------------------------------------
 
-    anchors.fill: itemText
+    anchors.fill: itemLink
 
     anchors.leftMargin : -st.dp12
     anchors.rightMargin: anchors.leftMargin
@@ -45,8 +45,8 @@ Rectangle
 
     radius: height
 
-    visible: itemText.visible
-    opacity: itemText.opacity
+    visible: itemLink.visible
+    opacity: itemLink.opacity
 
     color: "#323232"
 }
