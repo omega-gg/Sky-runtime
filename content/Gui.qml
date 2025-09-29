@@ -193,7 +193,7 @@ Item
                       "> unload           unload everthing\n" +
                       "> clear            clear the console\n" +
                       "> help             show the help\n" +
-                      "> exit             quit the application" +
+                      "> exit             quit the application\n" +
                       "api:\n" +
                       "- void setClipboard(text, description)    set the clipboard");
 
