@@ -97,7 +97,7 @@ Item
 
                 text: qsTr("Run script")
 
-                onClicked: gui.load(core.getLibraryFileName(currentIndex))
+                onClicked: gui.run(core.getLibraryFileName(currentIndex))
             }
 
             ButtonPiano

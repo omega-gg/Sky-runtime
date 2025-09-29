@@ -53,7 +53,7 @@ Item
     // Events
     //---------------------------------------------------------------------------------------------
 
-    Component.onCompleted: load(core.argument)
+    Component.onCompleted: run(core.argument)
 
     //---------------------------------------------------------------------------------------------
     // Connections
@@ -85,7 +85,7 @@ Item
     //---------------------------------------------------------------------------------------------
     // Interface
 
-    function load(source)
+    function run(source)
     {
         if (hideUi) ui = false;
 
@@ -156,15 +156,15 @@ Item
 
         if (source == "") return;
 
-        load("");
-        load(source);
+        run("");
+        run(source);
     }
 
     function unload()
     {
         hideUi = false;
 
-        load("");
+        run("");
 
         hideUi = true;
     }
@@ -187,13 +187,13 @@ Item
                       "- Escape       quit the application\n" +
                       "\n" +
                       "console:\n" +
-                      "> load <source>    load a .sky source\n" +
-                      "> refresh          refresh the top level script\n" +
-                      "> reload           reload everthing in cascade\n" +
-                      "> unload           unload everthing\n" +
-                      "> clear            clear the console\n" +
-                      "> help             show the help\n" +
-                      "> exit             quit the application\n" +
+                      "> run <source>    load a .sky source\n" +
+                      "> refresh         refresh the top level script\n" +
+                      "> reload          reload everthing in cascade\n" +
+                      "> unload          unload everthing\n" +
+                      "> clear           clear the console\n" +
+                      "> help            show the help\n" +
+                      "> exit            quit the application\n" +
                       "api:\n" +
                       "- void setClipboard(text, description)    set the clipboard");
 
@@ -222,7 +222,7 @@ Item
     {
         var name = core.createScript(text);
 
-        if (name) load(name);
+        if (name) run(name);
     }
 
     function loadScript(index)
@@ -319,9 +319,9 @@ Item
 
         var command = list[0];
 
-        if (command == "load")
+        if (command == "run")
         {
-            load(list[1]);
+            run(list[1]);
         }
         else if (command == "refresh")
         {
@@ -467,7 +467,7 @@ Item
 
         console.debug("> load " + text);
 
-        load(text);
+        run(text);
     }
 
     function onDragEnded()

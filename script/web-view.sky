@@ -34,6 +34,8 @@ Item
 
     /* read */ property bool isReady: (webView.url != "")
 
+    property int topMargin: st.dp48
+
     //---------------------------------------------------------------------------------------------
     // Functions
     //---------------------------------------------------------------------------------------------
@@ -45,18 +47,33 @@ Item
 
         webView.url = url;
 
-        while (loading) sk.processEvents();
+        while (webView.loading) sk.processEvents();
     }
 
     //---------------------------------------------------------------------------------------------
     // Events
 
+    function onConsole(list)
+    {
+        var length = list.length;
+
+        var command = list[0];
+
+        if (command == "load")
+        {
+            if (length != 2) return false;
+
+            load(list[1]);
+
+            return true;
+        }
+
+        return false;
+    }
+
     function onHelp()
     {
         return "Welcome to Sky web-view " + sk.versionSky + "\n" +
-               "\n" +
-               "keyboard:\n" +
-               "- Return    switch to fullscreen\n" +
                "\n" +
                "console:\n" +
                "> load <url>    load the url";
@@ -71,6 +88,8 @@ Item
         id: webView
 
         anchors.fill: parent
+
+        anchors.topMargin: topMargin
 
         visible: isReady
     }
