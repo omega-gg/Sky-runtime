@@ -36,6 +36,16 @@ Item
 
     property int topMargin: st.dp48
 
+    property int timeout: 30000
+
+    //---------------------------------------------------------------------------------------------
+    // Aliases
+    //---------------------------------------------------------------------------------------------
+
+    property alias webView: webView
+
+    property alias loader: loader
+
     //---------------------------------------------------------------------------------------------
     // Functions
     //---------------------------------------------------------------------------------------------
@@ -43,15 +53,33 @@ Item
 
     function load(url)
     {
-        if (webView.url == url) return;
+        if (webView.url == url) return true;
 
         webView.url = url;
 
-        while (webView.loading) sk.processEvents();
+        var start = Date.now();
+
+        while (webView.loadProgress != 100
+               &&
+               Date.now() - start < timeout) sk.processEvents();
+
+        if (webView.loadProgress != 100)
+        {
+            console.debug("web-view: Failed to load " + url);
+
+            return false;
+        }
+
+        return true;
     }
 
     //---------------------------------------------------------------------------------------------
     // Events
+
+    function onLoader()
+    {
+        return loader;
+    }
 
     function onConsole(list)
     {
