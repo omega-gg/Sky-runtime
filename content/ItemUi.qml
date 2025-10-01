@@ -32,7 +32,7 @@ Item
     width : itemUi.width
     height: itemUi.height - loaderConsole.height - y
 
-    y: viewDrag.height
+    y: gui.topMargin
 
     visible: (opacity != 0.0)
     opacity: (ui)

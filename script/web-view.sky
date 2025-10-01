@@ -34,7 +34,7 @@ Item
 
     /* read */ property bool isReady: (webView.url != "")
 
-    property int topMargin: st.dp48
+    property int topMargin: gui.topMargin
 
     property int timeout: 30000
 

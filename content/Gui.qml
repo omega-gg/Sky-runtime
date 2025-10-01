@@ -42,6 +42,8 @@ Item
 
     property bool hideUi: true
 
+    property int topMargin: st.dp40
+
     property int popupMargin: st.dp32
 
     //---------------------------------------------------------------------------------------------
@@ -585,7 +587,7 @@ Item
         anchors.left : parent.left
         anchors.right: parent.right
 
-        height: st.dp48
+        height: topMargin
 
         dragEnabled: (window.fullScreen == false)
 

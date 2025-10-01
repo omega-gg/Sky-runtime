@@ -141,18 +141,24 @@ Player
 
         var command = list[0];
 
-        if (command == "play")
+        if (command == "load")
         {
             if (length < 2 || length > 3) return false;
 
-            if (length == 2) play(Number(list[1]));
-            else             play(Number(list[1], list[2]));
+            if (length == 2) load(list[1]);
+            else             load(list[1], Number(list[2]));
 
             return true;
         }
         else if (length == 1)
         {
-            if (command == "pause")
+            if (command == "play")
+            {
+                play();
+
+                return true;
+            }
+            else if (command == "pause")
             {
                 pause();
 
@@ -167,15 +173,9 @@ Player
         }
         else if (length == 2)
         {
-            if (command == "load")
+            if (command == "seek")
             {
-                load(list[1]);
-
-                return true;
-            }
-            else if (command == "seek")
-            {
-                seek(list[1]);
+                seek(Number(list[1]));
 
                 return true;
             }
