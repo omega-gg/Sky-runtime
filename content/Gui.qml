@@ -382,6 +382,8 @@ Item
     function toggleUi()
     {
         ui = !(ui);
+
+        if (ui) window.clearFocus();
     }
 
     function openUrl(url)
@@ -505,12 +507,6 @@ Item
             event.accepted = true;
 
             toggleUi();
-
-            if (ui)
-            {
-                setFocusConsole();
-            }
-            else setFocus();
         }
         else if (event.key == Qt.Key_F5)
         {
@@ -590,6 +586,9 @@ Item
         height: topMargin
 
         dragEnabled: (window.fullScreen == false)
+
+        // NOTE: Clear the focus to retrieve keyboard events from a WebView or else.
+        onPressed: window.clearFocus()
 
         onDoubleClicked: toggleMaximized()
     }
