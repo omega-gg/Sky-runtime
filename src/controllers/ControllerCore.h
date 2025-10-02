@@ -43,6 +43,7 @@ typedef QDeclarativeItem QQuickItem;
 // Forward declarations
 class QQuickItem;
 class WControllerFileReply;
+class WWindow;
 class WCache;
 class WBackendIndex;
 class WDeclarativeImage;
@@ -127,6 +128,16 @@ public: // Interface
 
     Q_INVOKABLE bool saveImage(const QString & name,
                                const QImage  & image, bool asynchronous = true);
+
+    Q_INVOKABLE bool saveShot(const QString & name,
+                              WWindow       * window, bool asynchronous = true);
+#ifdef QT_4
+    Q_INVOKABLE bool saveItemShot(const QString   & name,
+                                  QGraphicsObject * item, bool asynchronous = true);
+#else
+    Q_INVOKABLE bool saveItemShot(const QString & name,
+                                  QQuickItem    * item, bool asynchronous = true);
+#endif
 
     Q_INVOKABLE bool saveFrame(const QString      & name,
                                WDeclarativePlayer * player, bool asynchronous = true);

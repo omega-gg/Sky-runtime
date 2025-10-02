@@ -658,6 +658,13 @@ ControllerCore::ControllerCore() : WController()
 
         if (asynchronous)
         {
+            if (_replies.count() > 10)
+            {
+                qWarning("ControllerCore::saveImage: Too many asynchronous requests");
+
+                return false;
+            }
+
             ControllerCoreFile file;
 
             file.origin = path;
@@ -682,6 +689,25 @@ ControllerCore::ControllerCore() : WController()
         else return false;
     }
     else return false;
+}
+
+/* Q_INVOKABLE */ bool ControllerCore::saveShot(const QString & name,
+                                                WWindow       * window, bool asynchronous)
+{
+    return saveImage(name, window->takeShot(), asynchronous);
+}
+
+#ifdef QT_4
+/* Q_INVOKABLE static */ bool ControllerCore::saveItemShot(const QString   & name,
+                                                           QGraphicsObject * item,
+                                                           bool              asynchronous)
+#else
+/* Q_INVOKABLE static */ bool ControllerCore::saveItemShot(const QString & name,
+                                                           QQuickItem    * item,
+                                                           bool            asynchronous)
+#endif
+{
+    return saveImage(name, WView::takeItemShot(item).toImage(), asynchronous);
 }
 
 /* Q_INVOKABLE */ bool ControllerCore::saveFrame(const QString      & name,
@@ -1062,8 +1088,6 @@ void ControllerCore::onComplete(bool ok)
     QString target = file.target;
 
     QFile::remove(target);
-
-    qDebug("HELLO COPY %s %s", file.origin.C_STR, target.C_STR);
 
     WControllerFile::renameFile(file.origin, target);
 }
