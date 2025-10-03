@@ -198,10 +198,12 @@ private slots:
 
     void onComplete(bool ok);
 
+    void onFilesModified(const QString & path, const QStringList & fileNames);
+
 signals:
     void libraryLoaded();
 
-    void refresh();
+    void refresh(const QStringList & fileNames);
 
     void sourceChanged();
 

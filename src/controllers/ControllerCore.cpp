@@ -519,7 +519,7 @@ ControllerCore::ControllerCore() : WController()
     // Signals
 
     connect(&_watcher, SIGNAL(filesModified(const QString &, const QStringList &)),
-            this,      SIGNAL(refresh()));
+            this,      SLOT(onFilesModified(const QString &, const QStringList &)));
 }
 
 /* Q_INVOKABLE */ DataScript * ControllerCore::loadScript(const QString & fileName)
@@ -1090,6 +1090,20 @@ void ControllerCore::onComplete(bool ok)
     QFile::remove(target);
 
     WControllerFile::renameFile(file.origin, target);
+}
+
+void ControllerCore::onFilesModified(const QString & path, const QStringList & fileNames)
+{
+    QStringList list;
+
+    QString base = path + '/';
+
+    foreach (const QString & name, fileNames)
+    {
+        list.append(base + name);
+    }
+
+    emit refresh(list);
 }
 
 //-------------------------------------------------------------------------------------------------

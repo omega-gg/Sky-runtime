@@ -65,7 +65,7 @@ Item
     {
         target: core
 
-        /* QML_CONNECTION */ function onRefresh() { refresh() }
+        /* QML_CONNECTION */ function onRefresh(fileNames) { gui.onRefresh(fileNames) }
     }
 
     Connections
@@ -142,12 +142,12 @@ Item
 
         loadScript(index);
 
-        for (var i = 0; i < objects.length; i++)
+        /*for (var i = 0; i < objects.length; i++)
         {
             var object = objects[i];
 
             if (object.onRefresh) object.onRefresh();
-        }
+        }*/
 
         setFocus();
     }
@@ -452,6 +452,18 @@ Item
 
     //---------------------------------------------------------------------------------------------
     // Events
+
+    function onRefresh(fileNames)
+    {
+        for (var i = 0; i < objects.length; i++)
+        {
+            var object = objects[i];
+
+            if (object.onRefresh && object.onRefresh(fileNames)) return;
+        }
+
+        refresh();
+    }
 
     function onDragEntered(event)
     {
