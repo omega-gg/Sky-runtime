@@ -185,6 +185,7 @@ Item
                       "keyboard:\n" +
                       "- F1           show the user inteface\n" +
                       "- F5           refresh the top level script\n" +
+                      "- F11          switch to fullscreen\n" +
                       "- Ctrl + F5    reload everthing in cascade\n" +
                       "- Escape       quit the application\n" +
                       "\n" +

@@ -594,12 +594,16 @@ ControllerCore::ControllerCore() : WController()
 
         QImage image(object->source());
 
-        image = image.scaled(qRound(object->width () * scale * upscale),
-                             qRound(object->height() * scale * upscale),
-                             Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        qreal sizeX = object->width () * scale * upscale;
+        qreal sizeY = object->height() * scale * upscale;
 
-        qreal postionX = (x + object->x() * scale) * upscale;
-        qreal postionY = (y + object->y() * scale) * upscale;
+        Qt::AspectRatioMode ratio = WDeclarativeImage::ratioFromFill(object->fillMode());
+
+        image = image.scaled(qRound(sizeX),
+                             qRound(sizeY), ratio, Qt::SmoothTransformation);
+
+        qreal postionX = (x + object->x() * scale) * upscale + (sizeX - image.width ()) / 2;
+        qreal postionY = (y + object->y() * scale) * upscale + (sizeY - image.height()) / 2;
 
 #ifdef QT_OLD
         painter.drawImage(QPoint(qRound(postionX),
@@ -883,11 +887,17 @@ ControllerCore::ControllerCore() : WController()
 
         QImage image(itemImage->source());
 
-        image = image.scaled(width, height, Qt::IgnoreAspectRatio, Qt::FastTransformation);
+        Qt::AspectRatioMode ratio = WDeclarativeImage::ratioFromFill(itemImage->fillMode());
 
-        // NOTE: When we pick a transparent pixel we skip the item.
-        if (qAlpha(image.pixel(x - positionX,
-                               y - positionY)) == 0) continue;
+        image = image.scaled(width, height, ratio, Qt::FastTransformation);
+
+        positionX = x - positionX - (width  - image.width ()) / 2;
+        positionY = y - positionY - (height - image.height()) / 2;
+
+        if (image.rect().contains(positionX, positionY) == false
+            ||
+            // NOTE: When we pick a transparent pixel we skip the item.
+            qAlpha(image.pixel(positionX, positionY)) == 0) continue;
 
         return object;
     }
