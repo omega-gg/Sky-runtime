@@ -71,6 +71,20 @@ Item
     //---------------------------------------------------------------------------------------------
     // Functions
     //---------------------------------------------------------------------------------------------
+
+    function getTemplate(name)
+    {
+        return "// " + name + "\n" +
+               "\n" +
+               "import QtQuick 2.0\n" +
+               "import Sky     1.0\n\n" +
+               "Item\n" +
+               "{\n" +
+               "    function onCreate(ui) {}\n"+
+               "}\n"
+    }
+
+    //---------------------------------------------------------------------------------------------
     // Private
 
     function pUpdateList()
@@ -105,6 +119,17 @@ Item
 
         if (index == -1) return;
 
+        if (index == 0)
+        {
+            var name = "sky " + sk.versionSky;
+
+            template = getTemplate(name);
+
+            help = gui.onHelp();
+
+            return;
+        }
+
         var fileName = core.getLibraryFileName(index);
 
         var script = core.loadScript(fileName);
@@ -133,17 +158,9 @@ Item
 
         if (object.onTemplate == undefined)
         {
-            var name = script.getName(index) + " " + script.getVersion(index);
+            /* var */ name = script.getName(index) + " " + script.getVersion(index);
 
-            template = "// " + name + "\n" +
-                       "\n" +
-                       "import QtQuick 2.0\n" +
-                       "import Sky     1.0\n\n" +
-                       "Item\n" +
-                       "{\n" +
-                       "    function onCreate(ui) {}\n"+
-                       "}\n"
-
+            template = getTemplate(name);
         }
         else template = object.onTemplate();
 

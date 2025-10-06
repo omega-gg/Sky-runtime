@@ -537,6 +537,17 @@ ControllerCore::ControllerCore() : WController()
 {
     _library.clear();
 
+    //---------------------------------------------------------------------------------------------
+    // NOTE: We want an empty 'sky' item at the top.
+
+    ControllerCoreItem item;
+
+    item.name = "sky";
+
+    _library.append(item);
+
+    //---------------------------------------------------------------------------------------------
+
     QFileInfoList entries = QDir(pathLibrary()).entryInfoList(QDir::Files);
 
     foreach (QFileInfo info, entries)

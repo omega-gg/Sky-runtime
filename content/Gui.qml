@@ -180,25 +180,7 @@ Item
 
     function help()
     {
-        console.debug("-------\n" +
-                      "Welcome to Sky kit runtime " + sk.versionSky + "\n\n" +
-                      "keyboard:\n" +
-                      "- F1           show the user inteface\n" +
-                      "- F5           refresh the top level script\n" +
-                      "- F11          switch to fullscreen\n" +
-                      "- Ctrl + F5    reload everthing in cascade\n" +
-                      "- Escape       quit the application\n" +
-                      "\n" +
-                      "console:\n" +
-                      "> run <source>    load a .sky source\n" +
-                      "> refresh         refresh the top level script\n" +
-                      "> reload          reload everthing in cascade\n" +
-                      "> unload          unload everthing\n" +
-                      "> clear           clear the console\n" +
-                      "> help            show the help\n" +
-                      "> exit            quit the application\n" +
-                      "api:\n" +
-                      "- void setClipboard(text, description)    set the clipboard");
+        console.debug("-------\n" + onHelp());
 
         for (var i = 0; i < objects.length; i++)
         {
@@ -453,6 +435,28 @@ Item
 
     //---------------------------------------------------------------------------------------------
     // Events
+
+    function onHelp()
+    {
+        return "Welcome to Sky kit runtime " + sk.versionSky + "\n\n" +
+               "keyboard:\n" +
+               "- F1           show the user inteface\n" +
+               "- F5           refresh the top level script\n" +
+               "- F11          switch to fullscreen\n" +
+               "- Ctrl + F5    reload everthing in cascade\n" +
+               "- Escape       quit the application\n" +
+               "\n" +
+               "console:\n" +
+               "> run <source>    load a .sky source\n" +
+               "> refresh         refresh the top level script\n" +
+               "> reload          reload everthing in cascade\n" +
+               "> unload          unload everthing\n" +
+               "> clear           clear the console\n" +
+               "> help            show the help\n" +
+               "> exit            quit the application\n" +
+               "api:\n" +
+               "- void setClipboard(text, description)    set the clipboard";
+    }
 
     function onRefresh(fileNames)
     {

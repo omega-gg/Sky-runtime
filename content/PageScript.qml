@@ -95,6 +95,9 @@ Item
 
                 padding: st.dp16
 
+                // NOTE: We hide this for the default sky script.
+                visible: (currentIndex != 0)
+
                 text: qsTr("Run script")
 
                 onClicked: gui.run(core.getLibraryFileName(currentIndex))
@@ -108,6 +111,8 @@ Item
                 borderBottom: borderSize
 
                 padding: st.dp16
+
+                visible: buttonRun.visible
 
                 text: qsTr("Open folder")
 
