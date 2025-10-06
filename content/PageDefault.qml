@@ -80,7 +80,7 @@ Item
                "import Sky     1.0\n\n" +
                "Item\n" +
                "{\n" +
-               "    function onCreate(ui) {}\n"+
+               "    function onRun(ui) {}\n"+
                "}\n"
     }
 

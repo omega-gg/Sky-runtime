@@ -255,7 +255,7 @@ Item
 
         objects.push(object);
 
-        if (object.onCreate) object.onCreate(parent);
+        if (object.onRun) object.onRun(parent);
     }
 
     function loadObjects(objects, script, index)
@@ -289,7 +289,7 @@ Item
 
         objects.push(object);
 
-        if (object.onCreate) object.onCreate(parent);
+        if (object.onRun) object.onRun(parent);
     }
 
     function process(text)
