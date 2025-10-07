@@ -186,10 +186,13 @@ public: // Static functions
     Q_INVOKABLE static bool renameFile(const QString & oldPath, const QString & newPath);
 
 private: // Functions
+    bool createPath(const QString & path) const;
+
     void createIndex();
 
     WControllerFileReply * copyBackends(const QString & path) const;
     WControllerFileReply * copyScripts (const QString & path) const;
+    WControllerFileReply * copyBash    (const QString & path) const;
 
     void loadData(DataScript * script, const QString & fileName);
 

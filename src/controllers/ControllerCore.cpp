@@ -130,10 +130,12 @@ static const int CORE_CACHE_PIXMAP = 1048576 *  30; //  30 megabytes
 static const QString PATH_STORAGE = "/../../../storage";
 static const QString PATH_BACKEND = "../../../../../backend";
 static const QString PATH_SCRIPT  = "../../../../script";
+static const QString PATH_BASH    = "../../../../bash";
 #else
 static const QString PATH_STORAGE = "/storage";
 static const QString PATH_BACKEND = "../../backend";
 static const QString PATH_SCRIPT  = "../script";
+static const QString PATH_BASH    = "../bash";
 #endif
 #endif
 
@@ -500,6 +502,29 @@ ControllerCore::ControllerCore() : WController()
 
         copyScripts(path);
     }
+
+    //---------------------------------------------------------------------------------------------
+    // Bash
+
+    path = _path + "/bash";
+
+    if (QFile::exists(path) == false)
+    {
+        if (QDir().mkpath(path) == false)
+        {
+            qWarning("ControllerCore::run: Failed to create folder %s.", path.C_STR);
+
+            return;
+        }
+
+        copyBash(path);
+    }
+
+    //---------------------------------------------------------------------------------------------
+    // User
+
+    if (createPath(_path + "/user/script") == false) return;
+    if (createPath(_path + "/user/bash")   == false) return;
 
     //---------------------------------------------------------------------------------------------
     // DataOnline
@@ -978,6 +1003,15 @@ ControllerCore::ControllerCore() : WController()
 // Functions private
 //-------------------------------------------------------------------------------------------------
 
+bool ControllerCore::createPath(const QString & path) const
+{
+    if (QFile::exists(path) || QDir().mkpath(path)) return true;
+
+    qWarning("ControllerCore::createPath: Failed to create folder %s.", path.C_STR);
+
+    return false;
+}
+
 void ControllerCore::createIndex()
 {
 #ifdef SK_NO_TORRENT
@@ -1004,14 +1038,27 @@ WControllerFileReply * ControllerCore::copyBackends(const QString & path) const
 
 WControllerFileReply * ControllerCore::copyScripts(const QString & path) const
 {
+    // NOTE: We want to copy the folder synchronously
+
 #ifdef SK_DEPLOY
 #ifdef Q_OS_ANDROID
-    return WControllerFile::copyFiles("assets:/script", path, "sky");
+    return WControllerFile::copyFiles("assets:/script", path, "sky", false);
 #else
-    return WControllerFile::copyFiles(WControllerFile::applicationPath("script"), path, "sky");
+    return WControllerFile::copyFiles(WControllerFile::applicationPath("script"), path, "sky", false);
 #endif
 #else
-    return WControllerFile::copyFiles(WControllerFile::applicationPath(PATH_SCRIPT), path, "sky");
+    return WControllerFile::copyFiles(WControllerFile::applicationPath(PATH_SCRIPT), path, "sky", false);
+#endif
+}
+
+WControllerFileReply * ControllerCore::copyBash(const QString & path) const
+{
+    // NOTE: We want to copy the folder synchronously
+
+#ifdef SK_DEPLOY
+    return WControllerFile::copyFolders(WControllerFile::applicationPath("bash"), path, false);
+#else
+    return WControllerFile::copyFolders(WControllerFile::applicationPath(PATH_BASH), path, false);
 #endif
 }
 
