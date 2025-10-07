@@ -3,7 +3,7 @@ LivePortrait tools
 
 ## Configuration
 
-Place your LivePortrait standalone folder into the bin folder.
+Place your LivePortrait standalone folder into the storage/user/bin folder.
 
 ## Tools
 

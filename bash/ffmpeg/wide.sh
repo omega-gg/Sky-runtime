@@ -5,9 +5,9 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-ffmpeg="$PWD/bin/ffmpeg"
+ffmpeg="${SKY_PATH_FFMPEG:-"$PWD/../../user/bin/ffmpeg"}"
 
-ffprobe="$PWD/bin/ffprobe"
+ffprobe="${SKY_PATH_FFPROBE:-"$PWD/../../user/bin/ffprobe"}"
 
 width="5160"
 height="2160"

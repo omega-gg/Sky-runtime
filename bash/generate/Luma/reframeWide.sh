@@ -7,7 +7,7 @@ set -e
 
 root="$PWD"
 
-ffmpeg="$PWD/../ffmpeg"
+ffmpeg="${SKY_PATH_FFMPEG:-"$PWD/../../../user/bin/ffmpeg"}"
 
 #--------------------------------------------------------------------------------------------------
 # Syntax

@@ -523,8 +523,14 @@ ControllerCore::ControllerCore() : WController()
     //---------------------------------------------------------------------------------------------
     // User
 
-    if (createPath(_path + "/user/script") == false) return;
-    if (createPath(_path + "/user/bash")   == false) return;
+    path = _path + "/user";
+
+    if (QFile::exists(path) == false)
+    {
+        if (createPath(path + "/bin")    == false) return;
+        if (createPath(path + "/script") == false) return;
+        if (createPath(path + "/bash")   == false) return;
+    }
 
     //---------------------------------------------------------------------------------------------
     // DataOnline
@@ -609,6 +615,19 @@ ControllerCore::ControllerCore() : WController()
     if (_bash == NULL) return false;
 
     return _bash->run(fileName, arguments, false);
+}
+
+/* Q_INVOKABLE */ QString ControllerCore::bashResolve(const QString & source) const
+{
+    if (source.startsWith("user/"))
+    {
+        return _path + "/bash/user/" + source + ".sh";
+    }
+    else if (WControllerNetwork::extractUrlExtension(source) == "sh")
+    {
+        return source;
+    }
+    else return _path + "/bash/" + source + ".sh";
 }
 
 /* Q_INVOKABLE */ bool ControllerCore::render(const QString      & name,

@@ -5,11 +5,11 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-bin="$PWD/bin"
+# "C:\Program Files\Topaz Labs LLC\Topaz Video AI"
+topaz="$SKY_PATH_TOPAZ"
 
-topaz="C:\Program Files\Topaz Labs LLC\Topaz Video AI"
-
-model="C:\ProgramData\Topaz Labs LLC\Topaz Video AI\models"
+# "C:\ProgramData\Topaz Labs LLC\Topaz Video AI\models"
+model="$SKY_PATH_TOPAZ_MODEL"
 
 width="3840"
 height="2160"

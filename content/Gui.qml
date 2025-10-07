@@ -133,7 +133,7 @@ Item
             args.push(String(arguments[i]))
         }
 
-        return core.bash(fileName, args);
+        return core.bash(core.bashResolve(fileName), args);
     }
 
     function refresh()
