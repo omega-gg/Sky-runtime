@@ -124,6 +124,18 @@ Item
 //#END
     }
 
+    function bash(fileName)
+    {
+        var args = new Array;
+
+        for (var i = 1; i < arguments.length; ++i)
+        {
+            args.push(String(arguments[i]))
+        }
+
+        return core.bash(fileName, args);
+    }
+
     function refresh()
     {
         var length = objects.length;
@@ -306,7 +318,22 @@ Item
 
         if (command == "run")
         {
+            if (length != 2) return;
+
             run(list[1]);
+        }
+        else if (command == "bash")
+        {
+            if (length < 2) return;
+
+            var args = new Array;
+
+            for (var i = 1; i < list.length; ++i)
+            {
+                args.push(String(list[i]));
+            }
+
+            bash.apply(this, args);
         }
         else if (command == "refresh")
         {
@@ -447,13 +474,14 @@ Item
                "- Escape       quit the application\n" +
                "\n" +
                "console:\n" +
-               "> run <source>    load a .sky source\n" +
-               "> refresh         refresh the top level script\n" +
-               "> reload          reload everthing in cascade\n" +
-               "> unload          unload everthing\n" +
-               "> clear           clear the console\n" +
-               "> help            show the help\n" +
-               "> exit            quit the application\n" +
+               "> run <source>           load a .sky source\n" +
+               "> bash <source> <...>    run the bash script\n" +
+               "> refresh                refresh the top level script\n" +
+               "> reload                 reload everthing in cascade\n" +
+               "> unload                 unload everthing\n" +
+               "> clear                  clear the console\n" +
+               "> help                   show the help\n" +
+               "> exit                   quit the application\n" +
                "api:\n" +
                "- void setClipboard(text, description)    set the clipboard";
     }

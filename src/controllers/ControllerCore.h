@@ -45,6 +45,7 @@ class QQuickItem;
 class WControllerFileReply;
 class WWindow;
 class WCache;
+class WScriptBash;
 class WBackendIndex;
 class WDeclarativeImage;
 class WDeclarativePlayer;
@@ -115,6 +116,8 @@ public: // Interface
     Q_INVOKABLE void loadLibrary();
 
     Q_INVOKABLE void reloadScript(int index);
+
+    Q_INVOKABLE bool bash(const QString & fileName, const QStringList & arguments = QStringList());
 
     Q_INVOKABLE bool render(const QString      & name,
                             const QVariantList & objects,
@@ -249,6 +252,8 @@ private: // Variables
     QString _path;
 
     WBackendIndex * _index;
+
+    WScriptBash * _bash;
 
     QList<ControllerCoreItem> _library;
 

@@ -57,6 +57,7 @@
 #include <WCache>
 #include <WActionCue>
 #include <WInputCue>
+#include <WScriptBash>
 #include <WLoaderNetwork>
 #include <WLoaderVbml>
 #include <WLoaderBarcode>
@@ -150,6 +151,8 @@ ControllerCore::ControllerCore() : WController()
     _cache = NULL;
 
     _index = NULL;
+
+    _bash = NULL;
 
     //---------------------------------------------------------------------------------------------
     // Settings
@@ -477,6 +480,11 @@ ControllerCore::ControllerCore() : WController()
     else createIndex();
 
     //---------------------------------------------------------------------------------------------
+    // Bash
+
+    _bash = new WScriptBash(this);
+
+    //---------------------------------------------------------------------------------------------
     // Script
 
     path = _path + "/script";
@@ -569,6 +577,13 @@ ControllerCore::ControllerCore() : WController()
 /* Q_INVOKABLE */ void ControllerCore::reloadScript(int index)
 {
     if (_script) _script->reload(index);
+}
+
+/* Q_INVOKABLE */ bool ControllerCore::bash(const QString & fileName, const QStringList & arguments)
+{
+    if (_bash == NULL) return false;
+
+    return _bash->run(fileName, arguments, false);
 }
 
 /* Q_INVOKABLE */ bool ControllerCore::render(const QString      & name,
