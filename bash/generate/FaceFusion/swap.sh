@@ -5,14 +5,15 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-FaceFusion="$PWD/bin/facefusion"
+FaceFusion="${SKY_PATH_FACE_FUSION:-"$PWD/../../../user/bin/facefusion"}"
 
 #--------------------------------------------------------------------------------------------------
 # pinokio
 
 pinokio="false"
 
-pinokio_path="/c/pinokio/api/facefusion-pinokio.git"
+# "/c/pinokio/api"
+pinokio_path="$SKY_PATH_PINOKIO"
 
 #--------------------------------------------------------------------------------------------------
 # Syntax
@@ -33,9 +34,11 @@ if [ $pinokio = "true" ]; then
 
     echo "swap: Using pinokio"
 
-    FaceFusion="$pinokio_path/facefusion"
+    path="$pinokio_path/facefusion-pinokio.git"
 
-    export PATH="$pinokio_path/.env:$pinokio_path/.env/Library/bin:$PATH"
+    FaceFusion="$path/facefusion"
+
+    export PATH="$path/.env:$path/.env/Library/bin:$PATH"
 fi
 
 cd "$FaceFusion"
