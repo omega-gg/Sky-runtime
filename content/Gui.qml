@@ -474,7 +474,7 @@ Item
                "- Escape       quit the application\n" +
                "\n" +
                "console:\n" +
-               "> run <source>           load a .sky source\n" +
+               "> run <source>           run a .sky source\n" +
                "> bash <source> <...>    run the bash script\n" +
                "> refresh                refresh the top level script\n" +
                "> reload                 reload everthing in cascade\n" +

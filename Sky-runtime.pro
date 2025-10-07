@@ -116,6 +116,7 @@ include(bash/image/image.pri)
 include(bash/ffmpeg/ffmpeg.pri)
 include(bash/youtube-dl/youtube-dl.pri)
 
+include(bash/generate/Topaz/Topaz.pri)
 include(bash/generate/Runway/Runway.pri)
 include(bash/generate/Freepik/Freepik.pri)
 include(bash/generate/fal/fal.pri)

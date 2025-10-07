@@ -7,5 +7,4 @@ OTHER_FILES += bash/ffmpeg/concat.sh \
                bash/ffmpeg/wide.sh \
                bash/ffmpeg/volume.sh \
                bash/ffmpeg/tempo.sh \
-               bash/ffmpeg/topaz.sh \
                bash/ffmpeg/README.md \

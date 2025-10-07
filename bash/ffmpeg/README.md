@@ -16,4 +16,3 @@ Place your FFmpeg binaries into the storage/user/bin folder.
 - [wide.sh](wide.sh): Turn a wide video into CinemaScope.
 - [volume.sh](volume.sh): Adjust the audio volume.
 - [tempo.sh](tempo.sh): Adjust the audio tempo.
-- [topaz.sh](topaz.sh): Upscale the video.
