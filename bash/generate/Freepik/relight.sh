@@ -131,4 +131,4 @@ do
     break
 done
 
-curl -L -o "$3" "$url"
+curl --ssl-no-revoke -L -o "$3" "$url"

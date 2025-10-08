@@ -55,7 +55,12 @@ Item
     // Events
     //---------------------------------------------------------------------------------------------
 
+//#QT_4
     Component.onCompleted: run(core.argument)
+//#ELSE
+    // NOTE: callLater seems required to avoid resizing freezes when calling a bash script.
+    Component.onCompleted: Qt.callLater(run, core.argument)
+//#END
 
     //---------------------------------------------------------------------------------------------
     // Connections
@@ -444,6 +449,8 @@ Item
 
     function getObject()
     {
+        if (objects == null) return null;
+
         var length = objects.length;
 
         if (length)
