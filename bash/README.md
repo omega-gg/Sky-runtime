@@ -23,5 +23,3 @@ bash scripts
 - FAL_KEY: fal API key
 
 - LUMA_KEY: Luma API key
-
-- RUNWAY_KEY: Runway API key
