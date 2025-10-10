@@ -1,17 +1,15 @@
 # Bash scripts
 
-## Tools
-
-### Image
+## Image
 
 - [image](image/README.md)
 
-### Video
+## Video
 
 - [FFmpeg](ffmpeg/README.md)
 - [youtube-dl](youtube-dl/README.md)
 
-### Generate
+## Generate
 
 - [Topaz](generate/Topaz/README.md)
 - [Freepik](generate/Freepik/README.md)
