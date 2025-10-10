@@ -1,5 +1,4 @@
-bash scripts
----
+# Bash scripts
 
 ## Tools
 

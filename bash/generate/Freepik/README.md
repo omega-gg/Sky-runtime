@@ -1,5 +1,4 @@
-Freepik generative tools
----
+# [Bash](../../README.md) Freepik generative tools
 
 ## Configuration
 

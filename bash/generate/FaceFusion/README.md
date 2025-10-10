@@ -1,5 +1,4 @@
-FaceFusion tools
----
+# [Bash](../../README.md) FaceFusion tools
 
 ## Configuration
 

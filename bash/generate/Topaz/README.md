@@ -1,5 +1,4 @@
-Topaz generative tools
----
+# [Bash](../../README.md) Topaz generative tools
 
 ## Configuration
 

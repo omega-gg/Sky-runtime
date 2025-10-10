@@ -1,5 +1,4 @@
-LivePortrait tools
----
+# [Bash](../../README.md) LivePortrait tools
 
 ## Configuration
 

@@ -1,5 +1,4 @@
-fal generative tools
----
+# [Bash](../../README.md) generative tools
 
 ## Configuration
 

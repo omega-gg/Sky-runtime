@@ -1,5 +1,4 @@
-Luma generative tools
----
+# [Bash](../../README.md) Luma generative tools
 
 ## Configuration
 

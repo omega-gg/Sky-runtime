@@ -1,5 +1,4 @@
-rembg tools
----
+# [Bash](../../README.md) rembg tools
 
 ## Configuration
 
