@@ -373,6 +373,8 @@ Item
                 if (object.onConsole && object.onConsole(list)) return;
             }
         }
+
+        console.debug(qsTr("sky: " + command + ": command not found"));
     }
 
     //---------------------------------------------------------------------------------------------
@@ -538,7 +540,9 @@ Item
     {
         if (event.key == Qt.Key_twosuperior)
         {
-            if (ui && stateConsole) return;
+            var item = loaderConsole.item;
+
+            if (item && item.isFocused) return;
 
             event.accepted = true;
 
