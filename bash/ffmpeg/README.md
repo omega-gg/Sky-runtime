@@ -3,7 +3,8 @@ FFmpeg tools
 
 ## Configuration
 
-Place your FFmpeg binaries into the storage/user/bin folder.
+Place your FFmpeg binaries into the storage/user/bin folder or set SKY_PATH_FFMPEG and
+SKY_PATH_FFPROBE.
 
 ## Tools
 

@@ -1,6 +1,27 @@
 bash scripts
 ---
 
+## Tools
+
+### Image
+
+- [image](image/README.md)
+
+### Video
+
+- [FFmpeg](ffmpeg/README.md)
+- [youtube-dl](youtube-dl/README.md)
+
+### Generate
+
+- [Topaz](generate/Topaz/README.md)
+- [Freepik](generate/Freepik/README.md)
+- [fal](generate/fal/README.md)
+- [Luma](generate/Luma/README.md)
+- [LivePortrait](generate/LivePortrait/README.md)
+- [FaceFusion](generate/FaceFusion/README.md)
+- [rembg](generate/rembg/README.md)
+
 ## Environment variables
 
 ### Paths
@@ -15,6 +36,8 @@ bash scripts
 - SKY_PATH_PINOKIO: Custom path to the Pinokio api folder
 
 - SKY_PATH_FACE_FUSION: Custom path to the FaceFusion folder
+
+- SKY_PATH_REMBG: Custom path to the rembg folder
 
 ### Keys
 

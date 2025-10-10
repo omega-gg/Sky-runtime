@@ -308,7 +308,6 @@ OTHER_FILES += environment.sh \
                script/hello.sky \
                script/player.sky \
                script/web-view.sky \
-               bash/README.md \
                test/hello.sky \
                test/player.sky \
                test/web-view.sky \

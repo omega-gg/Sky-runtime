@@ -3,7 +3,7 @@ youtube-dl tools
 
 ## Configuration
 
-Place your youtube-dl binary into the storage/user/bin folder.
+Place your youtube-dl binary into the storage/user/bin folder or set SKY_PATH_YOUTUBE_DL.
 
 ## Tools
 
