@@ -116,7 +116,7 @@ Item
 
                 text: qsTr("Open folder")
 
-                onClicked: gui.openFile(core.pathLibrary)
+                onClicked: gui.openFile(core.getLibraryPath(currentIndex))
             }
         }
 

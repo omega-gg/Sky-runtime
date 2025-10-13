@@ -587,20 +587,8 @@ ControllerCore::ControllerCore() : WController()
 
     //---------------------------------------------------------------------------------------------
 
-    QFileInfoList entries = QDir(pathLibrary()).entryInfoList(QDir::Files);
-
-    foreach (QFileInfo info, entries)
-    {
-        if (info.suffix().toLower() != "sky") continue;
-
-        ControllerCoreItem item;
-
-        item.fileName = info.absoluteFilePath();
-
-        item.name = WControllerFile::fileBaseName(info.fileName().toLower());
-
-        _library.append(item);
-    }
+    loadScripts(_path + "/script");
+    loadScripts(_path + "/user/script");
 
     emit libraryLoaded();
 }
@@ -896,6 +884,13 @@ ControllerCore::ControllerCore() : WController()
     return _library.at(index).fileName;
 }
 
+/* Q_INVOKABLE */ QString ControllerCore::getLibraryPath(int index) const
+{
+    if (index < 0 || index >= _library.count()) return QString();
+
+    return WControllerFile::folderPath(_library.at(index).fileName);
+}
+
 /* Q_INVOKABLE */ QString ControllerCore::getLibraryName(int index) const
 {
     if (index < 0 || index >= _library.count()) return QString();
@@ -1137,6 +1132,24 @@ void ControllerCore::loadData(DataScript * script, const QString & fileName)
     loadData(script, _path + "/script/" + parent + ".sky");
 }
 
+void ControllerCore::loadScripts(const QString & path)
+{
+    QFileInfoList entries = QDir(path).entryInfoList(QDir::Files);
+
+    foreach (QFileInfo info, entries)
+    {
+        if (info.suffix().toLower() != "sky") continue;
+
+        ControllerCoreItem item;
+
+        item.fileName = info.absoluteFilePath();
+
+        item.name = WControllerFile::fileBaseName(info.fileName().toLower());
+
+        _library.append(item);
+    }
+}
+
 //-------------------------------------------------------------------------------------------------
 // Private slots
 //-------------------------------------------------------------------------------------------------
@@ -1254,11 +1267,6 @@ void ControllerCore::setSource(const QString & source)
 QString ControllerCore::path() const
 {
     return WControllerFile::folderPath(_source);
-}
-
-QString ControllerCore::pathLibrary() const
-{
-    return _path + "/script";
 }
 
 int ControllerCore::count() const

@@ -88,8 +88,6 @@ class ControllerCore : public WController
 
     Q_PROPERTY(QString path READ path NOTIFY sourceChanged)
 
-    Q_PROPERTY(QString pathLibrary READ pathLibrary CONSTANT)
-
     Q_PROPERTY(int count READ count NOTIFY sourceChanged)
 
     Q_PROPERTY(QString name READ name NOTIFY sourceChanged)
@@ -168,6 +166,7 @@ public: // Interface
     Q_INVOKABLE QStringList getLibraryNames() const;
 
     Q_INVOKABLE QString getLibraryFileName(int index) const;
+    Q_INVOKABLE QString getLibraryPath    (int index) const;
     Q_INVOKABLE QString getLibraryName    (int index) const;
 
 public: // Static functions
@@ -197,6 +196,8 @@ private: // Functions
     WControllerFileReply * copyBash    (const QString & path) const;
 
     void loadData(DataScript * script, const QString & fileName);
+
+    void loadScripts(const QString & path);
 
 private slots:
     void onLoaded     ();
@@ -229,8 +230,7 @@ public: // Properties
     QString source() const;
     void    setSource(const QString & source);
 
-    QString path       () const;
-    QString pathLibrary() const;
+    QString path() const;
 
     int count() const;
 
