@@ -10,4 +10,4 @@ include(generate/LivePortrait/LivePortrait.pri)
 include(generate/FaceFusion/FaceFusion.pri)
 include(generate/rembg/rembg.pri)
 
-OTHER_FILES += README.md \
+OTHER_FILES += bash/README.md \

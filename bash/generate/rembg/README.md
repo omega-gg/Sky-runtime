@@ -6,4 +6,5 @@ Place your rembg standalone folder into the storage/user/bin/rembg folder or set
 
 ## Tools
 
+- [build.sh](build.sh): Clone and build the project.
 - [run.sh](run.sh): Remove the image background.
