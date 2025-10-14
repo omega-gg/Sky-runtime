@@ -10,5 +10,6 @@ SKY_PATH_FFPROBE.
 
 - [convert.sh](convert.sh): Convert an image to another format.
 - [resize.sh](resize.sh): Resize an image.
+- [expand.sh](expand.sh): Expand the image.
 - [flip.sh](flip.sh): Flip an image.
 - [blur.sh](blur.sh): Blur an image.
