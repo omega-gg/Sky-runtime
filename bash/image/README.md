@@ -13,4 +13,6 @@ SKY_PATH_FFPROBE.
 - [expand.sh](expand.sh): Expand the image.
 - [crop.sh](crop.sh): Crop the image.
 - [flip.sh](flip.sh): Flip an image.
+- [adjust.sh](adjust.sh): Adjust the image brightness and contrast.
+- [color.sh](adjust.sh): Adjust the image color balance.
 - [blur.sh](blur.sh): Blur an image.
