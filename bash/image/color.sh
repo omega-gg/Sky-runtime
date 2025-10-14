@@ -58,6 +58,10 @@ green="$4"
 
 blue="$5"
 
-filter="colorbalance=rs=${red}:gs=${green}:bs=${blue}:rm=${red}:gm=${green}:bm=${blue}:rh=${red}:gh=${green}:bh=${blue}:pl=1"
+filter="colorbalance=\
+rs=${red}:gs=${green}:bs=${blue}:\
+rm=${red}:gm=${green}:bm=${blue}:\
+rh=${red}:gh=${green}:bh=${blue}:\
+pl=1"
 
 "$ffmpeg" -y -i "$input" -vf "$filter" "$output"
