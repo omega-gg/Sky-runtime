@@ -125,7 +125,7 @@ if [ $# -gt 4 ]; then
 
     bg="$5"
 else
-    bg="black"
+    bg="#00000000"
 fi
 
 color="color=size=${output_width}x${output_height}:\
