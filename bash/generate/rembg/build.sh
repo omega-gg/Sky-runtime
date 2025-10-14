@@ -22,7 +22,7 @@ set -e
 #
 #==================================================================================================
 
-# NOTE: CPU does not seem much slower than the GPU for a single image.
+# NOTE: The CPU does not seem much slower than the GPU for a single image.
 
 #--------------------------------------------------------------------------------------------------
 # Settings
