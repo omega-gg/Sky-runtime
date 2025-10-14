@@ -26,7 +26,7 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-LivePortrait="${SKY_PATH_LIVE_PORTRAIT:-"$PWD/../../../user/bin/LivePortrait"}"
+LivePortrait="${SKY_PATH_LIVE_PORTRAIT:-"$SKY_PATH_BIN/LivePortrait"}"
 
 #--------------------------------------------------------------------------------------------------
 # Functions

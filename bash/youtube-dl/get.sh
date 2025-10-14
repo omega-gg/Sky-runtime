@@ -26,9 +26,9 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-youtube_dl="${SKY_PATH_YOUTUBE_DL:-"$PWD/../../user/bin/youtube-dl"}"
+youtube_dl="${SKY_PATH_YOUTUBE_DL:-"$SKY_PATH_BIN/youtube-dl"}"
 
-ffmpeg="${SKY_PATH_FFMPEG:-"$PWD/../../user/bin/ffmpeg"}"
+ffmpeg="${SKY_PATH_FFMPEG:-"$SKY_PATH_BIN/ffmpeg"}"
 
 #--------------------------------------------------------------------------------------------------
 # Syntax

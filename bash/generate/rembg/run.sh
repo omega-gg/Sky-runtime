@@ -26,7 +26,7 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-rembg="${SKY_PATH_REMBG:-"$PWD/../../../user/bin/rembg"}"
+rembg="${SKY_PATH_REMBG:-"$SKY_PATH_BIN/rembg"}"
 
 model="birefnet-general"
 

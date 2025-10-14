@@ -26,7 +26,7 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-FaceFusion="${SKY_PATH_FACE_FUSION:-"$PWD/../../../user/bin/facefusion"}"
+FaceFusion="${SKY_PATH_FACE_FUSION:-"$SKY_PATH_BIN/facefusion"}"
 
 #--------------------------------------------------------------------------------------------------
 # pinokio

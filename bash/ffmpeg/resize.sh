@@ -26,9 +26,9 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-ffmpeg="${SKY_PATH_FFMPEG:-"$PWD/../../user/bin/ffmpeg"}"
+ffmpeg="${SKY_PATH_FFMPEG:-"$SKY_PATH_BIN/ffmpeg"}"
 
-ffprobe="${SKY_PATH_FFPROBE:-"$PWD/../../user/bin/ffprobe"}"
+ffprobe="${SKY_PATH_FFPROBE:-"$SKY_PATH_BIN/ffprobe"}"
 
 yuv="yuv420p"
 

@@ -26,7 +26,7 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-ffmpeg="${SKY_PATH_FFMPEG:-"$PWD/../../user/bin/ffmpeg"}"
+ffmpeg="${SKY_PATH_FFMPEG:-"$SKY_PATH_BIN/ffmpeg"}"
 
 filter="bilinear"
 
