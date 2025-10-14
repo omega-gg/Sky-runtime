@@ -33,6 +33,8 @@ Item
 
     property variant objects: null
 
+    property variant user: null
+
     property bool ui: false
 
     property int stateConsole: 1
@@ -157,7 +159,7 @@ Item
 
         objects.pop();
 
-        loadScript(index);
+        reloadScript(index);
 
         /*for (var i = 0; i < objects.length; i++)
         {
@@ -227,11 +229,46 @@ Item
         if (name) run(name);
     }
 
+    function createObject(fileName)
+    {
+        var object;
+
+        var data = controllerFile.readAll(fileName);
+
+        try
+        {
+            object = Qt.createQmlObject(data, gui, Qt.resolvedUrl("Gui.qml"));
+        }
+        catch (error)
+        {
+            console.debug(error);
+        }
+
+        return object;
+    }
+
     function loadScript(index)
     {
-        var data = core.getData(index);
-
         var parent = getParent(index - 1);
+
+        var object = loadObject(parent, index);
+
+        if (object.onCreate) object.onCreate(parent);
+        if (object.onRun)    object.onRun   (parent);
+    }
+
+    function reloadScript(index)
+    {
+        var parent = getParent(index - 1);
+
+        var object = loadObject(parent, index);
+
+        if (object.onRun) object.onRun(parent);
+    }
+
+    function loadObject(parent, index)
+    {
+        var data = core.getData(index);
 
         var root;
 
@@ -272,7 +309,7 @@ Item
 
         objects.push(object);
 
-        if (object.onRun) object.onRun(parent);
+        return object;
     }
 
     function loadObjects(objects, script, index)
