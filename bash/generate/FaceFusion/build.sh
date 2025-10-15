@@ -22,47 +22,80 @@ set -e
 #
 #==================================================================================================
 
+# NOTE: The CPU does not seem much slower than the GPU for a single image.
+
 #--------------------------------------------------------------------------------------------------
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-FaceFusion="${SKY_PATH_FACE_FUSION:-"$SKY_PATH_BIN/facefusion"}"
+bin="$SKY_PATH_BIN"
+
+name="facefusion"
+
+repository="https://github.com/facefusion/facefusion.git"
+
+version="3.4.1"
 
 #--------------------------------------------------------------------------------------------------
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
-if [ $# != 3 ]; then
+if [ $# != 1 ] || [ $# = 1 -a "$1" != "default" -a "$1" != "cuda" ]; then
 
-    echo "Usage: swap <input> <reference> <output>"
+    echo "Usage: build [default | cuda]"
+    echo ""
+    echo "example:"
+    echo "    build cuda"
 
     exit 1
 fi
 
 #--------------------------------------------------------------------------------------------------
+# Clean
+#--------------------------------------------------------------------------------------------------
+
+cd "$bin"
+
+rm -rf "$name"
+
+#--------------------------------------------------------------------------------------------------
+# Clone
+#--------------------------------------------------------------------------------------------------
+
+git clone --depth=1 --branch "$version" "$repository"
+
+cd "$name"
+
+#--------------------------------------------------------------------------------------------------
 # Environment
 #--------------------------------------------------------------------------------------------------
 
-export PATH="$SKY_PATH_BIN:$PATH"
-
-cd "$FaceFusion"
+python -m venv .venv
 
 if [ -f ".venv/Scripts/activate" ]; then
 
     # Windows / Git Bash
-    . ".venv/Scripts/activate"
+    activate=".venv/Scripts/activate"
 else
-    . ".venv/bin/activate"
+    activate=".venv/bin/activate"
 fi
 
+. "$activate"
+
 #--------------------------------------------------------------------------------------------------
-# Run
+# Install
 #--------------------------------------------------------------------------------------------------
 
-python facefusion.py headless-run \
-    --target-path "$1" \
-    --source-paths "$2" \
-    --output-path "$3" \
-    --face-swapper-model hyperswap_1a_256 \
-    --face-swapper-pixel-boost 1024x1024 \
-    --output-image-quality 100
+python -m pip install --upgrade pip
+
+if [ "$1" = "cuda" ]; then
+
+    python -m pip install nvidia-cudnn-cu12
+
+    echo 'export PATH="$VIRTUAL_ENV/Lib/site-packages/nvidia/cudnn/bin:\
+$VIRTUAL_ENV/Lib/site-packages/nvidia/cublas/bin:$PATH"' >> "$activate"
+
+    python install.py --skip-conda --onnxruntime cuda
+else
+    python install.py --skip-conda --onnxruntime default
+fi
