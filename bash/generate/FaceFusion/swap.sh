@@ -43,6 +43,7 @@ fi
 # Environment
 #--------------------------------------------------------------------------------------------------
 
+# NOTE: This is required for FFmpeg dependency.
 export PATH="$SKY_PATH_BIN:$PATH"
 
 cd "$FaceFusion"
