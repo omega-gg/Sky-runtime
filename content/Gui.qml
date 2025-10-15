@@ -72,7 +72,7 @@ Item
     {
         target: core
 
-        /* QML_CONNECTION */ function onRefresh(fileNames) { gui.onRefresh(fileNames) }
+        /* QML_CONNECTION */ function onRefresh(fileNames) { gui.onRefreshCheck(fileNames) }
     }
 
     Connections
@@ -159,14 +159,14 @@ Item
 
         objects.pop();
 
-        reloadScript(index);
-
-        /*for (var i = 0; i < objects.length; i++)
+        for (var i = 0; i < objects.length; i++)
         {
             var object = objects[i];
 
             if (object.onRefresh) object.onRefresh();
-        }*/
+        }
+
+        reloadScript(index);
 
         setFocus();
     }
@@ -262,6 +262,8 @@ Item
         var parent = getParent(index - 1);
 
         var object = loadObject(parent, index);
+
+        if (object.onRefresh) object.onRefresh();
 
         if (object.onRun) object.onRun(parent);
     }
@@ -532,13 +534,13 @@ Item
                "- void setClipboard(text, description)    set the clipboard";
     }
 
-    function onRefresh(fileNames)
+    function onRefreshCheck(fileNames)
     {
         for (var i = 0; i < objects.length; i++)
         {
             var object = objects[i];
 
-            if (object.onRefresh && object.onRefresh(fileNames)) return;
+            if (object.onRefreshCheck && object.onRefreshCheck(fileNames)) return;
         }
 
         refresh();
