@@ -263,9 +263,8 @@ Item
 
         var object = loadObject(parent, index);
 
-        if (object.onRefresh) object.onRefresh();
-
-        if (object.onRun) object.onRun(parent);
+        if (object.onRefresh) object.onRefresh(parent);
+        if (object.onRun)     object.onRun    (parent);
     }
 
     function loadObject(parent, index)
