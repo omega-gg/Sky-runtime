@@ -634,8 +634,11 @@ ControllerCore::ControllerCore() : WController()
     x = x * scale + gapX;
     y = y * scale + gapY;
 
-    QImage result(qRound(width  * upscale),
-                  qRound(height * upscale), QImage::Format_ARGB32);
+    QSize size(width, height);
+
+    size.scale(width * upscale, height, Qt::KeepAspectRatioByExpanding);
+
+    QImage result(size, QImage::Format_ARGB32);
 
     result.fill(background);
 
