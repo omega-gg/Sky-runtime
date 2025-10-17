@@ -626,6 +626,7 @@ ControllerCore::ControllerCore() : WController()
                                               qreal                y,
                                               qreal                scale,
                                               qreal                upscale,
+                                              bool                 asynchronous,
                                               const QColor       & background)
 {
     qreal gapX = (qreal) (width  - width  * scale) / 2.0;
@@ -703,7 +704,7 @@ ControllerCore::ControllerCore() : WController()
 #endif
     }
 
-    return saveImage(name, result);
+    return saveImage(name, result, asynchronous);
 }
 
 /* Q_INVOKABLE */ bool ControllerCore::saveImage(const QString & name,

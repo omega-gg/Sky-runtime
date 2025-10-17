@@ -126,8 +126,9 @@ public: // Interface
                             qreal                x,
                             qreal                y,
                             qreal                scale,
-                            qreal                upscale    = 1.0,
-                            const QColor       & background = Qt::white);
+                            qreal                upscale      = 1.0,
+                            bool                 asynchronous = true,
+                            const QColor       & background   = Qt::white);
 
     Q_INVOKABLE bool saveImage(const QString & name,
                                const QImage  & image, bool asynchronous = true);
