@@ -119,8 +119,8 @@ public: // Interface
 
     Q_INVOKABLE QString bashResolve(const QString & source) const;
 
-    Q_INVOKABLE bool render(const QString      & name,
-                            const QVariantList & objects,
+    Q_INVOKABLE bool render(const QString      & fileName,
+                            const QVariantList & items,
                             int                  width,
                             int                  height,
                             qreal                x,
@@ -129,6 +129,16 @@ public: // Interface
                             qreal                upscale      = 1.0,
                             bool                 asynchronous = true,
                             const QColor       & background   = Qt::white);
+
+    Q_INVOKABLE bool renderBox(const QString      & fileName,
+                               const QVariantList & items,
+                               qreal                width,
+                               qreal                height,
+                               qreal                x,
+                               qreal                y,
+                               const QVariant     & itemFocus    = QVariant(),
+                               bool                 asynchronous = true,
+                               const QColor       & background   = Qt::white);
 
     Q_INVOKABLE bool saveImage(const QString & name,
                                const QImage  & image, bool asynchronous = true);
@@ -173,7 +183,7 @@ public: // Interface
 public: // Static functions
     Q_INVOKABLE static QString createScript(const QString & text);
 
-    Q_INVOKABLE static QQuickItem * pickItem(const QVariantList & objects, qreal x, qreal y);
+    Q_INVOKABLE static QQuickItem * pickItem(const QVariantList & items, qreal x, qreal y);
 
 #ifndef SK_NO_TORRENT
     Q_INVOKABLE static void applyTorrentOptions(int connections,

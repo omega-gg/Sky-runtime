@@ -618,8 +618,8 @@ ControllerCore::ControllerCore() : WController()
     else return _path + "/bash/" + source + ".sh";
 }
 
-/* Q_INVOKABLE */ bool ControllerCore::render(const QString      & name,
-                                              const QVariantList & objects,
+/* Q_INVOKABLE */ bool ControllerCore::render(const QString      & fileName,
+                                              const QVariantList & items,
                                               int                  width,
                                               int                  height,
                                               qreal                x,
@@ -648,30 +648,30 @@ ControllerCore::ControllerCore() : WController()
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    foreach (const QVariant & variant, objects)
+    foreach (const QVariant & variant, items)
     {
-        WDeclarativeImage * object = variant.value<WDeclarativeImage *>();
+        WDeclarativeImage * item = variant.value<WDeclarativeImage *>();
 
-        if (object == NULL) continue;
+        if (item == NULL) continue;
 
-        QImage image(object->source());
+        QImage image(item->source());
 
-        qreal sizeX = object->width () * scale * upscale;
-        qreal sizeY = object->height() * scale * upscale;
+        qreal sizeX = item->width () * scale * upscale;
+        qreal sizeY = item->height() * scale * upscale;
 
-        Qt::AspectRatioMode ratio = WDeclarativeImage::ratioFromFill(object->fillMode());
+        Qt::AspectRatioMode ratio = WDeclarativeImage::ratioFromFill(item->fillMode());
 
         image = image.scaled(qRound(sizeX),
                              qRound(sizeY), ratio, Qt::SmoothTransformation);
 
-        qreal postionX = (x + object->x() * scale) * upscale + (sizeX - image.width ()) / 2;
-        qreal postionY = (y + object->y() * scale) * upscale + (sizeY - image.height()) / 2;
+        qreal postionX = (x + item->x() * scale) * upscale + (sizeX - image.width ()) / 2;
+        qreal postionY = (y + item->y() * scale) * upscale + (sizeY - image.height()) / 2;
 
 #ifdef QT_OLD
         painter.drawImage(QPoint(qRound(postionX),
                                  qRound(postionY)), image);
 #else
-        qreal rotation = object->rotation();
+        qreal rotation = item->rotation();
 
         if (rotation)
         {
@@ -681,13 +681,14 @@ ControllerCore::ControllerCore() : WController()
                               qRound(postionY));
 
 #ifdef QT_5
-            QPointF origin(object->width() * 0.5, object->height() * 0.5);
+            int rotateX = qRound(sizeX * 0.5);
+            int rotateY = qRound(sizeY * 0.5);
 #else
-            QPointF origin = object->transformOriginPoint();
-#endif
+            QPointF origin = item->transformOriginPoint();
 
             int rotateX = qRound(origin.x() * scale * upscale);
             int rotateY = qRound(origin.y() * scale * upscale);
+#endif
 
             painter.translate(rotateX, rotateY);
 
@@ -704,7 +705,96 @@ ControllerCore::ControllerCore() : WController()
 #endif
     }
 
-    return saveImage(name, result, asynchronous);
+    return saveImage(fileName, result, asynchronous);
+}
+
+/* Q_INVOKABLE */ bool ControllerCore::renderBox(const QString      & fileName,
+                                                 const QVariantList & items,
+                                                 qreal                width,
+                                                 qreal                height,
+                                                 qreal                x,
+                                                 qreal                y,
+                                                 const QVariant     & itemFocus,
+                                                 bool                 asynchronous,
+                                                 const QColor       & background)
+{
+    qreal scale = 1.0;
+
+    x *= scale;
+    y *= scale;
+
+    width  *= scale;
+    height *= scale;
+
+    QImage result(qRound(width), qRound(height), QImage::Format_ARGB32);
+
+    result.fill(background);
+
+    QPainter painter(&result);
+
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    QRectF rect(x, y, width, height);
+
+    foreach (const QVariant & variant, items)
+    {
+        WDeclarativeImage * item = variant.value<WDeclarativeImage *>();
+
+        if (item == NULL) continue;
+
+        qreal itemX = item->x() * scale;
+        qreal itemY = item->y() * scale;
+
+        qreal sizeX = item->width () * scale;
+        qreal sizeY = item->height() * scale;
+
+        if (QRectF(itemX, itemY, sizeX, sizeY).intersects(rect) == false) continue;
+
+        QImage image(item->source());
+
+        Qt::AspectRatioMode ratio = WDeclarativeImage::ratioFromFill(item->fillMode());
+
+        image = image.scaled(qRound(sizeX),
+                             qRound(sizeY), ratio, Qt::SmoothTransformation);
+
+#ifdef QT_OLD
+        painter.drawImage(QPoint(qRound(x), qRound(y)), image);
+#else
+        qreal rotation = item->rotation();
+
+        if (rotation)
+        {
+            painter.save();
+
+            painter.translate(qRound(itemX - x), qRound(itemY - y));
+
+#ifdef QT_5
+            int rotateX = qRound(sizeX * 0.5);
+            int rotateY = qRound(sizeY * 0.5);
+#else
+            QPointF origin = item->transformOriginPoint();
+
+            int rotateX = qRound(origin.x() * scale);
+            int rotateY = qRound(origin.y() * scale);
+#endif
+
+            painter.translate(rotateX, rotateY);
+
+            painter.rotate(rotation);
+
+            painter.translate(-rotateX, -rotateY);
+
+            painter.drawImage(QPoint(0, 0), image);
+
+            painter.restore();
+        }
+        else painter.drawImage(QPoint(0, 0), image,
+                               QRect(qRound(x), qRound(y), qRound(width), qRound(height)));
+#endif
+    }
+
+    return saveImage(fileName, result, asynchronous);
 }
 
 /* Q_INVOKABLE */ bool ControllerCore::saveImage(const QString & name,
@@ -930,29 +1020,29 @@ ControllerCore::ControllerCore() : WController()
 #endif
 }
 
-/* Q_INVOKABLE static */ QQuickItem * ControllerCore::pickItem(const QVariantList & objects,
+/* Q_INVOKABLE static */ QQuickItem * ControllerCore::pickItem(const QVariantList & items,
                                                                qreal                x,
                                                                qreal                y)
 {
-    for (int i = objects.count() - 1; i >= 0; i--)
+    for (int i = items.count() - 1; i >= 0; i--)
     {
-        QVariant variant = objects.at(i);
+        QVariant variant = items.at(i);
 
-        QQuickItem * object = variant.value<QQuickItem *>();
+        QQuickItem * item = variant.value<QQuickItem *>();
 
-        if (object == NULL) continue;
+        if (item == NULL) continue;
 
-        int width  = object->width ();
-        int height = object->height();
+        int width  = item->width ();
+        int height = item->height();
 
-        int positionX = object->x();
-        int positionY = object->y();
+        int positionX = item->x();
+        int positionY = item->y();
 
         if (QRect(positionX, positionY, width, height).contains(x, y) == false) continue;
 
         WDeclarativeImage * itemImage = variant.value<WDeclarativeImage *>();
 
-        if (itemImage == NULL) return object;
+        if (itemImage == NULL) return item;
 
         QImage image(itemImage->source());
 
@@ -968,7 +1058,7 @@ ControllerCore::ControllerCore() : WController()
             // NOTE: When we pick a transparent pixel we skip the item.
             qAlpha(image.pixel(positionX, positionY)) == 0) continue;
 
-        return object;
+        return item;
     }
 
     return NULL;
