@@ -121,24 +121,25 @@ public: // Interface
 
     Q_INVOKABLE bool render(const QString      & fileName,
                             const QVariantList & items,
-                            int                  width,
-                            int                  height,
                             qreal                x,
                             qreal                y,
+                            int                  width,
+                            int                  height,
                             qreal                scale,
                             qreal                upscale      = 1.0,
                             bool                 asynchronous = true,
-                            const QColor       & background   = Qt::white);
+                            const QColor       & background   = Qt::transparent);
 
     Q_INVOKABLE bool renderBox(const QString      & fileName,
                                const QVariantList & items,
-                               qreal                width,
-                               qreal                height,
                                qreal                x,
                                qreal                y,
+                               qreal                width,
+                               qreal                height,
                                const QVariant     & itemFocus    = QVariant(),
+                               bool                 isolate      = false,
                                bool                 asynchronous = true,
-                               const QColor       & background   = Qt::white);
+                               const QColor       & background   = Qt::transparent);
 
     Q_INVOKABLE bool saveImage(const QString & name,
                                const QImage  & image, bool asynchronous = true);
@@ -209,6 +210,10 @@ private: // Functions
     void loadData(DataScript * script, const QString & fileName);
 
     void loadScripts(const QString & path);
+
+    void renderItem(QPainter          & painter,
+                    WDeclarativeImage * item,
+                    const QRectF      & rect, qreal x, qreal y, qreal scale) const;
 
 private slots:
     void onLoaded     ();
