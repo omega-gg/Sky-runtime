@@ -46,11 +46,16 @@ getHeight()
 
 getSize()
 {
-    awk -v s="$1" -v f="$2" 'BEGIN {
-        if (f < 0) f = 0;
-        if (f > 1) f = 1;
-        printf "%d", s * f;
-    }'
+    if echo "$2" | grep -Eq '^[0-9]*\.[0-9]+$'; then
+
+        awk -v s="$1" -v f="$2" 'BEGIN {
+            if (f < 0) f = 0;
+            if (f > 1) f = 1;
+            printf "%d", s * f;
+        }'
+    else
+        printf "%d" "$2"
+    fi
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -130,24 +135,13 @@ if [ -n "$ratio_width" ]; then
         output_height="$input_height"
     fi
 else
-    extra_left="$3"
+    extra_left=$(getSize "$input_width" "$3")
 
-    extra_top="${4:-0}"
+    extra_top=$(getSize "$input_height" "${4:-0}")
 
-    extra_right="${5:-$extra_left}"
+    extra_right=$(getSize "$input_width" "${5:-$extra_left}")
 
-    extra_bottom="${6:-$extra_top}"
-
-    if echo "$3" | grep -Eq '^[0-9]*\.[0-9]+$'; then
-
-        extra_left=$(getSize "$input_width" "$extra_left")
-
-        extra_top=$(getSize "$input_height" "$extra_top")
-
-        extra_right=$(getSize "$input_width" "$extra_right")
-
-        extra_bottom=$(getSize "$input_height" "$extra_bottom")
-    fi
+    extra_bottom=$(getSize "$input_height" "${6:-$extra_top}")
 
     output_width=$(( input_width - extra_left - extra_right ))
 

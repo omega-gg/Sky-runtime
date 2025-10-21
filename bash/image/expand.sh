@@ -44,15 +44,32 @@ getHeight()
     "$ffprobe" -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$1"
 }
 
+getSize()
+{
+    if echo "$2" | grep -Eq '^[0-9]*\.[0-9]+$'; then
+
+        awk -v s="$1" -v f="$2" 'BEGIN {
+            if (f < 0) f = 0;
+            if (f > 1) f = 1;
+            printf "%d", s * f;
+        }'
+    else
+        printf "%d" "$2"
+    fi
+}
+
 #--------------------------------------------------------------------------------------------------
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
-if [ $# -lt 3 -o $# -gt 5 ]; then
+if [ $# -lt 3 -o $# -gt 7 ]; then
 
-    echo "Usage: expand <input> <output> <width | ratio> [height] [color = transparent]"
+    echo "Usage: expand <input> <output> <left | ratio> [top] [right = left] [bottom = top]"
+    echo "              [color = transparent]"
     echo ""
     echo "examples: expand input.png output.png 128 128 white"
+    echo "          expand input.png output.png 32 64 48 56"
+    echo "          expand input.png output.png 0.3 0.2"
     echo "          expand input.png output.png 16:9"
     echo "          expand input.png output.png 2.39:1"
 
@@ -69,7 +86,7 @@ input_height=$(getHeight "$1")
 
 if echo "$3" | grep -q ":"; then
 
-    ratio=$(echo "$3" | tr ',' '.')
+    ratio="$3"
 
     ratio_width="${ratio%%:*}"
 
@@ -92,24 +109,57 @@ if [ -n "$ratio_width" ]; then
 
     if [ $target_height -ge $input_height ]; then
 
-        extra_width="0"
+        extra_left="0"
 
-        extra_height=$(( (target_height - input_height) / 2 ))
+        extra_right="0"
+
+        extra_top=$(( (target_height - input_height) / 2 ))
+
+        extra_bottom="$extra_top"
+
+        output_width="$input_width"
+
+        output_height=$(( input_height + extra_top + extra_bottom ))
     else
         target_width=$(( input_height * ratio_width / ratio_height ))
 
-        extra_width=$(( (target_width - input_width) / 2 ))
+        extra_left=$(( (target_width - input_width) / 2 ))
 
-        extra_height="0"
+        extra_right="$extra_left"
+
+        extra_top="0"
+
+        extra_bottom="0"
+
+        output_width=$(( input_width + extra_left + extra_right ))
+
+        output_height="$input_height"
     fi
-else
-    extra_width="$3"
 
     if [ $# -gt 3 ]; then
 
-        extra_height="$4"
+        bg="$4"
     else
-        extra_height="0"
+        bg="#00000000"
+    fi
+else
+    extra_left=$(getSize "$input_width" "$3")
+
+    extra_top=$(getSize "$input_height" "${4:-0}")
+
+    extra_right=$(getSize "$input_width" "${5:-$extra_left}")
+
+    extra_bottom=$(getSize "$input_height" "${6:-$extra_top}")
+
+    output_width=$(( input_width + extra_left + extra_right ))
+
+    output_height=$(( input_height + extra_top + extra_bottom ))
+
+    if [ $# -gt 6 ]; then
+
+        bg="$7"
+    else
+        bg="#00000000"
     fi
 fi
 
@@ -117,18 +167,7 @@ fi
 # Run
 #--------------------------------------------------------------------------------------------------
 
-output_width=$(( input_width + 2 * extra_width ))
-
-output_height=$(( input_height + 2 * extra_height ))
-
-if [ $# -gt 4 ]; then
-
-    bg="$5"
-else
-    bg="#00000000"
-fi
-
 color="color=size=${output_width}x${output_height}:\
-c=${bg}[bg];[bg][0:v]overlay=${extra_width}:${extra_height}"
+c=${bg}[bg];[bg][0:v]overlay=${extra_left}:${extra_top}"
 
 "$ffmpeg" -y -i "$1" -filter_complex "$color" -frames:v 1 "$2"
