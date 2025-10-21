@@ -1,6 +1,6 @@
 include(image/image.pri)
 include(ffmpeg/ffmpeg.pri)
-include(youtube-dl/youtube-dl.pri)
+include(yt-dlp/yt-dlp.pri)
 
 include(generate/Topaz/Topaz.pri)
 include(generate/Freepik/Freepik.pri)

@@ -26,17 +26,15 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-youtube_dl="${SKY_PATH_YOUTUBE_DL:-"$SKY_PATH_BIN/youtube-dl"}"
-
-ffmpeg="${SKY_PATH_FFMPEG:-"$SKY_PATH_BIN/ffmpeg"}"
+yt_dlp="${SKY_PATH_YT_DLP:-"$SKY_PATH_BIN/yt-dlp"}"
 
 #--------------------------------------------------------------------------------------------------
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
-if [ $# != 1 ]; then
+if [ $# != 2 ]; then
 
-    echo "Usage: get <url>"
+    echo "Usage: dump <url> <player-client>"
 
     exit 1
 fi
@@ -45,14 +43,4 @@ fi
 # Run
 #--------------------------------------------------------------------------------------------------
 
-"$youtube_dl" -f bestaudio "$1" --output audio.tmp
-"$youtube_dl" -f bestvideo "$1" --output video.tmp
-
-"$ffmpeg" -i audio.tmp -i video.tmp -vcodec copy -acodec copy output.mp4
-
-#--------------------------------------------------------------------------------------------------
-# Clean
-#--------------------------------------------------------------------------------------------------
-
-rm audio.tmp
-rm video.tmp
+"$yt_dlp" "$1" --verbose --print-traffic --extractor-args youtube:player-client=$2

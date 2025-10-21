@@ -26,7 +26,9 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-youtube_dl="${SKY_PATH_YOUTUBE_DL:-"$SKY_PATH_BIN/youtube-dl"}"
+yt_dlp="${SKY_PATH_YT_DLP:-"$SKY_PATH_BIN/yt-dlp"}"
+
+ffmpeg="${SKY_PATH_FFMPEG:-"$SKY_PATH_BIN/ffmpeg"}"
 
 #--------------------------------------------------------------------------------------------------
 # Syntax
@@ -34,7 +36,7 @@ youtube_dl="${SKY_PATH_YOUTUBE_DL:-"$SKY_PATH_BIN/youtube-dl"}"
 
 if [ $# != 1 ]; then
 
-    echo "Usage: audio <url>"
+    echo "Usage: get <url>"
 
     exit 1
 fi
@@ -43,4 +45,14 @@ fi
 # Run
 #--------------------------------------------------------------------------------------------------
 
-"$youtube_dl" -f bestaudio "$1" --output "output.%(ext)s"
+"$yt_dlp" -f bestaudio "$1" --output audio.tmp
+"$yt_dlp" -f bestvideo "$1" --output video.tmp
+
+"$ffmpeg" -i audio.tmp -i video.tmp -vcodec copy -acodec copy output.mp4
+
+#--------------------------------------------------------------------------------------------------
+# Clean
+#--------------------------------------------------------------------------------------------------
+
+rm audio.tmp
+rm video.tmp

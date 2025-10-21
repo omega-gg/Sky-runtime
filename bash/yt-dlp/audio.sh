@@ -26,15 +26,15 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-youtube_dl="${SKY_PATH_YOUTUBE_DL:-"$SKY_PATH_BIN/youtube-dl"}"
+yt_dlp="${SKY_PATH_YT_DLP:-"$SKY_PATH_BIN/yt-dlp"}"
 
 #--------------------------------------------------------------------------------------------------
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
-if [ $# != 2 ]; then
+if [ $# != 1 ]; then
 
-    echo "Usage: dump <url> <player-client>"
+    echo "Usage: audio <url>"
 
     exit 1
 fi
@@ -43,4 +43,4 @@ fi
 # Run
 #--------------------------------------------------------------------------------------------------
 
-"$youtube_dl" "$1" --verbose --print-traffic --extractor-args youtube:player-client=$2
+"$yt_dlp" -f bestaudio "$1" --output "output.%(ext)s"

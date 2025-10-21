@@ -1,8 +1,8 @@
-# [Bash](../README.md) youtube-dl tools
+# [Bash](../README.md) yt-dlp tools
 
 ## Configuration
 
-Place your youtube-dl binary into the storage/user/bin folder or set SKY_PATH_YOUTUBE_DL.
+Place your yt-dlp binary into the storage/user/bin folder or set SKY_PATH_YT_DLP.
 
 ## Tools
 
