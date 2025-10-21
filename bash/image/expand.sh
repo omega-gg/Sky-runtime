@@ -50,7 +50,7 @@ getHeight()
 
 if [ $# -lt 3 -o $# -gt 5 ]; then
 
-    echo "Usage: expand <input> <output> <width | ratio> [height] [color]"
+    echo "Usage: expand <input> <output> <width | ratio> [height] [color = transparent]"
     echo ""
     echo "examples: expand input.png output.png 128 128 white"
     echo "          expand input.png output.png 16:9"
