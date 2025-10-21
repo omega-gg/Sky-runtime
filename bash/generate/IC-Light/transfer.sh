@@ -26,73 +26,96 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-bin="$SKY_PATH_BIN"
+IC_Light="${SKY_PATH_IC_LIGHT:-"$SKY_PATH_BIN/IC-Light"}"
 
-name="color_transfer"
+image_width=1024
 
-repository="https://github.com/jrosebr1/color_transfer.git"
-
-commit="6724ccf"
+image_height=1024
 
 #--------------------------------------------------------------------------------------------------
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
-if [ $# != 1 ] || [ "$1" != "default" -a "$1" != "headless" ]; then
+if [ $# != 3 ]; then
 
-    echo "Usage: build <default | headless>"
-    echo ""
-    echo "example:"
-    echo "    build headless"
+    echo "Usage: transfer <input> <reference> <output>"
 
     exit 1
 fi
 
 #--------------------------------------------------------------------------------------------------
-# Clean
-#--------------------------------------------------------------------------------------------------
-
-cd "$bin"
-
-rm -rf "$name"
-
-#--------------------------------------------------------------------------------------------------
-# Clone
-#--------------------------------------------------------------------------------------------------
-
-git clone "$repository" "$name"
-
-cd "$name"
-
-git checkout "$commit"
-
-#--------------------------------------------------------------------------------------------------
 # Environment
 #--------------------------------------------------------------------------------------------------
 
-python -m venv .venv
+cd "$IC_Light"
 
 if [ -f ".venv/Scripts/activate" ]; then
 
     # Windows / Git Bash
-    activate=".venv/Scripts/activate"
+    . ".venv/Scripts/activate"
 else
-    activate=".venv/bin/activate"
+    . ".venv/bin/activate"
 fi
 
-. "$activate"
-
 #--------------------------------------------------------------------------------------------------
-# Install
+# Run
 #--------------------------------------------------------------------------------------------------
 
-python -m pip install --upgrade pip
+echo "RUNNING IC-Light"
 
-if [ "$1" = "headless" ]; then
+python - "$1" "$2" "$3" "$image_width" "$image_height" << 'PY'
+import sys
+from pathlib import Path
+import numpy as np
+from PIL import Image
 
-    python -m pip install numpy opencv-python-headless
-else
-    python -m pip install numpy opencv-python
-fi
+# Import the IC-Light Gradio script as a module
+import gradio_demo_bg as ic  # uses ic.BGSource, ic.process_relight, globals set up at import
 
-python -m pip install -e .
+inp, ref, outp, w, h = sys.argv[1:6]
+
+def load_rgb(p):
+    try:
+        return np.array(Image.open(p).convert("RGB"))
+    except Exception as e:
+        raise SystemExit(f"Error: could not load image '{p}': {e}")
+
+fg = load_rgb(inp)
+bg = load_rgb(ref)
+
+# Default params matching the Gradio UI defaults
+prompt = ""
+image_width = int(w)
+image_height = int(h)
+num_samples = 1
+seed = 12345
+steps = 20
+a_prompt = "best quality"
+n_prompt = "lowres, bad anatomy, bad hands, cropped, worst quality"
+cfg = 7.0
+highres_scale = 1.5
+highres_denoise = 0.5
+bg_source = ic.BGSource.UPLOAD.value # use the provided background as-is
+
+print(f"[IC-Light] Input: {inp}\n[IC-Light] Background: {ref}\n[IC-Light] Output: {outp}")
+
+# Run background-conditioned relighting
+try:
+    results = ic.process_relight(
+        fg, bg, prompt,
+        image_width, image_height,
+        num_samples, seed, steps,
+        a_prompt, n_prompt, cfg,
+        highres_scale, highres_denoise,
+        bg_source
+    )
+except Exception as e:
+    raise SystemExit(f"Error during IC-Light inference: {e}")
+
+# results = [relit_img(s)..., fg_preview, bg_preview]; take first relit image
+relit = results[0]
+
+Path(outp).parent.mkdir(parents=True, exist_ok=True)
+Image.fromarray(relit).save(outp)
+print(f"[IC-Light] Saved: {outp}")
+PY
