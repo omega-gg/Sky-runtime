@@ -25,9 +25,9 @@ set -e
 #--------------------------------------------------------------------------------------------------
 # Settings
 #--------------------------------------------------------------------------------------------------
-# https://fal.ai/models/fal-ai/flux-pro/kontext/max/multi/api
+# https://fal.ai/models/fal-ai/nano-banana/edit/api
 
-api="https://fal.run/fal-ai/flux-pro/kontext/max/multi"
+api="https://fal.run/fal-ai/nano-banana/edit"
 
 fal_key="$FAL_KEY"
 
@@ -91,14 +91,14 @@ removeData()
 
 if [ $# -lt 3 -o $# -gt 4 ]; then
 
-    echo "Usage: multi <image output> <prompt> <image 1> [image 2]"
+    echo "Usage: nano <image output> <prompt> <image 1> [image 2]"
 
     exit 1
 fi
 
 if [ -z "$fal_key" ]; then
 
-    echo "multi: FAL_KEY is missing in the environment."
+    echo "nano: FAL_KEY is missing in the environment."
 
     exit 1
 fi

@@ -25,9 +25,9 @@ set -e
 #--------------------------------------------------------------------------------------------------
 # Settings
 #--------------------------------------------------------------------------------------------------
-# https://fal.ai/models/fal-ai/flux-pro/kontext/max/multi/api
+# https://fal.ai/models/fal-ai/bytedance/seedream/v4/edit/api
 
-api="https://fal.run/fal-ai/flux-pro/kontext/max/multi"
+api="https://fal.run/fal-ai/bytedance/seedream/v4/edit"
 
 fal_key="$FAL_KEY"
 
@@ -89,16 +89,16 @@ removeData()
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
-if [ $# -lt 3 -o $# -gt 4 ]; then
+if [ $# -lt 3 -o $# -gt 6 ]; then
 
-    echo "Usage: multi <image output> <prompt> <image 1> [image 2]"
+    echo "Usage: seedream <image output> <prompt> <image 1> [image 2] [image 3] [image 4]"
 
     exit 1
 fi
 
 if [ -z "$fal_key" ]; then
 
-    echo "multi: FAL_KEY is missing in the environment."
+    echo "seedream: FAL_KEY is missing in the environment."
 
     exit 1
 fi
@@ -118,6 +118,23 @@ elif [ $# = 4 ]; then
     images='[
         "'"$(getData "$3")"'",
         "'"$(getData "$4")"'"
+    ]'
+
+elif [ $# = 5 ]; then
+
+    images='[
+        "'"$(getData "$3")"'",
+        "'"$(getData "$4")"'",
+        "'"$(getData "$5")"'"
+    ]'
+
+elif [ $# = 6 ]; then
+
+    images='[
+        "'"$(getData "$3")"'",
+        "'"$(getData "$4")"'",
+        "'"$(getData "$5")"'",
+        "'"$(getData "$6")"'"
     ]'
 fi
 
