@@ -656,6 +656,10 @@ ControllerCore::ControllerCore() : WController()
 
         QImage image(item->source());
 
+        painter.save();
+
+        painter.setOpacity(item->opacity());
+
         qreal sizeX = item->width () * scale * upscale;
         qreal sizeY = item->height() * scale * upscale;
 
@@ -675,8 +679,6 @@ ControllerCore::ControllerCore() : WController()
 
         if (rotation)
         {
-            painter.save();
-
             painter.translate(qRound(positionX),
                               qRound(positionY));
 
@@ -697,11 +699,11 @@ ControllerCore::ControllerCore() : WController()
             painter.translate(-rotateX, -rotateY);
 
             painter.drawImage(QPoint(0, 0), image);
-
-            painter.restore();
         }
         else painter.drawImage(QPoint(qRound(positionX),
                                       qRound(positionY)), image);
+
+        painter.restore();
 #endif
     }
 
@@ -1245,6 +1247,10 @@ void ControllerCore::renderItem(QPainter          & painter,
 
     if (QRectF(itemX, itemY, sizeX, sizeY).intersects(rect) == false) return;
 
+    painter.save();
+
+    painter.setOpacity(item->opacity());
+
     QImage image(item->source());
 
     Qt::AspectRatioMode ratio = WDeclarativeImage::ratioFromFill(item->fillMode());
@@ -1262,8 +1268,6 @@ void ControllerCore::renderItem(QPainter          & painter,
 
     if (rotation)
     {
-        painter.save();
-
         painter.translate(qRound(positionX), qRound(positionY));
 
 #ifdef QT_5
@@ -1283,10 +1287,10 @@ void ControllerCore::renderItem(QPainter          & painter,
         painter.translate(-rotateX, -rotateY);
 
         painter.drawImage(QPoint(0, 0), image);
-
-        painter.restore();
     }
     else painter.drawImage(QPoint(positionX, positionY), image);
+
+    painter.restore();
 #endif
 }
 
