@@ -9,4 +9,5 @@ SKY_PATH_IC_LIGHT.
 ## Tools
 
 - [build.sh](build.sh): Clone and build the project.
-- [transfer.sh](transfer.sh): Transfer lighting to the image from a reference.
+- [run.sh](run.sh): Apply a specific lighting to the image from a text prompt.
+- [transfer.sh](transfer.sh): Transfer lighting to the image from an image reference.

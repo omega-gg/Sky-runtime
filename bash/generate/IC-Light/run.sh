@@ -30,6 +30,8 @@ IC_Light="${SKY_PATH_IC_LIGHT:-"$SKY_PATH_BIN/IC-Light"}"
 
 prompt=""
 
+lighting="none"
+
 width="1024"
 
 height="1024"
@@ -38,15 +40,19 @@ scale="1.5"
 
 denoise="0.5"
 
+denoise_low="0.9"
+
 #--------------------------------------------------------------------------------------------------
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
-if [ $# -lt 3 -o $# -gt 8 ]; then
+if [ $# -lt 2 -o $# -gt 9 ]; then
 
-    echo "Usage: transfer <input> <reference> <output> [prompt] "
-    echo "                [width = $width] [height = $height] [scale = $scale] \
-[denoise = $denoise]"
+    echo "Usage: run <input> <output> [prompt] [lighting = $lighting] "
+    echo "           [width = $width] [height = $height] [scale = $scale] \
+[denoise = $denoise] [denoise_low = $denoise_low]"
+    echo ""
+    echo "lighting: none, left, right, top, bottom"
 
     exit 1
 fi
@@ -57,13 +63,17 @@ fi
 
 if [ $# -ge 3 ]; then prompt="$3"; fi
 
-if [ $# -ge 4 ]; then width="$4"; fi
+if [ $# -ge 4 ]; then lighting="$4"; fi
 
-if [ $# -ge 5 ]; then height="$5"; fi
+if [ $# -ge 5 ]; then width="$5"; fi
 
-if [ $# -ge 6 ]; then scale="$6"; fi
+if [ $# -ge 6 ]; then height="$6"; fi
 
-if [ $# -ge 7 ]; then denoise="$7"; fi
+if [ $# -ge 7 ]; then scale="$7"; fi
+
+if [ $# -ge 8 ]; then denoise="$8"; fi
+
+if [ $# -ge 9 ]; then denoise_low="$9"; fi
 
 #--------------------------------------------------------------------------------------------------
 # Environment
@@ -85,7 +95,7 @@ fi
 
 echo "RUNNING IC-Light"
 
-python - "$1" "$2" "$3" "$prompt" "$width" "$height" "$scale" "$denoise" << 'PY'
+python - "$1" "$2" "$prompt" "$lighting" "$width" "$height" "$scale" "$denoise" "$denoise_low" << 'PY'
 import sys
 from pathlib import Path
 import numpy as np
@@ -99,10 +109,10 @@ def _no_launch(*a, **k):
 gr.Blocks.launch = _no_launch
 # --------------------------------------------------
 
-# Import IC-Light module
-import gradio_demo_bg as ic
+# Import IC-Light (foreground-only) module
+import gradio_demo as ic
 
-inp, ref, outp, user_prompt, w, h, scale, denoise = sys.argv[1:9]
+inp, outp, user_prompt, lighting, w, h, scale, denoise, denoise_low = sys.argv[1:10]
 
 def load_rgb(p):
     try:
@@ -110,51 +120,63 @@ def load_rgb(p):
     except Exception as e:
         raise SystemExit(f"Error: could not load image '{p}': {e}")
 
-# --- load and remember original size ---
+# --- map lighting keyword -> exact BGSource value string ---
+LIGHTING_MAP = {
+    "none":   ic.BGSource.NONE.value,     # "None"
+    "left":   ic.BGSource.LEFT.value,     # "Left Light"
+    "right":  ic.BGSource.RIGHT.value,    # "Right Light"
+    "top":    ic.BGSource.TOP.value,      # "Top Light"
+    "bottom": ic.BGSource.BOTTOM.value,   # "Bottom Light"
+}
+lighting_key = (lighting or "none").strip().lower()
+bg_source_value = LIGHTING_MAP.get(lighting_key, ic.BGSource.NONE.value)
+
+# --- load input and remember original size ---
 fg = load_rgb(inp)
-bg = load_rgb(ref)
 orig_w, orig_h = fg.shape[1], fg.shape[0]
 
-# --- resize both to image_width × image_height (no aspect ratio) ---
+# --- working size (no aspect) ---
 def snap64(x: int) -> int: return ((x + 63)//64)*64
 image_width  = snap64(int(w))
 image_height = snap64(int(h))
 resize_target = (image_width, image_height)
 fg_resized = np.array(Image.fromarray(fg).resize(resize_target, Image.BICUBIC))
-bg_resized = np.array(Image.fromarray(bg).resize(resize_target, Image.BICUBIC))
 
-# --- IC-Light params ---
-prompt = user_prompt
+# --- params (aligned with gradio_demo defaults) ---
+prompt = user_prompt or ""
 num_samples = 1
 seed = 12345
-steps = 20
+steps = 25
 a_prompt = "best quality"
 n_prompt = "lowres, bad anatomy, bad hands, cropped, worst quality"
-cfg = 7.0
+cfg = 2.0
 highres_scale = float(scale)
 highres_denoise = float(denoise)
-bg_source = ic.BGSource.UPLOAD.value
+lowres_denoise  = float(denoise_low)
 
-print(f"[IC-Light] Input: {inp}\n[IC-Light] Background: {ref}\n[IC-Light] Output: {outp}")
+print(f"[IC-Light] Input: {inp}")
+print(f"[IC-Light] Output: {outp}")
+print(f"[IC-Light] Prompt: {prompt!r}")
+print(f"[IC-Light] Lighting: {bg_source_value}")
 print(f"[IC-Light] Internal relight resolution: {image_width}x{image_height}, final output: {orig_w}x{orig_h}")
 
-# --- run relighting ---
+# --- run foreground-conditioned relighting ---
 try:
-    results = ic.process_relight(
-        fg_resized, bg_resized, prompt,
+    # process_relight returns (preprocessed_fg, [images...])
+    pre_fg, results = ic.process_relight(
+        fg_resized, prompt,
         image_width, image_height,
         num_samples, seed, steps,
         a_prompt, n_prompt, cfg,
-        highres_scale, highres_denoise,
-        bg_source
+        highres_scale, highres_denoise, lowres_denoise,
+        bg_source_value
     )
 except Exception as e:
     raise SystemExit(f"Error during IC-Light inference: {e}")
 
-# --- restore original geometry ---
+# --- save first image resized back to original geometry ---
 relit = results[0]
 relit_resized = np.array(Image.fromarray(relit).resize((orig_w, orig_h), Image.BICUBIC))
-
 Path(outp).parent.mkdir(parents=True, exist_ok=True)
 Image.fromarray(relit_resized).save(outp)
 print(f"[IC-Light] Saved resized output: {outp}")
