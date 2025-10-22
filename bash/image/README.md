@@ -15,4 +15,5 @@ SKY_PATH_FFPROBE.
 - [flip.sh](flip.sh): Flip an image.
 - [adjust.sh](adjust.sh): Adjust the image brightness and contrast.
 - [color.sh](adjust.sh): Adjust the image color balance.
+- [border.sh](border.sh): Add a border around the image.
 - [blur.sh](blur.sh): Blur an image.
