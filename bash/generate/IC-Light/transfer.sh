@@ -28,9 +28,13 @@ set -e
 
 IC_Light="${SKY_PATH_IC_LIGHT:-"$SKY_PATH_BIN/IC-Light"}"
 
-image_width=1024
+image_width="1024"
 
-image_height=1024
+image_height="1024"
+
+highres_scale="1.5"
+
+highres_denoise="0.5"
 
 #--------------------------------------------------------------------------------------------------
 # Syntax
@@ -63,16 +67,24 @@ fi
 
 echo "RUNNING IC-Light"
 
-python - "$1" "$2" "$3" "$image_width" "$image_height" << 'PY'
+python - "$1" "$2" "$3" "$image_width" "$image_height" "$highres_scale" "$highres_denoise" << 'PY'
 import sys
 from pathlib import Path
 import numpy as np
 from PIL import Image
 
-# Import the IC-Light Gradio script as a module
+# --- prevent Gradio UI from launching on import ---
+import gradio as gr
+def _no_launch(*a, **k):
+    print("[IC-Light] Gradio UI disabled (headless).")
+    return None
+gr.Blocks.launch = _no_launch
+# --------------------------------------------------
+
+# Import the IC-Light Gradio script as a module (now safe—launch is no-op)
 import gradio_demo_bg as ic  # uses ic.BGSource, ic.process_relight, globals set up at import
 
-inp, ref, outp, w, h = sys.argv[1:6]
+inp, ref, outp, w, h, scale, denoise = sys.argv[1:8]
 
 def load_rgb(p):
     try:
@@ -93,11 +105,12 @@ steps = 20
 a_prompt = "best quality"
 n_prompt = "lowres, bad anatomy, bad hands, cropped, worst quality"
 cfg = 7.0
-highres_scale = 1.5
-highres_denoise = 0.5
+highres_scale = float(scale)
+highres_denoise = float(denoise)
 bg_source = ic.BGSource.UPLOAD.value # use the provided background as-is
 
 print(f"[IC-Light] Input: {inp}\n[IC-Light] Background: {ref}\n[IC-Light] Output: {outp}")
+print(f"[IC-Light] Resolution: {image_width}x{image_height}")
 
 # Run background-conditioned relighting
 try:
