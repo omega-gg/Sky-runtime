@@ -28,23 +28,56 @@ set -e
 
 IC_Light="${SKY_PATH_IC_LIGHT:-"$SKY_PATH_BIN/IC-Light"}"
 
-image_width="1024"
+prompt=""
 
-image_height="1024"
+width="1024"
 
-highres_scale="1.5"
+height="1024"
 
-highres_denoise="0.5"
+scale="1.5"
+
+denoise="0.5"
 
 #--------------------------------------------------------------------------------------------------
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
-if [ $# != 3 ]; then
+if [ $# -lt 3 -o $# -gt 8 ]; then
 
-    echo "Usage: transfer <input> <reference> <output>"
+    echo "Usage: transfer <input> <reference> <output> [prompt] "
+    echo "                [width = $width] [height = $height] [scale = $scale] \
+[denoise = $denoise]"
 
     exit 1
+fi
+
+#--------------------------------------------------------------------------------------------------
+# Configuration
+#--------------------------------------------------------------------------------------------------
+
+if [ $# -gt 3 ]; then
+
+    prompt="$4"
+fi
+
+if [ $# -gt 4 ]; then
+
+    width="$5"
+fi
+
+if [ $# -gt 5 ]; then
+
+    height="$6"
+fi
+
+if [ $# -gt 6 ]; then
+
+    scale="$7"
+fi
+
+if [ $# -gt 7 ]; then
+
+    denoise="$8"
 fi
 
 #--------------------------------------------------------------------------------------------------
@@ -67,7 +100,7 @@ fi
 
 echo "RUNNING IC-Light"
 
-python - "$1" "$2" "$3" "$image_width" "$image_height" "$highres_scale" "$highres_denoise" << 'PY'
+python - "$1" "$2" "$3" "$prompt" "$width" "$height" "$scale" "$denoise" << 'PY'
 import sys
 from pathlib import Path
 import numpy as np
@@ -81,10 +114,10 @@ def _no_launch(*a, **k):
 gr.Blocks.launch = _no_launch
 # --------------------------------------------------
 
-# Import the IC-Light Gradio script as a module (now safe—launch is no-op)
-import gradio_demo_bg as ic  # uses ic.BGSource, ic.process_relight, globals set up at import
+# Import IC-Light module
+import gradio_demo_bg as ic
 
-inp, ref, outp, w, h, scale, denoise = sys.argv[1:8]
+inp, ref, outp, user_prompt, w, h, scale, denoise = sys.argv[1:9]
 
 def load_rgb(p):
     try:
@@ -92,11 +125,18 @@ def load_rgb(p):
     except Exception as e:
         raise SystemExit(f"Error: could not load image '{p}': {e}")
 
+# --- load and remember original size ---
 fg = load_rgb(inp)
 bg = load_rgb(ref)
+orig_w, orig_h = fg.shape[1], fg.shape[0]
 
-# Default params matching the Gradio UI defaults
-prompt = ""
+# --- resize both to image_width × image_height (no aspect ratio) ---
+resize_target = (int(w), int(h))
+fg_resized = np.array(Image.fromarray(fg).resize(resize_target, Image.BICUBIC))
+bg_resized = np.array(Image.fromarray(bg).resize(resize_target, Image.BICUBIC))
+
+# --- IC-Light params ---
+prompt = user_prompt
 image_width = int(w)
 image_height = int(h)
 num_samples = 1
@@ -107,15 +147,15 @@ n_prompt = "lowres, bad anatomy, bad hands, cropped, worst quality"
 cfg = 7.0
 highres_scale = float(scale)
 highres_denoise = float(denoise)
-bg_source = ic.BGSource.UPLOAD.value # use the provided background as-is
+bg_source = ic.BGSource.UPLOAD.value
 
 print(f"[IC-Light] Input: {inp}\n[IC-Light] Background: {ref}\n[IC-Light] Output: {outp}")
-print(f"[IC-Light] Resolution: {image_width}x{image_height}")
+print(f"[IC-Light] Internal relight resolution: {image_width}x{image_height}, final output: {orig_w}x{orig_h}")
 
-# Run background-conditioned relighting
+# --- run relighting ---
 try:
     results = ic.process_relight(
-        fg, bg, prompt,
+        fg_resized, bg_resized, prompt,
         image_width, image_height,
         num_samples, seed, steps,
         a_prompt, n_prompt, cfg,
@@ -125,10 +165,11 @@ try:
 except Exception as e:
     raise SystemExit(f"Error during IC-Light inference: {e}")
 
-# results = [relit_img(s)..., fg_preview, bg_preview]; take first relit image
+# --- restore original geometry ---
 relit = results[0]
+relit_resized = np.array(Image.fromarray(relit).resize((orig_w, orig_h), Image.BICUBIC))
 
 Path(outp).parent.mkdir(parents=True, exist_ok=True)
-Image.fromarray(relit).save(outp)
-print(f"[IC-Light] Saved: {outp}")
+Image.fromarray(relit_resized).save(outp)
+print(f"[IC-Light] Saved resized output: {outp}")
 PY
