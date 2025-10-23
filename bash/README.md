@@ -19,7 +19,6 @@
 - [FaceFusion](generate/FaceFusion/README.md)
 - [rembg](generate/rembg/README.md)
 - [color_transfer](generate/color_transfer/README.md)
-- [IC-Light](generate/IC-Light/README.md)
 
 ## Environment variables
 
@@ -39,8 +38,6 @@
 - SKY_PATH_REMBG: Custom path to the rembg folder
 
 - SKY_PATH_COLOR_TRANSFER: Custom path to the color_transfer folder
-
-- SKY_PATH_IC_LIGHT: Custom path to the IC-Light folder
 
 ### Keys
 
