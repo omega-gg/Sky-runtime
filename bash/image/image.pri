@@ -6,5 +6,6 @@ OTHER_FILES += bash/image/convert.sh \
                bash/image/adjust.sh \
                bash/image/color.sh \
                bash/image/border.sh \
+               bash/image/text.sh \
                bash/image/blur.sh \
                bash/image/README.md \

@@ -28,22 +28,46 @@ set -e
 
 ffmpeg="${SKY_PATH_FFMPEG:-"$SKY_PATH_BIN/ffmpeg"}"
 
-filter="bilinear"
+ffprobe="${SKY_PATH_FFPROBE:-"$SKY_PATH_BIN/ffprobe"}"
+
+font_folder="${SKY_PATH_FONT:-"$SKY_PATH_BIN/font"}"
+
+size="64"
+
+color="#00dc00"
+
+color_background="#00000000"
+
+ratio="2"
+
+font="arial.ttf"
+
+#--------------------------------------------------------------------------------------------------
+# Functions
+#--------------------------------------------------------------------------------------------------
+
+getWidth()
+{
+    "$ffprobe" -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$1"
+}
+
+getHeight()
+{
+    "$ffprobe" -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$1"
+}
 
 #--------------------------------------------------------------------------------------------------
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
-if [ $# != 4 -a $# != 5 ]; then
+if [ $# -lt 3 -o $# -gt 8 ]; then
 
-    echo "Usage: resize <input> <output> <width> <height> [filter = bilinear]"
+    echo "Usage: text <input> <output> <text> [size = $size]"
+    echo "            [color = $color] [color_background = $color_background] [font = $font]"
+    echo "            [ratio = $ratio]"
     echo ""
-    echo "filter: fast_bilinear, bilinear, bicubic, experimental, neighbor, area, bicublin, gauss"
-    echo "        sinc, lanczos, spline, print_info, accurate_rnd, full_chroma_int"
-    echo "        full_chroma_inp, bitexact, unstable"
-    echo ""
-    echo "examples: resize input.png output.png 128 128"
-    echo "          resize input.png output.png 128 -1"
+    echo "examples: text input.png output.png \"text\""
+    echo "          text input.png output.png \"text\" 128 green #00000000 verdana.ttf"
 
     exit 1
 fi
@@ -52,10 +76,41 @@ fi
 # Configuration
 #--------------------------------------------------------------------------------------------------
 
-if [ $# -ge 5 ]; then filter="$5"; fi
+if [ $# -ge 4 ]; then size="$4"; fi
+
+if [ $# -ge 5 ]; then color="$5"; fi
+
+if [ $# -ge 6 ]; then color_background="$6"; fi
+
+if [ $# -ge 7 ]; then font="$7"; fi
+
+if [ $# -ge 8 ]; then ratio="$8"; fi
 
 #--------------------------------------------------------------------------------------------------
 # Run
 #--------------------------------------------------------------------------------------------------
 
-"$ffmpeg" -y -i "$1" -vf "scale=$3:$4:flags=$filter" "$2"
+width=$(getWidth "$1")
+
+height=$(getHeight "$1")
+
+text_height=$(awk "BEGIN {print int($size * $ratio)}")
+
+total_height=$((height + text_height))
+
+case "$(uname -s 2> /dev/null)" in
+
+    MINGW*|MSYS*|CYGWIN*)
+        font_folder="$(printf "%s" "$font_folder" | sed 's#\\#/#g; s#^\([A-Za-z]\):#\1\\:#')"
+        ;;
+esac
+
+echo "$font_folder"
+
+dt="drawtext=text='$3':fontcolor=$color:fontsize=$size:fontfile='$font_folder/$font':"
+
+dt="${dt}x=(w-text_w)/2:y=$height+($text_height-text_h)/2"
+
+vf="format=rgba,pad=w=$width:h=$total_height:x=0:y=0:color=$color_background,$dt"
+
+"$ffmpeg" -y -i "$1" -vf "$vf" -frames:v 1 "$2"

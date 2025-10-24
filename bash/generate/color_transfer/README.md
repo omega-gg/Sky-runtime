@@ -2,7 +2,7 @@
 
 ## Configuration
 
-Place your color_transfer standalone folder into the storage/user/bin/color_transfer folder or set
+Place your color_transfer standalone folder into the SKY_PATH_BIN/color_transfer folder or set
 SKY_PATH_COLOR_TRANSFER.
 
 ## Tools

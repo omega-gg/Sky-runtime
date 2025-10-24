@@ -2,7 +2,7 @@
 
 ## Configuration
 
-Place your LivePortrait standalone folder into the storage/user/bin/LivePortrait folder or set
+Place your LivePortrait standalone folder into the SKY_PATH_BIN/LivePortrait folder or set
 SKY_PATH_LIVE_PORTRAIT.
 
 ## Tools

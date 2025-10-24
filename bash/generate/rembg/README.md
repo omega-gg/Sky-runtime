@@ -2,7 +2,7 @@
 
 ## Configuration
 
-Place your rembg standalone folder into the storage/user/bin/rembg folder or set SKY_PATH_REMBG.
+Place your rembg standalone folder into the SKY_PATH_BIN/rembg folder or set SKY_PATH_REMBG.
 
 ## Tools
 

@@ -2,7 +2,7 @@
 
 ## Configuration
 
-Place your FaceFusion standalone folder into the storage/user/bin/FaceFusion folder or set
+Place your FaceFusion standalone folder into the SKY_PATH_BIN/FaceFusion folder or set
 SKY_PATH_FACE_FUSION.
 
 ## Tools
