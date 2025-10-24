@@ -34,9 +34,7 @@ flip="horizontal"
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
-if [ $# -lt 2 ] \
-   || \
-   [ $# -ge 3 -a "$3" != "horizontal" -a "$3" != "vertical" ]; then
+if [ $# -lt 2 ] || [ $# -ge 3 -a "$3" != "horizontal" -a "$3" != "vertical" ]; then
 
     echo "Usage: flip <input> <output> [flip = $flip] [options...]"
     echo ""
