@@ -34,6 +34,8 @@ font_folder="${SKY_PATH_FONT:-"$SKY_PATH_BIN/font"}"
 
 size="64"
 
+position="bottom"
+
 color="#00dc00"
 
 color_background="#00000000"
@@ -60,14 +62,16 @@ getHeight()
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
-if [ $# -lt 3 -o $# -gt 8 ]; then
+if [ $# -lt 3 -o $# -gt 9 ]; then
 
-    echo "Usage: text <input> <output> <text> [size = $size]"
+    echo "Usage: text <input> <output> <text> [size = $size] [position = $position]"
     echo "            [color = $color] [color_background = $color_background] [font = $font]"
     echo "            [ratio = $ratio]"
     echo ""
+    echo "position: left, top, bottom, right"
+    echo ""
     echo "examples: text input.png output.png \"text\""
-    echo "          text input.png output.png \"text\" 128 green #00000000 verdana.ttf"
+    echo "          text input.png output.png \"text\" 128 left green #00000000 verdana.ttf"
 
     exit 1
 fi
@@ -78,13 +82,15 @@ fi
 
 if [ $# -ge 4 ]; then size="$4"; fi
 
-if [ $# -ge 5 ]; then color="$5"; fi
+if [ $# -ge 5 ]; then position=$(printf '%s' "$5" | tr '[:upper:]' '[:lower:]'); fi
 
-if [ $# -ge 6 ]; then color_background="$6"; fi
+if [ $# -ge 6 ]; then color="$6"; fi
 
-if [ $# -ge 7 ]; then font="$7"; fi
+if [ $# -ge 7 ]; then color_background="$7"; fi
 
-if [ $# -ge 8 ]; then ratio="$8"; fi
+if [ $# -ge 8 ]; then font="$8"; fi
+
+if [ $# -ge 9 ]; then ratio="$9"; fi
 
 #--------------------------------------------------------------------------------------------------
 # Run
@@ -96,8 +102,6 @@ height=$(getHeight "$1")
 
 text_height=$(awk "BEGIN {print int($size * $ratio)}")
 
-total_height=$((height + text_height))
-
 case "$(uname -s 2> /dev/null)" in
 
     MINGW*|MSYS*|CYGWIN*)
@@ -105,12 +109,52 @@ case "$(uname -s 2> /dev/null)" in
         ;;
 esac
 
-echo "$font_folder"
+drawtext="drawtext=text='$3':fontcolor=$color:fontsize=$size:fontfile='$font_folder/$font':\
+x=(w-text_w)/2:y=(h-text_h)/2"
 
-dt="drawtext=text='$3':fontcolor=$color:fontsize=$size:fontfile='$font_folder/$font':"
+case "$position" in
 
-dt="${dt}x=(w-text_w)/2:y=$height+($text_height-text_h)/2"
+    left)
+        total_width=$((width + text_height))
 
-vf="format=rgba,pad=w=$width:h=$total_height:x=0:y=0:color=$color_background,$dt"
+        total_height="$height"
 
-"$ffmpeg" -y -i "$1" -vf "$vf" -frames:v 1 "$2"
+        fc="[0:v]format=rgba,pad=w=${total_width}:h=${total_height}:x=${text_height}:y=0:\
+color=${color_background}[base];color=c=${color_background}:s=${height}x${text_height}[tbg];\
+[tbg]${drawtext},rotate=PI/2:ow=${text_height}:oh=${height}:fillcolor=${color_background}[txt];\
+[base][txt]overlay=x=0:y=0[out]"
+        ;;
+
+    top)
+        total_width="$width"
+
+        total_height=$((height + text_height))
+
+        fc="[0:v]format=rgba,pad=w=${total_width}:h=${total_height}:x=0:y=${text_height}:\
+color=${color_background}[base];color=c=${color_background}:s=${width}x${text_height}[tbg];\
+[tbg]${drawtext}[txt];[base][txt]overlay=x=0:y=0[out]"
+        ;;
+
+    right)
+        total_width=$((width + text_height))
+
+        total_height="$height"
+
+        fc="[0:v]format=rgba,pad=w=${total_width}:h=${total_height}:x=0:y=0:\
+color=${color_background}[base];color=c=${color_background}:s=${height}x${text_height}[tbg];\
+[tbg]${drawtext},rotate=-PI/2:ow=${text_height}:oh=${height}:fillcolor=${color_background}[txt];\
+[base][txt]overlay=x=${width}:y=0[out]"
+        ;;
+
+    *)
+        total_width="$width"
+
+        total_height=$((height + text_height))
+
+        fc="[0:v]format=rgba,pad=w=${total_width}:h=${total_height}:x=0:y=0:\
+color=${color_background}[base];color=c=${color_background}:s=${width}x${text_height}[tbg];\
+[tbg]${drawtext}[txt];[base][txt]overlay=x=0:y=${height}[out]"
+        ;;
+esac
+
+"$ffmpeg" -y -i "$1" -filter_complex "$fc" -map "[out]" -frames:v 1 "$2"
