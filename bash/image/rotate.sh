@@ -28,7 +28,7 @@ set -e
 
 ffmpeg="${SKY_PATH_FFMPEG:-"$SKY_PATH_BIN/ffmpeg"}"
 
-flip="horizontal"
+angle="90"
 
 #--------------------------------------------------------------------------------------------------
 # Syntax
@@ -36,13 +36,13 @@ flip="horizontal"
 
 if [ $# -lt 2 ] \
    || \
-   [ $# -ge 3 -a "$3" != "horizontal" -a "$3" != "vertical" ]; then
+   [ $# -ge 3 -a "$3" != "90" -a "$3" != "-90" -a "$3" != "180" -a "$3" != "270" ]; then
 
-    echo "Usage: flip <input> <output> [flip = $flip] [options...]"
+    echo "Usage: rotate <input> <output> [angle = $angle] [options...]"
     echo ""
     echo "examples:"
-    echo "    flip input.png output.jpg horizontal -q:v 2"
-    echo "    flip input.png output.webp vertical -c:v libwebp -lossless 1"
+    echo "    rotate input.png output.jpg  180"
+    echo "    rotate input.png output.webp -90 -c:v libwebp -lossless 1"
 
     exit 1
 fi
@@ -59,20 +59,20 @@ if [ $# = 2 ]; then
 
     shift 2
 else
-    flip="$3"
+    angle="$3"
 
     shift 3
-fi
-
-if [ $flip = "horizontal" ]; then
-
-    flip="hflip"
-else
-    flip="vflip"
 fi
 
 #--------------------------------------------------------------------------------------------------
 # Run
 #--------------------------------------------------------------------------------------------------
 
-"$ffmpeg" -y -i "$input" -vf "$flip" "$@" "$output"
+case "$angle" in
+
+    180)     angle="transpose=1,transpose=1" ;;
+    270|-90) angle="transpose=2"             ;;
+    *)       angle="transpose=1"             ;;
+esac
+
+"$ffmpeg" -y -i "$input" -vf "$angle" "$@" "$output"

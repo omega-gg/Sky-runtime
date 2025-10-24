@@ -12,6 +12,7 @@ SKY_PATH_FFPROBE. Place your fonts into SKY_PATH_BIN/font or set SKY_PATH_FONT
 - [resize.sh](resize.sh): Resize an image.
 - [expand.sh](expand.sh): Expand the image.
 - [crop.sh](crop.sh): Crop the image.
+- [rotate.sh](rotate.sh): Rotate an image.
 - [flip.sh](flip.sh): Flip an image.
 - [adjust.sh](adjust.sh): Adjust the image brightness and contrast.
 - [color.sh](adjust.sh): Adjust the image color balance.
