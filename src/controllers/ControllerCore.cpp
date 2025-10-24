@@ -626,8 +626,8 @@ ControllerCore::ControllerCore() : WController()
                                               int                  height,
                                               qreal                scale,
                                               qreal                upscale,
-                                              bool                 asynchronous,
-                                              const QColor       & background)
+                                              const QColor       & background,
+                                              bool                 asynchronous)
 {
     qreal gapX = (qreal) (width  - width  * scale) / 2.0;
     qreal gapY = (qreal) (height - height * scale) / 2.0;
@@ -718,8 +718,8 @@ ControllerCore::ControllerCore() : WController()
                                                  qreal                height,
                                                  const QVariant     & itemFocus,
                                                  bool                 isolate,
-                                                 bool                 asynchronous,
-                                                 const QColor       & background)
+                                                 const QColor       & background,
+                                                 bool                 asynchronous)
 {
     qreal scale;
 

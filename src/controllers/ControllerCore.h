@@ -127,8 +127,8 @@ public: // Interface
                             int                  height,
                             qreal                scale,
                             qreal                upscale      = 1.0,
-                            bool                 asynchronous = true,
-                            const QColor       & background   = Qt::transparent);
+                            const QColor       & background   = Qt::transparent,
+                            bool                 asynchronous = true);
 
     Q_INVOKABLE bool renderBox(const QString      & fileName,
                                const QVariantList & items,
@@ -138,8 +138,8 @@ public: // Interface
                                qreal                height,
                                const QVariant     & itemFocus    = QVariant(),
                                bool                 isolate      = false,
-                               bool                 asynchronous = true,
-                               const QColor       & background   = Qt::transparent);
+                               const QColor       & background   = Qt::transparent,
+                               bool                 asynchronous = true);
 
     Q_INVOKABLE bool saveImage(const QString & name,
                                const QImage  & image, bool asynchronous = true);
