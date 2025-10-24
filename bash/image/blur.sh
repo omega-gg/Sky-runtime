@@ -51,15 +51,9 @@ fi
 # Configuration
 #--------------------------------------------------------------------------------------------------
 
-if [ $# -gt 2 ]; then
+if [ $# -ge 3 ]; then strength="$3"; fi
 
-    strength="$3"
-fi
-
-if [ $# -gt 3 ]; then
-
-    filter="$4"
-fi
+if [ $# -ge 4 ]; then filter="$4"; fi
 
 if [ $filter = "gblur" ]; then
 

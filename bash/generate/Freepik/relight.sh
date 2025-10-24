@@ -95,20 +95,11 @@ fi
 # Configuration
 #--------------------------------------------------------------------------------------------------
 
-if [ $# -gt 3 ]; then
+if [ $# -ge 4 ]; then style="$4"; fi
 
-    style="$4"
-fi
+if [ $# -ge 5 ]; then light_transfer_strength="$5"; fi
 
-if [ $# -gt 4 ]; then
-
-    light_transfer_strength="$5"
-fi
-
-if [ $# -gt 5 ]; then
-
-    change_background="$6"
-fi
+if [ $# -ge 6 ]; then change_background="$6"; fi
 
 #--------------------------------------------------------------------------------------------------
 # Run

@@ -136,7 +136,7 @@ if [ -n "$ratio_width" ]; then
         output_height="$input_height"
     fi
 
-    if [ $# -gt 3 ]; then
+    if [ $# -ge 4 ]; then
 
         bg="$4"
     else
@@ -155,7 +155,7 @@ else
 
     output_height=$(( input_height + extra_top + extra_bottom ))
 
-    if [ $# -gt 6 ]; then
+    if [ $# -ge 7 ]; then
 
         bg="$7"
     else

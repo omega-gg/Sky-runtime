@@ -98,20 +98,11 @@ fi
 # Configuration
 #--------------------------------------------------------------------------------------------------
 
-if [ $# -gt 2 ]; then
+if [ $# -ge 3 ]; then scale_factor="$3"; fi
 
-    scale_factor="$3"
-fi
+if [ $# -ge 4 ]; then optimized_for="$4"; fi
 
-if [ $# -gt 3 ]; then
-
-    optimized_for="$4"
-fi
-
-if [ $# -gt 4 ]; then
-
-    creativity="$5"
-fi
+if [ $# -ge 5 ]; then creativity="$5"; fi
 
 #--------------------------------------------------------------------------------------------------
 # Run
