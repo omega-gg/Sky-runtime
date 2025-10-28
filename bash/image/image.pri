@@ -1,4 +1,5 @@
-OTHER_FILES += bash/image/convert.sh \
+OTHER_FILES += bash/image/rectangle.sh \
+               bash/image/convert.sh \
                bash/image/resize.sh \
                bash/image/expand.sh \
                bash/image/crop.sh \

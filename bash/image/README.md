@@ -8,6 +8,7 @@ SKY_PATH_FFPROBE. Place your fonts into SKY_PATH_BIN/font or set SKY_PATH_FONT
 
 ## Tools
 
+- [rectangle.sh](rectangle.sh): Create an image with a given size and color.
 - [convert.sh](convert.sh): Convert an image to another format.
 - [resize.sh](resize.sh): Resize an image.
 - [expand.sh](expand.sh): Expand the image.
