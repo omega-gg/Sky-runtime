@@ -28,22 +28,19 @@ set -e
 
 ffmpeg="${SKY_PATH_FFMPEG:-"$SKY_PATH_BIN/ffmpeg"}"
 
-width="320"
+radius="32"
 
-height="$width"
-
-color="#00000000"
+feather="1.0"
 
 #--------------------------------------------------------------------------------------------------
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
-if [ $# -lt 1 -o $# -gt 4 ]; then
+if [ $# -lt 2 -o $# -gt 4 ]; then
 
-    echo "Usage: rectangle <output> [width = $width] [height = $height] [color = $color]"
+    echo "Usage: round <input> <output> [radius = $radius] [feather = $feather]"
     echo ""
-    echo "examples: rectangle output.png 320"
-    echo "          rectangle output.png 320 200 white"
+    echo "examples: round output.png 64 1.5"
 
     exit 1
 fi
@@ -52,14 +49,22 @@ fi
 # Configuration
 #--------------------------------------------------------------------------------------------------
 
-if [ $# -ge 2 ]; then width="$2"; fi
+if [ $# -ge 3 ]; then radius="$3"; fi
 
-if [ $# -ge 3 ]; then height="$3"; fi
-
-if [ $# -ge 4 ]; then color="$4"; fi
+if [ $# -ge 4 ]; then feather="$4"; fi
 
 #--------------------------------------------------------------------------------------------------
 # Run
 #--------------------------------------------------------------------------------------------------
 
-"$ffmpeg" -y -f lavfi -i "color=c=$color:s=${width}x${height},format=rgba" -frames:v 1 "$1"
+"$ffmpeg" -y -i "$1" -vf "\
+format=rgba,geq=\
+r='r(X\,Y)':g='g(X\,Y)':b='b(X\,Y)':a='\
+clip( \
+(- ( hypot( \
+max(abs(X-(W/2))-(W/2-$radius)\, 0) \, \
+max(abs(Y-(H/2))-(H/2-$radius)\, 0) ) \
++ min( max(abs(X-(W/2))-(W/2-$radius) \, abs(Y-(H/2))-(H/2-$radius)) \, 0 ) \
+- $radius ) ) / $feather * 255 \
+\, 0 \, 255)'" \
+-frames:v 1 "$2"
