@@ -4,10 +4,16 @@
 ## Configuration
 
 Place your FFmpeg binaries into the SKY_PATH_BIN folder or set SKY_PATH_FFMPEG and
-SKY_PATH_FFPROBE. Place your fonts into SKY_PATH_BIN/font or set SKY_PATH_FONT
+SKY_PATH_FFPROBE.
+
+Place your ImageMagick binaries into the SKY_PATH_BIN/ImageMagick folder or set
+SKY_PATH_IMAGE_MAGICK.
+
+Place your fonts into SKY_PATH_BIN/font or set SKY_PATH_FONT.
 
 ## Tools
 
+- [create.sh](create.sh): Create an image based on layers.
 - [convert.sh](convert.sh): Convert an image to another format.
 - [resize.sh](resize.sh): Resize an image.
 - [expand.sh](expand.sh): Expand the image.
