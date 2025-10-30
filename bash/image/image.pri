@@ -5,9 +5,8 @@ OTHER_FILES += bash/image/convert.sh \
                bash/image/rotate.sh \
                bash/image/flip.sh \
                bash/image/adjust.sh \
-               bash/image/color.sh \
+               bash/image/balance.sh \
                bash/image/rectangle.sh \
-               bash/image/round.sh \
                bash/image/border.sh \
                bash/image/text.sh \
                bash/image/blur.sh \
