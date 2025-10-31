@@ -1,5 +1,7 @@
 buildscript {
     repositories {
+        // NOTE: Fix TLS handshake issue on Azure.
+        maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
         google()
         mavenCentral()
     }
