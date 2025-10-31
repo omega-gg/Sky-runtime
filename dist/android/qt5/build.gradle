@@ -1,3 +1,6 @@
+// NOTE: Fix TLS handshake issue on Azure.
+System.setProperty("https.protocols", "TLSv1.2")
+
 buildscript {
     repositories {
         google()
