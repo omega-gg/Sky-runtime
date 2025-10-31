@@ -25,6 +25,7 @@
 
 // Qt includes
 #include <QImage>
+#include <QVariant>
 
 // Sk includes
 #include <WController>
