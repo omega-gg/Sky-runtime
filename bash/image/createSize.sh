@@ -32,13 +32,13 @@ magick="${SKY_PATH_IMAGE_MAGICK:-"$SKY_PATH_BIN/ImageMagick"}"
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
-if [ $# -lt 2 ]; then
+if [ $# -lt 3 ]; then
 
-    echo "Usage: create <output> <layer1> [layer2 ...]"
+    echo "Usage: createSize <output> <size> <layer1> [layer2 ...]"
     echo ""
     echo "examples:"
-    echo "    create output.png input.svg"
-    echo "    create output.psd layer1.png layer2.png"
+    echo "    createSize output.png 128 input.svg"
+    echo "    createSize output.psd 256 layer1.png layer2.png"
 
     exit 1
 fi
@@ -49,7 +49,9 @@ fi
 
 output="$1"
 
-shift
+size="${2}x${2}"
+
+shift 2
 
 if echo "$@" | grep -Eiq '\.(svg|pdf)(\s|$)'; then
 
@@ -71,10 +73,10 @@ if echo "$output" | grep -qi '\.psd$'; then
             \( -clone 0--1 -background "$color" -layers merge \) \
             -insert 0 \
             -define psd:write-layers=true \
-            -alpha set "$output"
+            -alpha set -resize "$size" "$output"
     else
-        "$magick/magick" -background "$color" "$@" -alpha set "$output"
+        "$magick/magick" -background "$color" "$@" -alpha set -resize "$size" "$output"
     fi
 else
-    "$magick/magick" -background "$color" "$@" -alpha set -layers merge "$output"
+    "$magick/magick" -background "$color" "$@" -alpha set -resize "$size" -layers merge "$output"
 fi

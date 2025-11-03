@@ -26,6 +26,8 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
+root="$(dirname "$0")"
+
 ffmpeg="${SKY_PATH_FFMPEG:-"$SKY_PATH_BIN/ffmpeg"}"
 
 ffprobe="${SKY_PATH_FFPROBE:-"$SKY_PATH_BIN/ffprobe"}"
@@ -97,9 +99,9 @@ icon="$3"
 
 if echo "$icon" | grep -qi '\.svg$'; then
 
-    temp="temp.png"
+    temp="$root/temp.png"
 
-    "$magick/magick" -background none "$icon" -alpha on -resize "${size}x${size}" "PNG32:$temp"
+    "$root"/createSize.sh "$temp" "$size" "$icon"
 
     icon="$temp"
 fi
