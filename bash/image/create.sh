@@ -37,8 +37,8 @@ if [ $# -lt 2 ]; then
     echo "Usage: create <output> <layer1> [layer2 ...]"
     echo ""
     echo "examples:"
-    echo "    create output.png input.jpg"
-    echo "    create output.psd layer1.png layer2.png"
+    echo "    create output.png layer1.png layer2.png"
+    echo "    create output.psd layer1.png layer2.png layer3.png"
 
     exit 1
 fi
