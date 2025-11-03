@@ -25,4 +25,5 @@ Place your fonts into SKY_PATH_BIN/font or set SKY_PATH_FONT.
 - [rectangle.sh](rectangle.sh): Create an image with a given size and color.
 - [border.sh](border.sh): Add a border around the image.
 - [text.sh](text.sh): Add text to an image.
+- [icon.sh](icon.sh): Add an icon to an image.
 - [blur.sh](blur.sh): Blur an image.

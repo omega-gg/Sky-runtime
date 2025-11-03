@@ -62,14 +62,14 @@ if echo "$output" | grep -qi '\.psd$'; then
 
     if [ $# -gt 1 ]; then
 
-        "$magick/magick" "$@" \
+        "$magick/magick" -background "$color" "$@" \
             \( -clone 0--1 -background "$color" -layers merge \) \
             -insert 0 \
             -define psd:write-layers=true \
-            -alpha set -background "$color" "$output"
+            -alpha set "$output"
     else
-        "$magick/magick" "$@" -alpha set -background "$color" "$output"
+        "$magick/magick" -background "$color" "$@" -alpha set "$output"
     fi
 else
-    "$magick/magick" "$@" -alpha set -background "$color" -layers merge "$output"
+    "$magick/magick" -background "$color" "$@" -alpha set -layers merge "$output"
 fi

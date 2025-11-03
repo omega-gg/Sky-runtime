@@ -30,19 +30,15 @@ ffmpeg="${SKY_PATH_FFMPEG:-"$SKY_PATH_BIN/ffmpeg"}"
 
 ffprobe="${SKY_PATH_FFPROBE:-"$SKY_PATH_BIN/ffprobe"}"
 
-font_folder="${SKY_PATH_FONT:-"$SKY_PATH_BIN/font"}"
+magick="${SKY_PATH_IMAGE_MAGICK:-"$SKY_PATH_BIN/ImageMagick"}"
 
 size="64"
 
 position="bottom"
 
-color="#00dc00"
-
 color_background="#00000000"
 
 ratio="1.8"
-
-font="arial.ttf"
 
 #--------------------------------------------------------------------------------------------------
 # Functions
@@ -62,16 +58,15 @@ getHeight()
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
-if [ $# -lt 3 -o $# -gt 9 ]; then
+if [ $# -lt 3 -o $# -gt 7 ]; then
 
-    echo "Usage: text <input> <output> <text> [size = $size] [position = $position]"
-    echo "            [color = $color] [color_background = $color_background] [font = $font]"
-    echo "            [ratio = $ratio]"
+    echo "Usage: icon <input> <output> <icon> [size = $size] [position = $position]"
+    echo "            [color_background = $color_background] [ratio = $ratio]"
     echo ""
     echo "position: left, top, bottom, right"
     echo ""
-    echo "examples: text input.png output.png \"text\""
-    echo "          text input.png output.png \"text\" 128 left green white verdana.ttf"
+    echo "examples: icon input.png output.png icon.png"
+    echo "          icon input.png output.png icon.svg 128 left white 2.4"
 
     exit 1
 fi
@@ -84,13 +79,9 @@ if [ $# -ge 4 ]; then size="$4"; fi
 
 if [ $# -ge 5 ]; then position=$(printf '%s' "$5" | tr '[:upper:]' '[:lower:]'); fi
 
-if [ $# -ge 6 ]; then color="$6"; fi
+if [ $# -ge 6 ]; then color_background="$6"; fi
 
-if [ $# -ge 7 ]; then color_background="$7"; fi
-
-if [ $# -ge 8 ]; then font="$8"; fi
-
-if [ $# -ge 9 ]; then ratio="$9"; fi
+if [ $# -ge 7 ]; then ratio="$7"; fi
 
 #--------------------------------------------------------------------------------------------------
 # Run
@@ -102,15 +93,16 @@ height=$(getHeight "$1")
 
 extra_height=$(awk "BEGIN {print int($size * $ratio)}")
 
-case "$(uname -s 2> /dev/null)" in
+icon="$3"
 
-    MINGW*|MSYS*|CYGWIN*)
-        font_folder="$(printf "%s" "$font_folder" | sed 's#\\#/#g; s#^\([A-Za-z]\):#\1\\:#')"
-        ;;
-esac
+if echo "$icon" | grep -qi '\.svg$'; then
 
-drawtext="drawtext=text='$3':fontcolor=$color:fontsize=$size:fontfile='$font_folder/$font':\
-x=(w-text_w)/2:y=(h-text_h)/2"
+    temp="temp.png"
+
+    "$magick/magick" -background none "$icon" -alpha on -resize "${size}x${size}" "PNG32:$temp"
+
+    icon="$temp"
+fi
 
 case "$position" in
 
@@ -120,9 +112,10 @@ case "$position" in
         total_height="$height"
 
         fc="[0:v]format=rgba,pad=w=${total_width}:h=${total_height}:x=${extra_height}:y=0:\
-color=${color_background}[base];color=c=${color_background}:s=${height}x${extra_height}[tbg];\
-[tbg]${drawtext},rotate=PI/2:ow=${extra_height}:oh=${height}:fillcolor=${color_background}[txt];\
-[base][txt]overlay=x=0:y=0[out]"
+color=${color_background}[base];[1:v]scale=w=${size}:h=${size}:\
+force_original_aspect_ratio=decrease[ico];[ico]pad=w=${extra_height}:h=${height}:\
+x=(ow-iw)/2:y=(oh-ih)/2:\
+color=${color_background}[iconstrip];[base][iconstrip]overlay=x=0:y=0[out]"
         ;;
 
     top)
@@ -131,8 +124,10 @@ color=${color_background}[base];color=c=${color_background}:s=${height}x${extra_
         total_height=$((height + extra_height))
 
         fc="[0:v]format=rgba,pad=w=${total_width}:h=${total_height}:x=0:y=${extra_height}:\
-color=${color_background}[base];color=c=${color_background}:s=${width}x${extra_height}[tbg];\
-[tbg]${drawtext}[txt];[base][txt]overlay=x=0:y=0[out]"
+color=${color_background}[base];[1:v]scale=w=${size}:h=${size}:\
+force_original_aspect_ratio=decrease[ico];[ico]pad=w=${width}:h=${extra_height}:\
+x=(ow-iw)/2:y=(oh-ih)/2:\
+color=${color_background}[iconstrip];[base][iconstrip]overlay=x=0:y=0[out]"
         ;;
 
     right)
@@ -141,9 +136,10 @@ color=${color_background}[base];color=c=${color_background}:s=${width}x${extra_h
         total_height="$height"
 
         fc="[0:v]format=rgba,pad=w=${total_width}:h=${total_height}:x=0:y=0:\
-color=${color_background}[base];color=c=${color_background}:s=${height}x${extra_height}[tbg];\
-[tbg]${drawtext},rotate=-PI/2:ow=${extra_height}:oh=${height}:fillcolor=${color_background}[txt];\
-[base][txt]overlay=x=${width}:y=0[out]"
+color=${color_background}[base];[1:v]scale=w=${size}:h=${size}:\
+force_original_aspect_ratio=decrease[ico];[ico]pad=w=${extra_height}:h=${height}:\
+x=(ow-iw)/2:y=(oh-ih)/2:\
+color=${color_background}[iconstrip];[base][iconstrip]overlay=x=${width}:y=0[out]"
         ;;
 
     *)
@@ -152,9 +148,17 @@ color=${color_background}[base];color=c=${color_background}:s=${height}x${extra_
         total_height=$((height + extra_height))
 
         fc="[0:v]format=rgba,pad=w=${total_width}:h=${total_height}:x=0:y=0:\
-color=${color_background}[base];color=c=${color_background}:s=${width}x${extra_height}[tbg];\
-[tbg]${drawtext}[txt];[base][txt]overlay=x=0:y=${height}[out]"
+color=${color_background}[base];[1:v]scale=w=${size}:h=${size}:\
+force_original_aspect_ratio=decrease[ico];[ico]pad=w=${width}:h=${extra_height}:\
+x=(ow-iw)/2:y=(oh-ih)/2:\
+color=${color_background}[iconstrip];[base][iconstrip]overlay=x=0:y=${height}[out]"
         ;;
 esac
 
-"$ffmpeg" -y -i "$1" -filter_complex "$fc" -map "[out]" -frames:v 1 "$2"
+"$ffmpeg" -y -i "$1" -i "$icon" -filter_complex "$fc" -map "[out]" -frames:v 1 "$2"
+
+#--------------------------------------------------------------------------------------------------
+# Clean
+#--------------------------------------------------------------------------------------------------
+
+if [ -n "$temp" ]; then rm -f "$temp"; fi

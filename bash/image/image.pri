@@ -10,5 +10,6 @@ OTHER_FILES += bash/image/create.sh \
                bash/image/rectangle.sh \
                bash/image/border.sh \
                bash/image/text.sh \
+               bash/image/icon.sh \
                bash/image/blur.sh \
                bash/image/README.md \
