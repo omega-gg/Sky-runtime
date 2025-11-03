@@ -54,5 +54,22 @@ if [ $# -ge 3 ]; then color="$3"; fi
 # Run
 #--------------------------------------------------------------------------------------------------
 
+# NOTE: For svg(s) we update the style directly from the source file.
+if echo "$1" | grep -qi '\.svg$'; then
+
+    awk -v COLOR="$color" '
+        !done && match($0, /<svg[^>]*>/) {
+            print substr($0, 1, RSTART + RLENGTH - 1) \
+                  "<style id=\"__recolor__\">svg{color:" COLOR "}*{fill:currentColor !important}</style>" \
+                  substr($0, RSTART + RLENGTH)
+            done = 1
+            next
+        }
+        { print }
+    ' "$1" > "$2"
+
+    exit 0
+fi
+
 "$magick/magick" \
 -background none "$1" -alpha on -channel RGB -fill "$color" -colorize 100 +channel "$2"
