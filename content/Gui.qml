@@ -529,6 +529,7 @@ Item
                "> clear                  clear the console\n" +
                "> help                   show the help\n" +
                "> exit                   quit the application\n" +
+               "\n" +
                "api:\n" +
                "- void setClipboard(text, description)    set the clipboard";
     }
