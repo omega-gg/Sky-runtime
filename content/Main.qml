@@ -87,7 +87,7 @@ Application
 
                 close();
             }
-            else if (event.key == Qt.Key_P && event.modifiers == Qt.ControlModifier)
+            else if (event.key == Qt.Key_F12 && event.modifiers == Qt.ControlModifier)
             {
                 event.accepted = true;
 

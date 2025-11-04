@@ -622,24 +622,24 @@ ControllerCore::ControllerCore() : WController()
                                               const QVariantList & items,
                                               qreal                x,
                                               qreal                y,
-                                              int                  width,
-                                              int                  height,
+                                              qreal                width,
+                                              qreal                height,
                                               qreal                scale,
                                               qreal                upscale,
                                               const QColor       & background,
                                               bool                 asynchronous)
 {
-    qreal gapX = (qreal) (width  - width  * scale) / 2.0;
-    qreal gapY = (qreal) (height - height * scale) / 2.0;
+    qreal gapX = (width  - width  * scale) / 2.0;
+    qreal gapY = (height - height * scale) / 2.0;
 
     x = x * scale + gapX;
     y = y * scale + gapY;
 
-    QSize size(width, height);
+    QSizeF size(width, height);
 
     size.scale(width * upscale, height, Qt::KeepAspectRatioByExpanding);
 
-    QImage result(size, QImage::Format_ARGB32);
+    QImage result(size.toSize(), QImage::Format_ARGB32);
 
     result.fill(background);
 
