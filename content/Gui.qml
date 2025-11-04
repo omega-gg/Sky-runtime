@@ -188,6 +188,8 @@ Item
         run("");
 
         hideUi = true;
+
+        hideConsole();
     }
 
     function clear()
@@ -420,6 +422,11 @@ Item
     function showConsole()
     {
         if (stateConsole == 0) stateConsole = 1;
+    }
+
+    function hideConsole()
+    {
+        stateConsole = 0;
     }
 
     function toggleConsole()
