@@ -7,7 +7,7 @@ include(generate/Freepik/Freepik.pri)
 include(generate/fal/fal.pri)
 include(generate/Luma/Luma.pri)
 include(generate/LivePortrait/LivePortrait.pri)
-include(generate/FaceFusion/FaceFusion.pri)
+include(generate/faceFusion/faceFusion.pri)
 include(generate/rembg/rembg.pri)
 include(generate/colorTransfer/colorTransfer.pri)
 

@@ -1,8 +1,8 @@
-# [Bash](../../README.md) FaceFusion tools
+# [Bash](../../README.md) faceFusion tools
 
 ## Configuration
 
-Place your FaceFusion standalone folder into the SKY_PATH_BIN/FaceFusion folder or set
+Place your facefusion standalone folder into the SKY_PATH_BIN/facefusion folder or set
 SKY_PATH_FACE_FUSION.
 
 ## Tools

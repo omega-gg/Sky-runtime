@@ -16,7 +16,7 @@
 - [fal](generate/fal/README.md)
 - [Luma](generate/Luma/README.md)
 - [LivePortrait](generate/LivePortrait/README.md)
-- [FaceFusion](generate/FaceFusion/README.md)
+- [faceFusion](generate/faceFusion/README.md)
 - [rembg](generate/rembg/README.md)
 - [colorTransfer](generate/colorTransfer/README.md)
 
@@ -33,11 +33,11 @@
 
 - SKY_PATH_LIVE_PORTRAIT: Custom path to the LivePortrait folder
 
-- SKY_PATH_FACE_FUSION: Custom path to the FaceFusion folder
+- SKY_PATH_FACE_FUSION: Custom path to the facefusion folder
 
 - SKY_PATH_REMBG: Custom path to the rembg folder
 
-- SKY_PATH_COLOR_TRANSFER: Custom path to the colorTransfer folder
+- SKY_PATH_COLOR_TRANSFER: Custom path to the color_transfer folder
 
 ### Keys
 
