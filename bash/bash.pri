@@ -11,4 +11,7 @@ include(generate/faceFusion/faceFusion.pri)
 include(generate/rembg/rembg.pri)
 include(generate/colorTransfer/colorTransfer.pri)
 
+include(web/pannellum/pannellum.pri)
+include(web/spark/spark.pri)
+
 OTHER_FILES += bash/README.md \
