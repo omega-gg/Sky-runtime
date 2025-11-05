@@ -39,6 +39,8 @@
 
 - SKY_PATH_COLOR_TRANSFER: Custom path to the color_transfer folder
 
+- SKY_PATH_SPARK: Custom path to the spark folder
+
 ### Keys
 
 - FREEPIK_KEY: Freepik API key
