@@ -6,16 +6,16 @@
 
 ## Video
 
-- [FFmpeg](ffmpeg/README.md)
+- [ffmpeg](ffmpeg/README.md)
 - [yt-dlp](yt-dlp/README.md)
 
 ## Generate
 
-- [Topaz](generate/Topaz/README.md)
-- [Freepik](generate/Freepik/README.md)
+- [topaz](generate/topaz/README.md)
+- [freepik](generate/freepik/README.md)
 - [fal](generate/fal/README.md)
-- [Luma](generate/Luma/README.md)
-- [LivePortrait](generate/LivePortrait/README.md)
+- [luma](generate/luma/README.md)
+- [livePortrait](generate/livePortrait/README.md)
 - [faceFusion](generate/faceFusion/README.md)
 - [rembg](generate/rembg/README.md)
 - [colorTransfer](generate/colorTransfer/README.md)
