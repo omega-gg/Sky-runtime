@@ -9,6 +9,6 @@ include(generate/Luma/Luma.pri)
 include(generate/LivePortrait/LivePortrait.pri)
 include(generate/FaceFusion/FaceFusion.pri)
 include(generate/rembg/rembg.pri)
-include(generate/color_transfer/color_transfer.pri)
+include(generate/colorTransfer/colorTransfer.pri)
 
 OTHER_FILES += bash/README.md \

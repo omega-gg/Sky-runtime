@@ -18,7 +18,7 @@
 - [LivePortrait](generate/LivePortrait/README.md)
 - [FaceFusion](generate/FaceFusion/README.md)
 - [rembg](generate/rembg/README.md)
-- [color_transfer](generate/color_transfer/README.md)
+- [colorTransfer](generate/colorTransfer/README.md)
 
 ## Environment variables
 
@@ -37,7 +37,7 @@
 
 - SKY_PATH_REMBG: Custom path to the rembg folder
 
-- SKY_PATH_COLOR_TRANSFER: Custom path to the color_transfer folder
+- SKY_PATH_COLOR_TRANSFER: Custom path to the colorTransfer folder
 
 ### Keys
 

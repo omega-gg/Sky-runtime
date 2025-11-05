@@ -1,8 +1,8 @@
-# [Bash](../../README.md) color_transfer tools
+# [Bash](../../README.md) colorTransfer tools
 
 ## Configuration
 
-Place your color_transfer standalone folder into the SKY_PATH_BIN/color_transfer folder or set
+Place your colorTransfer standalone folder into the SKY_PATH_BIN/colorTransfer folder or set
 SKY_PATH_COLOR_TRANSFER.
 
 ## Tools
