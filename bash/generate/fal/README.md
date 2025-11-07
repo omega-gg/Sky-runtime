@@ -1,8 +1,8 @@
 # [Bash](../../README.md) generative tools
 
-## Configuration
+## Environment
 
-Set FAL_KEY=your_api_key in the environment.
+- FAL_KEY=your_api_key
 
 ## Tools
 

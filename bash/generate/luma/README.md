@@ -1,8 +1,8 @@
 # [Bash](../../README.md) Luma generative tools
 
-## Configuration
+## Environment
 
-Set LUMA_KEY=your_api_key in the environment.
+- LUMA_KEY=your_api_key.
 
 ## Tools
 

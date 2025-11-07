@@ -1,8 +1,8 @@
 # [Bash](../../README.md) Freepik generative tools
 
-## Configuration
+## Environment
 
-Set FREEPIK_KEY=your_api_key in the environment.
+- FREEPIK_KEY=your_api_key
 
 ## Tools
 

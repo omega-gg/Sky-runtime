@@ -1,8 +1,10 @@
 # [Bash](../../README.md) Topaz generative tools
 
-## Configuration
+## Environment
 
-Set SKY_PATH_TOPAZ and SKY_PATH_TOPAZ_MODEL folders in the environment.
+SKY_PATH_TOPAZ=your_topaz_folder
+
+SKY_PATH_TOPAZ_MODEL=your_topaz_model_folder
 
 ## Tools
 

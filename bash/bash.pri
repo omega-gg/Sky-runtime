@@ -3,6 +3,7 @@ include(ffmpeg/ffmpeg.pri)
 include(yt-dlp/yt-dlp.pri)
 
 include(generate/topaz/topaz.pri)
+include(generate/hugging/hugging.pri)
 include(generate/freepik/freepik.pri)
 include(generate/fal/fal.pri)
 include(generate/luma/luma.pri)
