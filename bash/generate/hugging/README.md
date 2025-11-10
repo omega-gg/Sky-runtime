@@ -2,10 +2,12 @@
 
 ## Environment
 
-- HUGGING_QWEN_ANGLE_ENDPOINT=your_endpoint_url
+- HUGGING_KEY=your_token
 
-- HUGGING_QWEN_ANGLE_TOKEN=your_token
+- HUGGING_QWEN_ANGLE_ENDPOINT=your_endpoint_url
 
 ## Tools
 
+- [start.sh](start.sh): Start a Hugging Face endpoint.
+- [stop.sh](stop.sh): Stop a Hugging Face endpoint.
 - [qwenAngle.sh](qwenAngle.sh): Change the angle of an image.

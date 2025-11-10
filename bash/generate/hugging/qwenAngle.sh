@@ -31,7 +31,7 @@ root="$(dirname "$0")"
 
 api="$HUGGING_QWEN_ANGLE_ENDPOINT"
 
-token="$HUGGING_QWEN_ANGLE_TOKEN"
+key="$HUGGING_KEY"
 
 ffmpeg="${SKY_PATH_FFMPEG:-"$SKY_PATH_BIN/ffmpeg"}"
 
@@ -49,14 +49,14 @@ run()
 {
     curl --request POST --url "$api" --ssl-no-revoke \
          --header "Content-Type: application/json"   \
-         --header "Authorization: Bearer $token"     \
+         --header "Authorization: Bearer $key"       \
          --data @data.txt
 }
 
 get()
 {
     curl --request GET --url "$api/$1" --ssl-no-revoke \
-         --header "Authorization: Bearer $token"
+         --header "Authorization: Bearer $key"
 }
 
 getWidth()
@@ -101,9 +101,9 @@ if [ -z "$api" ]; then
     exit 1
 fi
 
-if [ -z "$token" ]; then
+if [ -z "$key" ]; then
 
-    echo "qwenAngle: HUGGING_QWEN_ANGLE_TOKEN is missing in the environment."
+    echo "qwenAngle: HUGGING_KEY is missing in the environment."
 
     exit 1
 fi
