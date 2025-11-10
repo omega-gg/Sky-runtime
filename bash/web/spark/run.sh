@@ -32,9 +32,9 @@ spark="${SKY_PATH_SPARK:-"$SKY_PATH_BIN/spark"}"
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
-if [ $# != 1 ] || [ $1 != "default" ]; then
+if [ $# != 0 -a $# != 1 ] || [ $# = 1 -a "$1" = "help" ] ; then
 
-    echo "Usage: run <default>"
+    echo "Usage: run"
 
     exit 1
 fi

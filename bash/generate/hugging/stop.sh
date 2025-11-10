@@ -29,7 +29,7 @@ set -e
 
 api="https://api.endpoints.huggingface.cloud/v2/endpoint"
 
-token="$HUGGING_TOKEN"
+key="$HUGGING_KEY"
 
 #--------------------------------------------------------------------------------------------------
 # Functions
@@ -39,13 +39,13 @@ run()
 {
     curl --request POST --url "$api/$1/pause" --ssl-no-revoke \
          --header "Content-Type: application/json"            \
-         --header "Authorization: Bearer $token"
+         --header "Authorization: Bearer $key"
 }
 
 get()
 {
     curl --request GET --url "$api/$1" --ssl-no-revoke \
-         --header "Authorization: Bearer $token"
+         --header "Authorization: Bearer $key"
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -62,9 +62,9 @@ if [ $# != 1 ]; then
     exit 1
 fi
 
-if [ -z "$token" ]; then
+if [ -z "$key" ]; then
 
-    echo "qwenAngle: HUGGING_TOKEN is missing in the environment."
+    echo "qwenAngle: HUGGING_KEY is missing in the environment."
 
     exit 1
 fi
