@@ -39,7 +39,7 @@ if [ $# != 3 -a $# != 4 ]; then
     echo "brightness: default = 0.0"
     echo "contrast:   default = 1.0"
     echo ""
-    echo "examples:"
+    echo "example:"
     echo "    adjust input.png output.jpg 0.5 1.2"
 
     exit 1

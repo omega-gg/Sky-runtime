@@ -42,8 +42,9 @@ if [ $# -lt 1 -o $# -gt 4 ]; then
 
     echo "Usage: rectangle <output> [width = $width] [height = $height] [color = $color]"
     echo ""
-    echo "examples: rectangle output.png 320"
-    echo "          rectangle output.png 320 200 white"
+    echo "examples:"
+    echo "    rectangle output.png 320"
+    echo "    rectangle output.png 320 200 white"
 
     exit 1
 fi

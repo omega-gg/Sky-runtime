@@ -70,8 +70,9 @@ if [ $# -lt 3 -o $# -gt 9 ]; then
     echo ""
     echo "position: left, top, bottom, right"
     echo ""
-    echo "examples: text input.png output.png \"text\""
-    echo "          text input.png output.png \"text\" 128 left green white verdana.ttf"
+    echo "examples:"
+    echo "    text input.png output.png \"text\""
+    echo "    text input.png output.png \"text\" 128 left green white verdana.ttf"
 
     exit 1
 fi

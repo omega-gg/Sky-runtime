@@ -67,8 +67,9 @@ if [ $# -lt 3 -o $# -gt 7 ]; then
     echo ""
     echo "position: left, top, bottom, right"
     echo ""
-    echo "examples: icon input.png output.png icon.png"
-    echo "          icon input.png output.png icon.svg 128 left white 2.4"
+    echo "examples:"
+    echo "    icon input.png output.png icon.png"
+    echo "    icon input.png output.png icon.svg 128 left white 2.4"
 
     exit 1
 fi

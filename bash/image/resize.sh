@@ -42,8 +42,9 @@ if [ $# != 4 -a $# != 5 ]; then
     echo "        sinc, lanczos, spline, print_info, accurate_rnd, full_chroma_int"
     echo "        full_chroma_inp, bitexact, unstable"
     echo ""
-    echo "examples: resize input.png output.png 128 128"
-    echo "          resize input.png output.png 128 -1"
+    echo "examples:"
+    echo "    resize input.png output.png 128 128"
+    echo "    resize input.png output.png 128 -1"
 
     exit 1
 fi

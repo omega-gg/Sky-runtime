@@ -2,7 +2,7 @@
 
 ## Environment
 
-- HUGGING_QWEN_ANGLE_URL=your_endpoint_url
+- HUGGING_QWEN_ANGLE_ENDPOINT=your_endpoint_url
 
 - HUGGING_QWEN_ANGLE_TOKEN=your_token
 

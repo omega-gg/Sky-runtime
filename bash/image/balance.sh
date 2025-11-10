@@ -38,7 +38,7 @@ if [ $# != 5 ]; then
     echo ""
     echo "red, green, blue: -1.0 to 1.0 (default = 0.0)"
     echo ""
-    echo "examples:"
+    echo "example:"
     echo "    color input.png output.jpg 0.1 0 -0.1"
 
     exit 1

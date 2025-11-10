@@ -25,25 +25,19 @@ set -e
 #--------------------------------------------------------------------------------------------------
 # Settings
 #--------------------------------------------------------------------------------------------------
-# https://docs.freepik.com/api-reference/image-relight/post-image-relight
+# https://huggingface.co/3unjee/qwen-angle
 
-api="https://api.freepik.com/v1/ai/image-relight"
+root="$(dirname "$0")"
 
-freepik_key="$FREEPIK_KEY"
+api="$HUGGING_QWEN_ANGLE_ENDPOINT"
 
-style="standard"
-# Available options:
-# standard,
-# darker_but_realistic,
-# clean,
-# smooth,
-# brighter,
-# contrasted_n_hdr,
-# just_composition
+token="$HUGGING_QWEN_ANGLE_TOKEN"
 
-light_transfer_strength="100"
+ffmpeg="${SKY_PATH_FFMPEG:-"$SKY_PATH_BIN/ffmpeg"}"
 
-change_background="false"
+ffprobe="${SKY_PATH_FFPROBE:-"$SKY_PATH_BIN/ffprobe"}"
+
+resize="$root/../../image/resize.sh"
 
 #--------------------------------------------------------------------------------------------------
 # Functions
@@ -53,40 +47,50 @@ run()
 {
     curl --request POST --url "$api" --ssl-no-revoke \
          --header "Content-Type: application/json"   \
-         --header "x-freepik-api-key: $freepik_key"  \
+         --header "Authorization: Bearer $token"     \
          --data @data.txt
 }
 
 get()
 {
     curl --request GET --url "$api/$1" --ssl-no-revoke \
-         --header "x-freepik-api-key: $freepik_key"
+         --header "Authorization: Bearer $token"
+}
+
+getWidth()
+{
+    "$ffprobe" -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$1"
+}
+
+getHeight()
+{
+    "$ffprobe" -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$1"
 }
 
 #--------------------------------------------------------------------------------------------------
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
-if [ $# -lt 3 -o $# -gt 6 ]; then
+if [ $# != 3 ]; then
 
-    echo "Usage: relight <image input> <image reference> <image output>"
-    echo "               [style = standard] [light_transfer_strength = 100]"
-    echo "               [change_background = false]"
+    echo "Usage: qwenAngle <image input> <image output> <prompt>"
     echo ""
-    echo "style: standard"
-    echo "       darker_but_realistic"
-    echo "       clean"
-    echo "       smooth"
-    echo "       brighter"
-    echo "       contrasted_n_hdr"
-    echo "       just_composition"
+    echo "example:"
+    echo "    qwenAngle input.png output.png 'rotate the camera 45 degrees to the left'"
 
     exit 1
 fi
 
-if [ -z "$freepik_key" ]; then
+if [ -z "$api" ]; then
 
-    echo "relight: FREEPIK_KEY is missing in the environment."
+    echo "qwenAngle: HUGGING_QWEN_ANGLE_ENDPOINT is missing in the environment."
+
+    exit 1
+fi
+
+if [ -z "$token" ]; then
+
+    echo "qwenAngle: HUGGING_QWEN_ANGLE_TOKEN is missing in the environment."
 
     exit 1
 fi
@@ -95,23 +99,39 @@ fi
 # Configuration
 #--------------------------------------------------------------------------------------------------
 
-if [ $# -ge 4 ]; then style="$4"; fi
+width=$(getWidth "$1")
 
-if [ $# -ge 5 ]; then light_transfer_strength="$5"; fi
-
-if [ $# -ge 6 ]; then change_background="$6"; fi
+height=$(getHeight "$1")
 
 #--------------------------------------------------------------------------------------------------
 # Run
 #--------------------------------------------------------------------------------------------------
 
+temp="$root/temp.png"
+
+size="1600"
+
+# Max 1024x1024, preserve aspect, no padding, high-quality scaling
+"$ffmpeg" -y -i "$1" \
+  -vf "scale=w='ceil(iw*min($size/iw,$size/ih))':h='ceil(ih*min($size/iw,$size/ih))':force_original_aspect_ratio=decrease:flags=lanczos" \
+  "$temp"
+
 cat > data.txt <<EOF
 {
-    "image": "$(base64 "$1")",
-    "transfer_light_from_reference_image": "$(base64 "$2")",
-    "light_transfer_strength": $light_transfer_strength,
-    "change_background": $change_background,
-    "style": "$style"
+    "inputs":
+    {
+        "image": "$(base64 "$temp")",
+        "rotate_deg": "-90",
+        "move_forward": 0,
+        "vertical_tilt": 0,
+        "wideangle": false,
+        "seed": 0,
+        "randomize_seed": true,
+        "true_guidance_scale": 1.0,
+        "num_inference_steps": 4,
+        "width": "$(getWidth "$temp")",
+        "height": "$(getHeight "$temp")"
+    }
 }
 EOF
 
@@ -121,26 +141,8 @@ echo "$data"
 
 rm data.txt
 
-id=$(echo "$data" | grep -o '"task_id":"[^"]*' | grep -o '[^"]*$')
+rm "$temp"
 
-while :
-do
-    sleep 10
+data=$(echo "$data" | grep -o '"image_base64":"[^"]*' | sed 's/"image_base64":"//')
 
-    data=$(get "$id")
-
-    echo "$data"
-
-    status=$(echo "$data" | grep -o '"status":"[^"]*' | grep -o '[^"]*$')
-
-    if [ "$status" != "COMPLETED" ]; then
-
-        continue
-    fi
-
-    url=$(echo "$data" | grep -o '"generated":\["[^"]*' | grep -o '[^"]*$')
-
-    break
-done
-
-curl --ssl-no-revoke -L -o "$3" "$url"
+echo "$data" | base64 -d > "$2"

@@ -36,7 +36,8 @@ if [ $# -lt 3 -o $# -gt 4 ]; then
 
     echo "Usage: border <input> <output> <size> [color = transparent]"
     echo ""
-    echo "examples: border input.png output.png 32 white"
+    echo "example:"
+    echo "    border input.png output.png 32 white"
 
     exit 1
 fi

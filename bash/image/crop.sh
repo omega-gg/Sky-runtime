@@ -66,11 +66,12 @@ if [ $# -lt 3 -o $# -gt 6 ]; then
 
     echo "Usage: crop <input> <output> <left | ratio> [top] [right = left] [bottom = top]"
     echo ""
-    echo "examples: crop input.png output.png 128 128"
-    echo "          crop input.png output.png 32 64 48 56"
-    echo "          crop input.png output.png 0.3 0.2"
-    echo "          crop input.png output.png 16:9"
-    echo "          crop input.png output.png 2.39:1"
+    echo "examples:"
+    echo "    crop input.png output.png 128 128"
+    echo "    crop input.png output.png 32 64 48 56"
+    echo "    crop input.png output.png 0.3 0.2"
+    echo "    crop input.png output.png 16:9"
+    echo "    crop input.png output.png 2.39:1"
 
     exit 1
 fi
