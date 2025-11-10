@@ -39,6 +39,8 @@ ffprobe="${SKY_PATH_FFPROBE:-"$SKY_PATH_BIN/ffprobe"}"
 
 resize="$root/../../image/resize.sh"
 
+size="1024"
+
 #--------------------------------------------------------------------------------------------------
 # Functions
 #--------------------------------------------------------------------------------------------------
@@ -71,12 +73,23 @@ getHeight()
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
-if [ $# != 3 ]; then
+if [ $# -lt 3 -o $# -gt 4 ]; then
 
-    echo "Usage: qwenAngle <image input> <image output> <prompt>"
+    echo "Usage: qwenAngle <image input> <image output> <prompt> [size = $size]"
+    echo ""
+    echo "prompts:"
+    echo "    将镜头向左旋转45度 Rotate the camera 45 degrees to the left"
+    echo "    将镜头向右旋转45度 Rotate the camera 45 degrees to the right"
+    echo "    将镜头转为特写镜头 Turn the camera to a close-up"
+    echo "    将镜头向前移动 Move the camera forward"
+    echo "    将相机转向鸟瞰视角 Turn the camera to a bird's-eye view"
+    echo "    将相机切换到仰视视角 Turn the camera to a worm's-eye view"
+    echo "    将镜头转为广角镜头 Turn the camera to a wide-angle lens"
+    echo ""
+    echo "Chinese syntax matters, replace rotation angles by yours."
     echo ""
     echo "example:"
-    echo "    qwenAngle input.png output.png 'rotate the camera 45 degrees to the left'"
+    echo "    qwenAngle input.png output.png \"将镜头向左旋转90度 Rotate the camera 90 degrees to the left\""
 
     exit 1
 fi
@@ -99,6 +112,8 @@ fi
 # Configuration
 #--------------------------------------------------------------------------------------------------
 
+if [ $# -ge 4 ]; then size="$4"; fi
+
 width=$(getWidth "$1")
 
 height=$(getHeight "$1")
@@ -109,35 +124,27 @@ height=$(getHeight "$1")
 
 temp="$root/temp.png"
 
-size="1600"
-
-# Max 1024x1024, preserve aspect, no padding, high-quality scaling
 "$ffmpeg" -y -i "$1" \
-  -vf "scale=w='ceil(iw*min($size/iw,$size/ih))':h='ceil(ih*min($size/iw,$size/ih))':force_original_aspect_ratio=decrease:flags=lanczos" \
-  "$temp"
+    -vf "scale=${size}:${size}:force_original_aspect_ratio=decrease:flags=lanczos" \
+    "$temp"
 
 cat > data.txt <<EOF
 {
     "inputs":
     {
         "image": "$(base64 "$temp")",
-        "rotate_deg": "-90",
-        "move_forward": 0,
-        "vertical_tilt": 0,
-        "wideangle": false,
         "seed": 0,
         "randomize_seed": true,
         "true_guidance_scale": 1.0,
         "num_inference_steps": 4,
         "width": "$(getWidth "$temp")",
-        "height": "$(getHeight "$temp")"
+        "height": "$(getHeight "$temp")",
+        "prompt": "$3"
     }
 }
 EOF
 
 data=$(run)
-
-echo "$data"
 
 rm data.txt
 
