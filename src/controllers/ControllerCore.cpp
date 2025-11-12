@@ -578,7 +578,7 @@ ControllerCore::ControllerCore() : WController()
 {
     QString name = source;
 
-    if (WControllerNetwork::extractUrlExtension(name) == "sh") name += ".sh";
+    if (WControllerNetwork::extractUrlExtension(name) != "sh") name += ".sh";
 
 #ifdef SK_DEPLOY
 #ifdef Q_OS_ANDROID

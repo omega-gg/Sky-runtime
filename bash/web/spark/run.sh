@@ -28,6 +28,8 @@ set -e
 
 spark="${SKY_PATH_SPARK:-"$SKY_PATH_BIN/spark"}"
 
+port="3000"
+
 #--------------------------------------------------------------------------------------------------
 # Syntax
 #--------------------------------------------------------------------------------------------------
@@ -44,5 +46,22 @@ fi
 #--------------------------------------------------------------------------------------------------
 
 cd "$spark"
+
+if python - <<PY
+import socket, sys
+s = socket.socket()
+try:
+    s.settimeout(0.5)
+    s.connect(("127.0.0.1", int("$port")))
+    print("http://localhost:$port (already running)")
+    sys.exit(0)
+except OSError:
+    sys.exit(1)
+finally:
+    s.close()
+PY
+then
+    exit 0
+fi
 
 npm run site:serve

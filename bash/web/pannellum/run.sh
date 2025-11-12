@@ -53,6 +53,23 @@ if [ $# -ge 1 ]; then port="$1"; fi
 
 cd "$pannellum/build"
 
+if python - <<PY
+import socket, sys
+s = socket.socket()
+try:
+    s.settimeout(0.5)
+    s.connect(("127.0.0.1", int("$port")))
+    print("http://localhost:$port/pannellum.htm (already running)")
+    sys.exit(0)
+except OSError:
+    sys.exit(1)
+finally:
+    s.close()
+PY
+then
+    exit 0
+fi
+
 echo "http://localhost:$port/pannellum.htm"
 
 python -m http.server $port
