@@ -39,6 +39,10 @@
     #include <QtAndroid>
 #endif
 #endif
+#ifndef QT_OLD
+#include <QCollator>
+#endif
+
 
 // Sk includes
 #include <WControllerApplication>
@@ -547,17 +551,43 @@ ControllerCore::ControllerCore() : WController()
 
     //---------------------------------------------------------------------------------------------
 
+    QList<QFileInfo> entries;
+
 #ifdef SK_DEPLOY
 #ifdef Q_OS_ANDROID
-    loadScripts("assets:/script");
+    loadFolder(entries, "assets:/script");
 #else
-    loadScripts(WControllerFile::applicationPath("script"));
+    loadFolder(entries, WControllerFile::applicationPath("script"));
 #endif
 #else
-    loadScripts(WControllerFile::applicationPath(PATH_SCRIPT));
+    loadFolder(entries, WControllerFile::applicationPath(PATH_SCRIPT));
 #endif
 
-    loadScripts(_path + "/script");
+    loadFolder(entries, _path + "/script");
+
+#ifndef QT_OLD
+    // NOTE: We want test.sky to be listed before test-extra.sky.
+
+    QCollator collator;
+
+    collator.setNumericMode(true);
+
+    std::sort(entries.begin(), entries.end(), [&](const QFileInfo & a, const QFileInfo & b)
+    {
+        return collator.compare(a.fileName(), b.fileName()) < 0;
+    });
+#endif
+
+    foreach (QFileInfo info, entries)
+    {
+        ControllerCoreItem item;
+
+        item.fileName = info.absoluteFilePath();
+
+        item.name = WControllerFile::fileBaseName(info.fileName().toLower());
+
+        _library.append(item);
+    }
 
     emit libraryLoaded();
 }
@@ -1188,21 +1218,13 @@ void ControllerCore::loadData(DataScript * script, const QString & fileName)
     else loadData(script, _path + "/script/" + name);
 }
 
-void ControllerCore::loadScripts(const QString & path)
+void ControllerCore::loadFolder(QList<QFileInfo> & entries, const QString & path)
 {
-    QFileInfoList entries = QDir(path).entryInfoList(QDir::Files);
-
-    foreach (QFileInfo info, entries)
+    foreach (const QFileInfo & info, QDir(path).entryInfoList(QDir::Files))
     {
         if (info.suffix().toLower() != "sky") continue;
 
-        ControllerCoreItem item;
-
-        item.fileName = info.absoluteFilePath();
-
-        item.name = WControllerFile::fileBaseName(info.fileName().toLower());
-
-        _library.append(item);
+        entries.append(info);
     }
 }
 

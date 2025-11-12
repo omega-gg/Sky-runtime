@@ -26,6 +26,7 @@
 // Qt includes
 #include <QImage>
 #include <QVariant>
+#include <QFileInfo>
 
 // Sk includes
 #include <WController>
@@ -208,7 +209,7 @@ private: // Functions
 
     void loadData(DataScript * script, const QString & fileName);
 
-    void loadScripts(const QString & path);
+    void loadFolder(QList<QFileInfo> & entries, const QString & path);
 
     void renderItem(QPainter          & painter,
                     WDeclarativeImage * item,

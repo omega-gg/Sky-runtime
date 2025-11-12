@@ -305,6 +305,7 @@ OTHER_FILES += environment.sh \
                content/PageDefault.qml \
                content/PageConsole.qml \
                content/PageScript.qml \
+               content/PageScriptDefault.qml \
                script/hello.sky \
                script/player.sky \
                script/web-view.sky \

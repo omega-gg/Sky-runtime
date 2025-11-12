@@ -82,9 +82,9 @@ Item
                 onClicked: gui.create(template)
             }
 
-            ButtonPiano
+            ButtonPianoFull
             {
-                id: buttonRun
+                id: buttonOpen
 
                 anchors.left: buttonNew.right
 
@@ -95,26 +95,29 @@ Item
 
                 padding: st.dp16
 
-                // NOTE: We hide this for the default sky script.
-                visible: (currentIndex != 0)
+                icon          : st.icon_external
+                iconSourceSize: st.size14x14
 
-                text: qsTr("Run script")
+                text: qsTr("User folder")
 
-                onClicked: gui.run(core.getLibraryFileName(currentIndex))
+                onClicked: gui.openFile(controllerFile.pathStorage)
             }
 
-            ButtonPiano
+            ButtonPianoFull
             {
-                anchors.left: buttonRun.right
-                anchors.top : buttonRun.top
+                anchors.left: buttonOpen.right
+                anchors.top : buttonOpen.top
 
                 borderBottom: borderSize
 
                 padding: st.dp16
 
-                text: qsTr("Open folder")
+                icon          : st.icon_external
+                iconSourceSize: st.size14x14
 
-                onClicked: gui.openFile(core.getLibraryPath(currentIndex))
+                text: qsTr("Application folder")
+
+                onClicked: gui.openFile(controllerFile.pathApplication)
             }
         }
 

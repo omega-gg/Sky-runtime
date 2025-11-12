@@ -110,6 +110,8 @@ Item
         // NOTE: It's probably better to append everything at once.
         model.append(array);
 //#END
+
+        list.currentIndex = 0;
     }
 
     function pApplyPage(index)
@@ -174,6 +176,19 @@ Item
         script.deleteNow();
     }
 
+    function pGetSource()
+    {
+        if (currentIndex == -1)
+        {
+            return "";
+        }
+        else if (currentIndex == 0)
+        {
+            return Qt.resolvedUrl("PageScriptDefault.qml");
+        }
+        else return Qt.resolvedUrl("PageScript.qml");
+    }
+
     //---------------------------------------------------------------------------------------------
     // Children
     //---------------------------------------------------------------------------------------------
@@ -228,17 +243,7 @@ Item
 
             delegate: ComponentList
             {
-                function onPress()
-                {
-                    if (list.currentIndex == index)
-                    {
-                        list.currentIndex = -1;
-
-                        return;
-                    }
-
-                    list.currentIndex = index;
-                }
+                function onPress() { list.currentIndex = index }
             }
 
             onCurrentIndexChanged: pApplyPage(currentIndex)
@@ -271,7 +276,7 @@ Item
             anchors.top   : borderA.top
             anchors.bottom: list.bottom
 
-            source: (currentIndex == -1) ? "" : Qt.resolvedUrl("PageScript.qml")
+            source: pGetSource()
         }
     }
 
