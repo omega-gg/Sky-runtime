@@ -37,8 +37,6 @@ void DataLocal_patch(QString & data, const QString & api)
     QString path = wControllerFile->pathStorage();
 
     WControllerFile::deleteFolder(path + "/backend");
-    WControllerFile::deleteFolder(path + "/script");
-    WControllerFile::deleteFolder(path + "/bash");
     WControllerFile::deleteFolder(path + "/cache");
 #ifndef SK_NO_TORRENT
     WControllerFile::deleteFolder(path + "/torrents");

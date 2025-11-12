@@ -487,50 +487,10 @@ ControllerCore::ControllerCore() : WController()
     _bash = new WScriptBash(this);
 
     //---------------------------------------------------------------------------------------------
-    // Script
+    // Paths
 
-    path = _path + "/script";
-
-    if (QFile::exists(path) == false)
-    {
-        if (QDir().mkpath(path) == false)
-        {
-            qWarning("ControllerCore::run: Failed to create folder %s.", path.C_STR);
-
-            return;
-        }
-
-        copyScripts(path);
-    }
-
-    //---------------------------------------------------------------------------------------------
-    // Bash
-
-    path = _path + "/bash";
-
-    if (QFile::exists(path) == false)
-    {
-        if (QDir().mkpath(path) == false)
-        {
-            qWarning("ControllerCore::run: Failed to create folder %s.", path.C_STR);
-
-            return;
-        }
-
-        copyBash(path);
-    }
-
-    //---------------------------------------------------------------------------------------------
-    // User
-
-    path = _path + "/user";
-
-    if (QFile::exists(path) == false)
-    {
-        if (createPath(path + "/bin")    == false) return;
-        if (createPath(path + "/script") == false) return;
-        if (createPath(path + "/bash")   == false) return;
-    }
+    if (createPath(_path + "/script") == false) return;
+    if (createPath(_path + "/bash")   == false) return;
 
     //---------------------------------------------------------------------------------------------
     // DataOnline
@@ -587,8 +547,17 @@ ControllerCore::ControllerCore() : WController()
 
     //---------------------------------------------------------------------------------------------
 
+#ifdef SK_DEPLOY
+#ifdef Q_OS_ANDROID
+    loadScripts("assets:/script");
+#else
+    loadScripts(WControllerFile::applicationPath("script"));
+#endif
+#else
+    loadScripts(WControllerFile::applicationPath(PATH_SCRIPT));
+#endif
+
     loadScripts(_path + "/script");
-    loadScripts(_path + "/user/script");
 
     emit libraryLoaded();
 }
@@ -607,15 +576,27 @@ ControllerCore::ControllerCore() : WController()
 
 /* Q_INVOKABLE */ QString ControllerCore::bashResolve(const QString & source) const
 {
-    if (source.startsWith("user/"))
-    {
-        return _path + "/bash/user/" + source + ".sh";
-    }
-    else if (WControllerNetwork::extractUrlExtension(source) == "sh")
-    {
-        return source;
-    }
-    else return _path + "/bash/" + source + ".sh";
+    QString name = source;
+
+    if (WControllerNetwork::extractUrlExtension(name) == "sh") name += ".sh";
+
+#ifdef SK_DEPLOY
+#ifdef Q_OS_ANDROID
+    QString fileName = "assets:/bash/" + name;
+#else
+    QString fileName = WControllerFile::applicationPath("bash/" + name);
+#endif
+#else
+    QString fileName = WControllerFile::applicationPath(PATH_BASH + "/" + name);
+#endif
+
+    if (QFile::exists(fileName)) return fileName;
+
+    fileName = _path + "/bash/" + name;
+
+    if (QFile::exists(fileName)) return fileName;
+
+    return source;
 }
 
 /* Q_INVOKABLE */ bool ControllerCore::render(const QString      & fileName,
@@ -1135,32 +1116,6 @@ WControllerFileReply * ControllerCore::copyBackends(const QString & path) const
 #endif
 }
 
-WControllerFileReply * ControllerCore::copyScripts(const QString & path) const
-{
-    // NOTE: We want to copy the folder synchronously
-
-#ifdef SK_DEPLOY
-#ifdef Q_OS_ANDROID
-    return WControllerFile::copyFiles("assets:/script", path, "sky", false);
-#else
-    return WControllerFile::copyFiles(WControllerFile::applicationPath("script"), path, "sky", false);
-#endif
-#else
-    return WControllerFile::copyFiles(WControllerFile::applicationPath(PATH_SCRIPT), path, "sky", false);
-#endif
-}
-
-WControllerFileReply * ControllerCore::copyBash(const QString & path) const
-{
-    // NOTE: We want to copy the folder synchronously
-
-#ifdef SK_DEPLOY
-    return WControllerFile::copyFolders(WControllerFile::applicationPath("bash"), path, false);
-#else
-    return WControllerFile::copyFolders(WControllerFile::applicationPath(PATH_BASH), path, false);
-#endif
-}
-
 void ControllerCore::loadData(DataScript * script, const QString & fileName)
 {
     qDebug("LOADING %s", fileName.C_STR);
@@ -1214,7 +1169,23 @@ void ControllerCore::loadData(DataScript * script, const QString & fileName)
 
     if (parent == "sky") return;
 
-    loadData(script, _path + "/script/" + parent + ".sky");
+    QString name = parent + ".sky";
+
+#ifdef SK_DEPLOY
+#ifdef Q_OS_ANDROID
+    QString path = "assets:/script/" + name;
+#else
+    QString path = WControllerFile::applicationPath("script/" + name);
+#endif
+#else
+    QString path = WControllerFile::applicationPath(PATH_SCRIPT + "/" + name);
+#endif
+
+    if (QFile::exists(path))
+    {
+        loadData(script, path);
+    }
+    else loadData(script, _path + "/script/" + name);
 }
 
 void ControllerCore::loadScripts(const QString & path)

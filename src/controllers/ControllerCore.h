@@ -205,8 +205,6 @@ private: // Functions
     void createIndex();
 
     WControllerFileReply * copyBackends(const QString & path) const;
-    WControllerFileReply * copyScripts (const QString & path) const;
-    WControllerFileReply * copyBash    (const QString & path) const;
 
     void loadData(DataScript * script, const QString & fileName);
 
