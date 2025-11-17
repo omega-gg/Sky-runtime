@@ -173,6 +173,7 @@ public: // Interface
     Q_INVOKABLE void clearWatchers();
 
     Q_INVOKABLE void loadRecent();
+    Q_INVOKABLE void saveRecent(const QString & fileName);
 
     // Script
 
