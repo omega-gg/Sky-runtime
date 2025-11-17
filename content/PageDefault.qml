@@ -134,13 +134,15 @@ Item
 
     function pApplyRow(row, recents, index)
     {
-        for (var i = index; i < recents.length && i < index + 4; i++)
+        for (var i = 0; index < recents.length && i < 4; i++)
         {
             var item = row.repeater.itemAt(i);
 
-            item.text = controllerFile.fileBaseName(recents[i]);
+            item.text = controllerFile.fileBaseName(recents[index]);
 
             item.enabled = true;
+
+            index++;
         }
     }
 
