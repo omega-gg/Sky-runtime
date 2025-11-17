@@ -80,6 +80,15 @@ Item
     // Functions
     //---------------------------------------------------------------------------------------------
 
+    function openScript()
+    {
+        var fileName = core.openScript();
+
+        if (fileName == "") return;
+
+        gui.run(fileName);
+    }
+
     function getTemplate(name)
     {
         return "// " + name + "\n" +
@@ -231,7 +240,9 @@ Item
 
         anchors.centerIn: parent
 
-        height: itemTextDrop.y + itemTextDrop.height
+        width: row.width
+
+        height: row.y + row.height
 
         TextBase
         {
@@ -244,9 +255,9 @@ Item
             font.pixelSize: st.dp32
         }
 
-        TextBase
+        Row
         {
-            id: itemTextDrop
+            id: row
 
             anchors.top: itemText.bottom
 
@@ -254,11 +265,36 @@ Item
 
             anchors.horizontalCenter: parent.horizontalCenter
 
-            text: qsTr("Drop a .sky file to begin")
+            spacing: st.dp6
 
-            color: st.text3_color
+            TextBase
+            {
+                text: qsTr("Drop or")
 
-            font.pixelSize: st.dp20
+                color: st.text3_color
+
+                font.pixelSize: st.dp20
+            }
+
+            TextLink
+            {
+                text: qsTr("open")
+
+                font.pixelSize: st.dp20
+
+                onClicked: openScript()
+            }
+
+            TextBase
+            {
+                id: itemTextDrop
+
+                text: qsTr("a .sky file")
+
+                color: st.text3_color
+
+                font.pixelSize: st.dp20
+            }
         }
     }
 

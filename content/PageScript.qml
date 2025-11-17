@@ -73,6 +73,7 @@ Item
                 id: buttonNew
 
                 borderLeft  : borderSize
+                borderTop   : borderSize
                 borderBottom: borderSize
 
                 padding: st.dp16
@@ -91,6 +92,7 @@ Item
                 anchors.leftMargin: st.dp16
 
                 borderLeft  : borderSize
+                borderTop   : borderSize
                 borderBottom: borderSize
 
                 padding: st.dp16
@@ -108,6 +110,7 @@ Item
                 anchors.left: buttonRun.right
                 anchors.top : buttonRun.top
 
+                borderTop   : borderSize
                 borderBottom: borderSize
 
                 padding: st.dp16

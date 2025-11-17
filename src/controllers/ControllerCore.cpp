@@ -1154,6 +1154,17 @@ ControllerCore::ControllerCore() : WController()
 #endif
 }
 
+/* Q_INVOKABLE static */ QString ControllerCore::openScript()
+{
+#ifdef SK_DESKTOP
+    return QFileDialog::getOpenFileName(NULL, tr("Open .sky"),
+                                        WControllerFile::pathDocuments(),
+                                        tr("Sky script (*.sky)"));
+#else
+    return QString();
+#endif
+}
+
 /* Q_INVOKABLE static */ QQuickItem * ControllerCore::pickItem(const QVariantList & items,
                                                                qreal                x,
                                                                qreal                y)

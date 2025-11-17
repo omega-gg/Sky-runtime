@@ -73,6 +73,7 @@ Item
                 id: buttonNew
 
                 borderLeft  : borderSize
+                borderTop   : borderSize
                 borderBottom: borderSize
 
                 padding: st.dp16
@@ -82,15 +83,32 @@ Item
                 onClicked: gui.create(template)
             }
 
-            ButtonPianoFull
+            ButtonPiano
             {
                 id: buttonOpen
 
                 anchors.left: buttonNew.right
 
+                borderTop   : borderSize
+                borderBottom: borderSize
+
+                padding: st.dp16
+
+                text: qsTr("Open script")
+
+                onClicked: openScript()
+            }
+
+            ButtonPianoFull
+            {
+                id: buttonFolder
+
+                anchors.left: buttonOpen.right
+
                 anchors.leftMargin: st.dp16
 
                 borderLeft  : borderSize
+                borderTop   : borderSize
                 borderBottom: borderSize
 
                 padding: st.dp16
@@ -105,9 +123,10 @@ Item
 
             ButtonPianoFull
             {
-                anchors.left: buttonOpen.right
-                anchors.top : buttonOpen.top
+                anchors.left: buttonFolder.right
+                anchors.top : buttonFolder.top
 
+                borderTop   : borderSize
                 borderBottom: borderSize
 
                 padding: st.dp16

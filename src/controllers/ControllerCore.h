@@ -195,6 +195,8 @@ public: // Interface
 public: // Static functions
     Q_INVOKABLE static QString createScript(const QString & text);
 
+    Q_INVOKABLE static QString openScript();
+
     Q_INVOKABLE static QQuickItem * pickItem(const QVariantList & items, qreal x, qreal y);
 
 #ifndef SK_NO_TORRENT
