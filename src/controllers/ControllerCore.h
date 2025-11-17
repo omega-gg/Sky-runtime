@@ -96,6 +96,8 @@ class ControllerCore : public WController
 
     Q_PROPERTY(int libraryCount READ libraryCount NOTIFY libraryLoaded)
 
+    Q_PROPERTY(QStringList recents READ recents NOTIFY recentsChanged)
+
 #if defined(SK_DESKTOP) && defined(SK_CONSOLE) == false
     Q_PROPERTY(bool associateSky READ associateSky WRITE setAssociateSky
                NOTIFY associateSkyChanged)
@@ -170,12 +172,18 @@ public: // Interface
 
     Q_INVOKABLE void clearWatchers();
 
+    Q_INVOKABLE void loadRecent();
+
+    // Script
+
     Q_INVOKABLE QString getName(int index) const;
 
     Q_INVOKABLE QString getVersion      (int index) const;
     Q_INVOKABLE QString getVersionParent(int index) const;
 
     Q_INVOKABLE QByteArray getData(int index) const;
+
+    // Library
 
     Q_INVOKABLE QStringList getLibraryNames() const;
 
@@ -223,10 +231,14 @@ private slots:
 
     void onComplete(bool ok);
 
+    void onRecent(const QStringList & recents);
+
     void onFilesModified(const QString & path, const QStringList & fileNames);
 
 signals:
     void libraryLoaded();
+
+    void recentsChanged();
 
     void refresh(const QStringList & fileNames);
 
@@ -254,6 +266,8 @@ public: // Properties
 
     int libraryCount() const;
 
+    QStringList recents() const;
+
 #if defined(SK_DESKTOP) && defined(SK_CONSOLE) == false
     bool associateSky   () const;
     void setAssociateSky(bool associate);
@@ -279,6 +293,8 @@ private: // Variables
     QList<ControllerCoreItem> _library;
 
     QHash<WControllerFileReply *, ControllerCoreFile> _replies;
+
+    QStringList _recents;
 
     WFileWatcher _watcher;
 

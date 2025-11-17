@@ -145,9 +145,95 @@ static const QString PATH_BASH    = "../bash";
 
 static const int CORE_WATCHER_INTERVAL = 200;
 
-//-------------------------------------------------------------------------------------------------
-// Private ctor / dtor
-//-------------------------------------------------------------------------------------------------
+//=================================================================================================
+// ControllerCoreWriteRecent
+//=================================================================================================
+
+class ControllerCoreWriteRecent : public WControllerFileAction
+{
+    Q_OBJECT
+
+protected: // WAbstractThreadAction implementation
+    /* virtual */ bool run();
+
+public: // Variables
+    QString path;
+
+    QStringList recents;
+};
+
+/* virtual */ bool ControllerCoreWriteRecent::run()
+{
+    QString content;
+
+    foreach (const QString & string, recents)
+    {
+        content.append(string + '\n');
+    }
+
+    WControllerFile::writeFile(path, content.toUtf8());
+
+    return true;
+}
+
+//=================================================================================================
+// ControllerCoreReadRecent
+//=================================================================================================
+
+class ControllerCoreReadRecent : public WAbstractThreadAction
+{
+    Q_OBJECT
+
+protected: // WAbstractThreadAction reimplementation
+    /* virtual */ WAbstractThreadReply * createReply() const;
+
+protected: // WAbstractThreadAction implementation
+    /* virtual */ bool run();
+
+public: // Variables
+    QString path;
+};
+
+class ControllerCoreReadReply : public WAbstractThreadReply
+{
+    Q_OBJECT
+
+protected: // WAbstractThreadReply reimplementation
+    /* virtual */ void onCompleted(bool ok);
+
+signals:
+    void loaded(const QStringList & recents);
+
+public: // Variables
+    QStringList recents;
+};
+
+/* virtual */ WAbstractThreadReply * ControllerCoreReadRecent::createReply() const
+{
+    return new ControllerCoreReadReply;
+}
+
+/* virtual */ bool ControllerCoreReadRecent::run()
+{
+    ControllerCoreReadReply * reply = qobject_cast<ControllerCoreReadReply *> (this->reply());
+
+    if (QFile::exists(path) == false) return true;
+
+    QString content = WControllerFile::readAll(path);
+
+    reply->recents = WControllerApplication::split(content, '\n');
+
+    return true;
+}
+
+/* virtual */ void ControllerCoreReadReply::onCompleted(bool)
+{
+    emit loaded(recents);
+}
+
+//=================================================================================================
+// ControllerCore
+//=================================================================================================
 
 ControllerCore::ControllerCore() : WController()
 {
@@ -921,6 +1007,19 @@ ControllerCore::ControllerCore() : WController()
     }
 }
 
+/* Q_INVOKABLE */ void ControllerCore::loadRecent()
+{
+    ControllerCoreReadRecent * action = new ControllerCoreReadRecent;
+
+    action->path = _path + "/recent.txt";
+
+    ControllerCoreReadReply * reply = qobject_cast<ControllerCoreReadReply *>
+                                      (wControllerFile->startReadAction(action));
+
+    connect(reply, SIGNAL(loaded(const QStringList &)),
+            this,  SLOT(onRecent(const QStringList &)));
+}
+
 //-------------------------------------------------------------------------------------------------
 
 /* Q_INVOKABLE */ QString ControllerCore::getName(int index) const
@@ -1344,6 +1443,13 @@ void ControllerCore::onComplete(bool ok)
     WControllerFile::renameFile(file.origin, target);
 }
 
+void ControllerCore::onRecent(const QStringList & recents)
+{
+    _recents = recents;
+
+    emit recentsChanged();
+}
+
 void ControllerCore::onFilesModified(const QString & path, const QStringList & fileNames)
 {
     QStringList list;
@@ -1380,7 +1486,8 @@ void ControllerCore::setSource(const QString & source)
 {
     if (_source == source) return;
 
-    _source = source;
+    // NOTE: fromNativeSeparators is important for fileBaseName.
+    _source = QDir::fromNativeSeparators(source);
 
     _watcher.clearFiles();
 
@@ -1392,7 +1499,6 @@ void ControllerCore::setSource(const QString & source)
 
     if (source.isEmpty() == false)
     {
-        // NOTE: fromNativeSeparators is important for fileBaseName.
         loadData(_script, QDir::fromNativeSeparators(source));
 
         _watcher.addFile(source);
@@ -1429,6 +1535,11 @@ int ControllerCore::libraryCount() const
     return _library.count();
 }
 
+QStringList ControllerCore::recents() const
+{
+    return _recents;
+}
+
 #if defined(SK_DESKTOP) && defined(SK_CONSOLE) == false
 
 bool ControllerCore::associateSky() const
@@ -1444,3 +1555,5 @@ void ControllerCore::setAssociateSky(bool associate)
 }
 
 #endif
+
+#include "ControllerCore.moc"

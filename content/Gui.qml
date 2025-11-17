@@ -96,7 +96,16 @@ Item
 
     function run(source)
     {
-        if (hideUi) ui = false;
+        if (hideUi && ui)
+        {
+            // NOTE: Avoid opacity animations when hiding the ui before loading.
+
+            st.animate = false;
+
+            ui = false;
+
+            st.animate = true;
+        }
 
         if (objects)
         {
@@ -183,11 +192,7 @@ Item
 
     function unload()
     {
-        hideUi = false;
-
         run("");
-
-        hideUi = true;
 
         hideConsole();
     }

@@ -29,6 +29,8 @@ Item
     // Properties
     //---------------------------------------------------------------------------------------------
 
+    /* read */ property bool hasRecent: false
+
     /* read */ property string template
     /* read */ property string help
 
@@ -45,6 +47,10 @@ Item
     Component.onCompleted:
     {
         pUpdateList();
+
+        core.loadRecent();
+
+        gui.hideConsole();
 
 //#DESKTOP+!LINUX
 //#WINDOWS
@@ -66,6 +72,8 @@ Item
         target: core
 
         /* QML_CONNECTION */ function onSourceChanged() { pUpdateList() }
+
+        /* QML_CONNECTION */ function onRecentsChanged() { pUpdateRecent() }
     }
 
     //---------------------------------------------------------------------------------------------
@@ -112,6 +120,28 @@ Item
 //#END
 
         list.currentIndex = 0;
+    }
+
+    function pUpdateRecent()
+    {
+        var recents = core.recents;
+
+        pApplyRow(rowA, recents, 0);
+        pApplyRow(rowB, recents, 4);
+
+        hasRecent = (recents.length);
+    }
+
+    function pApplyRow(row, recents, index)
+    {
+        for (var i = index; i < recents.length && i < index + 4; i++)
+        {
+            var item = row.repeater.itemAt(i);
+
+            item.text = controllerFile.fileBaseName(recents[i]);
+
+            item.enabled = true;
+        }
     }
 
     function pApplyPage(index)
@@ -193,30 +223,71 @@ Item
     // Children
     //---------------------------------------------------------------------------------------------
 
-    TextBase
+    Item
     {
-        id: itemText
+        id: itemTitle
 
         anchors.centerIn: parent
 
-        text: qsTr("Welcome to Sky kit")
+        height: itemTextDrop.y + itemTextDrop.height
 
-        font.pixelSize: st.dp32
+        TextBase
+        {
+            id: itemText
+
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            text: qsTr("Welcome to Sky kit")
+
+            font.pixelSize: st.dp32
+        }
+
+        TextBase
+        {
+            id: itemTextDrop
+
+            anchors.top: itemText.bottom
+
+            anchors.topMargin: st.dp16
+
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            text: qsTr("Drop a .sky file to begin")
+
+            color: st.text3_color
+
+            font.pixelSize: st.dp20
+        }
     }
 
-    TextBase
+    RowRecent
     {
-        anchors.top: itemText.bottom
+        id: rowA
 
-        anchors.topMargin: st.dp16
+        anchors.top: itemTitle.bottom
+
+        anchors.topMargin: st.dp48
 
         anchors.horizontalCenter: parent.horizontalCenter
 
-        text: qsTr("Drop a .sky file to begin")
+        visible: hasRecent
 
-        color: st.text3_color
+        function onClick(index) { gui.run(core.recents[index]) }
+    }
 
-        font.pixelSize: st.dp20
+    RowRecent
+    {
+        id: rowB
+
+        anchors.top: rowA.bottom
+
+        anchors.topMargin: st.dp8
+
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        visible: hasRecent
+
+        function onClick(index) { gui.run(core.recents[4 + index]) }
     }
 
     ItemUi
