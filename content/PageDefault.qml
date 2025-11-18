@@ -25,6 +25,8 @@ import Sky     1.0
 
 Item
 {
+    id: pageDefault
+
     //---------------------------------------------------------------------------------------------
     // Properties
     //---------------------------------------------------------------------------------------------
@@ -46,7 +48,7 @@ Item
 
     Component.onCompleted:
     {
-        pUpdateList();
+        updateLibrary();
 
         core.loadRecent();
 
@@ -71,7 +73,7 @@ Item
     {
         target: core
 
-        /* QML_CONNECTION */ function onSourceChanged() { pUpdateList() }
+        /* QML_CONNECTION */ function onSourceChanged() { updateLibrary() }
 
         /* QML_CONNECTION */ function onRecentsChanged() { pUpdateRecent() }
     }
@@ -80,32 +82,10 @@ Item
     // Functions
     //---------------------------------------------------------------------------------------------
 
-    function openScript()
+    function updateLibrary()
     {
-        var fileName = core.openScript();
+        model.clear();
 
-        if (fileName == "") return;
-
-        gui.run(fileName);
-    }
-
-    function getTemplate(name)
-    {
-        return "// " + name + "\n" +
-               "\n" +
-               "import QtQuick 2.0\n" +
-               "import Sky     1.0\n\n" +
-               "Item\n" +
-               "{\n" +
-               "    function onRun(ui) {}\n"+
-               "}\n"
-    }
-
-    //---------------------------------------------------------------------------------------------
-    // Private
-
-    function pUpdateList()
-    {
         core.loadLibrary();
 
         var array = new Array;
@@ -130,6 +110,37 @@ Item
 
         list.currentIndex = 0;
     }
+
+    function install(fileName)
+    {
+        areaPanel.showPanel("PanelInstall.qml", false);
+
+        areaPanel.loader.item.check(fileName);
+    }
+
+    function openScript()
+    {
+        var fileName = core.openScript();
+
+        if (fileName == "") return;
+
+        gui.run(fileName);
+    }
+
+    function getTemplate(name)
+    {
+        return "// " + name + "\n" +
+               "\n" +
+               "import QtQuick 2.0\n" +
+               "import Sky     1.0\n\n" +
+               "Item\n" +
+               "{\n" +
+               "    function onRun(ui) {}\n"+
+               "}\n"
+    }
+
+    //---------------------------------------------------------------------------------------------
+    // Private
 
     function pUpdateRecent()
     {

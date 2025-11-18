@@ -119,6 +119,9 @@ public: // Interface
 
     Q_INVOKABLE void reloadScript(int index);
 
+    // QVariantList contains: bool ok, QString log.
+    Q_INVOKABLE QVariantList installArchive(const QString & fileName, const QString & name);
+
     Q_INVOKABLE bool bash(const QString & fileName, const QStringList & arguments = QStringList());
 
     Q_INVOKABLE QString bashResolve(const QString & source) const;
@@ -192,10 +195,22 @@ public: // Interface
     Q_INVOKABLE QString getLibraryPath    (int index) const;
     Q_INVOKABLE QString getLibraryName    (int index) const;
 
+    Q_INVOKABLE int libraryIndexFromName(const QString & name);
+
 public: // Static functions
     Q_INVOKABLE static QString createScript(const QString & text);
 
     Q_INVOKABLE static QString openScript();
+
+    Q_INVOKABLE static bool fileIsArchive(const QString & fileName);
+
+    // QVariantList contains: bool ok, QString name, QString log.
+    Q_INVOKABLE static QVariantList checkArchive(const QString & fileName);
+
+    Q_INVOKABLE static QVariantList getVariantCheck(bool ok, const QString & name,
+                                                             const QString & log);
+
+    Q_INVOKABLE static QVariantList getVariantInstall(bool ok, const QString & log);
 
     Q_INVOKABLE static QQuickItem * pickItem(const QVariantList & items, qreal x, qreal y);
 

@@ -35,14 +35,12 @@ Item
 
     property variant user: null
 
-    property bool ui: false
+    /* read */ property bool ui: false
 
     property int stateConsole: 1
     // 0: hidden
     // 1: visible
     // 2: expanded
-
-    property bool hideUi: true
 
     property int topMargin: st.dp40
 
@@ -96,13 +94,13 @@ Item
 
     function run(source)
     {
-        if (hideUi && ui)
+        if (ui)
         {
             // NOTE: Avoid opacity animations when hiding the ui before loading.
 
             st.animate = false;
 
-            ui = false;
+            hideUi();
 
             st.animate = true;
         }
@@ -119,16 +117,27 @@ Item
 
         loader.source = "";
 
-        core.source = source;
-
-        if (source)
+        if (core.fileIsArchive(source))
         {
-            for (/* var */ i = 0; i < core.count; i++)
-            {
-                loadScript(i);
-            }
+            core.source = "";
+
+            loader.source = Qt.resolvedUrl("PageDefault.qml");
+
+            loader.item.install(source);
         }
-        else loader.source = Qt.resolvedUrl("PageDefault.qml");
+        else
+        {
+            core.source = source;
+
+            if (source)
+            {
+                for (/* var */ i = 0; i < core.count; i++)
+                {
+                    loadScript(i);
+                }
+            }
+            else loader.source = Qt.resolvedUrl("PageDefault.qml");
+        }
 
         setFocus();
 
@@ -424,9 +433,33 @@ Item
 
     //---------------------------------------------------------------------------------------------
 
+    function showUi()
+    {
+        if (ui) return;
+
+        ui = true;
+
+        window.clearFocus();
+    }
+
+    function hideUi()
+    {
+        ui = false;
+    }
+
+    function toggleUi()
+    {
+        if (ui) hideUi();
+        else    showUi();
+    }
+
     function showConsole()
     {
-        if (stateConsole == 0) stateConsole = 1;
+        if (stateConsole != 0) return;
+
+        stateConsole = 1;
+
+        setFocusConsole();
     }
 
     function hideConsole()
@@ -438,19 +471,14 @@ Item
     {
         stateConsole = (stateConsole + 1) % 3;
 
+        if (stateConsole == 0) return;
+
         setFocusConsole();
     }
 
     function toggleLocked()
     {
         window.locked = !(window.locked);
-    }
-
-    function toggleUi()
-    {
-        ui = !(ui);
-
-        if (ui) window.clearFocus();
     }
 
     function openUrl(url)
@@ -600,8 +628,6 @@ Item
             ui = true;
 
             showConsole();
-
-            setFocusConsole();
         }
         else if (event.key == Qt.Key_Tab || event.key == Qt.Key_Backtab)
         {
@@ -834,8 +860,6 @@ Item
                     easing.type: st.easing
                 }
             }
-
-            onItemChanged: setFocusConsole()
         }
 
         ButtonPiano

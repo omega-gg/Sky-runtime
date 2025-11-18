@@ -59,6 +59,7 @@
 #include <WViewDrag>
 #include <WWindow>
 #include <WCache>
+#include <WUnzipper>
 #include <WActionCue>
 #include <WInputCue>
 #include <WScriptBash>
@@ -686,7 +687,7 @@ ControllerCore::ControllerCore() : WController()
     });
 #endif
 
-    foreach (QFileInfo info, entries)
+    foreach (const QFileInfo & info, entries)
     {
         ControllerCoreItem item;
 
@@ -703,6 +704,64 @@ ControllerCore::ControllerCore() : WController()
 /* Q_INVOKABLE */ void ControllerCore::reloadScript(int index)
 {
     if (_script) _script->reload(index);
+}
+
+/* Q_INVOKABLE */ QVariantList ControllerCore::installArchive(const QString & fileName,
+                                                              const QString & name)
+{
+    QString log;
+
+    QString filePath = WControllerFile::filePath(fileName);
+
+    if (QFile::exists(filePath) == false)
+    {
+        log.append(QString(tr("The script file does not exist %1\n")).arg(filePath));
+
+        return getVariantInstall(false, log);
+    }
+
+    log.append(tr("\n"
+                  "Install in progress...\n"));
+
+    QList<QFileInfo> entries;
+
+    loadFolder(entries, _path + "/script");
+
+    QString match = name + '-';
+
+    foreach (const QFileInfo & info, entries)
+    {
+        QString baseName = WControllerFile::fileBaseName(info.fileName().toLower());
+
+        if (baseName != name && baseName.startsWith(match) == false) continue;
+
+        log.append(QString(tr("rm %1.sky\n")).arg(baseName));
+
+        WControllerFile::deleteFile(info.absoluteFilePath());
+    }
+
+    QString path = _path + "/bash/" + name + '/';
+
+    if (QFile::exists(path))
+    {
+        log.append(QString(tr("rm -rf script/%1\n")).arg(path));
+
+        WControllerFile::deleteFolder(path);
+    }
+
+    QStringList list = WUnzipper::getFileNames(filePath);
+
+    foreach (const QString & string, list)
+    {
+        log.append(QString(tr("cp %1\n")).arg(string));
+    }
+
+    WUnzipper::extract(filePath, _path);
+
+    log.append(tr("---\n"
+                  "Install complete"));
+
+    return getVariantInstall(true, log);
 }
 
 /* Q_INVOKABLE */ bool ControllerCore::bash(const QString & fileName, const QStringList & arguments)
@@ -1126,6 +1185,16 @@ ControllerCore::ControllerCore() : WController()
     return _library.at(index).name;
 }
 
+/* Q_INVOKABLE */ int ControllerCore::libraryIndexFromName(const QString & name)
+{
+    for (int i = 0; i < _library.count(); i++)
+    {
+        if (_library.at(i).name == name) return i;
+    }
+
+    return -1;
+}
+
 //-------------------------------------------------------------------------------------------------
 // Static functions
 //-------------------------------------------------------------------------------------------------
@@ -1159,10 +1228,110 @@ ControllerCore::ControllerCore() : WController()
 #ifdef SK_DESKTOP
     return QFileDialog::getOpenFileName(NULL, tr("Open .sky"),
                                         WControllerFile::pathDocuments(),
-                                        tr("Sky script (*.sky)"));
+                                        tr("Sky (*.sky *.skz)"));
 #else
     return QString();
 #endif
+}
+
+
+/* Q_INVOKABLE static */ bool ControllerCore::fileIsArchive(const QString & fileName)
+{
+    return fileName.endsWith(".skz", Qt::CaseInsensitive);
+}
+
+/* Q_INVOKABLE static */ QVariantList ControllerCore::checkArchive(const QString & fileName)
+{
+    QString log;
+
+    QStringList list = WUnzipper::getFileNames(WControllerFile::filePath(fileName));
+
+    list.removeOne("script/");
+    list.removeOne("bash/");
+
+    QStringList scripts;
+
+    int index = 0;
+
+    while (index < list.count())
+    {
+        QString string = list.at(index);
+
+        if (string.startsWith("script/"))
+        {
+            scripts.append(list.takeAt(index));
+        }
+        else index++;
+    }
+
+    if (scripts.isEmpty())
+    {
+        log.append(tr("The script folder is absent from the archive.\n"));
+
+        return getVariantCheck(false, "", log);
+    }
+
+    QString name = scripts.first();
+
+    if (name.contains('-'))
+    {
+         name = Sk::sliceIn(name, "/", "-");
+    }
+    else name = Sk::sliceIn(name, "/", ".");
+
+    if (name.isLower() == false)
+    {
+        log.append(tr("The script name is not lower case.\n"));
+
+        return getVariantCheck(false, "", log);
+    }
+
+    log.append(QString(tr("Script name: %1\n")).arg(name));
+
+    foreach (const QString & string, scripts)
+    {
+        log.append(string + '\n');
+    }
+
+    QString start = "bash/" + name;
+
+    foreach (const QString & string, list)
+    {
+        if (string.startsWith(start)) continue;
+
+        log.append(QString(tr("Invalid file: %1\n")).arg(string));
+
+        return getVariantCheck(false, "", log);
+    }
+
+    log.append(tr("---\n"
+                  "Valid folder structure\n"));
+
+    return getVariantCheck(true, name, log);
+}
+
+/* Q_INVOKABLE static */ QVariantList ControllerCore::getVariantCheck(bool            ok,
+                                                                      const QString & name,
+                                                                      const QString & log)
+{
+    QVariantList variants;
+
+    variants.append(ok);
+    variants.append(name);
+    variants.append(log);
+
+    return variants;
+}
+
+/* Q_INVOKABLE static */ QVariantList ControllerCore::getVariantInstall(bool            ok,
+                                                                        const QString & log)
+{
+    QVariantList variants;
+
+    variants.append(ok);
+    variants.append(log);
+
+    return variants;
 }
 
 /* Q_INVOKABLE static */ QQuickItem * ControllerCore::pickItem(const QVariantList & items,
@@ -1592,12 +1761,13 @@ QStringList ControllerCore::recents() const
 
 bool ControllerCore::associateSky() const
 {
-    return Sk::typeIsAssociated("sky");
+    return (Sk::typeIsAssociated("sky") && Sk::typeIsAssociated("skz"));
 }
 
 void ControllerCore::setAssociateSky(bool associate)
 {
-    if (Sk::associateType("sky", associate) == false) return;
+    if (Sk::associateType("sky", associate) != associate) return;
+    if (Sk::associateType("skz", associate) != associate) return;
 
     emit associateSkyChanged();
 }
