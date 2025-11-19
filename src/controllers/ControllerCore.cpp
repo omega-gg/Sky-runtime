@@ -687,13 +687,19 @@ ControllerCore::ControllerCore() : WController()
     });
 #endif
 
+    QStringList names;
+
     foreach (const QFileInfo & info, entries)
     {
+        QString name = WControllerFile::fileBaseName(info.fileName().toLower());
+
+        if (names.contains(name)) continue;
+
         ControllerCoreItem item;
 
         item.fileName = info.absoluteFilePath();
 
-        item.name = WControllerFile::fileBaseName(info.fileName().toLower());
+        item.name = name;
 
         _library.append(item);
     }
