@@ -94,7 +94,7 @@ Item
 
                 padding: st.dp16
 
-                text: qsTr("Open script")
+                text: qsTr("Open .sky script")
 
                 onClicked: openScript()
             }
