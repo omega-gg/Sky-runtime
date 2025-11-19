@@ -246,8 +246,8 @@ if [ $os = "windows" ]; then
         cp "$path"/$QtQuick/qtquick2plugin.dll $deploy/$QtQuick
         cp "$path"/$QtQuick/qmldir             $deploy/$QtQuick
 
-        cp "$path"/QtMultimedia/*multimedia*.dll $deploy/QtMultimedia
-        cp "$path"/QtMultimedia/qmldir           $deploy/QtMultimedia
+        cp "$path"/QtMultimedia/quickmultimediaplugin.dll $deploy/QtMultimedia
+        cp "$path"/QtMultimedia/qmldir                    $deploy/QtMultimedia
 
         if [ $qt = "qt6" ]; then
 
@@ -326,8 +326,8 @@ elif [ $1 = "macOS" ]; then
         cp "$path"/$QtQuick/libqtquick2plugin.dylib $deploy/$QtQuick
         cp "$path"/$QtQuick/qmldir                  $deploy/$QtQuick
 
-        cp "$path"/QtMultimedia/lib*multimedia*.dylib $deploy/QtMultimedia
-        cp "$path"/QtMultimedia/qmldir                $deploy/QtMultimedia
+        cp "$path"/QtMultimedia/libquickmultimediaplugin.dylib $deploy/QtMultimedia
+        cp "$path"/QtMultimedia/qmldir                         $deploy/QtMultimedia
 
         if [ $qt = "qt6" ]; then
 
@@ -445,8 +445,8 @@ elif [ $1 = "linux" ]; then
         cp "$path"/$QtQuick/libqtquick2plugin.so $deploy/$QtQuick
         cp "$path"/$QtQuick/qmldir               $deploy/$QtQuick
 
-        cp "$path"/QtMultimedia/lib*multimedia*.so $deploy/QtMultimedia
-        cp "$path"/QtMultimedia/qmldir             $deploy/QtMultimedia
+        cp "$path"/QtMultimedia/libquickmultimediaplugin.so $deploy/QtMultimedia
+        cp "$path"/QtMultimedia/qmldir                      $deploy/QtMultimedia
 
         if [ $qt = "qt6" ]; then
 
