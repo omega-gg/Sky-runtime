@@ -101,6 +101,9 @@ deployAndroid()
                        --android-platform android-$SDK_version \
                        --jdk $JAVA_HOME
 
+    # NOTE android: Remove intermediary files to save space.
+    find . -mindepth 1 -maxdepth 1 ! -name "android-build" -exec rm -rf {} +
+
     cd -
 }
 
