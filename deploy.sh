@@ -147,6 +147,32 @@ elif [ $qt = "qt6" ]; then
     QtQuick="QtQuick"
 fi
 
+if [ $qt != "qt4" ]; then
+
+    mkdir $deploy/platforms
+    mkdir $deploy/imageformats
+    mkdir $deploy/$QtQuick
+    mkdir $deploy/QtMultimedia
+
+    if [ $qt = "qt5" ]; then
+
+        mkdir -p $deploy/mediaservice
+    else
+        mkdir -p $deploy/tls
+        mkdir -p $deploy/multimedia
+
+        mkdir -p $deploy/QtWebEngine
+        mkdir -p $deploy/QtWebChannel
+        mkdir -p $deploy/QtWebView
+
+        mkdir -p $deploy/QtQml/WorkerScript
+
+        cp -r "$path"/webview $deploy
+
+        cp -r "$path"/resources $deploy
+    fi
+fi
+
 if [ $os = "windows" ]; then
 
     if [ $compiler = "mingw" ]; then
@@ -175,21 +201,6 @@ if [ $os = "windows" ]; then
         cp "$path"/imageformats/qsvg4.dll  $deploy/imageformats
         cp "$path"/imageformats/qjpeg4.dll $deploy/imageformats
     else
-        mkdir $deploy/platforms
-        mkdir $deploy/imageformats
-        mkdir $deploy/$QtQuick
-        mkdir $deploy/QtMultimedia
-
-        if [ $qt = "qt5" ]; then
-
-            mkdir -p $deploy/mediaservice
-        else
-            mkdir -p $deploy/tls
-            mkdir -p $deploy/multimedia
-
-            mkdir -p $deploy/QtQml/WorkerScript
-        fi
-
         if [ $qt = "qt5" ]; then
 
             cp "$path"/libEGL.dll    deploy
@@ -219,6 +230,8 @@ if [ $os = "windows" ]; then
         else
             cp "$path/$QtX"Core5Compat.dll $deploy
             cp "$path/$QtX"QmlMeta.dll     $deploy
+            cp "$path/$QtX"Positioning.dll $deploy
+            cp "$path/$QtX"Web*.dll        $deploy
         fi
 
         if [ -f "$path/$QtX"QmlModels.dll ]; then
@@ -260,21 +273,6 @@ elif [ $1 = "macOS" ]; then
 
     if [ $qt != "qt4" ]; then
 
-        mkdir $deploy/platforms
-        mkdir $deploy/imageformats
-        mkdir $deploy/$QtQuick
-        mkdir $deploy/QtMultimedia
-
-        if [ $qt = "qt5" ]; then
-
-            mkdir -p $deploy/mediaservice
-        else
-            mkdir -p $deploy/tls
-            mkdir -p $deploy/multimedia
-
-            mkdir -p $deploy/QtQml/WorkerScript
-        fi
-
         # FIXME Qt 5.14 macOS: We have to copy qt.conf to avoid a segfault.
         cp "$path"/qt.conf $deploy
 
@@ -288,8 +286,8 @@ elif [ $1 = "macOS" ]; then
         cp "$path"/QtSvg.dylib             $deploy
         cp "$path"/QtWidgets.dylib         $deploy
         cp "$path"/QtXml.dylib             $deploy
-        cp "$path/"QtMultimedia.dylib      $deploy
-        cp "$path/"QtMultimediaQuick.dylib $deploy
+        cp "$path"/QtMultimedia.dylib      $deploy
+        cp "$path"/QtMultimediaQuick.dylib $deploy
         cp "$path"/QtDBus.dylib            $deploy
         cp "$path"/QtPrintSupport.dylib    $deploy
 
@@ -299,6 +297,8 @@ elif [ $1 = "macOS" ]; then
         else
             cp "$path"/QtCore5Compat.dylib $deploy
             cp "$path"/QtQmlMeta.dylib     $deploy
+            cp "$path"/QtPositioning.dylib $deploy
+            cp "$path"/QtWeb*.dylib        $deploy
         fi
 
         if [ -f "$path"/QtQmlModels.dylib ]; then
@@ -359,21 +359,7 @@ elif [ $1 = "linux" ]; then
         cp "$path"/imageformats/libqsvg.so  $deploy/imageformats
         cp "$path"/imageformats/libqjpeg.so $deploy/imageformats
     else
-        mkdir $deploy/platforms
-        mkdir $deploy/imageformats
-        mkdir $deploy/$QtQuick
-        mkdir $deploy/QtMultimedia
         mkdir $deploy/xcbglintegrations
-
-        if [ $qt = "qt5" ]; then
-
-            mkdir -p $deploy/mediaservice
-        else
-            mkdir -p $deploy/tls
-            mkdir -p $deploy/multimedia
-
-            mkdir -p $deploy/QtQml/WorkerScript
-        fi
 
         #cp "$path"/libz.so.* $deploy
 
@@ -412,6 +398,8 @@ elif [ $1 = "linux" ]; then
         else
             cp "$path/lib$QtX"Core5Compat.so.$qx $deploy
             cp "$path/lib$QtX"QmlMeta.so.$qx     $deploy
+            cp "$path/lib$QtX"Positioning.so.$qx $deploy
+            cp "$path/lib$QtX"Web*.so.$qx        $deploy
         fi
 
         if [ -f "$path/lib$QtX"QmlModels.so.$qx ]; then
