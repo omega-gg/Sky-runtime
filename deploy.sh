@@ -161,9 +161,9 @@ if [ $qt != "qt4" ]; then
         mkdir -p $deploy/tls
         mkdir -p $deploy/multimedia
 
+        mkdir -p $deploy/QtWebView
         mkdir -p $deploy/QtWebEngine
         mkdir -p $deploy/QtWebChannel
-        mkdir -p $deploy/QtWebView
 
         mkdir -p $deploy/QtQml/WorkerScript
 
