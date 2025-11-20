@@ -35,6 +35,12 @@ copyAndroid()
     cp $path/bundle/release/android-build-release.aab $deploy/$target-$1.aab
 }
 
+copyQml()
+{
+    cp "$path"/$1/*.$2   $deploy/$1
+    cp "$path"/$1/qmldir $deploy/$1
+}
+
 #--------------------------------------------------------------------------------------------------
 # Syntax
 #--------------------------------------------------------------------------------------------------
@@ -60,12 +66,23 @@ if [ $1 = "win32" -o $1 = "win64" ]; then
     os="windows"
 
     compiler="$compiler_win"
+
+    if [ $compiler = "mingw" ]; then
+
+        hasWeb=false
+    else
+        hasWeb=true
+    fi
 else
     if [ $1 = "iOS" -o $1 = "android" ]; then
 
         os="mobile"
+
+        hasWeb=false
     else
         os="default"
+
+        hasWeb=true
     fi
 
     compiler="default"
@@ -161,15 +178,18 @@ if [ $qt != "qt4" ]; then
         mkdir -p $deploy/tls
         mkdir -p $deploy/multimedia
 
-        mkdir -p $deploy/QtWebView
-        mkdir -p $deploy/QtWebEngine
-        mkdir -p $deploy/QtWebChannel
-
         mkdir -p $deploy/QtQml/WorkerScript
 
-        cp -r "$path"/webview $deploy
+        if [ $hasWeb = true ]; then
 
-        cp -r "$path"/resources $deploy
+            mkdir -p $deploy/QtWebView
+            mkdir -p $deploy/QtWebEngine
+            mkdir -p $deploy/QtWebChannel
+
+            cp -r "$path"/webview $deploy
+
+            cp -r "$path"/resources $deploy
+        fi
     fi
 fi
 
@@ -230,8 +250,12 @@ if [ $os = "windows" ]; then
         else
             cp "$path/$QtX"Core5Compat.dll $deploy
             cp "$path/$QtX"QmlMeta.dll     $deploy
-            cp "$path/$QtX"Positioning.dll $deploy
-            cp "$path/$QtX"Web*.dll        $deploy
+
+            if [ $hasWeb = true ]; then
+
+                cp "$path/$QtX"Positioning.dll $deploy
+                cp "$path/$QtX"Web*.dll        $deploy
+            fi
         fi
 
         if [ -f "$path/$QtX"QmlModels.dll ]; then
@@ -264,8 +288,14 @@ if [ $os = "windows" ]; then
 
         if [ $qt = "qt6" ]; then
 
-            cp "$path"/QtQml/WorkerScript/workerscriptplugin.dll $deploy/QtQml/WorkerScript
-            cp "$path"/QtQml/WorkerScript/qmldir                 $deploy/QtQml/WorkerScript
+            copyQml QtQml/WorkerScript dll
+
+            if [ $hasWeb = true ]; then
+
+                copyQml QtWebView    dll
+                copyQml QtWebEngine  dll
+                copyQml QtWebChannel dll
+            fi
         fi
     fi
 
