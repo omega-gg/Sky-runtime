@@ -219,6 +219,8 @@ if [ $os = "windows" ]; then
                 cp -r "$path"/resources $deploy
             fi
 
+            cp "$path"/QtWebEngineProcess* deploy
+
             # FFmpeg
             cp "$path"/av*.dll deploy
             cp "$path"/sw*.dll deploy
