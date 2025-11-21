@@ -66,23 +66,12 @@ if [ $1 = "win32" -o $1 = "win64" ]; then
     os="windows"
 
     compiler="$compiler_win"
-
-    if [ $compiler = "mingw" ]; then
-
-        hasWeb=false
-    else
-        hasWeb=true
-    fi
 else
     if [ $1 = "iOS" -o $1 = "android" ]; then
 
         os="mobile"
-
-        hasWeb=false
     else
         os="default"
-
-        hasWeb=true
     fi
 
     compiler="default"
@@ -180,15 +169,13 @@ if [ $qt != "qt4" ]; then
 
         mkdir -p $deploy/QtQml/WorkerScript
 
-        if [ $hasWeb = true ]; then
+        if [ $compiler != "mingw" ]; then
 
             mkdir -p $deploy/QtWebView
             mkdir -p $deploy/QtWebEngine
             mkdir -p $deploy/QtWebChannel
 
             cp -r "$path"/webview $deploy
-
-            cp -r "$path"/resources $deploy
         fi
     fi
 fi
@@ -226,6 +213,12 @@ if [ $os = "windows" ]; then
             cp "$path"/libEGL.dll    deploy
             cp "$path"/libGLESv2.dll deploy
         else
+            if [ $compiler != "mingw" ]; then
+
+                # NOTE: Required for the webview.
+                cp -r "$path"/resources $deploy
+            fi
+
             # FFmpeg
             cp "$path"/av*.dll deploy
             cp "$path"/sw*.dll deploy
@@ -251,7 +244,7 @@ if [ $os = "windows" ]; then
             cp "$path/$QtX"Core5Compat.dll $deploy
             cp "$path/$QtX"QmlMeta.dll     $deploy
 
-            if [ $hasWeb = true ]; then
+            if [ $compiler != "mingw" ]; then
 
                 cp "$path/$QtX"Positioning.dll $deploy
                 cp "$path/$QtX"Web*.dll        $deploy
@@ -290,7 +283,7 @@ if [ $os = "windows" ]; then
 
             copyQml QtQml/WorkerScript dll
 
-            if [ $hasWeb = true ]; then
+            if [ $compiler != "mingw" ]; then
 
                 copyQml QtWebView    dll
                 copyQml QtWebEngine  dll
@@ -389,6 +382,12 @@ elif [ $1 = "linux" ]; then
         cp "$path"/imageformats/libqsvg.so  $deploy/imageformats
         cp "$path"/imageformats/libqjpeg.so $deploy/imageformats
     else
+        if [ $qt = "qt6" ]; then
+
+            # NOTE: Required for the webview.
+            cp -r "$path"/resources $deploy
+        fi
+
         mkdir $deploy/xcbglintegrations
 
         #cp "$path"/libz.so.* $deploy
