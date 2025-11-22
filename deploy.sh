@@ -26,6 +26,12 @@ qt="qt6"
 # Functions
 #--------------------------------------------------------------------------------------------------
 
+copyQml()
+{
+    cp "$path"/$1/*.$2   $deploy/$1
+    cp "$path"/$1/qmldir $deploy/$1
+}
+
 copyAndroid()
 {
     path="build/$1/android-build/build/outputs"
@@ -33,12 +39,6 @@ copyAndroid()
     cp $path/apk/release/android-build-release-unsigned.apk $deploy/$target-$1.apk
 
     cp $path/bundle/release/android-build-release.aab $deploy/$target-$1.aab
-}
-
-copyQml()
-{
-    cp "$path"/$1/*.$2   $deploy/$1
-    cp "$path"/$1/qmldir $deploy/$1
 }
 
 #--------------------------------------------------------------------------------------------------
