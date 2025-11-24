@@ -169,6 +169,14 @@ if [ "$2" = "all" ]; then
 
     sh 3rdparty.sh $1 all
 
+    # NOTE android: Remove files to save space.
+    if [ $vlc = "vlc3" ]; then
+
+        rm -rf 3rdparty/$1/VLC/4*
+    else
+        rm -rf 3rdparty/$1/VLC/3*
+    fi
+
     cd "$Sky"
 
     sh configure.sh $1
