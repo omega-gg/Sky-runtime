@@ -177,9 +177,6 @@ if [ "$2" = "all" ]; then
         rm -rf "$external"/$1/VLC/3*
     fi
 
-    apt-get clean
-    apt-get autoremove -y
-
     cd "$Sky"
 
     sh configure.sh $1
