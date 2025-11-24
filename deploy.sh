@@ -390,7 +390,7 @@ elif [ $1 = "linux" ]; then
         if [ $qt = "qt6" ]; then
 
             # NOTE: Required for the webview.
-            cp -r "$path"/resources $deploy
+            cp -r "$path"/resources/* $deploy
 
             cp "$path"/QtWebEngineProcess* deploy
         fi
