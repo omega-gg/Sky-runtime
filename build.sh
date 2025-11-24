@@ -86,9 +86,6 @@ makeAndroid()
 
     make INSTALL_ROOT=android-build install
 
-    # NOTE android: Remove build files to save space.
-    make clean
-
     cd ..
 }
 
@@ -103,6 +100,13 @@ deployAndroid()
                        --output android-build \
                        --android-platform android-$SDK_version \
                        --jdk $JAVA_HOME
+
+    # NOTE android: Remove build files to save space.
+    find android-build -mindepth 1 \
+        ! -path "android-build/build" \
+        ! -path "android-build/build/outputs" \
+        ! -path "android-build/build/outputs/*" \
+        -exec rm -rf {} +
 
     cd -
 }
