@@ -20,8 +20,10 @@
 */
 //=================================================================================================
 
-#if defined(Q_OS_LINUX) && defined(QT_6)
 // Qt includes
+// NOTE: Required for Q_OS_LINUX.
+#include <QtGlobal>
+#if defined(Q_OS_LINUX) && defined(QT_6)
 #include <QtWebEngineQuick>
 #endif
 
