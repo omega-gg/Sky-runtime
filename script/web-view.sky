@@ -57,6 +57,10 @@ Item
 
         webView.url = url;
 
+        sk.processEvents();
+
+        if (webView.loading == false) return false;
+
         var start = Date.now();
 
         while (webView.loadProgress != 100
