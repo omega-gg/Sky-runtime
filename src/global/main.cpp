@@ -20,6 +20,11 @@
 */
 //=================================================================================================
 
+#if defined(Q_OS_LINUX) && defined(QT_6)
+// Qt includes
+#include <QtWebEngineQuick>
+#endif
+
 // Sk includes
 #include <WApplication>
 
@@ -32,6 +37,10 @@
 
 int main(int argc, char * argv[])
 {
+#if defined(Q_OS_LINUX) && defined(QT_6)
+    QtWebEngineQuick::initialize();
+#endif
+
 #ifdef QT_4
     QApplication * application = WApplication::create(argc, argv, Sk::Multiple);
 #else

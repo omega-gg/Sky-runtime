@@ -217,9 +217,9 @@ if [ $os = "windows" ]; then
 
                 # NOTE: Required for the webview.
                 cp -r "$path"/resources $deploy
-            fi
 
-            cp "$path"/QtWebEngineProcess* deploy
+                cp "$path"/QtWebEngineProcess* deploy
+            fi
 
             # FFmpeg
             cp "$path"/av*.dll deploy
@@ -356,8 +356,11 @@ elif [ $1 = "macOS" ]; then
 
         if [ $qt = "qt6" ]; then
 
-            cp "$path"/QtQml/WorkerScript/libworkerscriptplugin.dylib $deploy/QtQml/WorkerScript
-            cp "$path"/QtQml/WorkerScript/qmldir                      $deploy/QtQml/WorkerScript
+            copyQml QtQml/WorkerScript dylib
+
+            copyQml QtWebView    dylib
+            copyQml QtWebEngine  dylib
+            copyQml QtWebChannel dylib
         fi
     fi
 
@@ -388,6 +391,8 @@ elif [ $1 = "linux" ]; then
 
             # NOTE: Required for the webview.
             cp -r "$path"/resources $deploy
+
+            cp "$path"/QtWebEngineProcess* deploy
         fi
 
         mkdir $deploy/xcbglintegrations
@@ -469,8 +474,11 @@ elif [ $1 = "linux" ]; then
 
         if [ $qt = "qt6" ]; then
 
-            cp "$path"/QtQml/WorkerScript/libworkerscriptplugin.so $deploy/QtQml/WorkerScript
-            cp "$path"/QtQml/WorkerScript/qmldir                   $deploy/QtQml/WorkerScript
+            copyQml QtQml/WorkerScript so
+
+            copyQml QtWebView    so
+            copyQml QtWebEngine  so
+            copyQml QtWebChannel so
         fi
     fi
 fi

@@ -34,7 +34,7 @@ contains(QT_MAJOR_VERSION, 4) {
 
     macx:QT += widgets
 
-    unix:!android:QT += widgets
+    unix:!android:QT += widgets webenginequick
 }
 
 greaterThan(QT_MAJOR_VERSION, 4) {
