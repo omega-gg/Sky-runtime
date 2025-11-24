@@ -426,9 +426,9 @@ Item
 
                 if (object.onConsole && object.onConsole(list)) return;
             }
-        }
 
-        console.debug(qsTr("sky: " + command + ": command not found"));
+            console.debug(qsTr("sky: " + command + ": command not found"));
+        }
     }
 
     //---------------------------------------------------------------------------------------------
