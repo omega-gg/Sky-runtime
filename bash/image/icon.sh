@@ -102,7 +102,7 @@ if echo "$icon" | grep -qi '\.svg$'; then
 
     temp="$root/temp.png"
 
-    "$root"/createSize.sh "$temp" "$size" "$icon"
+    "$root"/create-size.sh "$temp" "$size" "$icon"
 
     icon="$temp"
 fi

@@ -14,7 +14,7 @@ Place your fonts into SKY_PATH_BIN/font or set SKY_PATH_FONT.
 ## Tools
 
 - [create.sh](create.sh): Create an image based on layers.
-- [createSize.sh](createSize.sh): Create an image with a given size based on layers.
+- [create-size.sh](create-size.sh): Create an image with a given size based on layers.
 - [convert.sh](convert.sh): Convert an image to another format.
 - [resize.sh](resize.sh): Resize an image.
 - [expand.sh](expand.sh): Expand the image.

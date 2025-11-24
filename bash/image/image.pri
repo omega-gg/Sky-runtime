@@ -1,5 +1,5 @@
 OTHER_FILES += bash/image/create.sh \
-               bash/image/createSize.sh \
+               bash/image/create-size.sh \
                bash/image/convert.sh \
                bash/image/resize.sh \
                bash/image/expand.sh \

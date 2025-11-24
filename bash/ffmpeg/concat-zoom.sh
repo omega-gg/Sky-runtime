@@ -94,8 +94,8 @@ getFps()
 
 if [ $# -lt 3 -o $# -gt 4 ]; then
 
-    echo "Usage: concatZoom <image> <video> <output>"
-    echo "                  [codec | lossless]"
+    echo "Usage: concat-zoom <image> <video> <output>"
+    echo "                   [codec | lossless]"
     echo ""
     echo "This command output is usefull to generate a wide background and turn 16:9 into 21:9 \
 with a generative tool like Luma."
@@ -139,7 +139,7 @@ frames=$(awk "BEGIN { print int($fps * 1) }")
 
 zoom=$(awk "BEGIN { print (1.333 - 1) / $frames }")
 
-echo "concatZoom: Generating input image frames..."
+echo "concat-zoom: Generating input image frames..."
 
 mkdir -p frames
 

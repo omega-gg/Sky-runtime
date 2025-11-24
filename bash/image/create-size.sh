@@ -34,11 +34,11 @@ magick="${SKY_PATH_IMAGE_MAGICK:-"$SKY_PATH_BIN/ImageMagick"}"
 
 if [ $# -lt 3 ]; then
 
-    echo "Usage: createSize <output> <size> <layer1> [layer2 ...]"
+    echo "Usage: create-size <output> <size> <layer1> [layer2 ...]"
     echo ""
     echo "examples:"
-    echo "    createSize output.png 128 input.svg"
-    echo "    createSize output.psd 256 layer1.png layer2.png"
+    echo "    create-size output.png 128 input.svg"
+    echo "    create-size output.psd 256 layer1.png layer2.png"
 
     exit 1
 fi
