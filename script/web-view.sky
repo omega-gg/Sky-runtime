@@ -57,7 +57,7 @@ Item
 
         webView.url = url;
 
-        // NOTE: If we don't call this webView.loading is set to false.
+        // NOTE: If we don't call this, webView.loading is set to false.
         sk.processEvents();
 
         var start = Date.now();
