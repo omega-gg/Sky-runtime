@@ -57,13 +57,12 @@ Item
 
         webView.url = url;
 
+        // NOTE: If we don't call this webView.loading is set to false.
         sk.processEvents();
-
-        if (webView.loading == false) return false;
 
         var start = Date.now();
 
-        while (webView.loadProgress != 100
+        while (webView.loading && webView.loadProgress != 100
                &&
                Date.now() - start < timeout) sk.processEvents();
 
