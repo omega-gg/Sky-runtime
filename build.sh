@@ -57,6 +57,8 @@ vlc="vlc3"
 
 mobile="simulator"
 
+storage="storageDefault"
+
 #--------------------------------------------------------------------------------------------------
 # Functions
 #--------------------------------------------------------------------------------------------------
@@ -86,8 +88,10 @@ makeAndroid()
 
     make INSTALL_ROOT=android-build install
 
-    # NOTE android: Remove build files to save space.
-    make clean
+    if [ $storage = "storageLight" ]; then
+
+        make clean
+    fi
 
     cd ..
 }
@@ -104,8 +108,10 @@ deployAndroid()
                        --android-platform android-$SDK_version \
                        --jdk $JAVA_HOME
 
-    # NOTE android: Remove build files to save space.
-    find . -mindepth 1 -maxdepth 1 ! -name "android-build" -exec rm -rf {} +
+    if [ $storage = "storageLight" ]; then
+
+        find . -mindepth 1 -maxdepth 1 ! -name "android-build" -exec rm -rf {} +
+    fi
 
     cd -
 }
@@ -169,12 +175,14 @@ if [ "$2" = "all" ]; then
 
     sh 3rdparty.sh $1 all
 
-    # NOTE android: Remove files to save space.
-    if [ $vlc = "vlc3" ]; then
+    if [ $storage = "storageLight" ]; then
 
-        rm -rf "$external"/$1/VLC/4*
-    else
-        rm -rf "$external"/$1/VLC/3*
+        if [ $vlc = "vlc3" ]; then
+
+            rm -rf "$external"/$1/VLC/4*
+        else
+            rm -rf "$external"/$1/VLC/3*
+        fi
     fi
 
     cd "$Sky"
