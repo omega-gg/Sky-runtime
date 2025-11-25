@@ -36,9 +36,9 @@ copyAndroid()
 {
     path="build/$1/android-build/build/outputs"
 
-    cp $path/apk/release/android-build-release-unsigned.apk $deploy/$target-$1.apk
+    mv $path/apk/release/android-build-release-unsigned.apk $deploy/$target-$1.apk
 
-    cp $path/bundle/release/android-build-release.aab $deploy/$target-$1.aab
+    mv $path/bundle/release/android-build-release.aab $deploy/$target-$1.aab
 }
 
 #--------------------------------------------------------------------------------------------------
