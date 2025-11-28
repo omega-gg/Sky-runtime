@@ -557,7 +557,9 @@ Item
                "- F1           show the user inteface\n" +
                "- F5           refresh the top level script\n" +
                "- F11          switch to fullscreen\n" +
+               "- Ctrl + F1    unload the current script\n" +
                "- Ctrl + F5    reload everthing in cascade\n" +
+               "- ²            show and focus console\n" +
                "- Escape       quit the application\n" +
                "\n" +
                "console:\n" +
@@ -621,13 +623,15 @@ Item
         {
             var item = loaderConsole.item;
 
-            if (item && item.isFocused) return;
+            if (item && item.visible && item.isFocused) return;
 
             event.accepted = true;
 
             ui = true;
 
             showConsole();
+
+            setFocusConsole();
         }
         else if (event.key == Qt.Key_Tab || event.key == Qt.Key_Backtab)
         {
@@ -639,7 +643,11 @@ Item
         {
             event.accepted = true;
 
-            toggleUi();
+            if (event.modifiers == Qt.ControlModifier)
+            {
+                unload();
+            }
+            else toggleUi();
         }
         else if (event.key == Qt.Key_F5)
         {
