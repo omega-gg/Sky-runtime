@@ -36,7 +36,8 @@ Item
 
     property int topMargin: gui.topMargin
 
-    property int timeout: 30000
+    property int timeout    : 30000
+    property int timeoutLoad:  1000
 
     //---------------------------------------------------------------------------------------------
     // Aliases
@@ -57,10 +58,15 @@ Item
 
         webView.url = url;
 
-        // NOTE: If we don't call this, webView.loading is set to false.
-        sk.processEvents();
-
         var start = Date.now();
+
+        // NOTE: If we don't do this, webView.loading is set to false.
+        while (webView.loading == false && Date.now() - start < timeout)
+        {
+            sk.processEvents();
+        }
+
+        start = Date.now();
 
         while (webView.loading && webView.loadProgress != 100
                &&
