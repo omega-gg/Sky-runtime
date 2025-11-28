@@ -648,6 +648,24 @@ elif [ $1 = "macOS" ]; then
 
         install_name_tool -change @rpath/QtQmlMeta.framework/Versions/$qx/QtQmlMeta \
                                   @loader_path/QtQmlMeta.dylib $target
+
+        install_name_tool -change @rpath/QtPositioning.framework/Versions/$qx/QtPositioning \
+                                  @loader_path/QtPositioning.dylib $target
+
+        install_name_tool -change @rpath/QtWebView.framework/Versions/$qx/QtWebView \
+                                  @loader_path/QtWebView.dylib $target
+
+        install_name_tool -change @rpath/QtWebChannel.framework/Versions/$qx/QtWebChannel \
+                                  @loader_path/QtWebChannel.dylib $target
+
+        install_name_tool -change @rpath/QtWebChannelQuick.framework/Versions/$qx/QtWebChannelQuick \
+                                  @loader_path/QtWebChannelQuick.dylib $target
+
+        install_name_tool -change @rpath/QtWebEngineCore.framework/Versions/$qx/QtWebEngineCore \
+                                  @loader_path/QtWebEngineCore.dylib $target
+
+        install_name_tool -change @rpath/QtWebEngineQuick.framework/Versions/$qx/QtWebEngineQuick \
+                                  @loader_path/QtWebEngineQuick.dylib $target
     fi
 
     otool -L $target
