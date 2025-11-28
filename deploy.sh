@@ -227,7 +227,7 @@ if [ $os = "windows" ]; then
                 # NOTE: Required for the webview.
                 cp -r "$path"/resources $deploy
 
-                cp "$path"/QtWebEngineProcess* deploy
+                cp "$path"/QtWebEngineProcess* $deploy
             fi
 
             # FFmpeg
@@ -312,7 +312,7 @@ elif [ $1 = "macOS" ]; then
             # NOTE: Required for the webview.
             cp -r "$path"/resources/* $deploy
 
-            cp "$path"/QtWebEngineProcess* deploy
+            cp "$path"/QtWebEngineProcess* $deploy
         fi
 
         # FIXME Qt 5.14 macOS: We have to copy qt.conf to avoid a segfault.
@@ -409,7 +409,7 @@ elif [ $1 = "linux" ]; then
             # NOTE: Required for the webview.
             cp -r "$path"/resources/* $deploy
 
-            cp "$path"/QtWebEngineProcess* deploy
+            cp "$path"/QtWebEngineProcess* $deploy
         fi
 
         mkdir $deploy/xcbglintegrations
