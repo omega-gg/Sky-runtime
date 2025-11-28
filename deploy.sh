@@ -307,6 +307,14 @@ elif [ $1 = "macOS" ]; then
 
     if [ $qt != "qt4" ]; then
 
+        if [ $qt = "qt6" ]; then
+
+            # NOTE: Required for the webview.
+            cp -r "$path"/resources/* $deploy
+
+            cp "$path"/QtWebEngineProcess* deploy
+        fi
+
         # FIXME Qt 5.14 macOS: We have to copy qt.conf to avoid a segfault.
         cp "$path"/qt.conf $deploy
 
