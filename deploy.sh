@@ -747,6 +747,19 @@ elif [ $1 = "macOS" ]; then
     otool -L QtMultimedia/$libmultimedia.dylib
 
     #----------------------------------------------------------------------------------------------
+    # QtWebView
+
+    if [ $qt = "qt6" ]; then
+
+        install_name_tool -change \
+                          @rpath/QtWebViewQuick.framework/Versions/$qx/QtWebViewQuick \
+                          @loader_path/../../QtWebViewQuick.dylib \
+                          QtWebView/libqtwebviewquickplugin.dylib
+
+        otool -L QtWebView/libqtwebviewquickplugin.dylib
+    fi
+
+    #----------------------------------------------------------------------------------------------
     # VLC
 
     install_name_tool -change @rpath/libvlccore.dylib \
