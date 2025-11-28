@@ -227,7 +227,7 @@ if [ $os = "windows" ]; then
                 # NOTE: Required for the webview.
                 cp -r "$path"/resources $deploy
 
-                cp "$path"/QtWebEngineProcess* deploy
+                cp "$path"/QtWebEngineProcess* $deploy
             fi
 
             # FFmpeg
@@ -312,7 +312,7 @@ elif [ $1 = "macOS" ]; then
             # NOTE: Required for the webview.
             cp -r "$path"/resources/* $deploy
 
-            cp "$path"/QtWebEngineProcess* deploy
+            cp "$path"/QtWebEngineProcess* $deploy
         fi
 
         # FIXME Qt 5.14 macOS: We have to copy qt.conf to avoid a segfault.
@@ -409,7 +409,7 @@ elif [ $1 = "linux" ]; then
             # NOTE: Required for the webview.
             cp -r "$path"/resources/* $deploy
 
-            cp "$path"/QtWebEngineProcess* deploy
+            cp "$path"/QtWebEngineProcess* $deploy
         fi
 
         mkdir $deploy/xcbglintegrations
@@ -648,6 +648,24 @@ elif [ $1 = "macOS" ]; then
 
         install_name_tool -change @rpath/QtQmlMeta.framework/Versions/$qx/QtQmlMeta \
                                   @loader_path/QtQmlMeta.dylib $target
+
+        install_name_tool -change @rpath/QtPositioning.framework/Versions/$qx/QtPositioning \
+                                  @loader_path/QtPositioning.dylib $target
+
+        install_name_tool -change @rpath/QtWebView.framework/Versions/$qx/QtWebView \
+                                  @loader_path/QtWebView.dylib $target
+
+        install_name_tool -change @rpath/QtWebChannel.framework/Versions/$qx/QtWebChannel \
+                                  @loader_path/QtWebChannel.dylib $target
+
+        install_name_tool -change @rpath/QtWebChannelQuick.framework/Versions/$qx/QtWebChannelQuick \
+                                  @loader_path/QtWebChannelQuick.dylib $target
+
+        install_name_tool -change @rpath/QtWebEngineCore.framework/Versions/$qx/QtWebEngineCore \
+                                  @loader_path/QtWebEngineCore.dylib $target
+
+        install_name_tool -change @rpath/QtWebEngineQuick.framework/Versions/$qx/QtWebEngineQuick \
+                                  @loader_path/QtWebEngineQuick.dylib $target
     fi
 
     otool -L $target
@@ -727,6 +745,19 @@ elif [ $1 = "macOS" ]; then
                       QtMultimedia/$libmultimedia.dylib
 
     otool -L QtMultimedia/$libmultimedia.dylib
+
+    #----------------------------------------------------------------------------------------------
+    # QtWebView
+
+    if [ $qt = "qt6" ]; then
+
+        install_name_tool -change \
+                          @rpath/QtWebViewQuick.framework/Versions/$qx/QtWebViewQuick \
+                          @loader_path/../../QtWebViewQuick.dylib \
+                          QtWebView/libqtwebviewquickplugin.dylib
+
+        otool -L QtWebView/libqtwebviewquickplugin.dylib
+    fi
 
     #----------------------------------------------------------------------------------------------
     # VLC
