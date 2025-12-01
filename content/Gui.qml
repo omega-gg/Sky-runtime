@@ -554,10 +554,10 @@ Item
     {
         return "Welcome to Sky kit runtime " + sk.versionSky + "\n\n" +
                "keyboard:\n" +
-               "- F1           show the user inteface\n" +
+               "- F1           toggle the user inteface\n" +
                "- F5           refresh the top level script\n" +
                "- F11          switch to fullscreen\n" +
-               "- Ctrl + F1    show and focus console\n" +
+               "- Ctrl + F1    toggle and focus the console\n" +
                "- Ctrl + F5    reload everthing in cascade\n" +
                "- Ctrl + W     unload the current script\n" +
                "- Escape       quit the application\n" +
