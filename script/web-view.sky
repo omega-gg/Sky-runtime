@@ -60,15 +60,30 @@ Item
 
         var start = Date.now();
 
-        // NOTE: If we don't do this, webView.loading is set to false.
-        while (webView.loading == false
+        // NOTE: If we don't do this, webView.loading keeps its ancient state.
+        while (webView.loading == false || webView.loadProgress == 100
                &&
                Date.now() - start < timeoutLoad)
         {
             sk.processEvents();
         }
 
-        if (webView.loading == false)
+        if (webView.loading == false || webView.loadProgress == 100)
+        {
+            console.debug("web-view: Failed to load " + url);
+
+            return false;
+        }
+
+        // NOTE: Waiting for the loading to start, if not it's probably an SSL issue.
+        while (webView.loadProgress == 0
+               &&
+               Date.now() - start < timeoutLoad)
+        {
+            sk.processEvents();
+        }
+
+        if (webView.loadProgress == 0)
         {
             console.debug("web-view: Failed to load " + url);
 
