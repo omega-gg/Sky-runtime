@@ -8,7 +8,7 @@ The Sky runtime is a project driven aplication designed to run QML .sky files in
 C++ API(s) and UI components. It allows for versatile use cases while keeping things simple and
 minimalistic.
 
-- [Bash commands](bash/README.md)
+- [Bash scripts](bash/README.md)
 
 ## Technology
 
