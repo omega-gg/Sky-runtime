@@ -1,5 +1,4 @@
 # [Bash](../README.md) Image tools
----
 
 ## Configuration
 
