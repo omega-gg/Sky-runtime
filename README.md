@@ -12,7 +12,7 @@ minimalistic.
 
 ## Extensions
 
-- [hypergonar](https://omega.gg/hypergonar/sources): frame compositor for generative software.
+- [hypergonar](https://omega.gg/hypergonar/sources) - frame compositor for generative software.
 
 ## Technology
 
