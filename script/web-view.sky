@@ -61,16 +61,28 @@ Item
         var start = Date.now();
 
         // NOTE: If we don't do this, webView.loading is set to false.
-        while (webView.loading == false && Date.now() - start < timeout)
+        while (webView.loading == false
+               &&
+               Date.now() - start < timeoutLoad)
         {
             sk.processEvents();
         }
 
+        if (webView.loading == false)
+        {
+            console.debug("web-view: Failed to load " + url);
+
+            return false;
+        }
+
         start = Date.now();
 
-        while (webView.loading && webView.loadProgress != 100
+        while (webView.loading || webView.loadProgress != 100
                &&
-               Date.now() - start < timeout) sk.processEvents();
+               Date.now() - start < timeout)
+        {
+            sk.processEvents();
+        }
 
         if (webView.loadProgress != 100)
         {
