@@ -1,4 +1,4 @@
 include(image/image.pri)
-include(ffmpeg/ffmpeg.pri)
+include(video/video.pri)
 
 OTHER_FILES += bash/README.md \

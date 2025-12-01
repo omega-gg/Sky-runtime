@@ -6,7 +6,7 @@
 
 ## Video
 
-- [ffmpeg](ffmpeg/README.md)
+- [video](video/README.md)
 
 ## Environment variables
 
