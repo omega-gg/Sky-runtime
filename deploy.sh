@@ -50,6 +50,11 @@ copyAndroid()
     fi
 }
 
+installMacOS()
+{
+    install_name_tool -change @rpath/$1.framework/Versions/$qx/$1 @loader_path/$1.dylib "$2"
+}
+
 #--------------------------------------------------------------------------------------------------
 # Syntax
 #--------------------------------------------------------------------------------------------------
@@ -599,76 +604,61 @@ elif [ $1 = "macOS" ]; then
     #----------------------------------------------------------------------------------------------
     # target
 
-    install_name_tool -change @rpath/QtCore.framework/Versions/$qx/QtCore \
-                              @loader_path/QtCore.dylib $target
-
-    install_name_tool -change @rpath/QtGui.framework/Versions/$qx/QtGui \
-                              @loader_path/QtGui.dylib $target
-
-    install_name_tool -change @rpath/QtNetwork.framework/Versions/$qx/QtNetwork \
-                              @loader_path/QtNetwork.dylib $target
-
-    install_name_tool -change @rpath/QtOpenGL.framework/Versions/$qx/QtOpenGL \
-                              @loader_path/QtOpenGL.dylib $target
-
-    install_name_tool -change @rpath/QtQml.framework/Versions/$qx/QtQml \
-                              @loader_path/QtQml.dylib $target
+    installMacOS QtCore    $target
+    installMacOS QtGui     $target
+    installMacOS QtNetwork $target
+    installMacOS QtOpenGL  $target
+    installMacOS QtQml     $target
 
     if [ -f QtQmlModels.dylib ]; then
 
-        install_name_tool -change @rpath/QtQmlModels.framework/Versions/$qx/QtQmlModels \
-                                  @loader_path/QtQmlModels.dylib $target
+        installMacOS QtQmlModels $target
     fi
 
-    install_name_tool -change @rpath/QtQuick.framework/Versions/$qx/QtQuick \
-                              @loader_path/QtQuick.dylib $target
-
-    install_name_tool -change @rpath/QtSvg.framework/Versions/$qx/QtSvg \
-                              @loader_path/QtSvg.dylib $target
-
-    install_name_tool -change @rpath/QtWidgets.framework/Versions/$qx/QtWidgets \
-                              @loader_path/QtWidgets.dylib $target
-
-    install_name_tool -change @rpath/QtXml.framework/Versions/$qx/QtXml \
-                              @loader_path/QtXml.dylib $target
-
-    install_name_tool -change @rpath/QtMultimedia.framework/Versions/$qx/QtMultimedia \
-                              @loader_path/QtMultimedia.dylib $target
+    installMacOS QtQuick      $target
+    installMacOS QtSvg        $target
+    installMacOS QtWidgets    $target
+    installMacOS QtXml        $target
+    installMacOS QtMultimedia $target
 
     if [ $qt = "qt5" ]; then
 
-        install_name_tool -change @rpath/QtXmlPatterns.framework/Versions/$qx/QtXmlPatterns \
-                                  @loader_path/QtXmlPatterns.dylib $target
+        installMacOS QtXmlPatterns $target
     else
-        install_name_tool -change @rpath/QtCore5Compat.framework/Versions/$qx/QtCore5Compat \
-                                  @loader_path/QtCore5Compat.dylib $target
-
-        install_name_tool -change @rpath/QtQmlWorkerScript.framework/Versions/$qx/QtQmlWorkerScript \
-                                  @loader_path/QtQmlWorkerScript.dylib $target
-
-        install_name_tool -change @rpath/QtQmlMeta.framework/Versions/$qx/QtQmlMeta \
-                                  @loader_path/QtQmlMeta.dylib $target
-
-        install_name_tool -change @rpath/QtPositioning.framework/Versions/$qx/QtPositioning \
-                                  @loader_path/QtPositioning.dylib $target
-
-        install_name_tool -change @rpath/QtWebView.framework/Versions/$qx/QtWebView \
-                                  @loader_path/QtWebView.dylib $target
-
-        install_name_tool -change @rpath/QtWebChannel.framework/Versions/$qx/QtWebChannel \
-                                  @loader_path/QtWebChannel.dylib $target
-
-        install_name_tool -change @rpath/QtWebChannelQuick.framework/Versions/$qx/QtWebChannelQuick \
-                                  @loader_path/QtWebChannelQuick.dylib $target
-
-        install_name_tool -change @rpath/QtWebEngineCore.framework/Versions/$qx/QtWebEngineCore \
-                                  @loader_path/QtWebEngineCore.dylib $target
-
-        install_name_tool -change @rpath/QtWebEngineQuick.framework/Versions/$qx/QtWebEngineQuick \
-                                  @loader_path/QtWebEngineQuick.dylib $target
+        installMacOS QtCore5Compat     $target
+        installMacOS QtQmlWorkerScript $target
+        installMacOS QtQmlMeta         $target
+        installMacOS QtPositioning     $target
+        installMacOS QtWebView         $target
+        installMacOS QtWebChannel      $target
+        installMacOS QtWebChannelQuick $target
+        installMacOS QtWebEngineCore   $target
+        installMacOS QtWebEngineQuick  $target
     fi
 
     otool -L $target
+
+    #----------------------------------------------------------------------------------------------
+    # QtWebEngineProcess
+
+    if [ $qt = "qt6" ]; then
+
+        installMacOS QtCore            $target
+        installMacOS QtGui             $target
+        installMacOS QtNetwork         $target
+        installMacOS QtOpenGL          $target
+        installMacOS QtQml             $target
+        installMacOS QtQuick           $target
+        installMacOS QtQmlModels       $target
+        installMacOS QtQmlWorkerScript $target
+        installMacOS QtQmlMeta         $target
+        installMacOS QtPositioning     $target
+        installMacOS QtWebChannel      $target
+        installMacOS QtWebEngineCore   $target
+        installMacOS QtWebEngineQuick  $target
+
+        otool -L $target
+    fi
 
     #----------------------------------------------------------------------------------------------
     # QtGui
@@ -702,7 +692,7 @@ elif [ $1 = "macOS" ]; then
     #
     #   install_name_tool -change \
     #                      @rpath/QtQmlWorkerScript.framework/Versions/$qx/QtQmlWorkerScript \
-    #                      @loader_path/../../QtQmlWorkerScript.dylib \
+    #                      @loader_path/../QtQmlWorkerScript.dylib \
     #                      QtQml/WorkerScript/libworkerscriptplugin.dylib
     #
     #    otool -L QtQml/WorkerScript/libworkerscriptplugin.dylib
@@ -753,7 +743,7 @@ elif [ $1 = "macOS" ]; then
 
         install_name_tool -change \
                           @rpath/QtWebViewQuick.framework/Versions/$qx/QtWebViewQuick \
-                          @loader_path/../../QtWebViewQuick.dylib \
+                          @loader_path/../QtWebViewQuick.dylib \
                           QtWebView/libqtwebviewquickplugin.dylib
 
         otool -L QtWebView/libqtwebviewquickplugin.dylib
