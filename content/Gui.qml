@@ -557,9 +557,9 @@ Item
                "- F1           show the user inteface\n" +
                "- F5           refresh the top level script\n" +
                "- F11          switch to fullscreen\n" +
-               "- Ctrl + F1    unload the current script\n" +
+               "- Ctrl + F1    show and focus console\n" +
                "- Ctrl + F5    reload everthing in cascade\n" +
-               "- ²            show and focus console\n" +
+               "- Ctrl + W     unload the current script\n" +
                "- Escape       quit the application\n" +
                "\n" +
                "console:\n" +
@@ -619,21 +619,7 @@ Item
 
     function onKeyPressed(event)
     {
-        if (event.key == Qt.Key_twosuperior)
-        {
-            var item = loaderConsole.item;
-
-            if (item && item.visible && item.isFocused) return;
-
-            event.accepted = true;
-
-            ui = true;
-
-            showConsole();
-
-            setFocusConsole();
-        }
-        else if (event.key == Qt.Key_Tab || event.key == Qt.Key_Backtab)
+        if (event.key == Qt.Key_Tab || event.key == Qt.Key_Backtab)
         {
             event.accepted = true;
 
@@ -645,7 +631,22 @@ Item
 
             if (event.modifiers == Qt.ControlModifier)
             {
-                unload();
+                var item = loaderConsole.item;
+
+                if (item && item.visible && item.isFocused)
+                {
+                    hideUi();
+
+                    return;
+                }
+
+                event.accepted = true;
+
+                ui = true;
+
+                showConsole();
+
+                setFocusConsole();
             }
             else toggleUi();
         }
@@ -658,6 +659,12 @@ Item
                 reload();
             }
             else refresh();
+        }
+        else if (event.key == Qt.Key_W && event.modifiers == Qt.ControlModifier)
+        {
+            event.accepted = true;
+
+            unload();
         }
 //#!DEPLOY
         else if (event.key == Qt.Key_P && event.modifiers == Qt.ControlModifier)
