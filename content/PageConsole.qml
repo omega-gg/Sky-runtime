@@ -112,11 +112,11 @@ Item
             {
                 event.accepted = true;
 
-                gui.process(text);
+                var text = lineEdit.text;
 
                 clear();
 
-                setFocus();
+                gui.process(text);
             }
         }
     }
