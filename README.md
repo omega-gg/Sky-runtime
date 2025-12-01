@@ -10,6 +10,10 @@ minimalistic.
 
 - [Bash scripts](bash/README.md)
 
+## Extensions
+
+- [hypergonar](https://omega.gg/hypergonar/sources): frame compositor for generative software.
+
 ## Technology
 
 sky is built in C++ with [Sky kit](https://omega.gg/Sky/sources).<br>
