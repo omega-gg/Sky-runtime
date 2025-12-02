@@ -14,6 +14,17 @@ minimalistic.
 
 - [hypergonar](https://omega.gg/hypergonar/sources) - Frame compositor for generative software
 
+## Usage
+
+    sky <script> [options]
+
+    Where <script> is .sky script you want to run.
+
+## Options
+
+    --help    Print the help
+    --cli     Run the script headless
+
 ## Technology
 
 sky is built in C++ with [Sky kit](https://omega.gg/Sky/sources).<br>

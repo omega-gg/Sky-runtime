@@ -108,7 +108,7 @@ private:
 
 public: // Interface
 #ifdef SK_DESKTOP
-    Q_INVOKABLE void applyArguments(int & argc, char ** argv);
+    Q_INVOKABLE int applyArguments(int & argc, char ** argv);
 #endif
 
     Q_INVOKABLE void load();
@@ -227,6 +227,8 @@ public: // Static functions
     Q_INVOKABLE static bool renameFile(const QString & oldPath, const QString & newPath);
 
 private: // Functions
+    void help() const;
+
     bool createPath(const QString & path) const;
 
     void createIndex();

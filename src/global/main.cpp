@@ -61,7 +61,9 @@ int main(int argc, char * argv[])
     W_CREATE_CONTROLLER(ControllerCore);
 
 #ifdef SK_DESKTOP
-    core->applyArguments(argc, argv);
+    int code = core->applyArguments(argc, argv);
+
+    if (code != -1) return code;
 #endif
 
     //---------------------------------------------------------------------------------------------

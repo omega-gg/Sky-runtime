@@ -473,9 +473,9 @@ ControllerCore::ControllerCore() : WController()
 
 #ifdef SK_DESKTOP
 
-/* Q_INVOKABLE */ void ControllerCore::applyArguments(int & argc, char ** argv)
+/* Q_INVOKABLE */ int ControllerCore::applyArguments(int & argc, char ** argv)
 {
-    if (argc < 2) return;
+    if (argc < 2) return -1;
 
     for (int i = 1; i < argc; i++)
     {
@@ -491,9 +491,17 @@ ControllerCore::ControllerCore() : WController()
             {
                 sk->setCli(true);
             }
+            else if (name == "help")
+            {
+                help();
+
+                return 0;
+            }
         }
         else _argument = string;
     }
+
+    return -1;
 }
 
 #endif
@@ -1446,6 +1454,18 @@ ControllerCore::ControllerCore() : WController()
 //-------------------------------------------------------------------------------------------------
 // Functions private
 //-------------------------------------------------------------------------------------------------
+
+void ControllerCore::help() const
+{
+    createPath(_path);
+
+    qInfo("sky %s\n", sk->version().C_STR);
+
+    qInfo("Usage: sky <script> [options]\n"
+          "\n"
+          "--help    Print the help\n"
+          "--cli     Run the script headless");
+}
 
 bool ControllerCore::createPath(const QString & path) const
 {
