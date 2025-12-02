@@ -25,9 +25,28 @@ import Sky     1.0
 
 Application
 {
+    id: main
+
+    //---------------------------------------------------------------------------------------------
+    // Events
+    //---------------------------------------------------------------------------------------------
+
+    Component.onCompleted: if (sk.cli) load()
+
     //---------------------------------------------------------------------------------------------
     // Functions
     //---------------------------------------------------------------------------------------------
+
+    function load()
+    {
+        core.load();
+
+        st.applyNight();
+
+        loader.source = "Gui.qml";
+
+        loader.item.setFocus();
+    }
 
     function toggleMaximized()
     {
@@ -60,16 +79,7 @@ Application
         // Events
         //-----------------------------------------------------------------------------------------
 
-        onFadeIn:
-        {
-            core.load();
-
-            st.applyNight();
-
-            loader.source = "Gui.qml";
-
-            loader.item.setFocus();
-        }
+        onFadeIn: if (sk.cli == false) main.load()
 
         viewport.onActiveFocusChanged:
         {

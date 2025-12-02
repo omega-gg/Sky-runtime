@@ -477,7 +477,23 @@ ControllerCore::ControllerCore() : WController()
 {
     if (argc < 2) return;
 
-    _argument = QString(argv[1]);
+    for (int i = 1; i < argc; i++)
+    {
+        QString string = argv[i];
+
+        if (string.startsWith("--"))
+        {
+            QString name = string;
+
+            name = name.remove(0, 2).toLower();
+
+            if (name == "cli")
+            {
+                sk->setCli(true);
+            }
+        }
+        else _argument = string;
+    }
 }
 
 #endif
