@@ -57,9 +57,6 @@ installMacOS()
 
 copyFolder()
 {
-   rm -rf   "$2"
-   mkdir -p "$2"
-
    find "$1" -type f -iname "$3" | while read -r file; do
 
        path="${file#$1/}"
