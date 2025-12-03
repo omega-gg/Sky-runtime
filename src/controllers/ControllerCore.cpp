@@ -1459,6 +1459,11 @@ void ControllerCore::help() const
 {
     createPath(_path);
 
+    // FIXME Qt4.8.7: qInstallMsgHandler breaks QML 'Keys' events.
+#ifndef QT_4
+    wControllerFile->initMessageHandler();
+#endif
+
     qInfo("sky %s\n", sk->version().C_STR);
 
     qInfo("Usage: sky <script> [options]\n"

@@ -55,6 +55,23 @@ installMacOS()
     install_name_tool -change @rpath/$1.framework/Versions/$qx/$1 @loader_path/$1.dylib "$2"
 }
 
+copyFolder()
+{
+   rm -rf   "$2"
+   mkdir -p "$2"
+
+   find "$1" -type f -iname "$3" | while read -r file; do
+
+       path="${file#$1/}"
+
+       target="$2/$(dirname "$path")"
+
+       mkdir -p "$target"
+
+       cp "$file" "$target/"
+   done
+}
+
 #--------------------------------------------------------------------------------------------------
 # Syntax
 #--------------------------------------------------------------------------------------------------
@@ -813,20 +830,13 @@ if [ $os != "mobile" ]; then
 
     echo "COPYING script"
 
-    mkdir -p $deploy/script
-
-    cp "$script"/*.sky $deploy/script
-fi
-
-#--------------------------------------------------------------------------------------------------
-# script
-#--------------------------------------------------------------------------------------------------
-
-if [ $os != "mobile" ]; then
+    copyFolder "$script" $deploy/script "*.sky"
 
     echo "COPYING bash"
 
-    mkdir -p $deploy/bash
+    copyFolder "$bash" $deploy/bash "*.sh"
 
-    cp -r "$bash"/* $deploy/bash
+    echo "COPYING doc"
+
+    copyFolder "$bash" $deploy/doc "*.md"
 fi
