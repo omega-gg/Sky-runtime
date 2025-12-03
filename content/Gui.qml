@@ -144,7 +144,7 @@ Item
         // NOTE: When it's a command line interface run we quit right away.
         if (sk.cli)
         {
-            sk.quit();
+            window.close();
 
             return;
         }
