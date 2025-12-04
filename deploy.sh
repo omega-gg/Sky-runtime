@@ -611,6 +611,10 @@ if [ $os = "windows" ]; then
 
     cp bin/$target.exe $deploy
 
+    cp dist/script/sky.sh $deploy
+
+    chmod +x $deploy/sky.sh
+
 elif [ $1 = "macOS" ]; then
 
     cd $deploy

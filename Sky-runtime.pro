@@ -317,6 +317,7 @@ OTHER_FILES += environment.sh \
                include/generate.sh \
                dist/sky.rc \
                dist/script/start.sh \
+               dist/script/sky.sh \
                dist/doc/readme.md \
                dist/changes/1.1.0.md \
                dist/iOS/Info.plist \
