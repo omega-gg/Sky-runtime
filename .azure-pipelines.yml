@@ -125,9 +125,9 @@ jobs:
     vmImage: "ubuntu-latest"
   steps:
   # NOTE: We need an older version to package the application.
-  # NOTE Qt6: Ubuntu 20.04 is required for glibc.
+  # NOTE Qt6: Ubuntu 22.04 is required for glibc.
   - bash: |
-      docker run -d --name ubuntu -v $PWD:/Sky-runtime amd64/ubuntu:20.04 tail -f /dev/null
+      docker run -d --name ubuntu -v $PWD:/Sky-runtime amd64/ubuntu:22.04 tail -f /dev/null
       docker exec -t ubuntu bash -c "cd /Sky-runtime;
                                      export DEBIAN_FRONTEND=noninteractive;
                                      apt-get update;
