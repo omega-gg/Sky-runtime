@@ -660,21 +660,21 @@ elif [ $1 = "macOS" ]; then
 
     if [ $qt = "qt6" ]; then
 
-        installMacOS QtCore            $target
-        installMacOS QtGui             $target
-        installMacOS QtNetwork         $target
-        installMacOS QtOpenGL          $target
-        installMacOS QtQml             $target
-        installMacOS QtQuick           $target
-        installMacOS QtQmlModels       $target
-        installMacOS QtQmlWorkerScript $target
-        installMacOS QtQmlMeta         $target
-        installMacOS QtPositioning     $target
-        installMacOS QtWebChannel      $target
-        installMacOS QtWebEngineCore   $target
-        installMacOS QtWebEngineQuick  $target
+        installMacOS QtCore            QtWebEngineProcess
+        installMacOS QtGui             QtWebEngineProcess
+        installMacOS QtNetwork         QtWebEngineProcess
+        installMacOS QtOpenGL          QtWebEngineProcess
+        installMacOS QtQml             QtWebEngineProcess
+        installMacOS QtQuick           QtWebEngineProcess
+        installMacOS QtQmlModels       QtWebEngineProcess
+        installMacOS QtQmlWorkerScript QtWebEngineProcess
+        installMacOS QtQmlMeta         QtWebEngineProcess
+        installMacOS QtPositioning     QtWebEngineProcess
+        installMacOS QtWebChannel      QtWebEngineProcess
+        installMacOS QtWebEngineCore   QtWebEngineProcess
+        installMacOS QtWebEngineQuick  QtWebEngineProcess
 
-        otool -L $target
+        otool -L QtWebEngineProcess
     fi
 
     #----------------------------------------------------------------------------------------------
