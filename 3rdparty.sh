@@ -58,7 +58,6 @@ if [ "$2" = "all" ]; then
 
     sh environment.sh $compiler_win
     sh environment.sh $qt
-    sh environment.sh $vlc
 
     sh 3rdparty.sh $1 all
 else
