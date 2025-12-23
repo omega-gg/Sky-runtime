@@ -110,10 +110,18 @@ deployAndroid()
 
     if [ $storage = "storageLight" ]; then
 
-        find . -mindepth 1 -maxdepth 1 ! -name "android-build" -exec rm -rf {} +
-    fi
+        path="$1/android-build/build/outputs"
 
-    cd -
+        mv $path/apk/release/android-build-release-unsigned.apk ../$target-$1.apk
+
+        mv $path/bundle/release/android-build-release.aab ../$target-$1.aab
+
+        cd -
+
+        rm -rf $1
+    else
+        cd -
+    fi
 }
 
 #--------------------------------------------------------------------------------------------------
