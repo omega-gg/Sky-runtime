@@ -373,5 +373,6 @@ ios {
 
     DISTFILES += $$ANDROID_PACKAGE/AndroidManifest.xml \
                  $$ANDROID_PACKAGE/build.gradle \
-                 $$ANDROID_PACKAGE/gradle/wrapper/gradle-wrapper.properties
+                 $$ANDROID_PACKAGE/gradle/wrapper/gradle-wrapper.properties \
+                 $$ANDROID_PACKAGE/libs/classes.jar
 }

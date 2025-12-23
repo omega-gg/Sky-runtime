@@ -115,6 +115,8 @@ if [ $1 = "android" ]; then
     cleanAndroid arm64-v8a
     cleanAndroid x86
     cleanAndroid x86_64
+
+    rm -f "$data/$1/libs"/*.jar
 fi
 
 if [ "$2" = "clean" ]; then
@@ -233,6 +235,11 @@ elif [ $1 = "android" ]; then
     echo "COPYING VLC"
 
     copyAndroid "$deploy"/vlc
+
+    cp "$path"/*.jar $data/armeabi-v7a/libs
+    cp "$path"/*.jar $data/arm64-v8a/libs
+    cp "$path"/*.jar $data/x86/libs
+    cp "$path"/*.jar $data/x86_64/libs
 fi
 
 #--------------------------------------------------------------------------------------------------
