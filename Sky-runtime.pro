@@ -302,6 +302,7 @@ OTHER_FILES += environment.sh \
                content/TextDefaultLink.qml \
                content/TextEditCopy.qml \
                content/RowRecent.qml \
+               content/WebViewer.qml \
                content/PanelAssociate.qml \
                content/PanelInstall.qml \
                content/PageDefault.qml \
