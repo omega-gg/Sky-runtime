@@ -183,16 +183,6 @@ if [ "$2" = "all" ]; then
 
     sh 3rdparty.sh $1 all
 
-    if [ $storage = "storageLight" ]; then
-
-        if [ $vlc = "vlc3" ]; then
-
-            rm -rf "$external"/$1/VLC/4*
-        else
-            rm -rf "$external"/$1/VLC/3*
-        fi
-    fi
-
     cd "$Sky"
 
     sh configure.sh $1
