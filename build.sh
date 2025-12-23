@@ -110,7 +110,7 @@ deployAndroid()
 
     if [ $storage = "storageLight" ]; then
 
-        path="$1/android-build/build/outputs"
+        path="android-build/build/outputs"
 
         mv $path/apk/release/android-build-release-unsigned.apk ../$target-$1.apk
 
