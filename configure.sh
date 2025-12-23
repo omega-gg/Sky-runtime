@@ -234,7 +234,9 @@ elif [ $1 = "android" ]; then
 
     echo "COPYING VLC"
 
-    copyAndroid "$deploy"/vlc
+    path="$deploy/vlc"
+
+    copyAndroid "$path"
 
     cp "$path"/*.jar $data/armeabi-v7a/libs
     cp "$path"/*.jar $data/arm64-v8a/libs
