@@ -49,6 +49,20 @@ copyAndroid()
     fi
 }
 
+copyFolder()
+{
+   find "$1" -type f -iname "$3" | while read -r file; do
+
+       path="${file#$1/}"
+
+       target="$2/$(dirname "$path")"
+
+       mkdir -p "$target"
+
+       cp "$file" "$target/"
+   done
+}
+
 deployMacOS()
 {
     installMacOS "$target" ""
@@ -94,20 +108,6 @@ installMacOS()
         install_name_tool -change "@rpath/$library.framework/Versions/$qx/$library" \
                                   "@loader_path/${2}${library}.dylib" "$1" 2>/dev/null
     done
-}
-
-copyFolder()
-{
-   find "$1" -type f -iname "$3" | while read -r file; do
-
-       path="${file#$1/}"
-
-       target="$2/$(dirname "$path")"
-
-       mkdir -p "$target"
-
-       cp "$file" "$target/"
-   done
 }
 
 #--------------------------------------------------------------------------------------------------
