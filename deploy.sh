@@ -56,10 +56,8 @@ installMacOS()
     for library in $list; do
 
         install_name_tool -change "@rpath/$library.framework/Versions/$qx/$library" \
-                                  "@loader_path/${2}${library}.dylib" "$1"
+                                  "@loader_path/${2}${library}.dylib" "$1" 2>/dev/null
     done
-
-    install_name_tool -add_rpath "@loader_path/$2" "$1"
 }
 
 copyFolder()
@@ -644,14 +642,14 @@ elif [ $1 = "macOS" ]; then
     done
 
     find platforms \
-        imageformats \
-        tls \
-        multimedia \
-        QtQuick \
-        QtQml \
-        QtWebView \
-        QtWebEngine \
-        QtWebChannel \
+         imageformats \
+         tls \
+         multimedia \
+         QtQuick \
+         QtQml \
+         QtWebView \
+         QtWebEngine \
+         QtWebChannel \
     -name "*.dylib" | while read -r plugin; do
 
         case "$plugin" in
