@@ -49,6 +49,42 @@ copyAndroid()
     fi
 }
 
+deployMacOS()
+{
+    installMacOS "$target" ""
+
+    if [ -f "QtWebEngineProcess" ]; then
+
+        installMacOS "QtWebEngineProcess" ""
+    fi
+
+    for file in *.dylib; do
+
+        [ -e "$file" ] || continue
+
+        installMacOS "$file" ""
+    done
+
+    find platforms \
+         imageformats \
+         tls \
+         multimedia \
+         QtQuick \
+         QtQml \
+         QtWebView \
+         QtWebEngine \
+         QtWebChannel \
+    -name "*.dylib" | while read -r plugin; do
+
+        case "$plugin" in
+            */*/*/*) path="../../" ;;
+            *)       path="../"    ;;
+        esac
+
+        installMacOS "$plugin" "$path"
+    done
+}
+
 installMacOS()
 {
     list=$(otool -L "$1" | grep -o "Qt[A-Za-z0-9]*\.framework" | sed 's/\.framework//' | sort -u)
@@ -627,38 +663,7 @@ elif [ $1 = "macOS" ]; then
 
     cd $deploy
 
-    installMacOS "$target" ""
-
-    if [ -f "QtWebEngineProcess" ]; then
-
-        installMacOS "QtWebEngineProcess" ""
-    fi
-
-    for file in *.dylib; do
-
-        [ -e "$file" ] || continue
-
-        installMacOS "$file" ""
-    done
-
-    find platforms \
-         imageformats \
-         tls \
-         multimedia \
-         QtQuick \
-         QtQml \
-         QtWebView \
-         QtWebEngine \
-         QtWebChannel \
-    -name "*.dylib" | while read -r plugin; do
-
-        case "$plugin" in
-            */*/*/*) path="../../" ;;
-            *)       path="../"    ;;
-        esac
-
-        installMacOS "$plugin" "$path"
-    done
+    deployMacOS
 
     #----------------------------------------------------------------------------------------------
     # VLC
