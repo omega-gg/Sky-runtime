@@ -510,7 +510,7 @@ ControllerCore::ControllerCore() : WController()
 {
     if (_cache) return;
 
-#ifndef Q_OS_MAC
+#ifdef Q_OS_MACOS
     //---------------------------------------------------------------------------------------------
     // Environment
 
