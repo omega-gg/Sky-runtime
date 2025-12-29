@@ -270,6 +270,7 @@ if [ $os = "windows" ]; then
             cp "$path/$QtX"XmlPatterns.dll $deploy
             cp "$path/$QtX"WinExtras.dll   $deploy
         else
+            cp "$path/$QtX"Concurrent.dll  $deploy
             cp "$path/$QtX"Core5Compat.dll $deploy
             cp "$path/$QtX"QmlMeta.dll     $deploy
 
@@ -355,6 +356,7 @@ elif [ $1 = "macOS" ]; then
 
             cp "$path"/QtXmlPatterns.dylib $deploy
         else
+            cp "$path"/QtConcurrent.dylib  $deploy
             cp "$path"/QtCore5Compat.dylib $deploy
             cp "$path"/QtQmlMeta.dylib     $deploy
             cp "$path"/QtPositioning.dylib $deploy
@@ -467,6 +469,7 @@ elif [ $1 = "linux" ]; then
 
             cp "$path/lib$QtX"XmlPatterns.so.$qx $deploy
         else
+            cp "$path/lib$QtX"Concurrent.so.$qx  $deploy
             cp "$path/lib$QtX"Core5Compat.so.$qx $deploy
             cp "$path/lib$QtX"QmlMeta.so.$qx     $deploy
             cp "$path/lib$QtX"Positioning.so.$qx $deploy
@@ -642,6 +645,7 @@ elif [ $1 = "macOS" ]; then
 
         installMacOS QtXmlPatterns $target
     else
+        installMacOS QtConcurrent      $target
         installMacOS QtCore5Compat     $target
         installMacOS QtQmlWorkerScript $target
         installMacOS QtQmlMeta         $target

@@ -34,7 +34,7 @@ MinGW_version="13.1.0"
 
 jom_version="1.1.5"
 
-MSVC_version="14"
+MSVC_version="15"
 
 WindowsKit_version="10"
 
