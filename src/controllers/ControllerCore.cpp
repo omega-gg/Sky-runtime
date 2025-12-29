@@ -510,6 +510,14 @@ ControllerCore::ControllerCore() : WController()
 {
     if (_cache) return;
 
+#ifndef Q_OS_MAC
+    //---------------------------------------------------------------------------------------------
+    // Environment
+
+    // FIXME Qt6/macOS: This seems required for the WebView to load when deploying the application.
+    qputenv("QTWEBENGINE_DISABLE_SANDBOX", "1");
+#endif
+
     //---------------------------------------------------------------------------------------------
     // DataLocal
 
