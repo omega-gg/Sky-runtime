@@ -26,6 +26,12 @@ import Sky     1.0
 Item
 {
     //---------------------------------------------------------------------------------------------
+    // Properties
+    //---------------------------------------------------------------------------------------------
+
+    property string pathBin: sk.getEnv("SKY_PATH_BIN")
+
+    //---------------------------------------------------------------------------------------------
     // Children
     //---------------------------------------------------------------------------------------------
 
@@ -123,6 +129,8 @@ Item
 
             ButtonPianoFull
             {
+                id: buttonApplication
+
                 anchors.left: buttonFolder.right
                 anchors.top : buttonFolder.top
 
@@ -137,6 +145,29 @@ Item
                 text: qsTr("Application folder")
 
                 onClicked: gui.openFile(controllerFile.pathApplication)
+            }
+
+            ButtonPianoFull
+            {
+                anchors.left: buttonApplication.right
+                anchors.top : buttonApplication.top
+
+                borderTop   : borderSize
+                borderBottom: borderSize
+
+                padding: st.dp16
+
+                enabled: (pathBin != "")
+
+                icon          : st.icon_external
+                iconSourceSize: st.size14x14
+
+                text: qsTr("SKY_PATH_BIN")
+
+                // FIXME Qt5.14: Sometimes sk.textWidth() is too short.
+                itemText.elide: Text.ElideNone
+
+                onClicked: gui.openFile(pathBin)
             }
         }
 

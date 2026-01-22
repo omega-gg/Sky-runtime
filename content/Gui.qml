@@ -474,6 +474,8 @@ Item
     function hideUi()
     {
         ui = false;
+
+        window.clearFocus();
     }
 
     function toggleUi()
