@@ -31,7 +31,7 @@ Item
     // Properties
     //---------------------------------------------------------------------------------------------
 
-    /* read */ property bool isReady: (webView.url != "")
+    /* read */ property bool isReady: (webView.url != "" && webView.url != "about:blank")
 
     property int topMargin: gui.topMargin
 
@@ -108,6 +108,12 @@ Item
         return true;
     }
 
+    function clearView()
+    {
+        // FIXME: We use about:blank because an empty string does not work.
+        webView.url = "about:blank";
+    }
+
     //---------------------------------------------------------------------------------------------
     // Events
 
@@ -130,6 +136,12 @@ Item
 
             return true;
         }
+        else if (command == "clearView")
+        {
+            clearView();
+
+            return true;
+        }
 
         return false;
     }
@@ -139,7 +151,8 @@ Item
         return "Welcome to Sky web-view " + sk.versionSky + "\n" +
                "\n" +
                "console:\n" +
-               "> load <url>    load the url";
+               "> load <url>    load the url\n" +
+               "> clearView     clear the url";
     }
 
     //---------------------------------------------------------------------------------------------

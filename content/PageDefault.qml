@@ -52,8 +52,6 @@ Item
 
         core.loadRecent();
 
-        gui.hideConsole();
-
 //#DESKTOP+!LINUX
 //#WINDOWS
         if (sk.isUwp || core.associateSky) return;

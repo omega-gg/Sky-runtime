@@ -37,7 +37,7 @@ Item
 
     /* read */ property bool ui: false
 
-    property int stateConsole: 1
+    property int stateConsole: 0
     // 0: hidden
     // 1: visible
     // 2: expanded
@@ -80,6 +80,16 @@ Item
         /* QML_CONNECTION */ function onKeyPressed (event) { gui.onKeyPressed (event) }
         /* QML_CONNECTION */ function onKeyReleased(event) { gui.onKeyReleased(event) }
 
+        /* QML_CONNECTION */ function onViewportKeyPressed(event)
+        {
+            gui.onViewportKeyPressed(event);
+        }
+
+        /* QML_CONNECTION */ function onViewportKeyReleased(event)
+        {
+            gui.onViewportKeyReleased(event);
+        }
+
         /* QML_CONNECTION */ function onDragEntered(event) { gui.onDragEntered(event) }
         /* QML_CONNECTION */ function onDragExited (event) { gui.onDragExited (event) }
         /* QML_CONNECTION */ function onDrop       (event) { gui.onDrop       (event) }
@@ -112,6 +122,8 @@ Item
                 objects[i].destroy();
             }
         }
+
+        skip();
 
         objects = new Array;
 
@@ -169,11 +181,15 @@ Item
         return core.bash(core.bashResolve(fileName), args);
     }
 
+    function skip() { core.skip() }
+
     function refresh()
     {
         var length = objects.length;
 
         if (length == 0) return;
+
+        skip();
 
         core.clearWatchers();
 
@@ -207,12 +223,7 @@ Item
         run(source);
     }
 
-    function unload()
-    {
-        run("");
-
-        hideConsole();
-    }
+    function unload() { run("") }
 
     function clear()
     {
@@ -402,6 +413,10 @@ Item
 
             bash.apply(this, args);
         }
+        else if (command == "skip")
+        {
+            skip();
+        }
         else if (command == "refresh")
         {
             refresh();
@@ -447,7 +462,13 @@ Item
 
         ui = true;
 
-        window.clearFocus();
+        var item = loaderConsole.item;
+
+        if (item)
+        {
+            item.setFocus();
+        }
+        else window.clearFocus();
     }
 
     function hideUi()
@@ -565,14 +586,15 @@ Item
                "- F1           toggle the user inteface\n" +
                "- F5           refresh the top level script\n" +
                "- F11          switch to fullscreen\n" +
-               "- Ctrl + F1    toggle and focus the console\n" +
+               "- Tab          select the console\n" +
                "- Ctrl + F5    reload everthing in cascade\n" +
                "- Ctrl + W     unload the current script\n" +
                "- Escape       quit the application\n" +
                "\n" +
                "console:\n" +
                "> run <source>           run a .sky source\n" +
-               "> bash <source> <...>    run the bash script\n" +
+               "> bash <source> [...]    run the bash script\n" +
+               "> skip                   skip the current bash script\n" +
                "> refresh                refresh the top level script\n" +
                "> reload                 reload everthing in cascade\n" +
                "> unload                 unload everthing\n" +
@@ -627,36 +649,11 @@ Item
 
     function onKeyPressed(event)
     {
-        if (event.key == Qt.Key_Tab || event.key == Qt.Key_Backtab)
+        if (event.key == Qt.Key_F1)
         {
             event.accepted = true;
 
-            setFocusConsole();
-        }
-        else if (event.key == Qt.Key_F1)
-        {
-            event.accepted = true;
-
-            if (event.modifiers == Qt.ControlModifier)
-            {
-                var item = loaderConsole.item;
-
-                if (item && item.visible && item.isFocused)
-                {
-                    hideUi();
-
-                    return;
-                }
-
-                event.accepted = true;
-
-                ui = true;
-
-                showConsole();
-
-                setFocusConsole();
-            }
-            else toggleUi();
+            toggleUi();
         }
         else if (event.key == Qt.Key_F5)
         {
@@ -685,6 +682,27 @@ Item
     }
 
     function onKeyReleased(event)
+    {
+        if (event.isAutoRepeat) return;
+    }
+
+    function onViewportKeyPressed(event)
+    {
+        event.accepted = true;
+
+        if (event.key == Qt.Key_Tab || event.key == Qt.Key_Backtab)
+        {
+            event.accepted = true;
+
+            showUi();
+
+            showConsole();
+
+            setFocusConsole();
+        }
+    }
+
+    function onViewportKeyReleased(event)
     {
         if (event.isAutoRepeat) return;
     }

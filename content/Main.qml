@@ -69,7 +69,7 @@ Application
         antialias: true
 //#END
 
-        vsync: true
+        vsync: local.vsync
 
         dropEnabled: true
 

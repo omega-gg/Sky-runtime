@@ -124,6 +124,8 @@ public: // Interface
 
     Q_INVOKABLE bool bash(const QString & fileName, const QStringList & arguments = QStringList());
 
+    Q_INVOKABLE bool skip();
+
     Q_INVOKABLE QString bashResolve(const QString & source) const;
 
     Q_INVOKABLE bool render(const QString      & fileName,

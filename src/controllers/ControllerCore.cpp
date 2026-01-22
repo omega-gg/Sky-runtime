@@ -461,10 +461,17 @@ ControllerCore::ControllerCore() : WController()
                                                      "DeclarativeKeyEvent is not creatable");
 
     //---------------------------------------------------------------------------------------------
+    // Sky-runtime
+
+    qmlRegisterType<DataLocal>("Sky", 1,0, "DataLocal");
+
+    //---------------------------------------------------------------------------------------------
     // Context
 
     wControllerDeclarative->setContextProperty("sk",   sk);
-    wControllerDeclarative->setContextProperty("core", this);
+
+    wControllerDeclarative->setContextProperty("core",  this);
+    wControllerDeclarative->setContextProperty("local", &_local);
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -807,6 +814,13 @@ ControllerCore::ControllerCore() : WController()
     if (_bash == NULL) return false;
 
     return _bash->run(fileName, arguments, false);
+}
+
+/* Q_INVOKABLE */ bool ControllerCore::skip()
+{
+    if (_bash == NULL) return false;
+
+    _bash->stop();
 }
 
 /* Q_INVOKABLE */ QString ControllerCore::bashResolve(const QString & source) const
