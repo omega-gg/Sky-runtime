@@ -14,7 +14,7 @@
 
 - SKY_PATH_BIN: Default path for all the sky binaries
 
-- SKY_PATH_BASH: Custom path for the bash binaries
+- SKY_PATH_BASH: Custom path for the bash binary
 
 ---
 
