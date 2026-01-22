@@ -813,12 +813,14 @@ ControllerCore::ControllerCore() : WController()
 {
     if (_bash == NULL) return false;
 
+    qDebug("BASH %s", fileName.C_STR);
+
     return _bash->run(fileName, arguments, false);
 }
 
-/* Q_INVOKABLE */ bool ControllerCore::skip()
+/* Q_INVOKABLE */ void ControllerCore::skip()
 {
-    if (_bash == NULL) return false;
+    if (_bash == NULL) return;
 
     _bash->stop();
 }
