@@ -588,7 +588,7 @@ Item
                "- F1           toggle the user inteface\n" +
                "- F5           refresh the top level script\n" +
                "- F11          switch to fullscreen\n" +
-               "- Tab          select the console\n" +
+               "- Tab          toggle the console\n" +
                "- Ctrl + F5    reload everthing in cascade\n" +
                "- Ctrl + W     unload the current script\n" +
                "- Escape       quit the application\n" +
