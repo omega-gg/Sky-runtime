@@ -517,6 +517,8 @@ ControllerCore::ControllerCore() : WController()
 {
     if (_cache) return;
 
+    loadEnvironment();
+
 #ifdef Q_OS_MACOS
     //---------------------------------------------------------------------------------------------
     // Environment
@@ -1527,6 +1529,32 @@ WControllerFileReply * ControllerCore::copyBackends(const QString & path) const
 #else
     return WControllerPlaylist::copyBackends(WControllerFile::applicationPath(PATH_BACKEND), path);
 #endif
+}
+
+void ControllerCore::loadEnvironment()
+{
+    QString fileName = WControllerFile::applicationPath("env");
+
+    if (QFile::exists(fileName) == false) return;
+
+    QString data = WControllerFile::readAll(fileName);
+
+    data.remove('\r');
+
+    QStringList lines = Sk::split(data, '\n');
+
+    foreach (const QString & line, lines)
+    {
+        int index = line.indexOf('=');
+
+        if (index < 1) continue;
+
+        QString key = line.left(index).trimmed();
+
+        QString value = line.mid(index + 1).trimmed();
+
+        Sk::setEnv(key, value.toUtf8());
+    }
 }
 
 void ControllerCore::loadData(DataScript * script, const QString & fileName)

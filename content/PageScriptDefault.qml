@@ -171,6 +171,18 @@ Item
             }
         }
 
+        TextBase
+        {
+            anchors.left : parent.left
+            anchors.right: parent.right
+
+            anchors.margins: st.dp16
+
+            visible: (pathBin == "")
+
+            text: qsTr("SKY_PATH_BIN is undefined, set it as an env variable or create an Application folder \"env\" file with the following: SKY_PATH_BIN=<your_folder>")
+        }
+
         TextEditCopy
         {
             id: textTemplate
