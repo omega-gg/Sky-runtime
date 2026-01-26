@@ -1349,11 +1349,23 @@ ControllerCore::ControllerCore() : WController()
         log.append(string + '\n');
     }
 
-    QString start = "bash/" + name;
+    QString startBash = "bash/";
+    QString startDoc  = "doc/";
+
+    list.removeOne(startBash);
+    list.removeOne(startDoc);
+
+    QString path = name + '/';
+
+    startBash += path;
+    startDoc  += path;
+
+    list.removeOne(startBash);
+    list.removeOne(startDoc);
 
     foreach (const QString & string, list)
     {
-        if (string.startsWith(start)) continue;
+        if (string.startsWith(startBash) || string.startsWith(startDoc)) continue;
 
         log.append(QString(tr("Invalid file: %1\n")).arg(string));
 

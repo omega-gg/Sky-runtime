@@ -79,6 +79,8 @@ Image
 
     TextBase
     {
+        id: itemText
+
         anchors.left  : parent.left
         anchors.bottom: parent.bottom
 
@@ -90,6 +92,20 @@ Image
 
         font.family   : "consolas"
         font.pixelSize: st.dp18
+    }
+
+    TextBase
+    {
+        anchors.right : parent.right
+        anchors.bottom: parent.bottom
+
+        anchors.margins: itemText.anchors.margins
+
+        text: (window.graphicsApiName) ? window.graphicsApiName() : ""
+
+        color: itemText.color
+
+        font: itemText.font
     }
 
     //---------------------------------------------------------------------------------------------

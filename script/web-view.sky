@@ -31,7 +31,7 @@ Item
     // Properties
     //---------------------------------------------------------------------------------------------
 
-    /* read */ property bool isReady: (webView.url != "" && webView.url != "about:blank")
+    /* read */ property bool isReady: false
 
     property int topMargin: gui.topMargin
 
@@ -54,6 +54,8 @@ Item
     function load(url)
     {
         if (webView.url == url) return true;
+
+        isReady = false;
 
         webView.url = url;
 
@@ -105,11 +107,15 @@ Item
             return false;
         }
 
+        isReady = true;
+
         return true;
     }
 
     function clearView()
     {
+        isReady = false;
+
         // FIXME: We use about:blank because an empty string does not work.
         webView.url = "about:blank";
     }
