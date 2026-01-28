@@ -640,6 +640,10 @@ ControllerCore::ControllerCore() : WController()
 
     _bash = new WScriptBash(this);
 
+#ifdef Q_OS_WIN
+    _bash->setPathBash(WControllerFile::applicationPath("Git/usr/bin/bash.exe"));
+#endif
+
     //---------------------------------------------------------------------------------------------
     // Paths
 
