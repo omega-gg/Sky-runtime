@@ -122,7 +122,7 @@ Item
             {
                 event.accepted = true;
 
-                gui.hideUi();
+                gui.hideConsole();
             }
         }
     }

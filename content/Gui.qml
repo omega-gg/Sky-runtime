@@ -37,7 +37,8 @@ Item
 
     /* read */ property bool ui: false
 
-    property int stateConsole: 0
+    // NOTE: The console is visible by default.
+    property int stateConsole: 1
     // 0: hidden
     // 1: visible
     // 2: expanded
@@ -585,7 +586,7 @@ Item
     {
         return "Welcome to Sky kit runtime " + sk.versionSky + "\n\n" +
                "keyboard:\n" +
-               "- F1           toggle the user inteface\n" +
+               "- F1           toggle the application interface\n" +
                "- F5           refresh the top level script\n" +
                "- F11          switch to fullscreen\n" +
                "- Tab          toggle the console\n" +
