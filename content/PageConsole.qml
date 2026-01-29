@@ -122,11 +122,7 @@ Item
             {
                 event.accepted = true;
 
-                if (gui.stateConsole == 1)
-                {
-                    gui.stateConsole = 2;
-                }
-                else gui.stateConsole = 1;
+                gui.toggleConsole();
             }
         }
     }
@@ -136,5 +132,44 @@ Item
         id: border
 
         anchors.bottom: parent.top
+    }
+
+    ButtonPianoWindow
+    {
+        anchors.right : buttonClose.left
+        anchors.top   : buttonClose.top
+        anchors.bottom: buttonClose.bottom
+
+        borderLeft  : borderSize
+        borderRight : 0
+        borderBottom: borderSize
+
+        checkable: true
+        checked  : gui.expandConsole
+
+        icon          : st.icon_slideUp
+        iconSourceSize: st.size16x16
+
+        onClicked: gui.toggleConsole()
+    }
+
+    ButtonPianoWindow
+    {
+        id: buttonClose
+
+        anchors.right: parent.right
+        anchors.top  : parent.top
+
+        anchors.rightMargin: (itemConsole.isScrollable) ? itemConsole.scrollBar.width : 0
+
+        height: st.dp24 + borderSizeHeight
+
+        borderRight : 0
+        borderBottom: borderSize
+
+        icon          : st.icon_close
+        iconSourceSize: st.size12x12
+
+        onClicked: gui.hideUi()
     }
 }

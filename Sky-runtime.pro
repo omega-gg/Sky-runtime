@@ -296,7 +296,6 @@ OTHER_FILES += environment.sh \
                content/StyleApplication.qml \
                content/Main.qml \
                content/Gui.qml \
-               content/ItemUi.qml \
                content/BackgroundLink.qml \
                content/TextDefault.qml \
                content/TextDefaultLink.qml \
@@ -306,6 +305,8 @@ OTHER_FILES += environment.sh \
                content/PanelAssociate.qml \
                content/PanelInstall.qml \
                content/PageDefault.qml \
+               content/PageWelcome.qml \
+               content/PageBrowse.qml \
                content/PageConsole.qml \
                content/PageScript.qml \
                content/PageScriptDefault.qml \

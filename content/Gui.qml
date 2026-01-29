@@ -37,11 +37,7 @@ Item
 
     /* read */ property bool ui: false
 
-    // NOTE: The console is visible by default.
-    property int stateConsole: 1
-    // 0: hidden
-    // 1: visible
-    // 2: expanded
+    property bool expandConsole: false
 
     property int topMargin: st.dp40
 
@@ -105,17 +101,6 @@ Item
 
     function run(source)
     {
-        if (ui)
-        {
-            // NOTE: Avoid opacity animations when hiding the ui before loading.
-
-            st.animate = false;
-
-            hideUi();
-
-            st.animate = true;
-        }
-
         if (objects)
         {
             for (var i = 0; i < objects.length; i++)
@@ -162,12 +147,8 @@ Item
             return;
         }
 
-//#DEPLOY
-        help();
-//#ELSE
-        // NOTE: Make sure we show the help after the loading messages in the console.
-        timer.start();
-//#END
+        console.debug("Welcome to Sky kit runtime " + sk.versionSky + "\n" +
+                      "Type 'help' for command details.");
     }
 
     function bash(fileName)
@@ -485,27 +466,9 @@ Item
         else    showUi();
     }
 
-    function showConsole()
-    {
-        if (stateConsole != 0) return;
-
-        stateConsole = 1;
-
-        setFocusConsole();
-    }
-
-    function hideConsole()
-    {
-        stateConsole = 0;
-    }
-
     function toggleConsole()
     {
-        stateConsole = (stateConsole + 1) % 3;
-
-        if (stateConsole == 0) return;
-
-        setFocusConsole();
+        expandConsole = !(expandConsole);
     }
 
     function toggleLocked()
@@ -552,8 +515,6 @@ Item
 
     function setFocusConsole()
     {
-        if (stateConsole == 0) return;
-
         var item = loaderConsole.item;
 
         if (item) item.setFocus();
@@ -724,17 +685,6 @@ Item
     // Children
     //---------------------------------------------------------------------------------------------
 
-//#!DEPLOY
-    Timer
-    {
-        id: timer
-
-        interval: 3000
-
-        onTriggered: help()
-    }
-//#END
-
     Loader
     {
         id: loader
@@ -819,8 +769,8 @@ Item
         {
             id: buttonApplication
 
-            maximumWidth: (st.isTight) ? buttonConsole.x - st.dp16
-                                       : buttonConsole.x - buttonEject.width - st.dp16
+            maximumWidth: (st.isTight) ? buttonLock.x - st.dp16
+                                       : buttonLock.x - buttonEject.width - st.dp16
 
             borderBottom: borderSize
 
@@ -865,24 +815,14 @@ Item
             anchors.right : parent.right
             anchors.bottom: parent.bottom
 
-            height:
-            {
-                if (stateConsole == 0)
-                {
-                    return 0;
-                }
-                else if (stateConsole == 1)
-                {
-                    return Math.round(parent.height / 3)
-                }
-                else return parent.height - buttonApplication.height
-            }
+            height: (expandConsole) ? parent.height - buttonApplication.height
+                                    : Math.round(parent.height / 3)
 
             visible: (opacity != 0.0)
 
-            opacity: (stateConsole != 0)
+            opacity: (ui)
 
-            source: (stateConsole != 0) ? Qt.resolvedUrl("PageConsole.qml") : ""
+            source: (ui) ? Qt.resolvedUrl("PageConsole.qml") : ""
 
             Behavior on opacity
             {
@@ -893,33 +833,6 @@ Item
                     easing.type: st.easing
                 }
             }
-        }
-
-        ButtonPiano
-        {
-            id: buttonConsole
-
-            anchors.right : buttonLock.left
-            anchors.top   : buttonsWindow.top
-            anchors.bottom: buttonsWindow.bottom
-
-            anchors.rightMargin: st.dp16
-
-            borderLeft  : borderSize
-            borderBottom: borderSize
-
-            padding: st.dp16
-
-            checkable: true
-            checked  : (stateConsole != 0)
-
-            text: qsTr("Console")
-
-//#QT_4
-            onPressed: toggleConsole()
-//#ELSE
-            onPressed: Qt.callLater(toggleConsole)
-//#END
         }
 
         ButtonPianoWindow
