@@ -586,10 +586,10 @@ Item
     {
         return "Welcome to Sky kit runtime " + sk.versionSky + "\n\n" +
                "keyboard:\n" +
-               "- F1           toggle the application interface\n" +
+               "- F1           toggle the console\n" +
                "- F5           refresh the top level script\n" +
                "- F11          switch to fullscreen\n" +
-               "- Tab          toggle the console\n" +
+               "- Tab          expand the console\n" +
                "- Ctrl + F5    reload everthing in cascade\n" +
                "- Ctrl + W     unload the current script\n" +
                "- Escape       quit the application\n" +
@@ -692,17 +692,6 @@ Item
     function onViewportKeyPressed(event)
     {
         event.accepted = true;
-
-        if (event.key == Qt.Key_Tab || event.key == Qt.Key_Backtab)
-        {
-            event.accepted = true;
-
-            showUi();
-
-            showConsole();
-
-            setFocusConsole();
-        }
     }
 
     function onViewportKeyReleased(event)
@@ -776,7 +765,7 @@ Item
         anchors.top : parent.top
 
         text: (pVersion) ? qsTr("Update available")
-                         : qsTr("Press F1 for UI")
+                         : qsTr("F1 for console")
 
         // NOTE: Since the text is fading out on press, we keep it underlined when pressed.
         font.underline: isHovered

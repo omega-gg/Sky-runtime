@@ -122,7 +122,11 @@ Item
             {
                 event.accepted = true;
 
-                gui.hideConsole();
+                if (gui.stateConsole == 1)
+                {
+                    gui.stateConsole = 2;
+                }
+                else gui.stateConsole = 1;
             }
         }
     }
