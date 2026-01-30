@@ -1,12 +1,11 @@
 # [Sky-runtime](../README.md) bash scripts
 
-## Image
+## Tools
 
 - [image](image/README.md)
-
-## Video
-
 - [video](video/README.md)
+- [python](python/README.md)
+- [ffmpeg](ffmpeg/README.md)
 
 ## Environment variables
 
@@ -18,7 +17,7 @@
 
 ---
 
-- SKY_PATH_FFMPEG: Custom path to the ffmpeg binary
-- SKY_PATH_FFPROBE: Custom path to the ffprobe binary
+- SKY_PATH_PYTHON: Custom path to the ffmpeg folder
+- SKY_PATH_FFMPEG: Custom path to the ffmpeg folder
 
 - SKY_PATH_IMAGE_MAGICK: Custom path to the ImageMagick folder

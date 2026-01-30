@@ -1,9 +1,8 @@
-# [Bash](../README.md) FFmpeg tools
+# [Bash](../README.md) Video tools
 
 ## Configuration
 
-Place your FFmpeg binaries into the SKY_PATH_BIN folder or set SKY_PATH_FFMPEG and
-SKY_PATH_FFPROBE.
+Place your FFmpeg binaries into the SKY_PATH_BIN/FFmpeg folder or set SKY_PATH_FFMPEG.
 
 ## Tools
 
