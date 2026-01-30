@@ -517,12 +517,24 @@ ControllerCore::ControllerCore() : WController()
 {
     if (_cache) return;
 
-    loadEnvironment();
-
-#ifdef Q_OS_MACOS
     //---------------------------------------------------------------------------------------------
     // Environment
 
+    loadEnvironment();
+
+    if (qgetenv("SKY_PATH_BIN").isEmpty())
+    {
+        QString path = _path + "/bin";
+
+        if (QFile::exists(path) == false && QDir().mkpath(path) == false)
+        {
+            qWarning("ControllerCore::run: Failed to create folder %s.", path.C_STR);
+        }
+
+        qputenv("SKY_PATH_BIN", path.toUtf8());
+    }
+
+#ifdef Q_OS_MACOS
     // FIXME Qt6/macOS: This seems required for the WebView to load when deploying the application.
     qputenv("QTWEBENGINE_DISABLE_SANDBOX", "1");
 #endif
