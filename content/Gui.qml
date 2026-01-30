@@ -53,10 +53,10 @@ Item
     //---------------------------------------------------------------------------------------------
 
 //#QT_4
-    Component.onCompleted: run(core.argument)
+    Component.onCompleted: pRun(core.argument)
 //#ELSE
     // NOTE: callLater seems required to avoid resizing freezes when calling a bash script.
-    Component.onCompleted: Qt.callLater(run, core.argument)
+    Component.onCompleted: Qt.callLater(pRun, core.argument)
 //#END
 
     //---------------------------------------------------------------------------------------------
@@ -140,15 +140,7 @@ Item
         setFocus();
 
         // NOTE: When it's a command line interface run we quit right away.
-        if (sk.cli)
-        {
-            window.close();
-
-            return;
-        }
-
-        console.debug("Welcome to Sky kit runtime " + sk.versionSky + "\n" +
-                      "Type 'help' for command details.");
+        if (sk.cli) window.close();
     }
 
     function bash(fileName)
@@ -660,6 +652,33 @@ Item
         if (event.isAutoRepeat) return;
     }
 
+    //---------------------------------------------------------------------------------------------
+    // Private
+
+    function pRun(source)
+    {
+        run(source);
+
+        console.debug("Welcome to Sky kit runtime " + sk.versionSky + "\n" +
+                      "Type 'help' for command details.");
+    }
+
+    function pEject()
+    {
+        if (ui)
+        {
+            // NOTE: Avoid opacity animations when hiding the ui before loading.
+
+            st.animate = false;
+
+            hideUi();
+
+            st.animate = true;
+        }
+
+        unload();
+    }
+
 //#!DEPLOY
     //---------------------------------------------------------------------------------------------
     // Dev
@@ -804,7 +823,7 @@ Item
 
             text: qsTr("Eject")
 
-            onClicked: unload()
+            onClicked: pEject()
         }
 
         Loader
