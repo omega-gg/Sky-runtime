@@ -96,7 +96,7 @@ Item
 
             anchors.horizontalCenter: parent.horizontalCenter
 
-            text: qsTr("Welcome to Sky kit")
+            text: qsTr("Welcome to Sky")
 
             font.pixelSize: st.dp32
         }
