@@ -82,8 +82,10 @@ fi
 #--------------------------------------------------------------------------------------------------
 
 case `uname` in
-MINGW*) os="windows";;
-*)      os="other";;
+MINGW*)  os="windows";;
+Darwin*) os="macOS";;
+Linux*)  os="linux";;
+*)       os="other";;
 esac
 
 if [ $os = "other" ]; then
@@ -101,7 +103,7 @@ if [ $os = "windows" ]; then
 
     python="$bin/$name/python.exe"
 else
-    python="$bin/$name/python"
+    python="$bin/$name/bin/python3"
 fi
 
 if [ -f "$python" ]; then
@@ -146,6 +148,14 @@ if [ $os = "windows" ]; then
         aarch64|arm64) setup="python-$version-embed-arm64.zip";;
         *)             setup="python-$version-embed-amd64.zip";;
     esac
+
+elif [ $os = "macOS" ]; then
+
+    setup="python-$version-macos11.pkg"
+
+else # [ $os = "linux" ]; then
+
+    setup="Python-$version.tar.xz"
 fi
 
 url="$url/$setup"
@@ -156,12 +166,35 @@ curl --retry 3 -L -o "$setup" "$url"
 # Extract
 #--------------------------------------------------------------------------------------------------
 
-input=$(getPath "$PWD/$setup")
+if [ $os = "windows" ]; then
 
-output=$(getPath "$PWD")
+    input=$(getPath "$PWD/$setup")
 
-powershell -NoProfile -Command \
-    "Expand-Archive -Path '$input' -DestinationPath '$output' -Force"
+    output=$(getPath "$PWD")
+
+    powershell -NoProfile -Command \
+        "Expand-Archive -Path '$input' -DestinationPath '$output' -Force"
+
+elif [ $os = "macOS" ]; then
+
+    pkgutil --expand-full "$setup" temp
+
+    mv temp/Python_Framework.pkg/Payload/Python.framework/Versions/Current/* .
+
+    chmod +x "$python"
+
+    rm -rf temp
+
+else # [ $os = "linux" ]; then
+
+    tar -xvf "$setup" --strip-components=1
+
+    ./configure --prefix="$bin/$name" --enable-optimizations
+
+    make -j$(nproc)
+
+    make install
+fi
 
 rm "$setup"
 
@@ -169,11 +202,14 @@ rm "$setup"
 # Enable pip
 #--------------------------------------------------------------------------------------------------
 
-path="$bin/$name/python$(echo "$version" | tr -d . | cut -c1-3)._pth"
+if [ $os = "windows" ]; then
 
-if [ -f "$path" ]; then
+    path="$bin/$name/python$(echo "$version" | tr -d . | cut -c1-3)._pth"
 
-    sed -i "s/^# *import site/import site/" "$path"
+    if [ -f "$path" ]; then
+
+        sed -i "s/^# *import site/import site/" "$path"
+    fi
 fi
 
 if "$python" -m ensurepip --upgrade >/dev/null 2>&1; then
@@ -181,10 +217,10 @@ if "$python" -m ensurepip --upgrade >/dev/null 2>&1; then
     exit 0
 fi
 
-pip="get-pip.py"
+script="get-pip.py"
 
-curl --retry 3 -L -o "$pip" "https://bootstrap.pypa.io/get-pip.py"
+curl --retry 3 -L -o "$script" "https://bootstrap.pypa.io/get-pip.py"
 
-"$python" "$pip" --no-warn-script-location
+"$python" "$script" --no-warn-script-location
 
-rm -f "$pip"
+rm -f "$script"
