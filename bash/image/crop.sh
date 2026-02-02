@@ -28,20 +28,18 @@ set -e
 
 ffmpeg="${SKY_PATH_FFMPEG:-"$SKY_PATH_BIN/ffmpeg"}"
 
-ffprobe="${SKY_PATH_FFPROBE:-"$SKY_PATH_BIN/ffprobe"}"
-
 #--------------------------------------------------------------------------------------------------
 # Functions
 #--------------------------------------------------------------------------------------------------
 
 getWidth()
 {
-    "$ffprobe" -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$1"
+    "$ffmpeg/ffprobe" -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$1"
 }
 
 getHeight()
 {
-    "$ffprobe" -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$1"
+    "$ffmpeg/ffprobe" -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$1"
 }
 
 getSize()
@@ -165,4 +163,4 @@ fi
 
 crop="crop=${output_width}:${output_height}:${extra_left}:${extra_top}"
 
-"$ffmpeg" -y -i "$1" -vf "$crop" -frames:v 1 "$2"
+"$ffmpeg/ffmpeg" -y -i "$1" -vf "$crop" -frames:v 1 "$2"

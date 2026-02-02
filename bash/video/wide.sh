@@ -28,8 +28,6 @@ set -e
 
 ffmpeg="${SKY_PATH_FFMPEG:-"$SKY_PATH_BIN/ffmpeg"}"
 
-ffprobe="${SKY_PATH_FFPROBE:-"$SKY_PATH_BIN/ffprobe"}"
-
 width="5160"
 height="2160"
 
@@ -87,7 +85,7 @@ else
     codec="$3"
 fi
 
-"$ffmpeg" -y -i "$1" -filter_complex "\
+"$ffmpeg/ffmpeg" -y -i "$1" -filter_complex "\
     [0:v]crop=$size:$height:0:0[left]; \
     [0:v]crop=$size:$height:$right:0[right]; \
     [0:v]crop=$base:$height:$size:0[center]; \

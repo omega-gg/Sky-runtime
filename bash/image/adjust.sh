@@ -64,4 +64,4 @@ fi
 
 filter="eq=brightness=${brightness}:contrast=${contrast}"
 
-"$ffmpeg" -y -i "$input" -vf "$filter" "$output"
+"$ffmpeg/ffmpeg" -y -i "$input" -vf "$filter" "$output"

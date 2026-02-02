@@ -2,7 +2,7 @@
 
 ## Configuration
 
-Place your FFmpeg binaries into the SKY_PATH_BIN/FFmpeg folder or set SKY_PATH_FFMPEG.
+Place your ffmpeg binaries into the SKY_PATH_BIN/ffmpeg folder or set SKY_PATH_FFMPEG.
 
 Place your imageMagick binaries into the SKY_PATH_BIN/imageMagick folder or set
 SKY_PATH_IMAGE_MAGICK.

@@ -53,4 +53,4 @@ output="$2"
 
 shift 2
 
-"$ffmpeg" -y -i "$input" "$@" "$output"
+"$ffmpeg/ffmpeg" -y -i "$input" "$@" "$output"

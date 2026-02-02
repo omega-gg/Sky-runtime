@@ -50,4 +50,4 @@ else
     filter="rubberband=tempo=$3"
 fi
 
-"$ffmpeg" -y -i "$1" -filter:a "$filter" "$2"
+"$ffmpeg/ffmpeg" -y -i "$1" -filter:a "$filter" "$2"

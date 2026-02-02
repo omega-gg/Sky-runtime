@@ -28,7 +28,7 @@ set -e
 
 bin="$SKY_PATH_BIN"
 
-name="FFmpeg"
+name="ffmpeg"
 
 url="https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesrgan-ncnn-vulkan-20220424"
 

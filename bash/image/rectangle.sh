@@ -63,4 +63,4 @@ if [ $# -ge 4 ]; then color="$4"; fi
 # Run
 #--------------------------------------------------------------------------------------------------
 
-"$ffmpeg" -y -f lavfi -i "color=c=$color:s=${width}x${height},format=rgba" -frames:v 1 "$1"
+"$ffmpeg/ffmpeg" -y -f lavfi -i "color=c=$color:s=${width}x${height},format=rgba" -frames:v 1 "$1"

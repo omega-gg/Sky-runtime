@@ -28,8 +28,6 @@ set -e
 
 ffmpeg="${SKY_PATH_FFMPEG:-"$SKY_PATH_BIN/ffmpeg"}"
 
-ffprobe="${SKY_PATH_FFPROBE:-"$SKY_PATH_BIN/ffprobe"}"
-
 font_folder="${SKY_PATH_FONT:-"$SKY_PATH_BIN/font"}"
 
 size="64"
@@ -50,12 +48,12 @@ font="arial.ttf"
 
 getWidth()
 {
-    "$ffprobe" -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$1"
+    "$ffmpeg/ffprobe" -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$1"
 }
 
 getHeight()
 {
-    "$ffprobe" -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$1"
+    "$ffmpeg/ffprobe" -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$1"
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -158,4 +156,4 @@ color=${color_background}[base];color=c=${color_background}:s=${width}x${extra_h
         ;;
 esac
 
-"$ffmpeg" -y -i "$1" -filter_complex "$fc" -map "[out]" -frames:v 1 "$2"
+"$ffmpeg/ffmpeg" -y -i "$1" -filter_complex "$fc" -map "[out]" -frames:v 1 "$2"

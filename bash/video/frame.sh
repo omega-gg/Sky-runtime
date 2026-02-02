@@ -55,7 +55,7 @@ fi
 
 if [ "$4" = "fast" ]; then
 
-    "$ffmpeg" -y -ss "$2" -i "$1" -frames:v 1 -an "$3"
+    "$ffmpeg/ffmpeg" -y -ss "$2" -i "$1" -frames:v 1 -an "$3"
 else
-    "$ffmpeg" -y -i "$1" -ss "$2" -frames:v 1 -an "$3"
+    "$ffmpeg/ffmpeg" -y -i "$1" -ss "$2" -frames:v 1 -an "$3"
 fi

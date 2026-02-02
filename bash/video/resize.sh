@@ -28,8 +28,6 @@ set -e
 
 ffmpeg="${SKY_PATH_FFMPEG:-"$SKY_PATH_BIN/ffmpeg"}"
 
-ffprobe="${SKY_PATH_FFPROBE:-"$SKY_PATH_BIN/ffprobe"}"
-
 yuv="yuv420p"
 
 #--------------------------------------------------------------------------------------------------
@@ -38,7 +36,7 @@ yuv="yuv420p"
 
 getDuration()
 {
-    "$ffprobe" -i "$1" -show_entries format=duration -v quiet -of csv="p=0"
+    "$ffmpeg/ffprobe" -i "$1" -show_entries format=duration -v quiet -of csv="p=0"
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -98,12 +96,14 @@ if [ "$check" = 1 ]; then
         duration="$durationB"
     fi
 
-    "$ffmpeg" -y -i "$1" $skip -t "$duration" $codec -c:a copy "$3"
+    "$ffmpeg/ffmpeg" -y -i "$1" $skip -t "$duration" \
+                     $codec -c:a copy "$3"
 else
     if [ $# = 5 ]; then
 
         duration=$(awk "BEGIN { print $duration - $5 }")
     fi
 
-    "$ffmpeg" -y -i "$1" $skip -vf "tpad=stop_mode=clone:stop_duration=$duration" $codec -c:a copy "$3"
+    "$ffmpeg/ffmpeg" -y -i "$1" $skip -vf "tpad=stop_mode=clone:stop_duration=$duration" \
+                     $codec -c:a copy "$3"
 fi

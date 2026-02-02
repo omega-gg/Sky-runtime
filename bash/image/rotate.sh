@@ -75,4 +75,4 @@ case "$angle" in
     *)       angle="transpose=1"             ;;
 esac
 
-"$ffmpeg" -y -i "$input" -vf "$angle" "$@" "$output"
+"$ffmpeg/ffmpeg" -y -i "$input" -vf "$angle" "$@" "$output"

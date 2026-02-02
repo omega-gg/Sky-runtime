@@ -66,7 +66,7 @@ fi
 
 if [ "$5" = "precise" ]; then
 
-    "$ffmpeg" -y -i "$1" -ss "$2" -to "$3" $codec -c:a copy "$4"
+    "$ffmpeg/ffmpeg" -y -i "$1" -ss "$2" -to "$3" $codec -c:a copy "$4"
 else
-    "$ffmpeg" -y -ss "$2" -to "$3" -i "$1" -c copy "$4"
+    "$ffmpeg/ffmpeg" -y -ss "$2" -to "$3" -i "$1" -c copy "$4"
 fi

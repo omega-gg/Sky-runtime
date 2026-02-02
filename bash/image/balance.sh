@@ -64,4 +64,4 @@ rm=${red}:gm=${green}:bm=${blue}:\
 rh=${red}:gh=${green}:bh=${blue}:\
 pl=1"
 
-"$ffmpeg" -y -i "$input" -vf "$filter" "$output"
+"$ffmpeg/ffmpeg" -y -i "$input" -vf "$filter" "$output"

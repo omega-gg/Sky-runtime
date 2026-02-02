@@ -2,8 +2,8 @@
 
 ## Configuration
 
-Place your FFmpeg binaries into the SKY_PATH_BIN/FFmpeg folder or set SKY_PATH_FFMPEG.
+Place your ffmpeg binaries into the SKY_PATH_BIN/ffmpeg folder or set SKY_PATH_FFMPEG.
 
 ## Tools
 
-- [build.sh](build.sh): Install FFmpeg in the SKY_PATH_BIN folder.
+- [build.sh](build.sh): Install ffmpeg in the SKY_PATH_BIN folder.

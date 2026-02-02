@@ -30,8 +30,6 @@ root="$(dirname "$0")"
 
 ffmpeg="${SKY_PATH_FFMPEG:-"$SKY_PATH_BIN/ffmpeg"}"
 
-ffprobe="${SKY_PATH_FFPROBE:-"$SKY_PATH_BIN/ffprobe"}"
-
 magick="${SKY_PATH_IMAGE_MAGICK:-"$SKY_PATH_BIN/imageMagick"}"
 
 size="64"
@@ -48,12 +46,12 @@ ratio="1.8"
 
 getWidth()
 {
-    "$ffprobe" -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$1"
+    "$ffmpeg/ffprobe" -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$1"
 }
 
 getHeight()
 {
-    "$ffprobe" -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$1"
+    "$ffmpeg/ffprobe" -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$1"
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -158,7 +156,7 @@ color=${color_background}[iconstrip];[base][iconstrip]overlay=x=0:y=${height}[ou
         ;;
 esac
 
-"$ffmpeg" -y -i "$1" -i "$icon" -filter_complex "$fc" -map "[out]" -frames:v 1 "$2"
+"$ffmpeg/ffmpeg" -y -i "$1" -i "$icon" -filter_complex "$fc" -map "[out]" -frames:v 1 "$2"
 
 #--------------------------------------------------------------------------------------------------
 # Clean

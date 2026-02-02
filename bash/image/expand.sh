@@ -28,20 +28,18 @@ set -e
 
 ffmpeg="${SKY_PATH_FFMPEG:-"$SKY_PATH_BIN/ffmpeg"}"
 
-ffprobe="${SKY_PATH_FFPROBE:-"$SKY_PATH_BIN/ffprobe"}"
-
 #--------------------------------------------------------------------------------------------------
 # Functions
 #--------------------------------------------------------------------------------------------------
 
 getWidth()
 {
-    "$ffprobe" -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$1"
+    "$ffmpeg/ffprobe" -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$1"
 }
 
 getHeight()
 {
-    "$ffprobe" -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$1"
+    "$ffmpeg/ffprobe" -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$1"
 }
 
 getSize()
@@ -171,4 +169,4 @@ fi
 color="color=size=${output_width}x${output_height}:\
 c=${bg}[bg];[bg][0:v]overlay=${extra_left}:${extra_top}"
 
-"$ffmpeg" -y -i "$1" -filter_complex "$color" -frames:v 1 "$2"
+"$ffmpeg/ffmpeg" -y -i "$1" -filter_complex "$color" -frames:v 1 "$2"
