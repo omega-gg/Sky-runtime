@@ -20,4 +20,4 @@
 - SKY_PATH_PYTHON: Custom path to the ffmpeg folder
 - SKY_PATH_FFMPEG: Custom path to the ffmpeg folder
 
-- SKY_PATH_IMAGE_MAGICK: Custom path to the ImageMagick folder
+- SKY_PATH_IMAGE_MAGICK: Custom path to the imageMagick folder

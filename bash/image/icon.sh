@@ -32,7 +32,7 @@ ffmpeg="${SKY_PATH_FFMPEG:-"$SKY_PATH_BIN/ffmpeg"}"
 
 ffprobe="${SKY_PATH_FFPROBE:-"$SKY_PATH_BIN/ffprobe"}"
 
-magick="${SKY_PATH_IMAGE_MAGICK:-"$SKY_PATH_BIN/ImageMagick"}"
+magick="${SKY_PATH_IMAGE_MAGICK:-"$SKY_PATH_BIN/imageMagick"}"
 
 size="64"
 

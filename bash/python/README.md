@@ -2,7 +2,7 @@
 
 ## Configuration
 
-Place your Python binaries into the SKY_PATH_BIN/Python folder or set SKY_PATH_PYTHON.
+Place your Python binaries into the SKY_PATH_BIN/python folder or set SKY_PATH_PYTHON.
 
 ## Tools
 

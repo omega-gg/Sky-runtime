@@ -28,7 +28,7 @@ set -e
 
 bin="$SKY_PATH_BIN"
 
-name="Python"
+name="python"
 
 version="3.14.2"
 
