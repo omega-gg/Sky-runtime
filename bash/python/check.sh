@@ -26,84 +26,24 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-bin="$SKY_PATH_BIN"
-
-name="Python"
+bin="${SKY_PATH_PYTHON:-"$SKY_PATH_BIN/Python"}"
 
 version="3.14.2"
 
-url="https://www.python.org/ftp/python/$version"
-
-arguments="/quiet InstallAllUsers=1 PrependPath=1 Include_test=0"
-
 #--------------------------------------------------------------------------------------------------
-# Functions
-#--------------------------------------------------------------------------------------------------
-
-getPath()
-{
-    if [ $os = "windows" ]; then
-
-        cygpath -w "$1"
-    else
-        echo "$1"
-    fi
-}
-
-#--------------------------------------------------------------------------------------------------
-# Syntax
-#--------------------------------------------------------------------------------------------------
-
-if [ $# != 1 ] || [ $# = 1 -a "$1" != "default" -a "$1" != "clean" ]; then
-
-    echo "Usage: build <default | clean>"
-    echo ""
-    echo "example:"
-    echo "    build default"
-
-    exit 1
-fi
-
-#--------------------------------------------------------------------------------------------------
-# Clean
-#--------------------------------------------------------------------------------------------------
-
-if [ "$1" = "clean" ]; then
-
-    echo "CLEANING"
-
-    rm -rf "$bin/$name"
-
-    exit 0
-fi
-
-#--------------------------------------------------------------------------------------------------
-# Configuration
+# Check
 #--------------------------------------------------------------------------------------------------
 
 case `uname` in
-MINGW*)  os="windows";;
-Darwin*) os="macOS";;
-Linux*)  os="linux";;
-*)       os="other";;
+MINGW*) os="windows";;
+*)      os="other";;
 esac
-
-if [ $os = "other" ]; then
-
-    echo "build: Unsupported OS."
-
-    exit 1
-fi
-
-#--------------------------------------------------------------------------------------------------
-# Version
-#--------------------------------------------------------------------------------------------------
 
 if [ $os = "windows" ]; then
 
-    python="$bin/$name/python.exe"
+    python="$bin/python.exe"
 else
-    python="$bin/$name/bin/python3"
+    python="$bin/bin/python3"
 fi
 
 if [ -f "$python" ]; then
@@ -122,105 +62,4 @@ EOF
     fi
 fi
 
-#--------------------------------------------------------------------------------------------------
-# Clean
-#--------------------------------------------------------------------------------------------------
-
-cd "$bin"
-
-rm -rf "$name"
-
-#--------------------------------------------------------------------------------------------------
-# Download
-#--------------------------------------------------------------------------------------------------
-
-mkdir -p "$name"
-
-cd "$name"
-
-if [ $os = "windows" ]; then
-
-    arch="$(uname -m)"
-
-    case "$arch" in
-        x86_64|amd64)  setup="python-$version-embed-amd64.zip";;
-        i686|x86)      setup="python-$version-embed-win32.zip";;
-        aarch64|arm64) setup="python-$version-embed-arm64.zip";;
-        *)             setup="python-$version-embed-amd64.zip";;
-    esac
-
-elif [ $os = "macOS" ]; then
-
-    setup="python-$version-macos11.pkg"
-
-else # [ $os = "linux" ]; then
-
-    setup="Python-$version.tar.xz"
-fi
-
-url="$url/$setup"
-
-curl --retry 3 -L -o "$setup" "$url"
-
-#--------------------------------------------------------------------------------------------------
-# Extract
-#--------------------------------------------------------------------------------------------------
-
-if [ $os = "windows" ]; then
-
-    input=$(getPath "$PWD/$setup")
-
-    output=$(getPath "$PWD")
-
-    powershell -NoProfile -Command \
-        "Expand-Archive -Path '$input' -DestinationPath '$output' -Force"
-
-elif [ $os = "macOS" ]; then
-
-    pkgutil --expand-full "$setup" temp
-
-    mv temp/Python_Framework.pkg/Payload/Python.framework/Versions/Current/* .
-
-    chmod +x "$python"
-
-    rm -rf temp
-
-else # [ $os = "linux" ]; then
-
-    tar -xvf "$setup" --strip-components=1
-
-    ./configure --prefix="$bin/$name" --enable-optimizations
-
-    make -j$(nproc)
-
-    make install
-fi
-
-rm "$setup"
-
-#--------------------------------------------------------------------------------------------------
-# Enable pip
-#--------------------------------------------------------------------------------------------------
-
-if [ $os = "windows" ]; then
-
-    path="$bin/$name/python$(echo "$version" | tr -d . | cut -c1-3)._pth"
-
-    if [ -f "$path" ]; then
-
-        sed -i "s/^# *import site/import site/" "$path"
-    fi
-fi
-
-if "$python" -m ensurepip --upgrade >/dev/null 2>&1; then
-
-    exit 0
-fi
-
-script="get-pip.py"
-
-curl --retry 3 -L -o "$script" "https://bootstrap.pypa.io/get-pip.py"
-
-"$python" "$script" --no-warn-script-location
-
-rm -f "$script"
+exit 1
