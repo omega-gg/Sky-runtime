@@ -28,9 +28,9 @@ set -e
 
 root="$(dirname "$0")"
 
-ffmpeg="${SKY_PATH_FFMPEG:-"$SKY_PATH_BIN/ffmpeg"}"
+ffmpeg="${SKY_PATH_FFMPEG:-$SKY_PATH_BIN/ffmpeg}"
 
-magick="${SKY_PATH_IMAGE_MAGICK:-"$SKY_PATH_BIN/imageMagick"}"
+magick="${SKY_PATH_IMAGE_MAGICK:-$SKY_PATH_BIN/imageMagick}"
 
 size="64"
 

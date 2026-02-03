@@ -30,7 +30,56 @@ bin="$SKY_PATH_BIN"
 
 name="ffmpeg"
 
-url="https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesrgan-ncnn-vulkan-20220424"
+version="N-122611-g7e9fe341df"
+
+version_mac="8.0.1"
+
+url="https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2026-02-02-13-01/ffmpeg-$version"
+
+url_mac="https://evermeet.cx/ffmpeg"
+
+#--------------------------------------------------------------------------------------------------
+# Extract
+#--------------------------------------------------------------------------------------------------
+
+extract()
+{
+    python - <<EOF
+import os, zipfile, sys
+
+zip_path = os.path.abspath("$1")
+
+dst = os.path.abspath(".")
+
+with zipfile.ZipFile(zip_path, "r") as z:
+    z.extractall(dst)
+
+print("Extracted to:", dst)
+EOF
+
+    rm "$1"
+}
+
+extract_mac()
+{
+    curl --retry 3 -L -o "archive.zip" "$1"
+
+    extract "archive.zip"
+}
+
+move_bin()
+{
+    folder=$(find . -maxdepth 3 -type d -name bin | head -n 1)
+
+    if [ -z "$folder" ]; then
+
+        echo "build: Cannot find a bin directory in the extracted archive."
+
+        exit 1
+    fi
+
+    mv "$folder"/* .
+}
 
 #--------------------------------------------------------------------------------------------------
 # Syntax
@@ -65,7 +114,7 @@ cd "$name"
 case `uname` in
     MINGW*)  os="windows";;
     Darwin*) os="macos";;
-    Linux*)  os="ubuntu";;
+    Linux*)  os="linux";;
     *)       os="other";;
 esac
 
@@ -76,32 +125,56 @@ if [ $os = "other" ]; then
     exit 1
 fi
 
-url="$url-$os.zip"
-
-archive="archive.zip"
-
-curl -L -o "$archive" "$url"
+case `uname -m` in
+    x86_64|amd64) arch="x86_64";;
+    *)            arch="other";;
+esac
 
 #--------------------------------------------------------------------------------------------------
-# Extract
+# Download
 #--------------------------------------------------------------------------------------------------
 
-python - <<EOF
-import os, zipfile, sys
-dst = os.path.abspath(".")
-zip_path = os.path.abspath("$archive")
-with zipfile.ZipFile(zip_path, "r") as z:
-    z.extractall(dst)
-print("Extracted to:", dst)
-EOF
+if [ $os = "windows" ]; then
 
-rm "$archive"
+    archive="archive.zip"
+
+    url="$url-win64-gpl-shared.zip"
+
+    curl --retry 3 -L -o "$archive" "$url"
+
+    extract "$archive"
+
+    move_bin
+
+elif [ $os = "linux" ]; then
+
+    archive="archive.tar.xz"
+
+    url="$url-linux64-gpl-shared.tar.xz"
+
+    curl --retry 3 -L -o "$archive" "$url"
+
+    tar -xf "$archive"
+
+    rm "$archive"
+
+    move_bin
+else
+    extract_mac "$url_mac/ffmpeg-$version_mac.zip"
+
+    extract_mac "$url_mac/ffprobe-$version_mac.zip"
+fi
 
 #--------------------------------------------------------------------------------------------------
 # Permissions
 #--------------------------------------------------------------------------------------------------
 
-if [ -f "realesrgan-ncnn-vulkan" ]; then
+if [ -f "ffmpeg" ]; then
 
-    chmod +x "realesrgan-ncnn-vulkan"
+    chmod +x "ffmpeg"
+fi
+
+if [ -f "ffprobe" ]; then
+
+    chmod +x "ffprobe"
 fi

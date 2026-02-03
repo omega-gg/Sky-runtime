@@ -26,9 +26,9 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-ffmpeg="${SKY_PATH_FFMPEG:-"$SKY_PATH_BIN/ffmpeg"}"
+ffmpeg="${SKY_PATH_FFMPEG:-$SKY_PATH_BIN/ffmpeg}"
 
-font_folder="${SKY_PATH_FONT:-"$SKY_PATH_BIN/font"}"
+font_folder="${SKY_PATH_FONT:-$SKY_PATH_BIN/font}"
 
 size="64"
 

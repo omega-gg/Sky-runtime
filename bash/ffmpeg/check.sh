@@ -26,42 +26,27 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-bin="${SKY_PATH_PYTHON:-$SKY_PATH_BIN/python}"
+bin="${SKY_PATH_PYTHON:-$SKY_PATH_BIN/ffmpeg}"
 
-version="3.14.2"
+version="N-122611-g7e9fe341df"
+
+version_mac="8.0.1"
 
 #--------------------------------------------------------------------------------------------------
 # Check
 #--------------------------------------------------------------------------------------------------
 
-case `uname` in
-MINGW*) os="windows";;
-*)      os="other";;
-esac
+cd "$bin"
 
-if [ $os = "windows" ]; then
+result=$(./ffmpeg -version | head -n 1)
 
-    python="$bin/python.exe"
-else
-    python="$bin/bin/python3"
-fi
+echo "$result" | grep -q "$version" && {
 
-if [ -f "$python" ]; then
+    echo "ffmpeg $version is installed."
 
-    current="$("$python" - <<EOF
-import sys
-print("{}.{}.{}".format(*sys.version_info[:3]))
-EOF
-)"
+    exit 0
+}
 
-    if [ "$version" = "$current" ]; then
-
-        echo "Python $version is installed."
-
-        exit 0
-    fi
-fi
-
-echo "Python $version is not installed."
+echo "ffmpeg $version is not installed."
 
 exit 1
