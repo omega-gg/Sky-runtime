@@ -28,6 +28,8 @@ set -e
 
 bin="$SKY_PATH_BIN"
 
+python="${SKY_PATH_PYTHON:-$SKY_PATH_BIN/python}"
+
 name="ffmpeg"
 
 version="N-122611-g7e9fe341df"
@@ -102,6 +104,15 @@ fi
 cd "$bin"
 
 rm -rf "$name"
+
+#--------------------------------------------------------------------------------------------------
+# Environment
+#--------------------------------------------------------------------------------------------------
+
+case `uname` in
+    MINGW*|MSYS*|CYGWIN*) export PATH="$python:$PATH";;
+    *)                    export PATH="$python/bin:$PATH";;
+esac
 
 #--------------------------------------------------------------------------------------------------
 # Download
