@@ -39,27 +39,19 @@ MINGW*) os="windows";;
 *)      os="other";;
 esac
 
-if [ $os = "windows" ]; then
+cd "$bin"
 
-    python="$bin/python.exe"
-else
-    python="$bin/bin/python3"
-fi
-
-if [ -f "$python" ]; then
-
-    current="$("$python" - <<EOF
+current="$(./python - << EOF
 import sys
 print("{}.{}.{}".format(*sys.version_info[:3]))
 EOF
 )"
 
-    if [ "$version" = "$current" ]; then
+if [ "$version" = "$current" ]; then
 
-        echo "Python $version is installed."
+    echo "Python $version is installed."
 
-        exit 0
-    fi
+    exit 0
 fi
 
 echo "Python $version is not installed."

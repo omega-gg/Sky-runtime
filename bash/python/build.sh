@@ -152,7 +152,7 @@ elif [ $os = "macOS" ]; then
 
     mv temp/Python_Framework.pkg/Payload/Python.framework/Versions/Current/* .
 
-    chmod +x "$python"
+    chmod +x python
 
     rm -rf temp
 
@@ -170,12 +170,21 @@ fi
 rm "$setup"
 
 #--------------------------------------------------------------------------------------------------
+# Environment
+#--------------------------------------------------------------------------------------------------
+
+case `uname` in
+    MINGW*|MSYS*|CYGWIN*) export PATH="$bin/$name:$PATH";;
+    *)                    export PATH="$bin/$name/bin:$PATH";;
+esac
+
+#--------------------------------------------------------------------------------------------------
 # Enable pip
 #--------------------------------------------------------------------------------------------------
 
 if [ $os = "windows" ]; then
 
-    path="$bin/$name/python$(echo "$version" | tr -d . | cut -c1-3)._pth"
+    path="$(echo "$version" | tr -d . | cut -c1-3)._pth"
 
     if [ -f "$path" ]; then
 
@@ -183,7 +192,7 @@ if [ $os = "windows" ]; then
     fi
 fi
 
-if "$python" -m ensurepip --upgrade >/dev/null 2>&1; then
+if python -m ensurepip --upgrade >/dev/null 2>&1; then
 
     exit 0
 fi
@@ -192,6 +201,6 @@ script="get-pip.py"
 
 curl --retry 3 -L -o "$script" "https://bootstrap.pypa.io/get-pip.py"
 
-"$python" "$script" --no-warn-script-location
+python "$script" --no-warn-script-location
 
 rm -f "$script"
