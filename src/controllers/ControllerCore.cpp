@@ -522,17 +522,20 @@ ControllerCore::ControllerCore() : WController()
 
     loadEnvironment();
 
-    if (qgetenv("SKY_PATH_BIN").isEmpty())
-    {
-        QString path = _path + "/bin";
+    _pathBin = qgetenv("SKY_PATH_BIN");
 
-        if (QFile::exists(path) == false && QDir().mkpath(path) == false)
+    if (_pathBin.isEmpty())
+    {
+        _pathBin = _path + "/bin/sky";
+
+        if (QFile::exists(_pathBin) == false && QDir().mkpath(_pathBin) == false)
         {
-            qWarning("ControllerCore::run: Failed to create folder %s.", path.C_STR);
+            qWarning("ControllerCore::run: Failed to create folder %s.", _pathBin.C_STR);
         }
 
-        qputenv("SKY_PATH_BIN", path.toUtf8());
+        qputenv("SKY_PATH_BIN", _pathBin.toUtf8());
     }
+    else _pathBin += "/sky";
 
 #ifdef Q_OS_MACOS
     // FIXME Qt6/macOS: This seems required for the WebView to load when deploying the application.
@@ -657,12 +660,6 @@ ControllerCore::ControllerCore() : WController()
 #endif
 
     //---------------------------------------------------------------------------------------------
-    // Paths
-
-    if (createPath(_path + "/script") == false) return;
-    if (createPath(_path + "/bash")   == false) return;
-
-    //---------------------------------------------------------------------------------------------
     // DataOnline
 
     _online = new DataOnline(this);
@@ -729,7 +726,7 @@ ControllerCore::ControllerCore() : WController()
     loadFolder(entries, WControllerFile::applicationPath(PATH_SCRIPT));
 #endif
 
-    loadFolder(entries, _path + "/script");
+    loadFolder(entries, _pathBin + "/script");
 
 #ifndef QT_OLD
     // NOTE: We want test.sky to be listed before test-extra.sky.
@@ -788,7 +785,7 @@ ControllerCore::ControllerCore() : WController()
 
     QList<QFileInfo> entries;
 
-    loadFolder(entries, _path + "/script");
+    loadFolder(entries, _pathBin + "/script");
 
     QString match = name + '-';
 
@@ -803,7 +800,7 @@ ControllerCore::ControllerCore() : WController()
         WControllerFile::deleteFile(info.absoluteFilePath());
     }
 
-    QString path = _path + "/bash/" + name + '/';
+    QString path = _pathBin + "/bash/" + name + '/';
 
     if (QFile::exists(path))
     {
@@ -819,7 +816,7 @@ ControllerCore::ControllerCore() : WController()
         log.append(QString(tr("cp %1\n")).arg(string));
     }
 
-    WUnzipper::extract(filePath, _path);
+    WUnzipper::extract(filePath, _pathBin);
 
     log.append(tr("---\n"
                   "Install complete"));
@@ -861,7 +858,7 @@ ControllerCore::ControllerCore() : WController()
 
     if (QFile::exists(fileName)) return fileName;
 
-    fileName = _path + "/bash/" + name;
+    fileName = _pathBin + "/bash/" + name;
 
     if (QFile::exists(fileName)) return fileName;
 
@@ -1654,7 +1651,7 @@ void ControllerCore::loadData(DataScript * script, const QString & fileName)
     {
         loadData(script, path);
     }
-    else loadData(script, _path + "/script/" + name);
+    else loadData(script, _pathBin + "/script/" + name);
 }
 
 void ControllerCore::loadFolder(QList<QFileInfo> & entries, const QString & path)

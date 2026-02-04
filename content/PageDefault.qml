@@ -72,6 +72,20 @@ Item
         gui.run(fileName);
     }
 
+    function updateLibrary()
+    {
+        if (page != 1) return;
+
+        loader.item.updateLibrary();
+    }
+
+    function showScript(name)
+    {
+        page = 1;
+
+        loader.item.currentIndex = core.libraryIndexFromName(name);
+    }
+
     //---------------------------------------------------------------------------------------------
     // Children
     //---------------------------------------------------------------------------------------------

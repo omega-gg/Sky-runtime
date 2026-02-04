@@ -309,6 +309,7 @@ private: // Variables
     WCache * _cache;
 
     QString _path;
+    QString _pathBin;
 
     WBackendIndex * _index;
 

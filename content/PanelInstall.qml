@@ -103,9 +103,7 @@ Panel
     {
         hidePanel();
 
-        gui.showUi();
-
-        pageDefault.currentIndex = core.libraryIndexFromName(name);
+        pageDefault.showScript(name);
     }
 
     //---------------------------------------------------------------------------------------------
