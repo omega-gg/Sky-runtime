@@ -81,13 +81,7 @@ Application
 
         onFadeIn: if (sk.cli == false) main.load()
 
-        viewport.onActiveFocusChanged:
-        {
-            if (loader.item)
-            {
-                loader.item.setFocus();
-            }
-        }
+        viewport.onActiveFocusChanged: if (loader.item) loader.item.setFocus()
 
         /* QML_EVENT */ onKeyPressed: function(event)
         {

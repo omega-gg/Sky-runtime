@@ -493,7 +493,12 @@ Item
     {
         var object = getObject();
 
-        if (object) return;
+        if (object)
+        {
+            object.forceActiveFocus();
+
+            return;
+        }
 
         var item = loader.item;
 
