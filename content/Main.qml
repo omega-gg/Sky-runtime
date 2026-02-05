@@ -123,6 +123,9 @@ Application
 
             anchors.fill: parent
 
+            // NOTE: Clear the focus to retrieve keyboard events from a WebView or else.
+            onPressed: window.clearFocus()
+
             onDoubleClicked: toggleMaximized()
         }
 
