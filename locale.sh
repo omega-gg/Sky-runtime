@@ -73,15 +73,15 @@ fi
 # Update
 #--------------------------------------------------------------------------------------------------
 
-echo "UPDATING TS"
-echo "-----------"
+echo "UPDATING"
+echo "--------"
 
 lupdate="$QtBin/lupdate"
 
 "$lupdate" -version
 echo ""
 
-"$lupdate" content/ -recursive -ts dist/locale/fr_FR.ts
+"$lupdate" src/ content/ -recursive -ts dist/locale/fr_FR.ts
 
 #--------------------------------------------------------------------------------------------------
 # Release
@@ -91,6 +91,9 @@ if [ "$2" != "release" ]; then
 
     exit 0
 fi
+
+echo "RELEASING"
+echo "---------"
 
 lrelease="$QtBin/lrelease"
 

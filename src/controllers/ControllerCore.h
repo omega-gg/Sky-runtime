@@ -45,6 +45,7 @@ typedef QDeclarativeItem QQuickItem;
 // Forward declarations
 class QQuickItem;
 class WControllerFileReply;
+class QTranslator;
 class WWindow;
 class WCache;
 class WScriptBash;
@@ -248,6 +249,8 @@ private: // Functions
                     WDeclarativeImage * item,
                     const QRectF      & rect, qreal x, qreal y, qreal scale) const;
 
+    QString getPathLocale(const QString & name) const;
+
 private slots:
     void onLoaded     ();
     void onIndexLoaded();
@@ -259,6 +262,8 @@ private slots:
     void onRecent(const QStringList & recents);
 
     void onFilesModified(const QString & path, const QStringList & fileNames);
+
+    void onLocaleChanged();
 
 signals:
     void libraryLoaded();
@@ -323,6 +328,8 @@ private: // Variables
     QStringList _recents;
 
     WFileWatcher _watcher;
+
+    QTranslator * _translator;
 
 private:
     Q_DISABLE_COPY      (ControllerCore)

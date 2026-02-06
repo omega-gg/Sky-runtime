@@ -2,6 +2,116 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR">
 <context>
+    <name>ControllerCore</name>
+    <message>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="794"/>
+        <source>The script file does not exist %1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="799"/>
+        <source>
+Install in progress...
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="814"/>
+        <source>rm %1.sky
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="823"/>
+        <source>rm -rf script/%1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="832"/>
+        <source>cp %1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="837"/>
+        <source>---
+Install complete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1293"/>
+        <source>Create .sky</source>
+        <translation>Créer .sky</translation>
+    </message>
+    <message>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1295"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1318"/>
+        <source>Sky script (*.sky)</source>
+        <translation>Script sky (*.sky)</translation>
+    </message>
+    <message>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1316"/>
+        <source>Create shortcut</source>
+        <translation>Créer un raccourci</translation>
+    </message>
+    <message>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1336"/>
+        <source>Open .sky</source>
+        <translation>Ouvrir .sky</translation>
+    </message>
+    <message>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1338"/>
+        <source>Sky (*.sky *.skz)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1376"/>
+        <source>The script folder is absent from the archive.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1391"/>
+        <source>The script name is not lower case.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1396"/>
+        <source>Script name: %1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1421"/>
+        <source>Invalid file: %1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1426"/>
+        <source>---
+Valid folder structure
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1909"/>
+        <source>Sky runtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DataScript</name>
+    <message>
+        <location filename="../../src/io/DataScript.cpp" line="121"/>
+        <source>Sky runtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Gui</name>
     <message>
         <location filename="../../content/Gui.qml" line="736"/>
@@ -21,7 +131,7 @@
     <message>
         <location filename="../../content/Gui.qml" line="824"/>
         <source>Eject</source>
-        <translation>Ejecter</translation>
+        <translation>Éjecter</translation>
     </message>
 </context>
 <context>

@@ -198,6 +198,10 @@ if [ $os = "mobile" -o "$2" = "all" -o "$2" = "deploy" ]; then
 
     cp -r $content/icons $path
 
+    echo "COPYING locale"
+
+    cp -r $content/locale $path
+
     if [ $1 = "iOS" ]; then
 
         echo "COPYING backend"

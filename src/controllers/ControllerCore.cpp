@@ -24,6 +24,7 @@
 
 // Qt includes
 #include <QPainter>
+#include <QTranslator>
 #ifdef QT_4
 #include <QCoreApplication>
 #include <QDeclarativeEngine>
@@ -133,11 +134,13 @@ static const int CORE_CACHE_PIXMAP = 1048576 *  30; //  30 megabytes
 #ifndef SK_DEPLOY
 #ifdef Q_OS_MACOS
 static const QString PATH_STORAGE = "/../../../storage";
+static const QString PATH_LOCALE  = "../../../locale";
 static const QString PATH_BACKEND = "../../../../../backend";
 static const QString PATH_SCRIPT  = "../../../../script";
 static const QString PATH_BASH    = "../../../../bash";
 #else
 static const QString PATH_STORAGE = "/storage";
+static const QString PATH_LOCALE  = "locale";
 static const QString PATH_BACKEND = "../../backend";
 static const QString PATH_SCRIPT  = "../script";
 static const QString PATH_BASH    = "../bash";
@@ -268,6 +271,8 @@ ControllerCore::ControllerCore() : WController()
     _index = NULL;
 
     _bash = NULL;
+
+    _translator = NULL;
 
     //---------------------------------------------------------------------------------------------
     // Settings
@@ -682,7 +687,21 @@ ControllerCore::ControllerCore() : WController()
     wControllerDeclarative->setContextProperty("online", _online);
 
     //---------------------------------------------------------------------------------------------
+    // Translation
+
+    _translator = new QTranslator(this);
+
+    path = getPathLocale(sk->locale());
+
+    if (QFile::exists(path) && _translator->load(path))
+    {
+        qApp->installTranslator(_translator);
+    }
+
+    //---------------------------------------------------------------------------------------------
     // Signals
+
+    connect(sk, SIGNAL(localeChanged()), this, SLOT(onLocaleChanged()));
 
     connect(&_watcher, SIGNAL(filesModified(const QString &, const QStringList &)),
             this,      SLOT(onFilesModified(const QString &, const QStringList &)));
@@ -1745,6 +1764,15 @@ void ControllerCore::renderItem(QPainter          & painter,
 #endif
 }
 
+QString ControllerCore::getPathLocale(const QString & name) const
+{
+#ifdef SK_DEPLOY
+    return "qrc:/locale/" + name + ".qm";
+#else
+    return "locale/" + name + ".qm";
+#endif
+}
+
 //-------------------------------------------------------------------------------------------------
 // Private slots
 //-------------------------------------------------------------------------------------------------
@@ -1821,6 +1849,18 @@ void ControllerCore::onFilesModified(const QString & path, const QStringList & f
     }
 
     emit refresh(list);
+}
+
+void ControllerCore::onLocaleChanged()
+{
+    qApp->removeTranslator(_translator);
+
+    QString path = getPathLocale(sk->locale());
+
+    if (QFile::exists(path) && _translator->load(path))
+    {
+        qApp->installTranslator(_translator);
+    }
 }
 
 //-------------------------------------------------------------------------------------------------
