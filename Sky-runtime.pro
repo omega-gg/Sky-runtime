@@ -321,6 +321,7 @@ OTHER_FILES += environment.sh \
                dist/sky.rc \
                dist/script/start.sh \
                dist/script/sky.sh \
+               dist/locale/fr_FR.ts \
                dist/doc/readme.md \
                dist/changes/1.1.0.md \
                dist/iOS/Info.plist \

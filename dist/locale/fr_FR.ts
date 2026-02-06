@@ -6,22 +6,22 @@
     <message>
         <location filename="../../content/Gui.qml" line="736"/>
         <source>Update available</source>
-        <translation type="unfinished"></translation>
+        <translation>Mise à jour disponible</translation>
     </message>
     <message>
         <location filename="../../content/Gui.qml" line="737"/>
         <source>F1 for console</source>
-        <translation type="unfinished"></translation>
+        <translation>F1 pour la console</translation>
     </message>
     <message>
         <location filename="../../content/Gui.qml" line="757"/>
         <source>ESCAPE to quit</source>
-        <translation type="unfinished"></translation>
+        <translation>ECHAP pour quitter</translation>
     </message>
     <message>
         <location filename="../../content/Gui.qml" line="824"/>
         <source>Eject</source>
-        <translation type="unfinished"></translation>
+        <translation>Ejecter</translation>
     </message>
 </context>
 <context>
@@ -37,27 +37,27 @@
     <message>
         <location filename="../../content/PageScript.qml" line="89"/>
         <source>New .sky</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouveau .sky</translation>
     </message>
     <message>
         <location filename="../../content/PageScript.qml" line="105"/>
         <source>Create shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Créer un raccourci</translation>
     </message>
     <message>
         <location filename="../../content/PageScript.qml" line="127"/>
         <source>Run script</source>
-        <translation type="unfinished"></translation>
+        <translation>Lancer le script</translation>
     </message>
     <message>
         <location filename="../../content/PageScript.qml" line="142"/>
         <source>Open folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir le dossier</translation>
     </message>
     <message>
         <location filename="../../content/PageScript.qml" line="173"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Aide</translation>
     </message>
 </context>
 <context>
@@ -65,22 +65,22 @@
     <message>
         <location filename="../../content/PageScriptDefault.qml" line="95"/>
         <source>New .sky</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouveau .sky</translation>
     </message>
     <message>
         <location filename="../../content/PageScriptDefault.qml" line="111"/>
         <source>Open .sky script</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir .sky script</translation>
     </message>
     <message>
         <location filename="../../content/PageScriptDefault.qml" line="133"/>
         <source>User folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Dossier user</translation>
     </message>
     <message>
         <location filename="../../content/PageScriptDefault.qml" line="153"/>
         <source>Application folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Dossier application</translation>
     </message>
     <message>
         <location filename="../../content/PageScriptDefault.qml" line="173"/>
@@ -90,7 +90,7 @@
     <message>
         <location filename="../../content/PageScriptDefault.qml" line="207"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Aide</translation>
     </message>
 </context>
 <context>
@@ -98,27 +98,27 @@
     <message>
         <location filename="../../content/PageWelcome.qml" line="99"/>
         <source>Welcome to Sky</source>
-        <translation type="unfinished"></translation>
+        <translation>Bienvenue dans Sky</translation>
     </message>
     <message>
         <location filename="../../content/PageWelcome.qml" line="118"/>
         <source>Drop or</source>
-        <translation type="unfinished"></translation>
+        <translation>Déposer ou</translation>
     </message>
     <message>
         <location filename="../../content/PageWelcome.qml" line="127"/>
         <source>open</source>
-        <translation type="unfinished"></translation>
+        <translation>ouvrir</translation>
     </message>
     <message>
         <location filename="../../content/PageWelcome.qml" line="138"/>
         <source>a .sky file</source>
-        <translation type="unfinished"></translation>
+        <translation>un fichier .sky</translation>
     </message>
     <message>
         <location filename="../../content/PageWelcome.qml" line="192"/>
         <source>Browse .sky</source>
-        <translation type="unfinished"></translation>
+        <translation>Parcourir .sky</translation>
     </message>
 </context>
 <context>
@@ -126,7 +126,7 @@
     <message>
         <location filename="../../content/PanelAssociate.qml" line="51"/>
         <source>Associate .sky files</source>
-        <translation type="unfinished"></translation>
+        <translation>Associer les fichiers .sky</translation>
     </message>
 </context>
 <context>
@@ -134,22 +134,22 @@
     <message>
         <location filename="../../content/PanelInstall.qml" line="144"/>
         <source>I trust the origin and content of this .skz archive</source>
-        <translation type="unfinished"></translation>
+        <translation>J'ai confiance sur l'origine et le contenu de l'archive .skz</translation>
     </message>
     <message>
         <location filename="../../content/PanelInstall.qml" line="157"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <location filename="../../content/PanelInstall.qml" line="174"/>
         <source>Install</source>
-        <translation type="unfinished"></translation>
+        <translation>Installer</translation>
     </message>
     <message>
         <location filename="../../content/PanelInstall.qml" line="187"/>
         <source>Show </source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher </translation>
     </message>
 </context>
 <context>
@@ -157,12 +157,12 @@
     <message>
         <location filename="../../content/TextEditCopy.qml" line="78"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier</translation>
     </message>
     <message>
         <location filename="../../content/TextEditCopy.qml" line="80"/>
         <source>Text copied to the clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Texte copié dans le presse-papiers</translation>
     </message>
 </context>
 </TS>
