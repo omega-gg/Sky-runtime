@@ -96,6 +96,8 @@ Item
 
         anchors.fill: parent
 
+        visible: (areaPanel.source != "PanelInstall.qml")
+
         source: (page == 1) ? Qt.resolvedUrl("PageBrowse.qml")
                             : Qt.resolvedUrl("PageWelcome.qml")
     }

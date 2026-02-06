@@ -1268,25 +1268,47 @@ ControllerCore::ControllerCore() : WController()
 // Static functions
 //-------------------------------------------------------------------------------------------------
 
-/* Q_INVOKABLE static */ QString ControllerCore::createScript(const QString & text)
+/* Q_INVOKABLE static */ QString ControllerCore::createScript(const QString & text,
+                                                              const QString & name)
 {
 #ifdef SK_DESKTOP
     if (text.isEmpty()) return QString();
 
-    QString name = QFileDialog::getSaveFileName(NULL, tr("Create .sky"),
-                                                WControllerFile::pathDocuments(),
-                                                tr("Sky script (*.sky)"));
+    QString result = QFileDialog::getSaveFileName(NULL, tr("Create .sky"),
+                                                  WControllerFile::pathDocuments() + '/' + name,
+                                                  tr("Sky script (*.sky)"));
 
-    if (name.isEmpty()
-        ||
-        WControllerFile::writeFile(name, text.toUtf8()) == false)
+    if (result.isEmpty() || WControllerFile::writeFile(result, text.toUtf8()) == false)
     {
         return QString();
     }
 
-    return name;
+    return result;
 #else
-    Q_UNUSED(text);
+    Q_UNUSED(text); Q_UNUSED(name);
+
+    return QString();
+#endif
+}
+
+/* Q_INVOKABLE static */ QString ControllerCore::createShortcut(const QString & text,
+                                                                const QString & name)
+{
+#ifdef SK_DESKTOP
+    if (text.isEmpty()) return QString();
+
+    QString result = QFileDialog::getSaveFileName(NULL, tr("Create shortcut"),
+                                                  WControllerFile::pathDesktop() + '/' + name,
+                                                  tr("Sky script (*.sky)"));
+
+    if (result.isEmpty() || WControllerFile::writeFile(result, text.toUtf8()) == false)
+    {
+        return QString();
+    }
+
+    return result;
+#else
+    Q_UNUSED(text); Q_UNUSED(name);
 
     return QString();
 #endif

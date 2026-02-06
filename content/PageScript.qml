@@ -88,14 +88,30 @@ Item
 
                 text: qsTr("New .sky")
 
-                onClicked: gui.create(template)
+                onClicked: gui.create(template, core.getLibraryName(currentIndex))
+            }
+
+            ButtonPiano
+            {
+                id: buttonShortcut
+
+                anchors.left: buttonNew.right
+
+                borderTop   : borderSize
+                borderBottom: borderSize
+
+                padding: st.dp16
+
+                text: qsTr("Create shortcut")
+
+                onClicked: core.createShortcut(template, core.getLibraryName(currentIndex))
             }
 
             ButtonPiano
             {
                 id: buttonRun
 
-                anchors.left: buttonNew.right
+                anchors.left: buttonShortcut.right
 
                 anchors.leftMargin: st.dp16
 

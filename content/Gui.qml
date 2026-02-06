@@ -231,9 +231,9 @@ Item
 
     //---------------------------------------------------------------------------------------------
 
-    function create(text)
+    function create(text, name)
     {
-        var name = core.createScript(text);
+        name = core.createScript(text, name);
 
         if (name) run(name);
     }

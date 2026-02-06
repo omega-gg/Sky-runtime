@@ -94,7 +94,7 @@ Item
 
                 text: qsTr("New .sky")
 
-                onClicked: gui.create(template)
+                onClicked: gui.create(template, "")
             }
 
             ButtonPiano

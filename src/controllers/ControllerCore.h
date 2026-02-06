@@ -200,7 +200,8 @@ public: // Interface
     Q_INVOKABLE int libraryIndexFromName(const QString & name);
 
 public: // Static functions
-    Q_INVOKABLE static QString createScript(const QString & text);
+    Q_INVOKABLE static QString createScript  (const QString & text, const QString & name);
+    Q_INVOKABLE static QString createShortcut(const QString & text, const QString & name);
 
     Q_INVOKABLE static QString openScript();
 
