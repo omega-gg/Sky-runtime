@@ -157,6 +157,8 @@ Item
 
             ButtonPianoFull
             {
+                id: buttonBin
+
                 anchors.left: buttonApplication.right
                 anchors.top : buttonApplication.top
 
@@ -176,6 +178,20 @@ Item
                 itemText.elide: Text.ElideNone
 
                 onClicked: gui.openFile(pathBin)
+            }
+
+            ButtonPushFull
+            {
+                anchors.left: buttonBin.right
+
+                anchors.leftMargin: st.dp10
+
+                anchors.verticalCenter: parent.verticalCenter
+
+                icon          : st.icon_language
+                iconSourceSize: st.size14x14
+
+                text: qsTr("Default language")
             }
         }
 
