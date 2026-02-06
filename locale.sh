@@ -98,3 +98,5 @@ lrelease="$QtBin/lrelease"
 echo ""
 
 "$lrelease" dist/locale/*.ts
+
+mv dist/locale/*.qm content/locale
