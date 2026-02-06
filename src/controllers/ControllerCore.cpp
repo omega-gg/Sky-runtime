@@ -689,6 +689,13 @@ ControllerCore::ControllerCore() : WController()
     //---------------------------------------------------------------------------------------------
     // Translation
 
+    QString locale = _local.locale();
+
+    if (locale.isEmpty() == false)
+    {
+        sk->setLocale(locale);
+    }
+
     _translator = new QTranslator(this);
 
     path = getPathLocale(sk->locale());

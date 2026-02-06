@@ -4,101 +4,101 @@
 <context>
     <name>ControllerCore</name>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="794"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="804"/>
         <source>The script file does not exist %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="799"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="809"/>
         <source>
 Install in progress...
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="814"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="824"/>
         <source>rm %1.sky
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="823"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="833"/>
         <source>rm -rf script/%1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="832"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="842"/>
         <source>cp %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="837"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="847"/>
         <source>---
 Install complete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1293"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1303"/>
         <source>Create .sky</source>
         <translation>Créer .sky</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1295"/>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1318"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1305"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1328"/>
         <source>Sky script (*.sky)</source>
         <translation>Script sky (*.sky)</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1316"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1326"/>
         <source>Create shortcut</source>
         <translation>Créer un raccourci</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1336"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1346"/>
         <source>Open .sky</source>
         <translation>Ouvrir .sky</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1338"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1348"/>
         <source>Sky (*.sky *.skz)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1376"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1386"/>
         <source>The script folder is absent from the archive.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1391"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1401"/>
         <source>The script name is not lower case.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1396"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1406"/>
         <source>Script name: %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1421"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1431"/>
         <source>Invalid file: %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1426"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1436"/>
         <source>---
 Valid folder structure
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1909"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1940"/>
         <source>Sky runtime</source>
         <translation type="unfinished"></translation>
     </message>

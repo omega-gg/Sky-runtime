@@ -73,6 +73,8 @@ public: // Variables
     QString name;
     QString version;
 
+    QString locale;
+
     int style;
 
     bool vsync;
@@ -120,6 +122,8 @@ public: // Variables
     stream.writeStartElement(name);
 
     stream.writeTextElement("version", version);
+
+    stream.writeTextElement("locale", locale);
 
     stream.writeTextElement("style", QString::number(style));
 
@@ -218,6 +222,8 @@ public: // Variables
     action->name    = sk->name   ();
     action->version = sk->version();
 
+    action->locale = _locale;
+
     action->style = _style;
 
     action->vsync = _vsync;
@@ -261,6 +267,13 @@ bool DataLocal::extract(const QByteArray & array)
 
         return extract(content.toUtf8());
     }
+
+    //---------------------------------------------------------------------------------------------
+    // locale
+
+    if (WControllerXml::readNextStartElement(&stream, "locale") == false) return false;
+
+    _locale = WControllerXml::readNextString(&stream);
 
     //---------------------------------------------------------------------------------------------
     // style
@@ -328,6 +341,22 @@ bool DataLocal::extract(const QByteArray & array)
 //-------------------------------------------------------------------------------------------------
 // Properties
 //-------------------------------------------------------------------------------------------------
+
+QString DataLocal::locale() const
+{
+    return _locale;
+}
+
+void DataLocal::setLocale(const QString & name)
+{
+    if (_locale == name) return;
+
+    _locale = name;
+
+    emit localeChanged();
+
+    save();
+}
 
 int DataLocal::style() const
 {
