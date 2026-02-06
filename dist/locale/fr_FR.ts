@@ -134,7 +134,7 @@
     <message>
         <location filename="../../content/PanelInstall.qml" line="144"/>
         <source>I trust the origin and content of this .skz archive</source>
-        <translation>J'ai confiance sur l'origine et le contenu de l'archive .skz</translation>
+        <translation>J&apos;ai confiance sur l&apos;origine et le contenu de l&apos;archive .skz</translation>
     </message>
     <message>
         <location filename="../../content/PanelInstall.qml" line="157"/>
