@@ -286,6 +286,7 @@ OTHER_FILES += environment.sh \
                configure.sh \
                build.sh \
                deploy.sh \
+               locale.sh \
                README.md \
                LICENSE.md \
                AUTHORS.md \
