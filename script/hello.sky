@@ -25,7 +25,7 @@
 import QtQuick 2.0
 import Sky     1.0
 
-Image
+SkyImage
 {
     //---------------------------------------------------------------------------------------------
     // Settings
@@ -33,7 +33,7 @@ Image
 
     source: dataBack
 
-    fillMode: Image.PreserveAspectCrop
+    fillMode: SkyImage.PreserveAspectCrop
 
     cache: false
 
@@ -56,7 +56,7 @@ Image
     // Children
     //---------------------------------------------------------------------------------------------
 
-    Image
+    SkyImage
     {
         anchors.centerIn: parent
 
@@ -67,7 +67,7 @@ Image
 
         source: dataLogo
 
-        fillMode: Image.PreserveAspectCrop
+        fillMode: SkyImage.PreserveAspectCrop
     }
 
     Loader
