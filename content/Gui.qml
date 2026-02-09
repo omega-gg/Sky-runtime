@@ -885,7 +885,7 @@ Item
         }
     }
 
-    Popup
+    SkyPopup
     {
         id: popup
 
