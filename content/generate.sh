@@ -361,7 +361,7 @@ defines="$defines pictures_tag icons_slide icons_scale icons_add icons_external 
 
 files="\
 $SkyBase/Style.qml \
-$SkyBase/WindowSky.qml \
+$SkyBase/SkyWindow.qml \
 $SkyBase/ItemSlide.qml \
 $SkyBase/ItemWipe.qml \
 $SkyBase/ItemScan.qml \
