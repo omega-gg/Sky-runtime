@@ -301,7 +301,7 @@ if [ $os = "windows" ]; then
         cp "$path/$QtX"Network.dll         $deploy
         cp "$path/$QtX"OpenGL.dll          $deploy
         cp "$path/$QtX"Qml.dll             $deploy
-        cp "$path/$QtX"Quick.dll           $deploy
+        cp "$path/$QtX"Quick*.dll          $deploy
         cp "$path/$QtX"Svg.dll             $deploy
         cp "$path/$QtX"Widgets.dll         $deploy
         cp "$path/$QtX"Xml.dll             $deploy
@@ -346,8 +346,8 @@ if [ $os = "windows" ]; then
             cp "$path"/multimedia/ffmpegmediaplugin.dll $deploy/multimedia
         fi
 
-        cp "$path"/$QtQuick/qtquick2plugin.dll $deploy/$QtQuick
-        cp "$path"/$QtQuick/qmldir             $deploy/$QtQuick
+        copyFolder "$path"/$QtQuick $deploy/$QtQuick "*.dll"
+        copyFolder "$path"/$QtQuick $deploy/$QtQuick "qmldir"
 
         cp "$path"/QtMultimedia/*multimedia*.dll $deploy/QtMultimedia
         cp "$path"/QtMultimedia/qmldir           $deploy/QtMultimedia
@@ -386,7 +386,7 @@ elif [ $1 = "macOS" ]; then
         cp "$path"/QtOpenGL.dylib          $deploy
         cp "$path"/QtCore.dylib            $deploy
         cp "$path"/QtQml.dylib             $deploy
-        cp "$path"/QtQuick.dylib           $deploy
+        cp "$path"/QtQuick*.dylib          $deploy
         cp "$path"/QtSvg.dylib             $deploy
         cp "$path"/QtWidgets.dylib         $deploy
         cp "$path"/QtXml.dylib             $deploy
@@ -428,8 +428,8 @@ elif [ $1 = "macOS" ]; then
             cp "$path"/multimedia/libffmpegmediaplugin.dylib $deploy/multimedia
         fi
 
-        cp "$path"/$QtQuick/libqtquick2plugin.dylib $deploy/$QtQuick
-        cp "$path"/$QtQuick/qmldir                  $deploy/$QtQuick
+        copyFolder "$path"/$QtQuick $deploy/$QtQuick "*.dylib"
+        copyFolder "$path"/$QtQuick $deploy/$QtQuick "qmldir"
 
         cp "$path"/QtMultimedia/lib*multimedia*.dylib $deploy/QtMultimedia
         cp "$path"/QtMultimedia/qmldir                $deploy/QtMultimedia
@@ -499,7 +499,7 @@ elif [ $1 = "linux" ]; then
         cp "$path/lib$QtX"Network.so.$qx         $deploy
         cp "$path/lib$QtX"OpenGL.so.$qx          $deploy
         cp "$path/lib$QtX"Qml.so.$qx             $deploy
-        cp "$path/lib$QtX"Quick.so.$qx           $deploy
+        cp "$path/lib$QtX"Quick*.so.$qx          $deploy
         cp "$path/lib$QtX"Svg.so.$qx             $deploy
         cp "$path/lib$QtX"Widgets.so.$qx         $deploy
         cp "$path/lib$QtX"Xml.so.$qx             $deploy
@@ -547,8 +547,8 @@ elif [ $1 = "linux" ]; then
         cp "$path"/xcbglintegrations/libqxcb-egl-integration.so $deploy/xcbglintegrations
         cp "$path"/xcbglintegrations/libqxcb-glx-integration.so $deploy/xcbglintegrations
 
-        cp "$path"/$QtQuick/libqtquick2plugin.so $deploy/$QtQuick
-        cp "$path"/$QtQuick/qmldir               $deploy/$QtQuick
+        copyFolder "$path"/$QtQuick $deploy/$QtQuick "*.so"
+        copyFolder "$path"/$QtQuick $deploy/$QtQuick "qmldir"
 
         cp "$path"/QtMultimedia/lib*multimedia*.so $deploy/QtMultimedia
         cp "$path"/QtMultimedia/qmldir             $deploy/QtMultimedia
