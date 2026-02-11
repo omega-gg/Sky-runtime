@@ -89,7 +89,7 @@ Item
 
         local.locale = locale;
 
-        pageDefault.reload();
+        pageBrowse.reload();
     }
 //#END
 
