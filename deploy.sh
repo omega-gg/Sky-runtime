@@ -346,11 +346,8 @@ if [ $os = "windows" ]; then
             cp "$path"/multimedia/ffmpegmediaplugin.dll $deploy/multimedia
         fi
 
-        copyFolder "$path"/$QtQuick $deploy/$QtQuick "*.dll"
-        copyFolder "$path"/$QtQuick $deploy/$QtQuick "qmldir"
-
-        cp "$path"/QtMultimedia/*multimedia*.dll $deploy/QtMultimedia
-        cp "$path"/QtMultimedia/qmldir           $deploy/QtMultimedia
+        copyFolder "$path"/$QtQuick     $deploy/$QtQuick     "*.dll"
+        copyFolder "$path"/QtMultimedia $deploy/QtMultimedia "*.dll"
 
         if [ $qt = "qt6" ]; then
 
@@ -428,8 +425,8 @@ elif [ $1 = "macOS" ]; then
             cp "$path"/multimedia/libffmpegmediaplugin.dylib $deploy/multimedia
         fi
 
-        copyFolder "$path"/$QtQuick $deploy/$QtQuick "*.dylib"
-        copyFolder "$path"/$QtQuick $deploy/$QtQuick "qmldir"
+        copyFolder "$path"/$QtQuick     $deploy/$QtQuick     "*.dylib"
+        copyFolder "$path"/QtMultimedia $deploy/QtMultimedia "*.dylib"
 
         cp "$path"/QtMultimedia/lib*multimedia*.dylib $deploy/QtMultimedia
         cp "$path"/QtMultimedia/qmldir                $deploy/QtMultimedia
@@ -547,11 +544,8 @@ elif [ $1 = "linux" ]; then
         cp "$path"/xcbglintegrations/libqxcb-egl-integration.so $deploy/xcbglintegrations
         cp "$path"/xcbglintegrations/libqxcb-glx-integration.so $deploy/xcbglintegrations
 
-        copyFolder "$path"/$QtQuick $deploy/$QtQuick "*.so"
-        copyFolder "$path"/$QtQuick $deploy/$QtQuick "qmldir"
-
-        cp "$path"/QtMultimedia/lib*multimedia*.so $deploy/QtMultimedia
-        cp "$path"/QtMultimedia/qmldir             $deploy/QtMultimedia
+        copyFolder "$path"/$QtQuick     $deploy/$QtQuick     "*.so"
+        copyFolder "$path"/QtMultimedia $deploy/QtMultimedia "*.so"
 
         if [ $qt = "qt6" ]; then
 
