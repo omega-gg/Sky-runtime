@@ -23,6 +23,10 @@
 import QtQuick 1.0
 import Sky     1.0
 
+//#QT_NEW
+import QtQuick.Controls
+//#END
+
 Item
 {
     id: gui
@@ -47,6 +51,18 @@ Item
     // Private
 
     property bool pVersion: (online.version && online.version != sk.version)
+
+    //---------------------------------------------------------------------------------------------
+    // Settings
+    //---------------------------------------------------------------------------------------------
+
+//#QT_NEW
+    palette
+    {
+        highlight      : st.color_highlight
+        highlightedText: st.text2_color
+    }
+//#END
 
     //---------------------------------------------------------------------------------------------
     // Events

@@ -38,8 +38,6 @@ StyleComponents
     property url icon_eject: "icons/eject.svg"
     property url icon_lock : "icons/lock.svg"
 
-    property url icon_language: "icons/language.svg"
-
     //---------------------------------------------------------------------------------------------
     // Settings
     //---------------------------------------------------------------------------------------------

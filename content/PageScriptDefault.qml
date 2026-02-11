@@ -23,6 +23,10 @@
 import QtQuick 1.0
 import Sky     1.0
 
+//#QT_NEW
+import QtQuick.Controls.Fusion
+//#END
+
 Item
 {
     //---------------------------------------------------------------------------------------------
@@ -36,6 +40,29 @@ Item
     //---------------------------------------------------------------------------------------------
 
     property alias column: column
+
+    //---------------------------------------------------------------------------------------------
+    // Functions
+    //---------------------------------------------------------------------------------------------
+    // Private
+
+//#QT_NEW
+    function pUpdateLanguages()
+    {
+        var array = new Array;
+
+        //var subtitles = player.subtitlesData;
+
+        //var count = subtitles.length;
+
+        for (var i = 0; i < 2; i++)
+        {
+            array.push({ "text": qsTr("Default language") });
+        }
+
+        model.append(array);
+    }
+//#END
 
     //---------------------------------------------------------------------------------------------
     // Children
@@ -180,19 +207,24 @@ Item
                 onClicked: gui.openFile(pathBin)
             }
 
-            ButtonPushFull
+//#QT_NEW
+            ComboBox
             {
                 anchors.left: buttonBin.right
 
-                anchors.leftMargin: st.dp10
+                anchors.leftMargin: st.dp16
 
                 anchors.verticalCenter: parent.verticalCenter
 
-                icon          : st.icon_language
-                iconSourceSize: st.size14x14
+                width: st.dp128
 
-                text: qsTr("Default language")
+                height: st.dp28
+
+                model: ListModel { id: model }
+
+                Component.onCompleted: pUpdateLanguages()
             }
+//#END
         }
 
         TextEditCopy
