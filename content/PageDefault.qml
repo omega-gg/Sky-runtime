@@ -56,6 +56,14 @@ Item
     // Functions
     //---------------------------------------------------------------------------------------------
 
+    function reload()
+    {
+        var index = page;
+
+        page = -1;
+        page = index;
+    }
+
     function install(fileName)
     {
         areaPanel.showPanel("PanelInstall.qml", false);
@@ -87,6 +95,16 @@ Item
     }
 
     //---------------------------------------------------------------------------------------------
+    // Private
+
+    function pGetSource()
+    {
+        if      (page == 0) return Qt.resolvedUrl("PageWelcome.qml");
+        else if (page == 1) return Qt.resolvedUrl("PageBrowse.qml");
+        else                return "";
+    }
+
+    //---------------------------------------------------------------------------------------------
     // Children
     //---------------------------------------------------------------------------------------------
 
@@ -98,8 +116,7 @@ Item
 
         visible: (areaPanel.source != "PanelInstall.qml")
 
-        source: (page == 1) ? Qt.resolvedUrl("PageBrowse.qml")
-                            : Qt.resolvedUrl("PageWelcome.qml")
+        source: pGetSource()
     }
 
     AreaPanel

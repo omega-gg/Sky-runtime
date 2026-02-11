@@ -51,16 +51,45 @@ Item
     {
         var array = new Array;
 
-        //var subtitles = player.subtitlesData;
+        var languages = sk.getLanguages();
 
-        //var count = subtitles.length;
+        var count = languages.length;
 
-        for (var i = 0; i < 2; i++)
+        array.push({ "text": qsTr("Default langauge") });
+
+        for (var i = 0; i < count; i++)
         {
-            array.push({ "text": qsTr("Default language") });
+            array.push({ "text": languages[i] });
         }
 
         model.append(array);
+
+        var index = languages.indexOf(sk.localeToLanguage(local.locale));
+
+        comboLanguages.currentIndex = index + 1;
+    }
+
+    function pApplyLanguage(currentIndex)
+    {
+        if (currentIndex == -1) return;
+
+        var locale;
+
+        if (currentIndex != 0)
+        {
+            locale = model.get(currentIndex).text;
+
+            locale = sk.localeFromLanguage(locale);
+        }
+        else locale = "";
+
+        if (local.locale == locale) return;
+
+        sk.locale = locale;
+
+        local.locale = locale;
+
+        pageDefault.reload();
     }
 //#END
 
@@ -210,6 +239,8 @@ Item
 //#QT_6
             ComboBox
             {
+                id: comboLanguages
+
                 anchors.left: buttonBin.right
 
                 anchors.leftMargin: st.dp16
@@ -223,6 +254,8 @@ Item
                 model: ListModel { id: model }
 
                 Component.onCompleted: pUpdateLanguages()
+
+                onCurrentIndexChanged: pApplyLanguage(currentIndex)
             }
 //#END
         }
