@@ -23,10 +23,6 @@
 import QtQuick 1.0
 import Sky     1.0
 
-//#QT_NEW
-import QtQuick.Controls
-//#END
-
 Item
 {
     id: gui
