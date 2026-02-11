@@ -23,7 +23,7 @@
 import QtQuick 1.0
 import Sky     1.0
 
-//#QT_NEW
+//#QT_6
 import QtQuick.Controls.Fusion
 //#END
 
@@ -46,7 +46,7 @@ Item
     //---------------------------------------------------------------------------------------------
     // Private
 
-//#QT_NEW
+//#QT_6
     function pUpdateLanguages()
     {
         var array = new Array;
@@ -207,7 +207,7 @@ Item
                 onClicked: gui.openFile(pathBin)
             }
 
-//#QT_NEW
+//#QT_6
             ComboBox
             {
                 anchors.left: buttonBin.right
