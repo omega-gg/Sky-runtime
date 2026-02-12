@@ -33,6 +33,7 @@
 struct DataScriptItem
 {
     QString fileName;
+    QString fileLocale;
 
     QString version;
     QString versionParent;
@@ -67,6 +68,8 @@ public: // Interface
     Q_INVOKABLE QString getVersionParent(int index) const;
 
     Q_INVOKABLE QByteArray getData(int index) const;
+
+    Q_INVOKABLE QStringList getLocaleFiles() const;
 
     Q_INVOKABLE void deleteNow();
 

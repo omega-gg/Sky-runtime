@@ -251,6 +251,10 @@ private: // Functions
 
     QString getPathLocale(const QString & name) const;
 
+    void applyTranslators(const QStringList & fileNames);
+
+    void clearTranslators();
+
 private slots:
     void onLoaded     ();
     void onIndexLoaded();
@@ -330,6 +334,8 @@ private: // Variables
     WFileWatcher _watcher;
 
     QTranslator * _translator;
+
+    QList<QTranslator *> _translators;
 
 private:
     Q_DISABLE_COPY      (ControllerCore)

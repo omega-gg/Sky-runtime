@@ -96,6 +96,22 @@
     return _items.at(index).data;
 }
 
+/* Q_INVOKABLE */ QStringList DataScript::getLocaleFiles() const
+{
+    QStringList list;
+
+    foreach (const DataScriptItem & item, _items)
+    {
+        QString fileName = item.fileLocale;
+
+        if (fileName.isEmpty() || list.contains(fileName)) continue;
+
+        list.append(fileName);
+    }
+
+    return list;
+}
+
 //-------------------------------------------------------------------------------------------------
 
 /* Q_INVOKABLE */ void DataScript::deleteNow()

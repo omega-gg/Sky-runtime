@@ -492,6 +492,11 @@ Item
         Qt.openUrlExternally(controllerFile.fileUrl(url));
     }
 
+    function skyTr(text)
+    {
+        return qsTranslate(core.name, text);
+    }
+
     function setClipboard(text, description)
     {
         sk.setClipboardText(text);
@@ -571,6 +576,7 @@ Item
                "> exit                   quit the application\n" +
                "\n" +
                "api:\n" +
+               "- void skyTr(translation)                 translate the text\n" +
                "- void setClipboard(text, description)    set the clipboard";
     }
 

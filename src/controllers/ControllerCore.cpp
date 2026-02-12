@@ -1417,23 +1417,31 @@ ControllerCore::ControllerCore() : WController()
         log.append(string + '\n');
     }
 
-    QString startBash = "bash/";
-    QString startDoc  = "doc/";
+    QString startBash   = "bash/";
+    QString startLocale = "locale/";
+    QString startDoc    = "doc/";
 
     list.removeOne(startBash);
+    list.removeOne(startLocale);
     list.removeOne(startDoc);
 
     QString path = name + '/';
 
-    startBash += path;
-    startDoc  += path;
+    startBash   += path;
+    startLocale += path;
+    startDoc    += path;
 
     list.removeOne(startBash);
+    list.removeOne(startLocale);
     list.removeOne(startDoc);
 
     foreach (const QString & string, list)
     {
-        if (string.startsWith(startBash) || string.startsWith(startDoc)) continue;
+        if (string.startsWith(startBash)
+            ||
+            string.startsWith(startLocale)
+            ||
+            string.startsWith(startDoc)) continue;
 
         log.append(QString(tr("Invalid file: %1\n")).arg(string));
 
@@ -1668,6 +1676,19 @@ void ControllerCore::loadData(DataScript * script, const QString & fileName)
 
     item.fileName = fileName;
 
+    QString fileLocale = fileName.left(fileName.lastIndexOf("script/"));
+
+    QString base = WControllerFile::fileBaseName(fileName);
+
+    base = base.left(base.lastIndexOf('-'));
+
+    fileLocale += "locale/" + base + '/' + sk->locale() + ".qm";
+
+    if (QFile::exists(fileLocale))
+    {
+        item.fileLocale = fileLocale;
+    }
+
     item.versionParent = pair.at(1);
 
     QString version = list.at(0).simplified();
@@ -1787,6 +1808,35 @@ QString ControllerCore::getPathLocale(const QString & name) const
 #endif
 }
 
+void ControllerCore::applyTranslators(const QStringList & fileNames)
+{
+    clearTranslators();
+
+    foreach (const QString & fileName, fileNames)
+    {
+        QTranslator * translator = new QTranslator(this);
+
+        if (translator->load(fileName))
+        {
+            qApp->installTranslator(translator);
+        }
+
+        _translators.append(translator);
+    }
+}
+
+void ControllerCore::clearTranslators()
+{
+    foreach (QTranslator * translator, _translators)
+    {
+        qApp->removeTranslator(translator);
+
+        delete translator;
+    }
+
+    _translators.clear();
+}
+
 //-------------------------------------------------------------------------------------------------
 // Private slots
 //-------------------------------------------------------------------------------------------------
@@ -1869,6 +1919,8 @@ void ControllerCore::onLocaleChanged()
 {
     qApp->removeTranslator(_translator);
 
+    clearTranslators();
+
     QString path = getPathLocale(sk->locale());
 
     if (QFile::exists(path) && _translator->load(path))
@@ -1915,6 +1967,8 @@ void ControllerCore::setSource(const QString & source)
     if (string.isEmpty() == false)
     {
         loadData(_script, QDir::fromNativeSeparators(string));
+
+        applyTranslators(_script->getLocaleFiles());
 
         saveRecent(string);
 
