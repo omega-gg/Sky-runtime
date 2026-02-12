@@ -102,8 +102,8 @@ Item
     {
         return "// " + name + "\n" +
                "\n" +
-               "import QtQuick 2.0\n" +
-               "import Sky     1.0\n\n" +
+               "import QtQuick\n" +
+               "import Sky\n\n" +
                "Item\n" +
                "{\n" +
                "    function onRun(ui) {}\n"+
