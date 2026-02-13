@@ -873,21 +873,30 @@ ControllerCore::ControllerCore() : WController()
     _bash->stop();
 }
 
-/* Q_INVOKABLE */ QString ControllerCore::bashResolve(const QString & source) const
+/* Q_INVOKABLE */ QString ControllerCore::resolveScript(const QString & source) const
+{
+    QString name = source;
+
+    if (WControllerNetwork::extractUrlExtension(name) != "sky") name += ".sky";
+
+    QString fileName = getPathScript(name);
+
+    if (QFile::exists(fileName)) return fileName;
+
+    fileName = _pathBin + "/script/" + name;
+
+    if (QFile::exists(fileName)) return fileName;
+
+    return source;
+}
+
+/* Q_INVOKABLE */ QString ControllerCore::resolveBash(const QString & source) const
 {
     QString name = source;
 
     if (WControllerNetwork::extractUrlExtension(name) != "sh") name += ".sh";
 
-#ifdef SK_DEPLOY
-#ifdef Q_OS_ANDROID
-    QString fileName = "assets:/bash/" + name;
-#else
-    QString fileName = WControllerFile::applicationPath("bash/" + name);
-#endif
-#else
-    QString fileName = WControllerFile::applicationPath(PATH_BASH + "/" + name);
-#endif
+    QString fileName = getPathBash(name);
 
     if (QFile::exists(fileName)) return fileName;
 
@@ -1713,15 +1722,7 @@ void ControllerCore::loadData(DataScript * script, const QString & fileName)
 
     QString name = parent + ".sky";
 
-#ifdef SK_DEPLOY
-#ifdef Q_OS_ANDROID
-    QString path = "assets:/script/" + name;
-#else
-    QString path = WControllerFile::applicationPath("script/" + name);
-#endif
-#else
-    QString path = WControllerFile::applicationPath(PATH_SCRIPT + "/" + name);
-#endif
+    QString path = getPathScript(name);
 
     if (QFile::exists(path))
     {
@@ -1799,15 +1800,6 @@ void ControllerCore::renderItem(QPainter          & painter,
 #endif
 }
 
-QString ControllerCore::getPathLocale(const QString & name) const
-{
-#ifdef SK_DEPLOY
-    return "qrc:/locale/" + name + ".qm";
-#else
-    return "locale/" + name + ".qm";
-#endif
-}
-
 void ControllerCore::applyTranslators(const QStringList & fileNames)
 {
     clearTranslators();
@@ -1835,6 +1827,43 @@ void ControllerCore::clearTranslators()
     }
 
     _translators.clear();
+}
+
+//-------------------------------------------------------------------------------------------------
+
+QString ControllerCore::getPathScript(const QString & name) const
+{
+#ifdef SK_DEPLOY
+#ifdef Q_OS_ANDROID
+    return "assets:/script/" + name;
+#else
+    return WControllerFile::applicationPath("script/" + name);
+#endif
+#else
+    return WControllerFile::applicationPath(PATH_SCRIPT + "/" + name);
+#endif
+}
+
+QString ControllerCore::getPathBash(const QString & name) const
+{
+#ifdef SK_DEPLOY
+#ifdef Q_OS_ANDROID
+    return "assets:/bash/" + name;
+#else
+    return WControllerFile::applicationPath("bash/" + name);
+#endif
+#else
+    return WControllerFile::applicationPath(PATH_BASH + "/" + name);
+#endif
+}
+
+QString ControllerCore::getPathLocale(const QString & name) const
+{
+#ifdef SK_DEPLOY
+    return "qrc:/locale/" + name + ".qm";
+#else
+    return "locale/" + name + ".qm";
+#endif
 }
 
 //-------------------------------------------------------------------------------------------------

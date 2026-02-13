@@ -137,7 +137,7 @@ Item
         }
         else
         {
-            core.source = source;
+            core.source = core.resolveScript(source);
 
             if (source)
             {
@@ -149,7 +149,7 @@ Item
             else loader.source = Qt.resolvedUrl("PageDefault.qml");
         }
 
-        setFocus();
+        pFocus();
 
         // NOTE: When it's a command line interface run we quit right away.
         if (sk.cli) window.close();
@@ -164,7 +164,7 @@ Item
             args.push(String(arguments[i]))
         }
 
-        return core.bash(core.bashResolve(fileName), args);
+        return core.bash(core.resolveBash(fileName), args);
     }
 
     function skip() { core.skip() }
@@ -196,7 +196,7 @@ Item
 
         reloadScript(index);
 
-        setFocus();
+        pFocus();
     }
 
     function reload()
@@ -466,8 +466,17 @@ Item
 
     function toggleUi()
     {
-        if (ui) hideUi();
-        else    showUi();
+        if (ui)
+        {
+            var item = loaderConsole.item;
+
+            if (item.isFocused)
+            {
+                hideUi();
+            }
+            else item.setFocus();
+        }
+        else showUi();
     }
 
     function toggleConsole()
@@ -679,6 +688,15 @@ Item
 
         console.debug("Welcome to Sky kit runtime " + sk.versionSky + "\n" +
                       "Type 'help' for command details.");
+    }
+
+    function pFocus()
+    {
+        var item = loaderConsole.item;
+
+        if (item && item.isFocused) return;
+
+        setFocus();
     }
 
     function pEject()

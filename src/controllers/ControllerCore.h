@@ -127,7 +127,8 @@ public: // Interface
 
     Q_INVOKABLE void skip();
 
-    Q_INVOKABLE QString bashResolve(const QString & source) const;
+    Q_INVOKABLE QString resolveScript(const QString & source) const;
+    Q_INVOKABLE QString resolveBash  (const QString & source) const;
 
     Q_INVOKABLE bool render(const QString      & fileName,
                             const QVariantList & items,
@@ -249,11 +250,13 @@ private: // Functions
                     WDeclarativeImage * item,
                     const QRectF      & rect, qreal x, qreal y, qreal scale) const;
 
-    QString getPathLocale(const QString & name) const;
-
     void applyTranslators(const QStringList & fileNames);
 
     void clearTranslators();
+
+    QString getPathScript(const QString & name) const;
+    QString getPathBash  (const QString & name) const;
+    QString getPathLocale(const QString & name) const;
 
 private slots:
     void onLoaded     ();
