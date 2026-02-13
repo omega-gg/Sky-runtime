@@ -29,7 +29,8 @@ Item
     // Properties
     //---------------------------------------------------------------------------------------------
 
-    /* read */ property bool hasRecent: false
+    // NOTE: Setting this to true to avoid the flickering when loading recents.
+    /* read */ property bool hasRecent: true
 
     //---------------------------------------------------------------------------------------------
     // Events
