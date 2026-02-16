@@ -25,7 +25,7 @@ contains(QT_MAJOR_VERSION, 4) {
 
     android:QT += androidextras
 } else {
-    QT += opengl quick network xml svg multimedia core5compat webview quickcontrols2
+    QT += opengl quick network xml svg multimedia core5compat webview
 
     #----------------------------------------------------------------------------------------------
     # NOTE Qt6.3: We need the widgets for QApplication and QFileDialog(s).
@@ -35,6 +35,8 @@ contains(QT_MAJOR_VERSION, 4) {
     macx:QT += widgets
 
     unix:!android:QT += widgets webenginequick
+
+    !ios:!android:QT += quickcontrols2
 }
 
 greaterThan(QT_MAJOR_VERSION, 4) {

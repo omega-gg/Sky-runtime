@@ -150,15 +150,10 @@ jobs:
     vmImage: "ubuntu-latest"
   steps:
   - bash: |
-      docker run -d --name ubuntu -v $PWD:/Sky-runtime amd64/ubuntu:22.04 tail -f /dev/null
-      docker exec -t ubuntu bash -c "cd /Sky-runtime;
-                                     export DEBIAN_FRONTEND=noninteractive;
-                                     apt-get update;
-                                     apt-get -y install sudo curl zip git awscli;
-                                     sh environment.sh qt5;
-                                     sh build.sh android all;
-                                     cd deploy;
-                                     zip -rq ../Sky-runtime.zip *"
+      sh environment.sh qt5
+      sh build.sh android all
+      cd deploy
+      zip -rq ../Sky-runtime.zip *
   - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
     artifact: Sky-runtime-android-qt5
 
