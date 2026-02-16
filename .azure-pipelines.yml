@@ -152,6 +152,7 @@ jobs:
   - bash: |
       sh environment.sh qt5
       sh build.sh android all
+      cat build/armeabi-v7a/android-build/build/reports/problems/problems-report.html
       cd deploy
       zip -rq ../Sky-runtime.zip *
   - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
