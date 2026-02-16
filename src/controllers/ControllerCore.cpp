@@ -475,6 +475,9 @@ ControllerCore::ControllerCore() : WController()
     //---------------------------------------------------------------------------------------------
     // Sky-runtime
 
+    qmlRegisterUncreatableType<ControllerCore>("Sky", 1,0, "ControllerCore",
+                                               "ControllerCore is not creatable");
+
     qmlRegisterType<DataLocal>("Sky", 1,0, "DataLocal");
 
     //---------------------------------------------------------------------------------------------
@@ -857,20 +860,93 @@ ControllerCore::ControllerCore() : WController()
     return getVariantInstall(true, log);
 }
 
-/* Q_INVOKABLE */ bool ControllerCore::bash(const QString & fileName, const QStringList & arguments)
+/* Q_INVOKABLE */ QVariantMap ControllerCore::bash(const QString     & fileName,
+                                                   const QStringList & arguments)
 {
-    if (_bash == NULL) return false;
+    if (_bash == NULL) return getVariantBash(WScriptBashResult());
 
     qDebug("BASH %s", fileName.C_STR);
 
-    return _bash->run(fileName, arguments, false);
+    return getVariantBash(_bash->run(fileName, arguments, false));
 }
 
-/* Q_INVOKABLE */ void ControllerCore::skip()
+/* Q_INVOKABLE */ QVariantMap ControllerCore::bashAsync(const QString     & fileName,
+                                                        const QStringList & arguments)
 {
-    if (_bash == NULL) return;
+    WScriptBashResult result;
+
+    if (_bash == NULL)
+    {
+        QVariantMap map = getVariantBash(result);
+
+        map.insert("id", -1);
+
+        return map;
+    }
+
+    WScriptBash * bash = new WScriptBash(this);
+
+    _bashes.append(bash);
+
+    int id = _bashIds.generateId();
+
+    result = bash->run(fileName, arguments, true);
+
+    connect(bash, SIGNAL(finished    (const WScriptBashResult &)),
+            this, SLOT(onBashFinished(const WScriptBashResult &)));
+
+    QVariantMap map = getVariantBash(result);
+
+    map.insert("id", id);
+
+    return map;
+}
+
+/* Q_INVOKABLE */ bool ControllerCore::bashSkip()
+{
+    if (_bash == NULL) return false;
 
     _bash->stop();
+
+    return true;
+}
+
+/* Q_INVOKABLE */ bool ControllerCore::bashStop(int id)
+{
+    if (id == -1)
+    {
+        foreach (WScriptBash * bash, _bashes)
+        {
+            bash->stop();
+
+            delete bash;
+        }
+
+        _bashes .clear();
+        _bashIds.clear();
+
+        return true;
+    }
+
+    int index = _bashIds.indexOf(id);
+
+    if (index == -1) return false;
+
+    _bashIds.removeAt(index);
+
+    WScriptBash * bash = _bashes.takeAt(index);
+
+    bash->stop();
+
+    delete bash;
+
+    return true;
+}
+
+/* Q_INVOKABLE */ void ControllerCore::bashClear()
+{
+    bashSkip();
+    bashStop(-1);
 }
 
 /* Q_INVOKABLE */ QString ControllerCore::resolveScript(const QString & source) const
@@ -1866,6 +1942,13 @@ QString ControllerCore::getPathLocale(const QString & name) const
 #endif
 }
 
+QVariantMap ControllerCore::getVariantBash(const WScriptBashResult & result) const
+{
+    QVariantMap map;
+
+    map.insert("ok", result.ok);
+}
+
 //-------------------------------------------------------------------------------------------------
 // Private slots
 //-------------------------------------------------------------------------------------------------
@@ -1904,6 +1987,28 @@ void ControllerCore::onReload()
     _index->reloadBackends();
 
     WBackendUniversal::clearCache();
+}
+
+void ControllerCore::onBashFinished(const WScriptBashResult & result)
+{
+    WScriptBash * bash = static_cast<WScriptBash *> (sender());
+
+    int index = _bashes.indexOf(bash);
+
+    if (index == -1)
+    {
+        bash->deleteLater();
+
+        return;
+    }
+
+    _bashes.removeAt(index);
+
+    QVariantMap map = getVariantBash(result);
+
+    map.insert("id", _bashIds.at(index));
+
+    emit bashFinished(map);
 }
 
 void ControllerCore::onComplete(bool ok)

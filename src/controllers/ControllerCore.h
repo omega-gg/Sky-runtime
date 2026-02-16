@@ -30,6 +30,8 @@
 
 // Sk includes
 #include <WController>
+#include <WScriptBash>
+#include <WListId>
 #include <WFileWatcher>
 
 // Application includes
@@ -48,7 +50,6 @@ class WControllerFileReply;
 class QTranslator;
 class WWindow;
 class WCache;
-class WScriptBash;
 class WBackendIndex;
 class WDeclarativeImage;
 class WDeclarativePlayer;
@@ -135,9 +136,21 @@ public: // Interface
     // QVariantList contains: bool ok, QString log.
     Q_INVOKABLE QVariantList installArchive(const QString & fileName, const QString & name);
 
-    Q_INVOKABLE bool bash(const QString & fileName, const QStringList & arguments = QStringList());
+    Q_INVOKABLE QVariantMap bash(const QString     & fileName,
+                                 const QStringList & arguments = QStringList());
 
-    Q_INVOKABLE void skip();
+    // NOTE: This returns an id that's useful for the bashComplete signal and -1 on error.
+    Q_INVOKABLE QVariantMap bashAsync(const QString     & fileName,
+                                      const QStringList & arguments = QStringList());
+
+    // NOTE: Stop the current sequential bash script.
+    Q_INVOKABLE bool bashSkip();
+
+    // NOTE: Stop an asynchronous bash script based on its id. -1 stops everything.
+    Q_INVOKABLE bool bashStop(int id);
+
+    // NOTE: Stop everything bash, asynchronous or not.
+    Q_INVOKABLE void bashClear();
 
     Q_INVOKABLE QString resolveScript(const QString & source) const;
     Q_INVOKABLE QString resolveBash  (const QString & source) const;
@@ -270,11 +283,15 @@ private: // Functions
     QString getPathBash  (const QString & name) const;
     QString getPathLocale(const QString & name) const;
 
+    QVariantMap getVariantBash(const WScriptBashResult & result) const;
+
 private slots:
     void onLoaded     ();
     void onIndexLoaded();
 
     void onReload();
+
+    void onBashFinished(const WScriptBashResult & result);
 
     void onComplete(bool ok);
 
@@ -287,9 +304,11 @@ private slots:
 signals:
     void libraryLoaded();
 
-    void recentsChanged();
-
     void refresh(const QStringList & fileNames);
+
+    void bashFinished(const QVariantMap map);
+
+    void recentsChanged();
 
     void sourceChanged();
 
@@ -339,6 +358,9 @@ private: // Variables
     WBackendIndex * _index;
 
     WScriptBash * _bash;
+
+    QList<WScriptBash *> _bashes;
+    WListId              _bashIds;
 
     QList<ControllerCoreItem> _library;
 

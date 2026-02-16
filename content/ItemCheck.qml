@@ -61,23 +61,40 @@ Item
 
     /* virtual */ function onGetState()
     {
-        if (stateCheck == core.StateChecking)
+        if (stateCheck == ControllerCore.StateChecking)
         {
             return qsTr("Checking...");
         }
-        else if (stateCheck == core.StateInvalid)
+        else if (stateCheck == ControllerCore.StateInvalid)
         {
             return qsTr("Invalid");
         }
-        else if (stateCheck == core.StateIncomplete)
+        else if (stateCheck == ControllerCore.StateIncomplete)
         {
             return qsTr("Incomplete");
         }
-        else if (stateCheck == core.StateValid)
+        else if (stateCheck == ControllerCore.StateValid)
         {
             return qsTr("Valid");
         }
         else return qsTr("Default");
+    }
+
+    /* virtual */ function onGetColor()
+    {
+        if (stateCheck == ControllerCore.StateInvalid)
+        {
+            return "#c80000";
+        }
+        else if (stateCheck == ControllerCore.StateIncomplete)
+        {
+            return "#c86400";
+        }
+        else if (stateCheck == ControllerCore.StateValid)
+        {
+            return "#00c800";
+        }
+        else return st.text3_color;
     }
 
     //---------------------------------------------------------------------------------------------
@@ -110,6 +127,22 @@ Item
         font.pixelSize: st.dp16
     }
 
+    Rectangle
+    {
+        anchors.right: itemState.left
+
+        anchors.rightMargin: st.dp8
+
+        anchors.verticalCenter: buttonRefresh.verticalCenter
+
+        width : st.dp8
+        height: width
+
+        radius: height
+
+        color: onGetColor()
+    }
+
     TextBase
     {
         id: itemState
@@ -135,6 +168,8 @@ Item
         anchors.margins: st.dp4
 
         radius: height
+
+        enabled: (stateCheck != ControllerCore.StateChecking)
 
         icon          : st.icon_refresh
         iconSourceSize: st.size16x16

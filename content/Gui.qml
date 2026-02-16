@@ -167,7 +167,7 @@ Item
         return core.bash(core.resolveBash(fileName), args);
     }
 
-    function skip() { core.skip() }
+    function skip() { core.bashSkip() }
 
     function refresh()
     {
