@@ -151,8 +151,8 @@ jobs:
   steps:
   - bash: |
       sh environment.sh qt5
+      export GRADLE_OPTS="-Dorg.gradle.logging.stacktrace=full -Dorg.gradle.logging.level=info -Dorg.gradle.console=plain"
       sh build.sh android all
-      cat build/armeabi-v7a/android-build/build/reports/problems/problems-report.html
       cd deploy
       zip -rq ../Sky-runtime.zip *
   - publish: $(System.DefaultWorkingDirectory)/Sky-runtime.zip
