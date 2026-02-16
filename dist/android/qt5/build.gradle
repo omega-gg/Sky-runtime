@@ -48,6 +48,16 @@ android {
     // Extract native libraries from the APK
     packagingOptions.jniLibs.useLegacyPackaging true
 
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+        resources {
+            // This is the magic line that fixes the Lint crash and the Merge error
+            pickFirsts.add("kotlin/reflect/reflect.kotlin_module")
+        }
+    }
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
