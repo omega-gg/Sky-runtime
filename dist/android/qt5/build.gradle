@@ -20,6 +20,17 @@ repositories {
 
 apply plugin: 'com.android.application'
 
+gradle.taskGraph.whenReady {
+    println "JAVA: " + System.getProperty("java.version") + " (" + System.getProperty("java.vendor") + ")"
+    println "JVM: " + System.getProperty("java.vm.name")
+    println "GRADLE: " + gradle.gradleVersion
+    try {
+        println "ANDROID_PLUGIN: " + com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION
+    } catch (Throwable t) {
+        println "ANDROID_PLUGIN: <unavailable> (" + t.getClass().getName() + ": " + t.getMessage() + ")"
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     implementation 'com.android.support:support-core-utils:28.0.0'
@@ -66,13 +77,15 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    lintOptions {
-        abortOnError false
+    lint {
+        checkReleaseBuilds = false
+        abortOnError = false
     }
+
 
     // Do not compress Qt binary resources file
     aaptOptions {
