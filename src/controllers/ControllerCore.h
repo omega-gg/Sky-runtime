@@ -83,6 +83,8 @@ class ControllerCore : public WController
 {
     Q_OBJECT
 
+    Q_ENUMS(StateCheck)
+
 #ifdef SK_DESKTOP
     Q_PROPERTY(QString argument READ argument CONSTANT)
 #endif
@@ -103,6 +105,16 @@ class ControllerCore : public WController
     Q_PROPERTY(bool associateSky READ associateSky WRITE setAssociateSky
                NOTIFY associateSkyChanged)
 #endif
+
+public: // Enums
+    enum StateCheck
+    {
+        StateDefault,
+        StateChecking,
+        StateInvalid,
+        StateIncomplete,
+        StateValid
+    };
 
 private:
     ControllerCore();

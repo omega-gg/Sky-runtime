@@ -1,5 +1,9 @@
 # [Sky-runtime](../README.md) bash scripts
 
+## Core
+
+- [bash](bash/README.md)
+
 ## Tools
 
 - [image](image/README.md)

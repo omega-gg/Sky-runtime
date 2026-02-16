@@ -15,3 +15,5 @@ solid="$font/solid"
 
 cp "$solid"/eject.svg icons
 cp "$solid"/lock.svg  icons
+
+cp "$solid"/rotate-right.svg icons/refresh.svg
