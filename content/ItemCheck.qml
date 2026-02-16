@@ -25,9 +25,17 @@ import Sky     1.0
 
 Item
 {
+    id: itemCheck
+
     //---------------------------------------------------------------------------------------------
     // Properties
     //---------------------------------------------------------------------------------------------
+
+    /* read */ property bool isCheckable: (script != ""
+                                           &&
+                                           stateCheck != ControllerCore.StateChecking)
+
+    property bool autoCheck: true
 
     property int stateCheck: 0
     // 0: StateDefault
@@ -35,6 +43,10 @@ Item
     // 2: StateInvalid
     // 3: StateWarning
     // 4: StateValid
+
+    property string script
+
+    property int scriptId: -1
 
     //---------------------------------------------------------------------------------------------
     // Aliases
@@ -46,7 +58,7 @@ Item
     property alias itemTitle: itemTitle
     property alias itemState: itemState
 
-    property alias buttonRefresh: buttonRefresh
+    property alias buttonCheck: buttonCheck
 
     //---------------------------------------------------------------------------------------------
     // Settings
@@ -55,9 +67,50 @@ Item
     height: st.dp48
 
     //---------------------------------------------------------------------------------------------
+    // Events
+    //---------------------------------------------------------------------------------------------
+
+    Component.onCompleted: if (autoCheck) check()
+
+    //---------------------------------------------------------------------------------------------
+    // Connections
+    //---------------------------------------------------------------------------------------------
+
+    Connections
+    {
+        target: core
+
+        /* QML_CONNECTION */ function onBashFinished(result)
+        {
+            itemCheck.onBashFinished(result);
+        }
+    }
+
+    //---------------------------------------------------------------------------------------------
     // Functions
     //---------------------------------------------------------------------------------------------
+
+    function check()
+    {
+        if (isCheckable == false) return;
+
+        stateCheck = ControllerCore.StateChecking;
+
+        onCheck();
+    }
+
+    //---------------------------------------------------------------------------------------------
     // Events
+
+    /* virtual */ function onCheck()
+    {
+        if (scriptId != -1)
+        {
+            core.bashStop(scriptId);
+        }
+
+        scriptId = core.bashAsync(core.resolveBash(script)).id;
+    }
 
     /* virtual */ function onGetState()
     {
@@ -97,6 +150,21 @@ Item
         else return st.text3_color;
     }
 
+    /* virtual */ function onBashFinished(result)
+    {
+        if (result.id != scriptId) return;
+
+        scriptId = -1;
+
+        onBashCheck(result);
+    }
+
+    /* virtual */ function onBashCheck(result)
+    {
+        if (result.ok) stateCheck = ControllerCore.StateValid;
+        else           stateCheck = ControllerCore.StateInvalid;
+    }
+
     //---------------------------------------------------------------------------------------------
     // Children
     //---------------------------------------------------------------------------------------------
@@ -120,7 +188,7 @@ Item
 
         anchors.leftMargin: st.dp12
 
-        anchors.verticalCenter: buttonRefresh.verticalCenter
+        anchors.verticalCenter: buttonCheck.verticalCenter
 
         color: st.text3_color
 
@@ -133,7 +201,7 @@ Item
 
         anchors.rightMargin: st.dp8
 
-        anchors.verticalCenter: buttonRefresh.verticalCenter
+        anchors.verticalCenter: buttonCheck.verticalCenter
 
         width : st.dp8
         height: width
@@ -147,11 +215,11 @@ Item
     {
         id: itemState
 
-        anchors.right: buttonRefresh.left
+        anchors.right: buttonCheck.left
 
         anchors.rightMargin: st.dp8
 
-        anchors.verticalCenter: buttonRefresh.verticalCenter
+        anchors.verticalCenter: buttonCheck.verticalCenter
 
         text: onGetState()
 
@@ -160,7 +228,7 @@ Item
 
     ButtonPushIcon
     {
-        id: buttonRefresh
+        id: buttonCheck
 
         anchors.right: parent.right
         anchors.top  : parent.top
@@ -169,9 +237,11 @@ Item
 
         radius: height
 
-        enabled: (stateCheck != ControllerCore.StateChecking)
+        enabled: isCheckable
 
         icon          : st.icon_refresh
         iconSourceSize: st.size16x16
+
+        onClicked: check()
     }
 }

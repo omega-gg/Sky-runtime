@@ -283,8 +283,6 @@ private: // Functions
     QString getPathBash  (const QString & name) const;
     QString getPathLocale(const QString & name) const;
 
-    QVariantMap getVariantBash(const WScriptBashResult & result) const;
-
 private slots:
     void onLoaded     ();
     void onIndexLoaded();

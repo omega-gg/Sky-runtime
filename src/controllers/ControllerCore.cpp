@@ -863,11 +863,11 @@ ControllerCore::ControllerCore() : WController()
 /* Q_INVOKABLE */ QVariantMap ControllerCore::bash(const QString     & fileName,
                                                    const QStringList & arguments)
 {
-    if (_bash == NULL) return getVariantBash(WScriptBashResult());
+    if (_bash == NULL) return WScriptBash::resultToMap(WScriptBashResult());
 
     qDebug("BASH %s", fileName.C_STR);
 
-    return getVariantBash(_bash->run(fileName, arguments, false));
+    return WScriptBash::resultToMap(_bash->run(fileName, arguments, false));
 }
 
 /* Q_INVOKABLE */ QVariantMap ControllerCore::bashAsync(const QString     & fileName,
@@ -877,7 +877,7 @@ ControllerCore::ControllerCore() : WController()
 
     if (_bash == NULL)
     {
-        QVariantMap map = getVariantBash(result);
+        QVariantMap map = WScriptBash::resultToMap(result);
 
         map.insert("id", -1);
 
@@ -895,7 +895,7 @@ ControllerCore::ControllerCore() : WController()
     connect(bash, SIGNAL(finished    (const WScriptBashResult &)),
             this, SLOT(onBashFinished(const WScriptBashResult &)));
 
-    QVariantMap map = getVariantBash(result);
+    QVariantMap map = WScriptBash::resultToMap(result);
 
     map.insert("id", id);
 
@@ -1942,13 +1942,6 @@ QString ControllerCore::getPathLocale(const QString & name) const
 #endif
 }
 
-QVariantMap ControllerCore::getVariantBash(const WScriptBashResult & result) const
-{
-    QVariantMap map;
-
-    map.insert("ok", result.ok);
-}
-
 //-------------------------------------------------------------------------------------------------
 // Private slots
 //-------------------------------------------------------------------------------------------------
@@ -1993,20 +1986,19 @@ void ControllerCore::onBashFinished(const WScriptBashResult & result)
 {
     WScriptBash * bash = static_cast<WScriptBash *> (sender());
 
+    disconnect(bash, 0, this, 0);
+
     int index = _bashes.indexOf(bash);
 
-    if (index == -1)
-    {
-        bash->deleteLater();
+    bash->deleteLater();
 
-        return;
-    }
+    if (index == -1) return;
 
     _bashes.removeAt(index);
 
-    QVariantMap map = getVariantBash(result);
+    QVariantMap map = WScriptBash::resultToMap(result);
 
-    map.insert("id", _bashIds.at(index));
+    map.insert("id", _bashIds.takeAt(index));
 
     emit bashFinished(map);
 }
