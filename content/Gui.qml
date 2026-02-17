@@ -632,7 +632,13 @@ Item
 
     function onKeyPressed(event)
     {
-        if (event.key == Qt.Key_F1)
+        if (event.key == Qt.Key_Escape)
+        {
+            event.accepted = true;
+
+            window.close();
+        }
+        else if (event.key == Qt.Key_F1)
         {
             event.accepted = true;
 
@@ -647,6 +653,20 @@ Item
                 reload();
             }
             else refresh();
+        }
+        else if (event.key == Qt.Key_F12 && event.modifiers == Qt.ControlModifier)
+        {
+            event.accepted = true;
+
+            if (event.isAutoRepeat) return;
+
+            window.writeShot(core.pathShots);
+        }
+        else if (event.key == Qt.Key_F11)
+        {
+            event.accepted = true;
+
+            fullScreen = !(fullScreen);
         }
         else if (event.key == Qt.Key_W && event.modifiers == Qt.ControlModifier)
         {

@@ -83,30 +83,6 @@ Application
 
         viewport.onActiveFocusChanged: if (loader.item) loader.item.setFocus()
 
-        /* QML_EVENT */ onKeyPressed: function(event)
-        {
-            if (event.key == Qt.Key_Escape)
-            {
-                event.accepted = true;
-
-                close();
-            }
-            else if (event.key == Qt.Key_F12 && event.modifiers == Qt.ControlModifier)
-            {
-                event.accepted = true;
-
-                if (event.isAutoRepeat) return;
-
-                window.writeShot(core.pathShots);
-            }
-            else if (event.key == Qt.Key_F11)
-            {
-                event.accepted = true;
-
-                fullScreen = !(fullScreen);
-            }
-        }
-
         //-----------------------------------------------------------------------------------------
         // Children
         //-----------------------------------------------------------------------------------------

@@ -30,8 +30,7 @@
 
 // Sk includes
 #include <WController>
-#include <WScriptBash>
-#include <WListId>
+#include <WBashManager>
 #include <WFileWatcher>
 
 // Application includes
@@ -289,7 +288,7 @@ private slots:
 
     void onReload();
 
-    void onBashFinished(const WScriptBashResult & result);
+    void onBashFinished(const WBashManagerResult & result);
 
     void onComplete(bool ok);
 
@@ -304,7 +303,7 @@ signals:
 
     void refresh(const QStringList & fileNames);
 
-    void bashFinished(const QVariantMap map);
+    void bashFinished(const QVariantMap & map);
 
     void recentsChanged();
 
@@ -357,8 +356,7 @@ private: // Variables
 
     WScriptBash * _bash;
 
-    QList<WScriptBash *> _bashes;
-    WListId              _bashIds;
+    WBashManager * _manager;
 
     QList<ControllerCoreItem> _library;
 

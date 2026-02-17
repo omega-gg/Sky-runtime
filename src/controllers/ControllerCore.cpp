@@ -63,7 +63,6 @@
 #include <WUnzipper>
 #include <WActionCue>
 #include <WInputCue>
-#include <WScriptBash>
 #include <WLoaderNetwork>
 #include <WLoaderVbml>
 #include <WLoaderBarcode>
@@ -675,6 +674,14 @@ ControllerCore::ControllerCore() : WController()
 #endif
 
     //---------------------------------------------------------------------------------------------
+    // BashManager
+
+    _manager = new WBashManager(this);
+
+    connect(_manager, SIGNAL(finished    (const WBashManagerResult &)),
+            this,     SLOT(onBashFinished(const WBashManagerResult &)));
+
+    //---------------------------------------------------------------------------------------------
     // DataOnline
 
     _online = new DataOnline(this);
@@ -873,33 +880,11 @@ ControllerCore::ControllerCore() : WController()
 /* Q_INVOKABLE */ QVariantMap ControllerCore::bashAsync(const QString     & fileName,
                                                         const QStringList & arguments)
 {
-    WScriptBashResult result;
-
-    if (_bash == NULL)
+    if (_manager)
     {
-        QVariantMap map = WScriptBash::resultToMap(result);
-
-        map.insert("id", -1);
-
-        return map;
+        return WBashManager::resultToMap(_manager->run(fileName, arguments));
     }
-
-    WScriptBash * bash = new WScriptBash(this);
-
-    _bashes.append(bash);
-
-    int id = _bashIds.generateId();
-
-    result = bash->run(fileName, arguments, true);
-
-    connect(bash, SIGNAL(finished    (const WScriptBashResult &)),
-            this, SLOT(onBashFinished(const WScriptBashResult &)));
-
-    QVariantMap map = WScriptBash::resultToMap(result);
-
-    map.insert("id", id);
-
-    return map;
+    else return WBashManager::resultToMap(WBashManagerResult());
 }
 
 /* Q_INVOKABLE */ bool ControllerCore::bashSkip()
@@ -913,32 +898,13 @@ ControllerCore::ControllerCore() : WController()
 
 /* Q_INVOKABLE */ bool ControllerCore::bashStop(int id)
 {
+    if (_manager == NULL) return false;
+
     if (id == -1)
     {
-        foreach (WScriptBash * bash, _bashes)
-        {
-            bash->stop();
-
-            delete bash;
-        }
-
-        _bashes .clear();
-        _bashIds.clear();
-
-        return true;
+        _manager->clear();
     }
-
-    int index = _bashIds.indexOf(id);
-
-    if (index == -1) return false;
-
-    _bashIds.removeAt(index);
-
-    WScriptBash * bash = _bashes.takeAt(index);
-
-    bash->stop();
-
-    delete bash;
+    else _manager->stop(id);
 
     return true;
 }
@@ -1982,25 +1948,9 @@ void ControllerCore::onReload()
     WBackendUniversal::clearCache();
 }
 
-void ControllerCore::onBashFinished(const WScriptBashResult & result)
+void ControllerCore::onBashFinished(const WBashManagerResult & result)
 {
-    WScriptBash * bash = static_cast<WScriptBash *> (sender());
-
-    disconnect(bash, 0, this, 0);
-
-    int index = _bashes.indexOf(bash);
-
-    bash->deleteLater();
-
-    if (index == -1) return;
-
-    _bashes.removeAt(index);
-
-    QVariantMap map = WScriptBash::resultToMap(result);
-
-    map.insert("id", _bashIds.takeAt(index));
-
-    emit bashFinished(map);
+    emit bashFinished(WBashManager::resultToMap(result));
 }
 
 void ControllerCore::onComplete(bool ok)
