@@ -68,6 +68,7 @@ android {
     }
 
     lintOptions {
+        // NOTE: This is useful to avoid Gradle lint failures.
         checkReleaseBuilds = false
         abortOnError       = false
     }
