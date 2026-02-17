@@ -56,6 +56,7 @@ Item
     property alias textState: itemState.text
 
     property alias itemTitle: itemTitle
+    property alias itemColor: itemColor
     property alias itemState: itemState
 
     property alias buttonCheck: buttonCheck
@@ -116,7 +117,7 @@ Item
     {
         if (stateCheck == ControllerCore.StateChecking)
         {
-            return qsTr("Checking...");
+            return qsTr("Checking");
         }
         else if (stateCheck == ControllerCore.StateInvalid)
         {
@@ -184,7 +185,8 @@ Item
     {
         id: itemTitle
 
-        anchors.left: parent.left
+        anchors.left : parent.left
+        anchors.right: itemColor.left
 
         anchors.leftMargin: st.dp12
 
@@ -197,6 +199,8 @@ Item
 
     Rectangle
     {
+        id: itemColor
+
         anchors.right: itemState.left
 
         anchors.rightMargin: st.dp8
