@@ -114,7 +114,6 @@ public: // Enums
         StateInstall,
         StateRemove,
         StateInvalid,
-        StateIncomplete,
         StateValid
     };
 

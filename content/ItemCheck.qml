@@ -50,8 +50,7 @@ Item
     // 2: StateInstall
     // 3: StateRemove
     // 4: StateInvalid
-    // 5: StateWarning
-    // 6: StateValid
+    // 5: StateValid
 
     property string script
 
@@ -195,9 +194,7 @@ Item
     {
         if (stateCheck == ControllerCore.StateInstall
             ||
-            stateCheck == ControllerCore.StateRemove
-            ||
-            stateCheck == ControllerCore.StateIncomplete)
+            stateCheck == ControllerCore.StateRemove)
         {
             return "#c86400";
         }
