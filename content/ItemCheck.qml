@@ -35,7 +35,7 @@ Item
                                            &&
                                            stateCheck != ControllerCore.StateChecking)
 
-    property bool autoCheck: true
+    property bool autoCheck: false
 
     property int stateCheck: 0
     // 0: StateDefault
