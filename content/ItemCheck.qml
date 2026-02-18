@@ -31,21 +31,27 @@ Item
     // Properties
     //---------------------------------------------------------------------------------------------
 
-    /* read */ property bool isCheckable: (script != ""
-                                           &&
-                                           stateCheck != ControllerCore.StateChecking)
+    /* read */ property bool isReady: (script != ""
+                                       &&
+                                       stateCheck != ControllerCore.StateCheck
+                                       &&
+                                       stateCheck != ControllerCore.StateInstall
+                                       &&
+                                       stateCheck != ControllerCore.StateRemove)
 
-    /* read */ property bool isValid   : (stateCheck == ControllerCore.StateValid)
-    /* read */ property bool isChecking: (stateCheck == ControllerCore.StateChecking)
+    /* read */ property bool isValid  : (stateCheck == ControllerCore.StateValid)
+    /* read */ property bool isInvalid: (stateCheck == ControllerCore.StateInvalid)
 
     property bool autoCheck: false
 
     property int stateCheck: ControllerCore.StateDefault
     // 0: StateDefault
-    // 1: StateChecking
-    // 2: StateInvalid
-    // 3: StateWarning
-    // 4: StateValid
+    // 1: StateCheck
+    // 2: StateInstall
+    // 3: StateRemove
+    // 4: StateInvalid
+    // 5: StateWarning
+    // 6: StateValid
 
     property string script
 
@@ -76,6 +82,8 @@ Item
 
     Component.onCompleted: if (autoCheck) check()
 
+    Component.onDestruction: if (scriptId != -1) core.bashStop(scriptId)
+
     //---------------------------------------------------------------------------------------------
     // Connections
     //---------------------------------------------------------------------------------------------
@@ -96,11 +104,39 @@ Item
 
     function check()
     {
-        if (isCheckable == false) return;
+        if (isReady == false) return;
 
-        stateCheck = ControllerCore.StateChecking;
+        stateCheck = ControllerCore.StateCheck;
 
         onCheck();
+    }
+
+    function install()
+    {
+        if (isReady == false) return;
+
+        stateCheck = ControllerCore.StateInstall;
+
+        popup.showText(qsTr("Press F1 for details"));
+
+        onInstall();
+
+        stateCheck = ControllerCore.StateDefault;
+
+        check();
+    }
+
+    function remove()
+    {
+        if (isReady == false) return;
+
+        stateCheck = ControllerCore.StateRemove;
+
+        onRemove();
+
+        stateCheck = ControllerCore.StateDefault;
+
+        check();
     }
 
     //---------------------------------------------------------------------------------------------
@@ -116,15 +152,33 @@ Item
         scriptId = core.bashAsync(core.resolveBash(script)).id;
     }
 
+    /* virtual */ function onInstall()
+    {
+        console.debug("ItemCheck: onInstall is not implemented.")
+    }
+
+    /* virtual */ function onRemove()
+    {
+        console.debug("ItemCheck: onRemove is not implemented.")
+    }
+
     /* virtual */ function onGetState()
     {
-        if (stateCheck == ControllerCore.StateChecking)
+        if (stateCheck == ControllerCore.StateCheck)
         {
             return qsTr("Checking");
         }
+        else if (stateCheck == ControllerCore.StateInstall)
+        {
+            return qsTr("Installing");
+        }
+        else if (stateCheck == ControllerCore.StateRemove)
+        {
+            return qsTr("Removing");
+        }
         else if (stateCheck == ControllerCore.StateInvalid)
         {
-            return qsTr("Invalid");
+            return qsTr("Absent");
         }
         else if (stateCheck == ControllerCore.StateIncomplete)
         {
@@ -139,11 +193,11 @@ Item
 
     /* virtual */ function onGetColor()
     {
-        if (stateCheck == ControllerCore.StateInvalid)
-        {
-            return "#c80000";
-        }
-        else if (stateCheck == ControllerCore.StateIncomplete)
+        if (stateCheck == ControllerCore.StateInstall
+            ||
+            stateCheck == ControllerCore.StateRemove
+            ||
+            stateCheck == ControllerCore.StateIncomplete)
         {
             return "#c86400";
         }
@@ -244,7 +298,7 @@ Item
 
         radius: height
 
-        enabled: isCheckable
+        enabled: isReady
 
         icon          : st.icon_refresh
         iconSourceSize: st.size16x16

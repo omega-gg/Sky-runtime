@@ -83,7 +83,7 @@ class ControllerCore : public WController
 {
     Q_OBJECT
 
-    Q_ENUMS(StateCheck)
+    Q_ENUMS(CheckState)
 
 #ifdef SK_DESKTOP
     Q_PROPERTY(QString argument READ argument CONSTANT)
@@ -107,10 +107,12 @@ class ControllerCore : public WController
 #endif
 
 public: // Enums
-    enum StateCheck
+    enum CheckState
     {
         StateDefault,
-        StateChecking,
+        StateCheck,
+        StateInstall,
+        StateRemove,
         StateInvalid,
         StateIncomplete,
         StateValid
