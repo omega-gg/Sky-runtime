@@ -123,10 +123,10 @@ mkdir -p "$name"
 cd "$name"
 
 case `uname` in
-    MINGW*)  os="windows";;
-    Darwin*) os="macos";;
-    Linux*)  os="linux";;
-    *)       os="other";;
+    MINGW*|MSYS*|CYGWIN*) os="windows";;
+    Darwin*)              os="macos";;
+    Linux*)               os="linux";;
+    *)                    os="other";;
 esac
 
 if [ $os = "other" ]; then

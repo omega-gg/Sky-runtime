@@ -35,9 +35,12 @@ Item
                                            &&
                                            stateCheck != ControllerCore.StateChecking)
 
+    /* read */ property bool isValid   : (stateCheck == ControllerCore.StateValid)
+    /* read */ property bool isChecking: (stateCheck == ControllerCore.StateChecking)
+
     property bool autoCheck: false
 
-    property int stateCheck: 0
+    property int stateCheck: ControllerCore.StateDefault
     // 0: StateDefault
     // 1: StateChecking
     // 2: StateInvalid

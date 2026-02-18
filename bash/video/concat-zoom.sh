@@ -45,10 +45,10 @@ append()
 getOs()
 {
     case `uname` in
-    MINGW*)  os="windows";;
-    Darwin*) os="macOS";;
-    Linux*)  os="linux";;
-    *)       os="other";;
+    MINGW*|MSYS*|CYGWIN*) os="windows";;
+    Darwin*)              os="macOS";;
+    Linux*)               os="linux";;
+    *)                    os="other";;
     esac
 
     type=`uname -m`
