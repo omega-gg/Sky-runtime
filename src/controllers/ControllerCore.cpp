@@ -667,7 +667,7 @@ ControllerCore::ControllerCore() : WController()
     //---------------------------------------------------------------------------------------------
     // Bash
 
-    _bash = new WScriptBash(this);
+    _bash = new WBashScript(this);
 
 #ifdef Q_OS_WIN
     _bash->setPathBash(WControllerFile::applicationPath("Git/usr/bin/bash.exe"));
@@ -870,11 +870,11 @@ ControllerCore::ControllerCore() : WController()
 /* Q_INVOKABLE */ QVariantMap ControllerCore::bash(const QString     & fileName,
                                                    const QStringList & arguments)
 {
-    if (_bash == NULL) return WScriptBash::resultToMap(WScriptBashResult());
+    if (_bash == NULL) return WBashScript::resultToMap(WBashScriptResult());
 
     qDebug("BASH %s", fileName.C_STR);
 
-    return WScriptBash::resultToMap(_bash->run(fileName, arguments, false));
+    return WBashScript::resultToMap(_bash->run(fileName, arguments, false));
 }
 
 /* Q_INVOKABLE */ QVariantMap ControllerCore::bashAsync(const QString     & fileName,

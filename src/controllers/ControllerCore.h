@@ -355,7 +355,7 @@ private: // Variables
 
     WBackendIndex * _index;
 
-    WScriptBash * _bash;
+    WBashScript * _bash;
 
     WBashManager * _manager;
 
