@@ -39,6 +39,7 @@ Item
                                        &&
                                        stateCheck != ControllerCore.StateRemove)
 
+
     /* read */ property bool isValid  : (stateCheck == ControllerCore.StateValid)
     /* read */ property bool isInvalid: (stateCheck == ControllerCore.StateInvalid)
 
@@ -55,6 +56,9 @@ Item
     property string script
 
     property int scriptId: -1
+
+    //---------------------------------------------------------------------------------------------
+    // Private
 
     //---------------------------------------------------------------------------------------------
     // Aliases
@@ -107,7 +111,9 @@ Item
 
         stateCheck = ControllerCore.StateCheck;
 
-        onCheck();
+        if (onCheck()) return;
+
+        stateCheck = ControllerCore.StateInvalid;
     }
 
     function install()
@@ -149,6 +155,8 @@ Item
         }
 
         scriptId = core.bashAsync(core.resolveBash(script)).id;
+
+        return (scriptId != -1);
     }
 
     /* virtual */ function onInstall()
