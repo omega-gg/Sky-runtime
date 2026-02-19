@@ -32,6 +32,9 @@ StyleComponents
 
     property bool isTight: (window.contentWidth < dp480)
 
+    property int minimumWidth : dp320
+    property int minimumHeight: dp200
+
     //---------------------------------------------------------------------------------------------
     // Icons
 

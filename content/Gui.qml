@@ -786,8 +786,9 @@ Item
 
     TextDefaultLink
     {
-        anchors.left: parent.left
-        anchors.top : parent.top
+        anchors.left : parent.left
+        anchors.right: itemText.left
+        anchors.top  : parent.top
 
         text: (pVersion) ? qsTr("Update available")
                          : qsTr("F1 for console")
@@ -807,6 +808,8 @@ Item
 
     TextDefaultLink
     {
+        id: itemText
+
         anchors.right: parent.right
         anchors.top  : parent.top
 

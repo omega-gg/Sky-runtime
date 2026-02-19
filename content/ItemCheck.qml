@@ -39,7 +39,6 @@ Item
                                        &&
                                        stateCheck != ControllerCore.StateRemove)
 
-
     /* read */ property bool isValid  : (stateCheck == ControllerCore.StateValid)
     /* read */ property bool isInvalid: (stateCheck == ControllerCore.StateInvalid)
 
@@ -64,7 +63,9 @@ Item
     // Aliases
     //---------------------------------------------------------------------------------------------
 
-    property alias text     : itemTitle.text
+    property alias title: itemTitle.text
+
+    property alias text     : itemText.text
     property alias textState: itemState.text
 
     property alias itemTitle: itemTitle
@@ -73,11 +74,14 @@ Item
 
     property alias buttonCheck: buttonCheck
 
+    property alias itemText: itemText
+
     //---------------------------------------------------------------------------------------------
     // Settings
     //---------------------------------------------------------------------------------------------
 
-    height: st.dp48
+    height: (itemText.visible) ? st.dp64 + itemText.height
+                               : st.dp48
 
     //---------------------------------------------------------------------------------------------
     // Events
@@ -309,5 +313,20 @@ Item
         iconSourceSize: st.size16x16
 
         onClicked: check()
+    }
+
+    TextBase
+    {
+        id: itemText
+
+        anchors.left : itemTitle.left
+        anchors.right: buttonCheck.right
+        anchors.top  : buttonCheck.bottom
+
+        anchors.topMargin: st.dp4
+
+        visible: (text != "")
+
+        color: st.text3_color
     }
 }

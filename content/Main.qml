@@ -65,6 +65,9 @@ Application
     {
         id: window
 
+        minimumWidth : st.minimumWidth
+        minimumHeight: st.minimumHeight
+
 //#QT_4
         antialias: true
 //#END
