@@ -323,7 +323,9 @@ Item
         anchors.right: buttonCheck.right
         anchors.top  : buttonCheck.bottom
 
-        anchors.topMargin: st.dp4
+        anchors.leftMargin : st.dp4
+        anchors.rightMargin: st.dp4
+        anchors.topMargin  : st.dp4
 
         visible: (text != "")
 

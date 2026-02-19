@@ -121,7 +121,7 @@ Item
             }
         }
 
-        skip();
+        core.bashSkip();
 
         objects = new Array;
 
@@ -167,7 +167,30 @@ Item
         return core.bash(core.resolveBash(fileName), args);
     }
 
-    function skip() { core.bashSkip() }
+    function async(fileName)
+    {
+        var args = new Array;
+
+        for (var i = 1; i < arguments.length; ++i)
+        {
+            args.push(String(arguments[i]))
+        }
+
+        return core.bashAsync(core.resolveBash(fileName), args);
+    }
+
+    function kill(id)
+    {
+        if (id == undefined)
+        {
+            core.bashSkip();
+        }
+        else if (id == -1)
+        {
+            core.bashClear();
+        }
+        else core.bashStop(id);
+    }
 
     function refresh()
     {
@@ -175,7 +198,7 @@ Item
 
         if (length == 0) return;
 
-        skip();
+        core.bashSkip();
 
         core.clearWatchers();
 
@@ -399,9 +422,28 @@ Item
 
             bash.apply(this, args);
         }
-        else if (command == "skip")
+        else if (command == "async")
         {
-            skip();
+            if (length < 2) return;
+
+            /* var */ args = new Array;
+
+            for (var i = 1; i < list.length; ++i)
+            {
+                args.push(String(list[i]));
+            }
+
+            async.apply(this, args);
+        }
+        else if (command == "kill")
+        {
+            if (length > 2) return;
+
+            if (length == 1)
+            {
+                kill();
+            }
+            else kill(list[1]);
         }
         else if (command == "refresh")
         {
@@ -575,8 +617,13 @@ Item
                "\n" +
                "console:\n" +
                "> run <source>           run a .sky source\n" +
-               "> bash <source> [...]    run the bash script\n" +
-               "> skip                   skip the current bash script\n" +
+               "> bash  <source> [...]   run the script\n" +
+               "> async <source> [...]   run the script asynchronously\n" +
+               "> kill [id]              kill a script\n" +
+               "    [id] = none:   kill the current script\n" +
+               "         = number: kill a specific script\n" +
+               "         = -1:     kill all scripts\n" +
+               "\n" +
                "> refresh                refresh the top level script\n" +
                "> reload                 reload everthing in cascade\n" +
                "> unload                 unload everthing\n" +
