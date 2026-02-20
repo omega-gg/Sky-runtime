@@ -32,6 +32,12 @@ Item
     property alias isFocused: lineEdit.isFocused
 
     //---------------------------------------------------------------------------------------------
+    // Events
+    //---------------------------------------------------------------------------------------------
+
+    Component.onCompleted: controllerFile.maxLog = 100000
+
+    //---------------------------------------------------------------------------------------------
     // Functions
     //---------------------------------------------------------------------------------------------
 
@@ -73,6 +79,8 @@ Item
         anchors.bottom: lineEdit.top
 
         log: controllerFile.log
+
+        itemConsole.maximumLength: controllerFile.maxLog
     }
 
     LineEditBox

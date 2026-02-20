@@ -33,7 +33,7 @@ Row
 
     /* mandatory */ property ItemCheck itemCheck
 
-    property int size: width / 2
+    property int size: width
 
     property int margins: st.dp8
 
@@ -42,7 +42,6 @@ Row
     //---------------------------------------------------------------------------------------------
 
     property alias buttonInstall: buttonInstall
-    property alias buttonRemove : buttonRemove
 
     //---------------------------------------------------------------------------------------------
     // Settings
@@ -53,6 +52,27 @@ Row
     height: st.dp32 + margins
 
     clip: true
+
+    //---------------------------------------------------------------------------------------------
+    // Events
+    //---------------------------------------------------------------------------------------------
+
+    Connections
+    {
+        target: itemCheck
+
+        /* QML_CONNECTION */ function onStateCheckChanged()
+        {
+            if (itemCheck.isValid)
+            {
+                buttonInstall.text = qsTr("Remove");
+            }
+            else if (itemCheck.isInvalid)
+            {
+                buttonInstall.text = qsTr("Install");
+            }
+        }
+    }
 
     //---------------------------------------------------------------------------------------------
     // Children
@@ -66,21 +86,12 @@ Row
 
         enabled: itemCheck.isReady
 
-        text: (itemCheck.isValid) ? qsTr("Reinstall") : qsTr("Install")
+        text: qsTr("Install")
 
-        onClicked: itemCheck.install()
-    }
-
-    ButtonPush
-    {
-        id: buttonRemove
-
-        width: rowCheck.size
-
-        enabled: (itemCheck.isReady && itemCheck.isInvalid == false)
-
-        text: qsTr("Remove")
-
-        onClicked: itemCheck.remove()
+        onClicked:
+        {
+            if (itemCheck.isValid) itemCheck.remove ();
+            else                   itemCheck.install();
+        }
     }
 }

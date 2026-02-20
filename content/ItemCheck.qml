@@ -335,5 +335,7 @@ Item
         visible: (text != "")
 
         color: st.text3_color
+
+        lineHeight: 1.8
     }
 }
