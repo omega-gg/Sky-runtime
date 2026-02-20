@@ -543,6 +543,11 @@ Item
         Qt.openUrlExternally(controllerFile.fileUrl(url));
     }
 
+    function openBin(url)
+    {
+        openFile(core.pathBin + '/' + url);
+    }
+
     function skyTr(text)
     {
         return qsTranslate(core.name, text);

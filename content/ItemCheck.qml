@@ -152,6 +152,11 @@ Item
     //---------------------------------------------------------------------------------------------
     // Events
 
+    /* virtual */ function onClick()
+    {
+        console.debug("ItemCheck: onClick is not implemented.")
+    }
+
     /* virtual */ function onCheck()
     {
         if (scriptId != -1)
@@ -215,6 +220,10 @@ Item
         {
             return "#c86400";
         }
+        else if (stateCheck == ControllerCore.StateInvalid)
+        {
+            return "#c80000";
+        }
         else if (stateCheck == ControllerCore.StateValid)
         {
             return "#00c800";
@@ -252,7 +261,7 @@ Item
         color: st.buttonPush_colorA
     }
 
-    TextBase
+    TextLink
     {
         id: itemTitle
 
@@ -263,9 +272,13 @@ Item
 
         anchors.verticalCenter: buttonCheck.verticalCenter
 
+        enabled: isValid
+
         color: st.text3_color
 
         font.pixelSize: st.dp16
+
+        onClicked: onClick()
     }
 
     Rectangle
