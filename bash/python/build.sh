@@ -184,7 +184,9 @@ esac
 
 if [ $os = "windows" ]; then
 
-    path="$(echo "$version" | tr -d . | cut -c1-3)._pth"
+    path="$(echo "$version" | awk -F. '{print $1$2}')"
+
+    path="python$path._pth"
 
     if [ -f "$path" ]; then
 
@@ -204,3 +206,9 @@ curl --retry 3 -L -o "$script" "https://bootstrap.pypa.io/get-pip.py"
 python "$script" --no-warn-script-location
 
 rm -f "$script"
+
+#--------------------------------------------------------------------------------------------------
+# Install
+#--------------------------------------------------------------------------------------------------
+
+python -m pip install virtualenv

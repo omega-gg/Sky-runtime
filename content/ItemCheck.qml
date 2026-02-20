@@ -53,6 +53,7 @@ Item
     // 5: StateValid
 
     property string script
+    property var    parameters
 
     property int scriptId: -1
 
@@ -158,7 +159,11 @@ Item
             core.bashStop(scriptId);
         }
 
-        scriptId = core.bashAsync(core.resolveBash(script)).id;
+        if (parameters)
+        {
+             scriptId = core.bashAsync(core.resolveBash(script), parameters).id;
+        }
+        else scriptId = core.bashAsync(core.resolveBash(script)).id;
 
         return (scriptId != -1);
     }

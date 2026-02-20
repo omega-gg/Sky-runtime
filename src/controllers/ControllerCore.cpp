@@ -549,7 +549,7 @@ ControllerCore::ControllerCore() : WController()
 
         qputenv("SKY_PATH_BIN", _pathBin.toUtf8());
     }
-    else _pathBin += "/sky";
+    else _pathBin = QDir::fromNativeSeparators(_pathBin) + "/sky";
 
 #ifdef Q_OS_MACOS
     // FIXME Qt6/macOS: This seems required for the WebView to load when deploying the application.
