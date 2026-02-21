@@ -152,7 +152,7 @@ Item
         pFocus();
 
         // NOTE: When it's a command line interface run we quit right away.
-        if (sk.cli) window.close();
+        if (sk.cli) exit();
     }
 
     function bash(fileName)
@@ -261,6 +261,8 @@ Item
 
     function exit()
     {
+        core.bashClear();
+
         window.close();
     }
 
@@ -688,7 +690,7 @@ Item
         {
             event.accepted = true;
 
-            window.close();
+            exit();
         }
         else if (event.key == Qt.Key_F1)
         {
@@ -870,7 +872,7 @@ Item
         // NOTE: Since the text is fading out on press, we keep it underlined when pressed.
         font.underline: isHovered
 
-        onClicked: window.close()
+        onClicked: exit()
     }
 
     Item

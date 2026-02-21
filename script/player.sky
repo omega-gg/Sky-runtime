@@ -273,7 +273,7 @@ Player
             {
                 anchors.centerIn: parent
 
-                text: qsTr("Welcome to Sky player")
+                text: skyTr("Welcome to Sky player")
 
                 font.pixelSize: st.dp32
             }

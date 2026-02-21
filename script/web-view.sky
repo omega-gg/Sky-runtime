@@ -195,7 +195,7 @@ Item
             {
                 anchors.centerIn: parent
 
-                text: qsTr("Welcome to Sky web-view")
+                text: skyTr("Welcome to Sky web-view")
 
                 font.pixelSize: st.dp32
             }
