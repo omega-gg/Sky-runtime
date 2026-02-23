@@ -42,9 +42,10 @@ Item
     /* read */ property bool isValid  : (stateCheck == ControllerCore.StateValid)
     /* read */ property bool isInvalid: (stateCheck == ControllerCore.StateInvalid)
 
-    /* read */ property bool isProcessing: (stateCheck == ControllerCore.StateInstall
-                                            ||
-                                            stateCheck == ControllerCore.StateRemove)
+    /* read */ property bool isInstalling: (stateCheck == ControllerCore.StateInstall)
+    /* read */ property bool isRemoving  : (stateCheck == ControllerCore.StateRemove)
+
+    /* read */ property bool isProcessing: (isInstalling || isRemoving)
 
     property bool autoCheck: false
 

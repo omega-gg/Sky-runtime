@@ -86,7 +86,7 @@ Row
 
         width: rowCheck.size
 
-        enabled: (itemCheck.isReady || itemCheck.isProcessing)
+        enabled: (parent.enabled && (itemCheck.isReady || itemCheck.isProcessing))
 
         text: qsTr("Install")
 
