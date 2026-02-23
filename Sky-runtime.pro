@@ -298,6 +298,7 @@ OTHER_FILES += environment.sh \
                content/Main.qml \
                content/Gui.qml \
                content/ItemCheck.qml \
+               content/BackgroundItem.qml \
                content/BackgroundLink.qml \
                content/TextDefault.qml \
                content/TextDefaultLink.qml \
