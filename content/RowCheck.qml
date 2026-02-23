@@ -69,6 +69,10 @@ Row
             {
                 buttonInstall.text = qsTr("Install");
             }
+            else if (itemCheck.isProcessing)
+            {
+                buttonInstall.text = qsTr("Abort");
+            }
         }
     }
 
@@ -82,14 +86,21 @@ Row
 
         width: rowCheck.size
 
-        enabled: itemCheck.isReady
+        enabled: (itemCheck.isReady || itemCheck.isProcessing)
 
         text: qsTr("Install")
 
         onClicked:
         {
-            if (itemCheck.isValid) itemCheck.remove ();
-            else                   itemCheck.install();
+            if (itemCheck.isValid)
+            {
+                itemCheck.remove();
+            }
+            else if (itemCheck.isInvalid)
+            {
+                itemCheck.install();
+            }
+            else itemCheck.abort();
         }
     }
 }

@@ -42,6 +42,10 @@ Item
     /* read */ property bool isValid  : (stateCheck == ControllerCore.StateValid)
     /* read */ property bool isInvalid: (stateCheck == ControllerCore.StateInvalid)
 
+    /* read */ property bool isProcessing: (stateCheck == ControllerCore.StateInstall
+                                            ||
+                                            stateCheck == ControllerCore.StateRemove)
+
     property bool autoCheck: false
 
     property int stateCheck: ControllerCore.StateDefault
@@ -149,6 +153,15 @@ Item
         check();
     }
 
+    function abort()
+    {
+        if (isProcessing == false) return;
+
+        onAbort();
+
+        check();
+    }
+
     //---------------------------------------------------------------------------------------------
     // Events
 
@@ -166,9 +179,9 @@ Item
 
         if (parameters)
         {
-             scriptId = core.bashAsync(core.resolveBash(script), parameters).id;
+             scriptId = gui.async(core.resolveBash(script), parameters).id;
         }
-        else scriptId = core.bashAsync(core.resolveBash(script)).id;
+        else scriptId = gui.async(core.resolveBash(script)).id;
 
         return (scriptId != -1);
     }
@@ -182,6 +195,8 @@ Item
     {
         console.debug("ItemCheck: onRemove is not implemented.")
     }
+
+    /* virtual */ function onAbort() { gui.kill() }
 
     /* virtual */ function onGetState()
     {
