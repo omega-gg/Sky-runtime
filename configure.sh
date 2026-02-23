@@ -12,6 +12,15 @@ Sky="$PWD/../Sky"
 external="$PWD/../3rdparty"
 
 #--------------------------------------------------------------------------------------------------
+# Windows
+
+Git_version="2.53.0"
+
+Git_url="https://github.com/git-for-windows/git/releases/download/v$Git_version.windows.1/Git-$Git_version-64-bit.tar.bz2"
+
+Git_path="$PWD/bin/git"
+
+#--------------------------------------------------------------------------------------------------
 # Android
 
 JDK_version="17.0.2"
@@ -288,6 +297,20 @@ elif [ $1 = "linux" ]; then
     echo "COPYING Boost"
 
     cp "$deploy"/libboost*.so* bin
+fi
+
+#--------------------------------------------------------------------------------------------------
+# Git
+#--------------------------------------------------------------------------------------------------
+
+if [ $1 = "win64" ]; then
+
+    curl --retry 3 -L -o archive.tar.bz2 "$Git_url"
+
+    rm -rf   "$Git_path"
+    mkdir -p "$Git_path"
+
+    tar -xjf archive.tar.bz2 -C "$Git_path"
 fi
 
 echo "------------------------"
