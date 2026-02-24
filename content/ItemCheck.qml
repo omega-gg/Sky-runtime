@@ -266,7 +266,7 @@ Item
     // Children
     //---------------------------------------------------------------------------------------------
 
-    BackgroundItem
+    Rectangle
     {
         id: background
 
@@ -283,8 +283,11 @@ Item
 
         anchors.left : parent.left
         anchors.right: itemColor.left
+        anchors.top  : parent.top
 
-        anchors.leftMargin: st.dp12
+        anchors.leftMargin : st.dp12
+        anchors.rightMargin: st.dp4
+        anchors.topMargin  : st.dp16
 
         anchors.verticalCenter: buttonCheck.verticalCenter
 
