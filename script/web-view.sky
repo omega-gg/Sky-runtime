@@ -120,6 +120,11 @@ Item
         webView.url = "about:blank";
     }
 
+    function skyTr(text)
+    {
+        return qsTranslate("web-view", text);
+    }
+
     //---------------------------------------------------------------------------------------------
     // Events
 

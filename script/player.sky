@@ -127,6 +127,11 @@ Player
         pause();
     }
 
+    function skyTr(text)
+    {
+        return qsTranslate("player", text);
+    }
+
     //---------------------------------------------------------------------------------------------
     // Events
 
