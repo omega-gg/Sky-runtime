@@ -116,6 +116,46 @@ installMacOS()
     done
 }
 
+generateQml()
+{
+   if [ $qt = "qt4" ]; then
+
+       defines="QT_4 QT_OLD"
+
+   elif [ $qt = "qt5" ]; then
+
+      defines="QT_5 QT_OLD QT_NEW"
+   else
+      defines="QT_6 QT_NEW"
+   fi
+
+   if [ $os = "windows" ]; then
+
+       defines="$defines DESKTOP WINDOWS"
+
+   elif [ $1 = "macOS" ]; then
+
+       defines="$defines DESKTOP MAC"
+
+   elif [ $1 = "iOS" ]; then
+
+       defines="$defines MOBILE IOS NO_TORRENT"
+
+   elif [ $1 = "linux" ]; then
+
+       defines="$defines DESKTOP LINUX"
+   else
+       defines="$defines MOBILE ANDROID"
+   fi
+
+   if [ "$2" = "deploy" ]; then
+
+       defines="$defines DEPLOY"
+   fi
+
+   "$Sky"/deploy/qmlGenerator "$1" "$1" "$defines"
+}
+
 #--------------------------------------------------------------------------------------------------
 # Syntax
 #--------------------------------------------------------------------------------------------------
@@ -740,7 +780,11 @@ if [ $os != "mobile" ]; then
 
     echo "COPYING script"
 
-    copyFolder "$script" $deploy/script "*.sky"
+    path="$deploy/script"
+
+    copyFolder "$script" "$path" "*.sky"
+
+    generateQml "$path"
 
     echo "COPYING bash"
 

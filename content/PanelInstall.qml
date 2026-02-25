@@ -141,7 +141,7 @@ Panel
 
         checked: true
 
-        text: qsTr("I trust the origin and content of this .skz archive")
+        text: qsTr("⚠️ I trust the origin and content of this .skz archive")
     }
 
     ButtonPush

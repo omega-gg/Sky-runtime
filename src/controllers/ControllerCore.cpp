@@ -971,12 +971,38 @@ ControllerCore::ControllerCore() : WController()
 
     QStringList list = WUnzipper::getFileNames(filePath);
 
+    QStringList scripts;
+
     foreach (const QString & string, list)
     {
+        if (string.startsWith("script/"))
+        {
+            scripts.append(string);
+        }
+
         log.append(QString(tr("cp %1\n")).arg(string));
     }
 
     WUnzipper::extract(filePath, _pathSky);
+
+    path = _pathSky + '/';
+
+    QStringList defines = WControllerFile::qmlDefines();
+
+#ifdef SK_DEPLOY
+    defines.append("DEPLOY");
+#endif
+
+    scripts.removeOne("script/");
+
+    foreach (const QString & script, scripts)
+    {
+        QString fileName = path + script;
+
+        log.append(QString(tr("generate %1\n")).arg(script));
+
+        WControllerFile::generateQml(fileName, fileName, defines);
+    }
 
     log.append(tr("---\n"
                   "Install complete"));
