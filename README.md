@@ -13,12 +13,13 @@ minimalistic.
 ## Extensions
 
 - [hypergonar](https://omega.gg/hypergonar/sources) - Frame compositor for generative software
+- [turbopixel](https://omega.gg/turbopixel/sources) - Efficient local image generator
 
 ## Usage
 
     sky <script> [options]
 
-    Where <script> is .sky script you want to run.
+    Where <script> is a .sky script or a .skz archive you want to run.
 
 ## Options
 
