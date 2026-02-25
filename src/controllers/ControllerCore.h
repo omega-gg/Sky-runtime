@@ -206,8 +206,23 @@ public: // Interface
 
     Q_INVOKABLE void clearWatchers();
 
+    // Recent
+
     Q_INVOKABLE void loadRecent();
     Q_INVOKABLE void saveRecent(const QString & fileName);
+
+    // Storage
+
+    Q_INVOKABLE bool createStorage(const QString & name, bool asynchronous = true);
+
+    Q_INVOKABLE QVariantMap loadJson(const QString & name,
+                                     const QString & nameJson, bool asynchronous = true);
+
+    Q_INVOKABLE bool saveJson(const QString     & name,
+                              const QString     & nameJson,
+                              const QVariantMap & map, bool asynchronous = true);
+
+    Q_INVOKABLE QString getPathStorage(const QString & name) const;
 
     // Script
 
@@ -303,6 +318,8 @@ private slots:
 
 signals:
     void libraryLoaded();
+
+    void jsonLoaded(const QString & fileName, const QVariantMap & map);
 
     void refresh(const QStringList & fileNames);
 

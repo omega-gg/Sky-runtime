@@ -30,6 +30,7 @@
 #include <QDeclarativeEngine>
 #else
 #include <QQmlEngine>
+#include <QJsonObject>
 #endif
 //#include <QNetworkDiskCache>
 #ifdef SK_DESKTOP
@@ -199,7 +200,7 @@ public: // Variables
 {
     ControllerCoreReadReply * reply = qobject_cast<ControllerCoreReadReply *> (this->reply());
 
-    if (QFile::exists(path) == false) return true;
+    if (QFile::exists(path) == false) return false;
 
     reply->recents = loadRecents(path);
 
@@ -254,6 +255,115 @@ public: // Variables
     WControllerFile::writeFile(path, content.toUtf8());
 
     return true;
+}
+
+//=================================================================================================
+// ControllerCoreReadJson
+//=================================================================================================
+
+class ControllerCoreReadJson : public WAbstractThreadAction
+{
+    Q_OBJECT
+
+public: // Static functions
+    static QVariantMap load(const QString & fileName);
+
+protected: // WAbstractThreadAction reimplementation
+    /* virtual */ WAbstractThreadReply * createReply() const;
+
+protected: // WAbstractThreadAction implementation
+    /* virtual */ bool run();
+
+public: // Variables
+    QString fileName;
+};
+
+class ControllerCoreReplyJson : public WAbstractThreadReply
+{
+    Q_OBJECT
+
+protected: // WAbstractThreadReply reimplementation
+    /* virtual */ void onCompleted(bool ok);
+
+signals:
+    void loaded(const QString & fileName, const QVariantMap & map);
+
+public: // Variables
+    QString     fileName;
+    QVariantMap map;
+};
+
+/* static */ QVariantMap ControllerCoreReadJson::load(const QString & fileName)
+{
+#ifdef QT_OLD
+    return QVariantMap();
+#else
+    QByteArray json = WControllerFile::readAll(fileName);
+
+    QJsonDocument document = QJsonDocument::fromJson(json);
+
+    return document.object().toVariantMap();
+#endif
+}
+
+/* virtual */ WAbstractThreadReply * ControllerCoreReadJson::createReply() const
+{
+    return new ControllerCoreReplyJson;
+}
+
+/* virtual */ bool ControllerCoreReadJson::run()
+{
+    ControllerCoreReplyJson * reply = qobject_cast<ControllerCoreReplyJson *> (this->reply());
+
+    if (QFile::exists(fileName) == false) return false;
+
+    reply->fileName = fileName;
+
+    reply->map = load(fileName);
+
+    return true;
+}
+
+/* virtual */ void ControllerCoreReplyJson::onCompleted(bool)
+{
+    emit loaded(fileName, map);
+}
+
+//=================================================================================================
+// ControllerCoreWriteJson
+//=================================================================================================
+
+class ControllerCoreWriteJson : public WControllerFileAction
+{
+    Q_OBJECT
+
+public: // Static functions
+    static bool save(const QString & fileName, const QVariantMap & map);
+
+protected: // WAbstractThreadAction implementation
+    /* virtual */ bool run();
+
+public: // Variables
+    QString     fileName;
+    QVariantMap map;
+};
+
+/* static */ bool ControllerCoreWriteJson::save(const QString & fileName, const QVariantMap & map)
+{
+#ifdef QT_OLD
+    return false;
+#else
+    QJsonObject object = QJsonObject::fromVariantMap(map);
+
+    QJsonDocument document(object);
+
+    return WControllerFile::writeFile(fileName, document.toJson());
+#endif
+}
+
+/* virtual */ bool ControllerCoreWriteJson::run()
+{
+    return save(fileName, map);
 }
 
 //=================================================================================================
@@ -1248,6 +1358,9 @@ ControllerCore::ControllerCore() : WController()
     }
 }
 
+//-------------------------------------------------------------------------------------------------
+// Recent
+
 /* Q_INVOKABLE */ void ControllerCore::loadRecent()
 {
     ControllerCoreReadRecent * action = new ControllerCoreReadRecent;
@@ -1273,6 +1386,68 @@ ControllerCore::ControllerCore() : WController()
 }
 
 //-------------------------------------------------------------------------------------------------
+// Storage
+
+/* Q_INVOKABLE */ bool ControllerCore::createStorage(const QString & name, bool asynchronous)
+{
+    if (asynchronous)
+    {
+        wControllerFile->startCreatePath(getPathStorage(name));
+
+        return true;
+    }
+    else return WControllerFile::createPath(getPathStorage(name));
+}
+
+/* Q_INVOKABLE */ QVariantMap ControllerCore::loadJson(const QString & name,
+                                                       const QString & nameJson, bool asynchronous)
+{
+    QString fileName = getPathStorage(name) + '/' + nameJson;
+
+    if (asynchronous == false)
+    {
+        return ControllerCoreReadJson::load(fileName);
+    }
+
+    ControllerCoreReadJson * action = new ControllerCoreReadJson;
+
+    action->fileName = fileName;
+
+    ControllerCoreReplyJson * reply = qobject_cast<ControllerCoreReplyJson *>
+                                      (wControllerFile->startReadAction(action));
+
+    connect(reply, SIGNAL(loaded    (const QString &, const QVariantMap &)),
+            this,  SIGNAL(jsonLoaded(const QString &, const QVariantMap &)));
+
+    return QVariantMap();
+}
+
+/* Q_INVOKABLE */ bool ControllerCore::saveJson(const QString     & name,
+                                                const QString     & nameJson,
+                                                const QVariantMap & map, bool asynchronous)
+{
+    QString fileName = getPathStorage(name) + '/' + nameJson;
+
+    if (asynchronous == false)
+    {
+        return ControllerCoreWriteJson::save(fileName, map);
+    }
+
+    ControllerCoreWriteJson * action = new ControllerCoreWriteJson;
+
+    action->fileName = fileName;
+    action->map      = map;
+
+    return wControllerFile->startWriteAction(action);
+}
+
+/* Q_INVOKABLE */ QString ControllerCore::getPathStorage(const QString & name) const
+{
+    return _pathSky + "/storage/" + name;
+}
+
+//-------------------------------------------------------------------------------------------------
+// Script
 
 /* Q_INVOKABLE */ QString ControllerCore::getName(int index) const
 {
@@ -1311,6 +1486,7 @@ ControllerCore::ControllerCore() : WController()
 }
 
 //-------------------------------------------------------------------------------------------------
+// Library
 
 /* Q_INVOKABLE */ QStringList ControllerCore::getLibraryNames() const
 {
