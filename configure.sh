@@ -305,6 +305,8 @@ fi
 
 if [ $1 = "win64" ]; then
 
+    echo "COPYING git"
+
     curl --retry 3 -L -o archive.tar.bz2 "$Git_url"
 
     rm -rf   "$Git_path"

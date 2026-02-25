@@ -18,7 +18,9 @@ bash="$PWD/bash"
 #--------------------------------------------------------------------------------------------------
 # Windows
 
-Git_path="$PWD/bin/git"
+Git_version="2.53.0"
+
+Git_url="https://github.com/git-for-windows/git/releases/download/v$Git_version.windows.1/Git-$Git_version-64-bit.tar.bz2"
 
 #--------------------------------------------------------------------------------------------------
 # environment
@@ -801,7 +803,11 @@ fi
 
 if [ $1 = "win64" ]; then
 
-    echo "COPYING Git"
+    echo "COPYING git"
 
-    cp -r "$Git_path" $deploy
+    curl --retry 3 -L -o archive.tar.bz2 "$Git_url"
+
+    path="$deploy/git"
+
+    tar -xjf archive.tar.bz2 -C "$path"
 fi
