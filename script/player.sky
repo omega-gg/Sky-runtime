@@ -33,6 +33,8 @@ Player
     // Properties
     //---------------------------------------------------------------------------------------------
 
+    /* read */ property string sky: "web-view"
+
     /* read */ property bool isReady: (player.source != "")
 
     property int increment    :  40
@@ -125,11 +127,6 @@ Player
         while (isLoading) sk.processEvents();
 
         pause();
-    }
-
-    function skyTr(text)
-    {
-        return qsTranslate("player", text);
     }
 
     //---------------------------------------------------------------------------------------------
@@ -278,7 +275,7 @@ Player
             {
                 anchors.centerIn: parent
 
-                text: skyTr("Welcome to Sky player")
+                text: qsTranslate(sky, "Welcome to Sky player")
 
                 font.pixelSize: st.dp32
             }

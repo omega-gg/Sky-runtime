@@ -21,6 +21,33 @@ Qt6_version="6.10.1"
 qt="qt6"
 
 #--------------------------------------------------------------------------------------------------
+# Functions
+#--------------------------------------------------------------------------------------------------
+
+lupdate()
+{
+    find script -type f -iname '*.sky' | while read -r file; do
+
+        temp="${file%.sky}.qml"
+
+        cp "$file" "$temp"
+    done
+
+    "$lupdate" src/ content/ script/ -recursive -ts dist/locale/fr_FR.ts
+
+    rm script/*.qml
+
+    echo ""
+}
+
+lrelease()
+{
+    "$lrelease" dist/locale/*.ts
+
+    mv dist/locale/*.qm content/locale
+}
+
+#--------------------------------------------------------------------------------------------------
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
@@ -81,7 +108,7 @@ lupdate="$QtBin/lupdate"
 "$lupdate" -version
 echo ""
 
-"$lupdate" src/ content/ -recursive -ts dist/locale/fr_FR.ts
+lupdate
 
 #--------------------------------------------------------------------------------------------------
 # Release
@@ -100,6 +127,4 @@ lrelease="$QtBin/lrelease"
 "$lrelease" -version
 echo ""
 
-"$lrelease" dist/locale/*.ts
-
-mv dist/locale/*.qm content/locale
+lrelease

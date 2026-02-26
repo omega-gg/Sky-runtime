@@ -31,6 +31,8 @@ Item
     // Properties
     //---------------------------------------------------------------------------------------------
 
+    /* read */ property string sky: "web-view"
+
     /* read */ property bool isReady: false
 
     property int topMargin: gui.topMargin
@@ -120,11 +122,6 @@ Item
         webView.url = "about:blank";
     }
 
-    function skyTr(text)
-    {
-        return qsTranslate("web-view", text);
-    }
-
     //---------------------------------------------------------------------------------------------
     // Events
 
@@ -200,7 +197,7 @@ Item
             {
                 anchors.centerIn: parent
 
-                text: skyTr("Welcome to Sky web-view")
+                text: qsTranslate(sky, "Welcome to Sky web-view")
 
                 font.pixelSize: st.dp32
             }
