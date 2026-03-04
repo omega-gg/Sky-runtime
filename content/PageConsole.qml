@@ -149,7 +149,6 @@ Item
         anchors.bottom: buttonClose.bottom
 
         borderLeft  : borderSize
-        borderRight : 0
         borderBottom: borderSize
 
         checkable: true
@@ -172,7 +171,6 @@ Item
 
         height: st.dp24 + borderSizeHeight
 
-        borderRight : 0
         borderBottom: borderSize
 
         icon          : st.icon_close

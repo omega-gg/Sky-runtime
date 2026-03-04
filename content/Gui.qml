@@ -898,6 +898,7 @@ Item
             maximumWidth: (st.isTight) ? buttonLock.x - st.dp16
                                        : buttonLock.x - buttonEject.width - st.dp16
 
+            borderRight : borderSize
             borderBottom: borderSize
 
             checkable: true
@@ -917,6 +918,7 @@ Item
             anchors.top : buttonApplication.top
             anchors.left: buttonApplication.right
 
+            borderRight : borderSize
             borderBottom: borderSize
 
             spacing: 0
@@ -970,7 +972,6 @@ Item
             anchors.bottom: buttonsWindow.bottom
 
             borderLeft  : borderSize
-            borderRight : 0
             borderBottom: borderSize
 
             checkable: true

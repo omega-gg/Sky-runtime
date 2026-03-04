@@ -256,7 +256,6 @@ Item
         anchors.rightMargin: pGetMargin()
 
         borderLeft  : borderSize
-        borderRight : 0
         borderBottom: borderSize
 
         icon          : st.icon_close

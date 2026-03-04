@@ -143,6 +143,7 @@ Item
                 id: buttonNew
 
                 borderLeft  : borderSize
+                borderRight : borderSize
                 borderTop   : borderSize
                 borderBottom: borderSize
 
@@ -159,6 +160,7 @@ Item
 
                 anchors.left: buttonNew.right
 
+                borderRight : borderSize
                 borderTop   : borderSize
                 borderBottom: borderSize
 
@@ -178,6 +180,7 @@ Item
                 anchors.leftMargin: st.dp16
 
                 borderLeft  : borderSize
+                borderRight : borderSize
                 borderTop   : borderSize
                 borderBottom: borderSize
 
@@ -198,6 +201,7 @@ Item
                 anchors.left: buttonFolder.right
                 anchors.top : buttonFolder.top
 
+                borderRight : borderSize
                 borderTop   : borderSize
                 borderBottom: borderSize
 
@@ -218,6 +222,7 @@ Item
                 anchors.left: buttonApplication.right
                 anchors.top : buttonApplication.top
 
+                borderRight : borderSize
                 borderTop   : borderSize
                 borderBottom: borderSize
 
