@@ -485,7 +485,7 @@ $SkyComponents/LabelLoadingButton.qml \
 $SkyComponents/LabelStream.qml \
 $SkyComponents/LabelWide.qml \
 $SkyComponents/SkyPopup.qml \
-$SkyComponents/CheckBox.qml \
+$SkyComponents/SkyCheckBox.qml \
 $SkyComponents/CheckBoxText.qml \
 $SkyComponents/LineEdit.qml \
 $SkyComponents/LineEditCopy.qml \
