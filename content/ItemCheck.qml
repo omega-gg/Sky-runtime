@@ -340,7 +340,7 @@ Item
         anchors.right: parent.right
         anchors.top  : parent.top
 
-        anchors.margins: st.dp4
+        anchors.margins: st.dp8
 
         radius: height
 
@@ -362,7 +362,7 @@ Item
 
         anchors.leftMargin : st.dp4
         anchors.rightMargin: st.dp4
-        anchors.topMargin  : st.dp4
+        anchors.topMargin  : st.dp12
 
         visible: (text != "")
 

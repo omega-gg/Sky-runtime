@@ -35,7 +35,7 @@ Row
 
     property int size: width
 
-    property int margins: st.dp8
+    property int margins: st.dp12
 
     //---------------------------------------------------------------------------------------------
     // Aliases
@@ -47,9 +47,10 @@ Row
     // Settings
     //---------------------------------------------------------------------------------------------
 
-    anchors.margins: margins
+    anchors.leftMargin : margins
+    anchors.rightMargin: margins
 
-    height: st.dp32 + margins
+    height: st.buttonPush_height
 
     //---------------------------------------------------------------------------------------------
     // Events
