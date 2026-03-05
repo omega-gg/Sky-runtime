@@ -26,9 +26,9 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-bin="$SKY_PATH_BIN"
+bin="$SKY_PATH_BIN/sky"
 
-python="${SKY_PATH_PYTHON:-$SKY_PATH_BIN/python}"
+python="${SKY_PATH_PYTHON:-$bin/python}"
 
 name="ffmpeg"
 

@@ -26,9 +26,9 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-bin="${SKY_PATH_PYTHON:-$SKY_PATH_BIN/python}"
+bin="${SKY_PATH_PYTHON:-$SKY_PATH_BIN/sky/python}"
 
-python="${SKY_PATH_PYTHON:-$SKY_PATH_BIN/python}"
+python="${SKY_PATH_PYTHON:-$SKY_PATH_BIN/sky/python}"
 
 version="3.14.2"
 

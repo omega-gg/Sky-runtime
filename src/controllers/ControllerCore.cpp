@@ -654,11 +654,11 @@ ControllerCore::ControllerCore() : WController()
     {
         _pathBin = _path + "/bin";
 
-        _pathSky = _pathBin + "/sky";
+        _pathSrc = _pathBin + "/src";
 
-        if (QFile::exists(_pathSky) == false && QDir().mkpath(_pathSky) == false)
+        if (QFile::exists(_pathSrc) == false && QDir().mkpath(_pathSrc) == false)
         {
-            qWarning("ControllerCore::run: Failed to create folder %s.", _pathSky.C_STR);
+            qWarning("ControllerCore::run: Failed to create folder %s.", _pathSrc.C_STR);
         }
 
         qputenv("SKY_PATH_BIN", _pathBin.toUtf8());
@@ -667,7 +667,7 @@ ControllerCore::ControllerCore() : WController()
     {
         _pathBin = QDir::fromNativeSeparators(_pathBin);
 
-        _pathSky = _pathBin + "/sky";
+        _pathSrc = _pathBin + "/src";
     }
 
 #ifdef Q_OS_MACOS
@@ -888,7 +888,7 @@ ControllerCore::ControllerCore() : WController()
     loadFolder(entries, WControllerFile::applicationPath(PATH_SCRIPT));
 #endif
 
-    loadFolder(entries, _pathSky + "/script");
+    loadFolder(entries, _pathSrc + "/script");
 
 #ifndef QT_OLD
     // NOTE: We want test.sky to be listed before test-extra.sky.
@@ -947,7 +947,7 @@ ControllerCore::ControllerCore() : WController()
 
     QList<QFileInfo> entries;
 
-    loadFolder(entries, _pathSky + "/script");
+    loadFolder(entries, _pathSrc + "/script");
 
     QString match = name + '-';
 
@@ -962,7 +962,7 @@ ControllerCore::ControllerCore() : WController()
         WControllerFile::deleteFile(info.absoluteFilePath());
     }
 
-    QString path = _pathSky + "/bash/" + name + '/';
+    QString path = _pathSrc + "/bash/" + name + '/';
 
     if (QFile::exists(path))
     {
@@ -985,9 +985,9 @@ ControllerCore::ControllerCore() : WController()
         log.append(QString(tr("cp %1\n")).arg(string));
     }
 
-    WUnzipper::extract(filePath, _pathSky);
+    WUnzipper::extract(filePath, _pathSrc);
 
-    path = _pathSky + '/';
+    path = _pathSrc + '/';
 
     QStringList defines = WControllerFile::qmlDefines();
 
@@ -1070,7 +1070,7 @@ ControllerCore::ControllerCore() : WController()
 
     if (QFile::exists(fileName)) return fileName;
 
-    fileName = _pathSky + "/script/" + name;
+    fileName = _pathSrc + "/script/" + name;
 
     if (QFile::exists(fileName)) return fileName;
 
@@ -1087,7 +1087,7 @@ ControllerCore::ControllerCore() : WController()
 
     if (QFile::exists(fileName)) return fileName;
 
-    fileName = _pathSky + "/bash/" + name;
+    fileName = _pathSrc + "/bash/" + name;
 
     if (QFile::exists(fileName)) return fileName;
 
@@ -1471,7 +1471,7 @@ ControllerCore::ControllerCore() : WController()
 
 /* Q_INVOKABLE */ QString ControllerCore::getPathStorage(const QString & name) const
 {
-    return _pathSky + "/storage/" + name;
+    return _pathSrc + "/storage/" + name;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -1981,7 +1981,7 @@ void ControllerCore::loadData(DataScript * script, const QString & fileName)
     {
         loadData(script, path);
     }
-    else loadData(script, _pathSky + "/script/" + name);
+    else loadData(script, _pathSrc + "/script/" + name);
 }
 
 void ControllerCore::loadFolder(QList<QFileInfo> & entries, const QString & path)

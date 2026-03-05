@@ -26,7 +26,7 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-bin="${SKY_PATH_PYTHON:-$SKY_PATH_BIN/ffmpeg}"
+bin="${SKY_PATH_PYTHON:-$SKY_PATH_BIN/sky/ffmpeg}"
 
 version="N-122611-g7e9fe341df"
 

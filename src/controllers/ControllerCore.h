@@ -372,7 +372,7 @@ private: // Variables
 
     QString _path;
     QString _pathBin;
-    QString _pathSky;
+    QString _pathSrc;
 
     WBackendIndex * _index;
 
