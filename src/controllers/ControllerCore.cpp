@@ -1038,6 +1038,8 @@ ControllerCore::ControllerCore() : WController()
 /* Q_INVOKABLE */ QVariantMap ControllerCore::bashAsync(const QString     & fileName,
                                                         const QStringList & arguments)
 {
+    qDebug("ASYNC %s", fileName.C_STR);
+
     if (_manager)
     {
         return WBashManager::resultToMap(_manager->run(fileName, arguments));
