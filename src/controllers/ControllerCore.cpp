@@ -400,9 +400,22 @@ ControllerCore::ControllerCore() : WController()
 #endif
 
 #ifdef SK_DEPLOY
-    _path = QDir::fromNativeSeparators(WControllerFile::pathWritable());
+    _pathData = QDir::fromNativeSeparators(WControllerFile::pathWritable());
+
+    QString path = QDir::currentPath() + PATH_STORAGE;
+
+    // NOTE: When an application level storage folder is found we assume that we have to use it.
+    //       This enables independent runtime instances to coexist on the system while having their
+    //       own parameters.
+    if (QFile::exists(path))
+    {
+        _path = path;
+    }
+    else _path = _pathData;
 #else
-    _path = QDir::currentPath() + PATH_STORAGE;
+    _pathData = QDir::currentPath() + PATH_STORAGE;
+
+    _path = _pathData;
 #endif
 
     wControllerFile->setPathStorage(_path);
@@ -652,7 +665,7 @@ ControllerCore::ControllerCore() : WController()
 
     if (_pathBin.isEmpty())
     {
-        _pathBin = _path + "/bin";
+        _pathBin = _pathData + "/bin";
 
         _pathSrc = _pathBin + "/src";
 

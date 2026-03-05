@@ -371,6 +371,7 @@ private: // Variables
     WCache * _cache;
 
     QString _path;
+    QString _pathData;
     QString _pathBin;
     QString _pathSrc;
 
