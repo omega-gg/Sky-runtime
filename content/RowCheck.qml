@@ -50,7 +50,7 @@ Row
     anchors.leftMargin : margins
     anchors.rightMargin: margins
 
-    height: st.buttonPush_height
+    height: st.buttonPush_size
 
     //---------------------------------------------------------------------------------------------
     // Events
