@@ -42,11 +42,11 @@ result=$(./ffmpeg -version | head -n 1)
 
 echo "$result" | grep -q "$version" && {
 
-    echo "ffmpeg $version is installed."
+    echo "ffmpeg $version is installed"
 
     exit 0
 }
 
-echo "ffmpeg $version is not installed."
+echo "ffmpeg $version is not installed"
 
 exit 1

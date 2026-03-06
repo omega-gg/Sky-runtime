@@ -60,11 +60,11 @@ EOF
 
 if [ "$version" = "$current" ]; then
 
-    echo "Python $version is installed."
+    echo "Python $version is installed"
 
     exit 0
 fi
 
-echo "Python $version is not installed."
+echo "Python $version is not installed"
 
 exit 1
