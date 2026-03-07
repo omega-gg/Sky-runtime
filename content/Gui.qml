@@ -665,6 +665,10 @@ Item
     {
         var text = event.text;
 
+        var object = getObject();
+
+        if (object && object.onDrop && object.onDrop(text)) return;
+
         console.debug("> load " + text);
 
         run(text);
