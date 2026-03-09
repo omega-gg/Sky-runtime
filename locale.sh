@@ -26,16 +26,16 @@ qt="qt6"
 
 lupdate()
 {
-    find script -type f -iname '*.sky' | while read -r file; do
+    find run -type f -iname '*.sky' | while read -r file; do
 
         temp="${file%.sky}.qml"
 
         cp "$file" "$temp"
     done
 
-    "$lupdate" src/ content/ script/ -recursive -ts dist/locale/fr_FR.ts
+    "$lupdate" src/ content/ run/ -recursive -ts dist/locale/fr_FR.ts
 
-    rm script/*.qml
+    rm run/*.qml
 
     echo ""
 }

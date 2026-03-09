@@ -11,7 +11,7 @@ Sky="$PWD/../Sky"
 
 backend="$PWD/../backend"
 
-script="$PWD/script"
+run="$PWD/run"
 
 bash="$PWD/bash"
 
@@ -775,16 +775,16 @@ if [ $os != "mobile" ]; then
 fi
 
 #--------------------------------------------------------------------------------------------------
-# script
+# sky
 #--------------------------------------------------------------------------------------------------
 
 if [ $os != "mobile" ]; then
 
-    echo "COPYING script"
+    echo "COPYING run"
 
-    path="$deploy/script"
+    path="$deploy/run"
 
-    copyFolder "$script" "$path" "*.sky"
+    copyFolder "$run" "$path" "*.sky"
 
     generateQml "$path"
 

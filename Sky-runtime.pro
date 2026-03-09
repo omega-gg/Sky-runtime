@@ -313,9 +313,9 @@ OTHER_FILES += environment.sh \
                content/PageConsole.qml \
                content/PageScript.qml \
                content/PageScriptDefault.qml \
-               script/hello.sky \
-               script/player.sky \
-               script/web-view.sky \
+               sky/hello.sky \
+               sky/player.sky \
+               sky/web-view.sky \
                test/hello.sky \
                test/player.sky \
                test/web-view.sky \

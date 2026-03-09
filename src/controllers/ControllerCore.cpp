@@ -137,13 +137,13 @@ static const int CORE_CACHE_PIXMAP = 1048576 *  30; //  30 megabytes
 static const QString PATH_STORAGE = "/../../../storage";
 static const QString PATH_LOCALE  = "../../../locale";
 static const QString PATH_BACKEND = "../../../../../backend";
-static const QString PATH_SCRIPT  = "../../../../script";
+static const QString PATH_RUN     = "../../../../run";
 static const QString PATH_BASH    = "../../../../bash";
 #else
 static const QString PATH_STORAGE = "/storage";
 static const QString PATH_LOCALE  = "locale";
 static const QString PATH_BACKEND = "../../backend";
-static const QString PATH_SCRIPT  = "../script";
+static const QString PATH_RUN     = "../run";
 static const QString PATH_BASH    = "../bash";
 #endif
 #endif
@@ -894,15 +894,15 @@ ControllerCore::ControllerCore() : WController()
 
 #ifdef SK_DEPLOY
 #ifdef Q_OS_ANDROID
-    loadFolder(entries, "assets:/script");
+    loadFolder(entries, "assets:/run");
 #else
-    loadFolder(entries, WControllerFile::applicationPath("script"));
+    loadFolder(entries, WControllerFile::applicationPath("run"));
 #endif
 #else
-    loadFolder(entries, WControllerFile::applicationPath(PATH_SCRIPT));
+    loadFolder(entries, WControllerFile::applicationPath(PATH_RUN));
 #endif
 
-    loadFolder(entries, _pathSrc + "/script");
+    loadFolder(entries, _pathSrc + "/run");
 
 #ifndef QT_OLD
     // NOTE: We want test.sky to be listed before test-extra.sky.
@@ -961,7 +961,7 @@ ControllerCore::ControllerCore() : WController()
 
     QList<QFileInfo> entries;
 
-    loadFolder(entries, _pathSrc + "/script");
+    loadFolder(entries, _pathSrc + "/run");
 
     QString match = name + '-';
 
@@ -980,7 +980,7 @@ ControllerCore::ControllerCore() : WController()
 
     if (QFile::exists(path))
     {
-        log.append(QString(tr("rm -rf script/%1\n")).arg(path));
+        log.append(QString(tr("rm -rf run/%1\n")).arg(path));
 
         WControllerFile::deleteFolder(path);
     }
@@ -991,7 +991,7 @@ ControllerCore::ControllerCore() : WController()
 
     foreach (const QString & string, list)
     {
-        if (string.startsWith("script/"))
+        if (string.startsWith("run/"))
         {
             scripts.append(string);
         }
@@ -1009,7 +1009,7 @@ ControllerCore::ControllerCore() : WController()
     defines.append("DEPLOY");
 #endif
 
-    scripts.removeOne("script/");
+    scripts.removeOne("run/");
 
     foreach (const QString & script, scripts)
     {
@@ -1086,7 +1086,7 @@ ControllerCore::ControllerCore() : WController()
 
     if (QFile::exists(fileName)) return fileName;
 
-    fileName = _pathSrc + "/script/" + name;
+    fileName = _pathSrc + "/run/" + name;
 
     if (QFile::exists(fileName)) return fileName;
 
@@ -1648,7 +1648,7 @@ ControllerCore::ControllerCore() : WController()
 
     QStringList list = WUnzipper::getFileNames(WControllerFile::filePath(fileName));
 
-    list.removeOne("script/");
+    list.removeOne("run/");
     list.removeOne("bash/");
 
     QStringList scripts;
@@ -1659,7 +1659,7 @@ ControllerCore::ControllerCore() : WController()
     {
         QString string = list.at(index);
 
-        if (string.startsWith("script/"))
+        if (string.startsWith("run/"))
         {
             scripts.append(list.takeAt(index));
         }
@@ -1668,7 +1668,7 @@ ControllerCore::ControllerCore() : WController()
 
     if (scripts.isEmpty())
     {
-        log.append(tr("The script folder is absent from the archive.\n"));
+        log.append(tr("The run folder is absent from the archive.\n"));
 
         return getVariantCheck(false, "", log);
     }
@@ -1954,7 +1954,7 @@ void ControllerCore::loadData(DataScript * script, const QString & fileName)
 
     item.fileName = fileName;
 
-    QString fileLocale = fileName.left(fileName.lastIndexOf("script/"));
+    QString fileLocale = fileName.left(fileName.lastIndexOf("run/"));
 
     QString base = WControllerFile::fileBaseName(fileName);
 
@@ -1997,7 +1997,7 @@ void ControllerCore::loadData(DataScript * script, const QString & fileName)
     {
         loadData(script, path);
     }
-    else loadData(script, _pathSrc + "/script/" + name);
+    else loadData(script, _pathSrc + "/run/" + name);
 }
 
 void ControllerCore::loadFolder(QList<QFileInfo> & entries, const QString & path)
@@ -2104,12 +2104,12 @@ QString ControllerCore::getPathScript(const QString & name) const
 {
 #ifdef SK_DEPLOY
 #ifdef Q_OS_ANDROID
-    return "assets:/script/" + name;
+    return "assets:/run/" + name;
 #else
-    return WControllerFile::applicationPath("script/" + name);
+    return WControllerFile::applicationPath("run/" + name);
 #endif
 #else
-    return WControllerFile::applicationPath(PATH_SCRIPT + "/" + name);
+    return WControllerFile::applicationPath(PATH_RUN + "/" + name);
 #endif
 }
 
