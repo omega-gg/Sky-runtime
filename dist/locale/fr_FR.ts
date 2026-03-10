@@ -4,107 +4,112 @@
 <context>
     <name>ControllerCore</name>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="938"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="954"/>
         <source>The script file does not exist %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="943"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="959"/>
         <source>
 Install in progress...
 </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Installation en cours...
+</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="958"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="974"/>
         <source>rm %1.sky
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="967"/>
-        <source>rm -rf script/%1
+        <location filename="../../src/controllers/ControllerCore.cpp" line="983"/>
+        <source>rm -rf run/%1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="983"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="999"/>
         <source>cp %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1002"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1018"/>
         <source>generate %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1007"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1023"/>
         <source>---
 Install complete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1570"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1588"/>
         <source>Create .sky</source>
         <translation>Créer .sky</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1572"/>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1595"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1590"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1613"/>
         <source>Sky script (*.sky)</source>
         <translation>Script sky (*.sky)</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1593"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1611"/>
         <source>Create shortcut</source>
         <translation>Créer un raccourci</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1613"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1631"/>
         <source>Open .sky</source>
         <translation>Ouvrir .sky</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1615"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1633"/>
         <source>Sky (*.sky *.skz)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1653"/>
-        <source>The script folder is absent from the archive.
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1671"/>
+        <source>The run folder is absent from the archive.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Le dossier run est absent dans l&apos;archive.
+</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1668"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1686"/>
         <source>The script name is not lower case.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Le nom du script n&apos;est pas en minuscule.
+</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1673"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1691"/>
         <source>Script name: %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Nom du script: %1
+</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1706"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1724"/>
         <source>Invalid file: %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier invalide: %1
+</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1711"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1729"/>
         <source>---
 Valid folder structure
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="2291"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="2309"/>
         <source>Sky runtime</source>
         <translation type="unfinished"></translation>
     </message>
@@ -120,22 +125,22 @@ Valid folder structure
 <context>
     <name>Gui</name>
     <message>
-        <location filename="../../content/Gui.qml" line="841"/>
+        <location filename="../../content/Gui.qml" line="845"/>
         <source>Update available</source>
         <translation>Mise à jour disponible</translation>
     </message>
     <message>
-        <location filename="../../content/Gui.qml" line="842"/>
+        <location filename="../../content/Gui.qml" line="846"/>
         <source>F1 for console</source>
         <translation>F1 pour la console</translation>
     </message>
     <message>
-        <location filename="../../content/Gui.qml" line="864"/>
+        <location filename="../../content/Gui.qml" line="868"/>
         <source>ESCAPE to quit</source>
         <translation>ECHAP pour quitter</translation>
     </message>
     <message>
-        <location filename="../../content/Gui.qml" line="931"/>
+        <location filename="../../content/Gui.qml" line="937"/>
         <source>Eject</source>
         <translation>Éjecter</translation>
     </message>
@@ -145,42 +150,42 @@ Valid folder structure
     <message>
         <location filename="../../content/ItemCheck.qml" line="135"/>
         <source>Press F1 for details</source>
-        <translation type="unfinished"></translation>
+        <translation>Appuyez sur F1 pour les détails</translation>
     </message>
     <message>
         <location filename="../../content/ItemCheck.qml" line="206"/>
         <source>Checking</source>
-        <translation type="unfinished"></translation>
+        <translation>Vérification</translation>
     </message>
     <message>
         <location filename="../../content/ItemCheck.qml" line="210"/>
         <source>Installing</source>
-        <translation type="unfinished"></translation>
+        <translation>Installation</translation>
     </message>
     <message>
         <location filename="../../content/ItemCheck.qml" line="214"/>
         <source>Removing</source>
-        <translation type="unfinished"></translation>
+        <translation>Suppression</translation>
     </message>
     <message>
         <location filename="../../content/ItemCheck.qml" line="218"/>
         <source>Absent</source>
-        <translation type="unfinished"></translation>
+        <translation>Absent</translation>
     </message>
     <message>
         <location filename="../../content/ItemCheck.qml" line="222"/>
         <source>Incomplete</source>
-        <translation type="unfinished"></translation>
+        <translation>Incomplet</translation>
     </message>
     <message>
         <location filename="../../content/ItemCheck.qml" line="226"/>
         <source>Valid</source>
-        <translation type="unfinished"></translation>
+        <translation>Valide</translation>
     </message>
     <message>
         <location filename="../../content/ItemCheck.qml" line="228"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>État initial</translation>
     </message>
 </context>
 <context>
@@ -194,27 +199,27 @@ Valid folder structure
 <context>
     <name>PageScript</name>
     <message>
-        <location filename="../../content/PageScript.qml" line="89"/>
+        <location filename="../../content/PageScript.qml" line="90"/>
         <source>New .sky</source>
         <translation>Nouveau .sky</translation>
     </message>
     <message>
-        <location filename="../../content/PageScript.qml" line="105"/>
+        <location filename="../../content/PageScript.qml" line="107"/>
         <source>Create shortcut</source>
         <translation>Créer un raccourci</translation>
     </message>
     <message>
-        <location filename="../../content/PageScript.qml" line="127"/>
+        <location filename="../../content/PageScript.qml" line="130"/>
         <source>Run script</source>
         <translation>Lancer le script</translation>
     </message>
     <message>
-        <location filename="../../content/PageScript.qml" line="142"/>
+        <location filename="../../content/PageScript.qml" line="146"/>
         <source>Open folder</source>
         <translation>Ouvrir le dossier</translation>
     </message>
     <message>
-        <location filename="../../content/PageScript.qml" line="173"/>
+        <location filename="../../content/PageScript.qml" line="177"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
@@ -224,35 +229,35 @@ Valid folder structure
     <message>
         <location filename="../../content/PageScriptDefault.qml" line="58"/>
         <source>Default langauge</source>
-        <translation type="unfinished"></translation>
+        <translation>Langage par défaut</translation>
     </message>
     <message>
-        <location filename="../../content/PageScriptDefault.qml" line="151"/>
+        <location filename="../../content/PageScriptDefault.qml" line="152"/>
         <source>New .sky</source>
         <translation>Nouveau .sky</translation>
     </message>
     <message>
-        <location filename="../../content/PageScriptDefault.qml" line="167"/>
+        <location filename="../../content/PageScriptDefault.qml" line="169"/>
         <source>Open .sky script</source>
         <translation>Ouvrir .sky script</translation>
     </message>
     <message>
-        <location filename="../../content/PageScriptDefault.qml" line="189"/>
+        <location filename="../../content/PageScriptDefault.qml" line="192"/>
         <source>User folder</source>
         <translation>Dossier user</translation>
     </message>
     <message>
-        <location filename="../../content/PageScriptDefault.qml" line="209"/>
+        <location filename="../../content/PageScriptDefault.qml" line="213"/>
         <source>Application folder</source>
         <translation>Dossier application</translation>
     </message>
     <message>
-        <location filename="../../content/PageScriptDefault.qml" line="231"/>
+        <location filename="../../content/PageScriptDefault.qml" line="236"/>
         <source>SKY_PATH_BIN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../content/PageScriptDefault.qml" line="288"/>
+        <location filename="../../content/PageScriptDefault.qml" line="293"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
@@ -296,13 +301,9 @@ Valid folder structure
 <context>
     <name>PanelInstall</name>
     <message>
-        <source>I trust the origin and content of this .skz archive</source>
-        <translation type="vanished">J&apos;ai confiance sur l&apos;origine et le contenu de l&apos;archive .skz</translation>
-    </message>
-    <message>
         <location filename="../../content/PanelInstall.qml" line="144"/>
         <source>⚠️ I trust the origin and content of this .skz archive</source>
-        <translation type="unfinished"></translation>
+        <translation>⚠️ J&apos;ai confiance sur l&apos;origine et le contenu de l&apos;archive .skz</translation>
     </message>
     <message>
         <location filename="../../content/PanelInstall.qml" line="157"/>
@@ -323,20 +324,20 @@ Valid folder structure
 <context>
     <name>RowCheck</name>
     <message>
-        <location filename="../../content/RowCheck.qml" line="66"/>
+        <location filename="../../content/RowCheck.qml" line="67"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../../content/RowCheck.qml" line="70"/>
-        <location filename="../../content/RowCheck.qml" line="91"/>
+        <location filename="../../content/RowCheck.qml" line="71"/>
+        <location filename="../../content/RowCheck.qml" line="92"/>
         <source>Install</source>
-        <translation type="unfinished">Installer</translation>
+        <translation>Installer</translation>
     </message>
     <message>
-        <location filename="../../content/RowCheck.qml" line="74"/>
+        <location filename="../../content/RowCheck.qml" line="75"/>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuler</translation>
     </message>
 </context>
 <context>
@@ -350,22 +351,6 @@ Valid folder structure
         <location filename="../../content/TextEditCopy.qml" line="80"/>
         <source>Text copied to the clipboard</source>
         <translation>Texte copié dans le presse-papiers</translation>
-    </message>
-</context>
-<context>
-    <name>player</name>
-    <message>
-        <location filename="../../script/player.qml" line="276"/>
-        <source>Welcome to Sky player</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>web-view</name>
-    <message>
-        <location filename="../../script/web-view.qml" line="198"/>
-        <source>Welcome to Sky web-view</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
