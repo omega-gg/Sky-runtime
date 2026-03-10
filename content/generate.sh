@@ -145,6 +145,7 @@ if [ "$2" = "clean" ]; then
     rm -f  $bin/*.qml
     #rm -rf $bin/pictures
     rm -rf $bin/icons
+    rm -rf $bin/locale
 
     rm -rf qrc
     mkdir  qrc

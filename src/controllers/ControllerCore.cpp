@@ -2131,7 +2131,7 @@ QString ControllerCore::getPathBash(const QString & name) const
 QString ControllerCore::getPathLocale(const QString & name) const
 {
 #ifdef SK_DEPLOY
-    return "qrc:/locale/" + name + ".qm";
+    return ":/locale/" + name + ".qm";
 #else
     return "locale/" + name + ".qm";
 #endif
