@@ -132,7 +132,9 @@ static const QString CORE_VERSION = "3.0.0-2";
 static const int CORE_CACHE        = 1048576 * 100; // 100 megabytes
 static const int CORE_CACHE_PIXMAP = 1048576 *  30; //  30 megabytes
 
-#ifndef SK_DEPLOY
+#ifdef SK_DEPLOY
+static const QString PATH_STORAGE = "/storage";
+#else
 #ifdef Q_OS_MACOS
 static const QString PATH_STORAGE = "/../../../storage";
 static const QString PATH_LOCALE  = "../../../locale";

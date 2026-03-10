@@ -313,6 +313,8 @@ if [ $1 = "win64" ]; then
     mkdir -p "$Git_path"
 
     tar -xjf archive.tar.bz2 -C "$Git_path"
+
+    rm archive.tar.bz2
 fi
 
 echo "------------------------"

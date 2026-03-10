@@ -809,5 +809,9 @@ if [ $1 = "win64" ]; then
 
     path="$deploy/git"
 
+    mkdir -p "$path"
+
     tar -xjf archive.tar.bz2 -C "$path"
+
+    rm archive.tar.bz2
 fi
