@@ -718,7 +718,7 @@ Item
         {
             event.accepted = true;
 
-            fullScreen = !(fullScreen);
+            window.fullScreen = !(window.fullScreen);
         }
         else if (event.key == Qt.Key_W && event.modifiers == Qt.ControlModifier)
         {
