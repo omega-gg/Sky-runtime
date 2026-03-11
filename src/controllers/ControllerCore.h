@@ -273,6 +273,10 @@ public: // Static functions
 
     Q_INVOKABLE static bool renameFile(const QString & oldPath, const QString & newPath);
 
+    Q_INVOKABLE static QString getOpenFileName(const QString & title,
+                                               const QString & filter = QString(),
+                                               const QString & path   = QString());
+
 private: // Functions
     void help() const;
 

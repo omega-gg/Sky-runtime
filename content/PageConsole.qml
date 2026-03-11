@@ -35,7 +35,28 @@ Item
     // Events
     //---------------------------------------------------------------------------------------------
 
-    Component.onCompleted: controllerFile.maxLog = 100000
+    Component.onCompleted:
+    {
+        controllerFile.maxLog = 100000;
+
+        itemConsole.log = controllerFile.log;
+
+        itemConsole.scrollToBottom();
+    }
+
+    //---------------------------------------------------------------------------------------------
+    // Connections
+    //---------------------------------------------------------------------------------------------
+
+    Connections
+    {
+        target: controllerFile
+
+        /* QML_CONNECTION */ function onLogChanged(message)
+        {
+            itemConsole.append("\n" + message);
+        }
+    }
 
     //---------------------------------------------------------------------------------------------
     // Functions
@@ -77,10 +98,6 @@ Item
         anchors.right : parent.right
         anchors.top   : border.bottom
         anchors.bottom: lineEdit.top
-
-        log: controllerFile.log
-
-        itemConsole.maximumLength: controllerFile.maxLog
     }
 
     LineEditBox
@@ -124,7 +141,11 @@ Item
 
                 clear();
 
+//#QT_4
                 gui.process(text);
+//#ELSE
+                Qt.callLater(gui.process, text);
+//#END
             }
             else if (event.key == Qt.Key_Tab || event.key == Qt.Key_Backtab)
             {

@@ -1845,6 +1845,23 @@ ControllerCore::ControllerCore() : WController()
     return WControllerFile::renameFile(oldPath, newPath);
 }
 
+/* Q_INVOKABLE static */ QString ControllerCore::getOpenFileName(const QString & title,
+                                                                 const QString & filter,
+                                                                 const QString & path)
+{
+#ifdef SK_DESKTOP
+    QString output = QFileDialog::getOpenFileName(NULL, title, path, filter);
+
+    if (output.isEmpty()) return QString();
+
+    return WControllerFile::fileUrl(output);
+#else
+    Q_UNUSED(title); Q_UNUSED(filter); Q_UNUSED(path);
+
+    return QString();
+#endif
+}
+
 //-------------------------------------------------------------------------------------------------
 // Functions private
 //-------------------------------------------------------------------------------------------------
@@ -1948,7 +1965,7 @@ void ControllerCore::loadData(DataScript * script, const QString & fileName)
 
     QStringList pair = Sk::split(list.at(index).simplified(), ' ');
 
-    if (pair.count() != 2) return;
+    if (pair.isEmpty()) return;
 
     QString parent = pair.at(0);
 
@@ -1969,21 +1986,23 @@ void ControllerCore::loadData(DataScript * script, const QString & fileName)
         item.fileLocale = fileLocale;
     }
 
-    item.versionParent = pair.at(1);
-
-    QString version = list.at(0).simplified();
-
-    if (index)
+    if (pair.count() > 1)
     {
-        pair = Sk::split(version, ' ');
+        item.versionParent = pair.at(1);
 
-        if (pair.count() == 2)
+        QString version = list.at(0).simplified();
+
+        if (index)
         {
-            item.version = pair.at(1);
+            pair = Sk::split(version, ' ');
+
+            if (pair.count() == 2)
+            {
+                item.version = pair.at(1);
+            }
+            else item.version = version;
         }
-        else item.version = version;
     }
-    else item.version = "1.0.0";
 
     item.data = data;
 
