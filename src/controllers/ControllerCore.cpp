@@ -714,6 +714,7 @@ ControllerCore::ControllerCore() : WController()
     qDebug("Path storage: %s", _path.C_STR);
     qDebug("Path log:     %s", wControllerFile->pathLog().C_STR);
     qDebug("Path config:  %s", _local.getFilePath().C_STR);
+    qDebug("Path bin:     %s", _pathBin.C_STR);
 
     //---------------------------------------------------------------------------------------------
     // Controllers
