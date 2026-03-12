@@ -405,9 +405,9 @@ ControllerCore::ControllerCore() : WController()
 #endif
 #endif
 
-#ifdef SK_DEPLOY
     _pathData = QDir::fromNativeSeparators(WControllerFile::pathWritable());
 
+#ifdef SK_DEPLOY
     QString path = QDir::currentPath() + PATH_STORAGE;
 
     // NOTE: When an application level storage folder is found we assume that we have to use it.
@@ -419,9 +419,7 @@ ControllerCore::ControllerCore() : WController()
     }
     else _path = _pathData;
 #else
-    _pathData = QDir::currentPath() + PATH_STORAGE;
-
-    _path = _pathData;
+    _path = QDir::currentPath() + PATH_STORAGE;
 #endif
 
     wControllerFile->setPathStorage(_path);
