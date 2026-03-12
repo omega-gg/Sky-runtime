@@ -203,7 +203,10 @@ if [ $os = "mobile" -o "$2" = "all" -o "$2" = "deploy" ]; then
 
     cp -r $content/locale $path
 
-    rm -f $path/.gitignore
+    if [ "$2" = "deploy" ]; then
+
+        rm -f $path/locale/.gitignore
+    fi
 
     if [ $1 = "iOS" ]; then
 
