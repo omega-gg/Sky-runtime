@@ -382,6 +382,11 @@ fi
 $qmake --version
 echo ""
 
+if [ "$2" = "deploy" ]; then
+
+    sh locale.sh $1 release
+fi
+
 cd content
 
 if [ "$2" = "deploy" ]; then

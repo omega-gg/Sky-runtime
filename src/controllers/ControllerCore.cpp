@@ -133,7 +133,11 @@ static const int CORE_CACHE        = 1048576 * 100; // 100 megabytes
 static const int CORE_CACHE_PIXMAP = 1048576 *  30; //  30 megabytes
 
 #ifdef SK_DEPLOY
+#ifdef Q_OS_MACOS
+static const QString PATH_STORAGE = "/../../../storage";
+#else
 static const QString PATH_STORAGE = "/storage";
+#endif
 #else
 #ifdef Q_OS_MACOS
 static const QString PATH_STORAGE = "/../../../storage";
