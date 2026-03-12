@@ -78,7 +78,30 @@ Item
 
             ButtonPiano
             {
+                id: buttonRun
+
+                borderLeft  : borderSize
+                borderRight : borderSize
+                borderTop   : borderSize
+                borderBottom: borderSize
+
+                padding: st.dp16
+
+                // NOTE: We hide this for the default sky script.
+                visible: (currentIndex != 0)
+
+                text: qsTr("Run script")
+
+                onClicked: gui.run(core.getLibraryFileName(currentIndex))
+            }
+
+            ButtonPiano
+            {
                 id: buttonNew
+
+                anchors.left: buttonRun.right
+
+                anchors.leftMargin: st.dp16
 
                 borderLeft  : borderSize
                 borderRight : borderSize
@@ -111,32 +134,12 @@ Item
 
             ButtonPiano
             {
-                id: buttonRun
-
                 anchors.left: buttonShortcut.right
+                anchors.top : buttonShortcut.top
 
                 anchors.leftMargin: st.dp16
 
                 borderLeft  : borderSize
-                borderRight : borderSize
-                borderTop   : borderSize
-                borderBottom: borderSize
-
-                padding: st.dp16
-
-                // NOTE: We hide this for the default sky script.
-                visible: (currentIndex != 0)
-
-                text: qsTr("Run script")
-
-                onClicked: gui.run(core.getLibraryFileName(currentIndex))
-            }
-
-            ButtonPiano
-            {
-                anchors.left: buttonRun.right
-                anchors.top : buttonRun.top
-
                 borderRight : borderSize
                 borderTop   : borderSize
                 borderBottom: borderSize
