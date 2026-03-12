@@ -132,21 +132,21 @@ static const QString CORE_VERSION = "3.0.0-2";
 static const int CORE_CACHE        = 1048576 * 100; // 100 megabytes
 static const int CORE_CACHE_PIXMAP = 1048576 *  30; //  30 megabytes
 
-#ifdef SK_DEPLOY
 #ifdef Q_OS_MACOS
 static const QString PATH_STORAGE = "/../../../storage";
+static const QString PATH_ENV     = "../../../env";
 #else
 static const QString PATH_STORAGE = "/storage";
+static const QString PATH_ENV     = "env";
 #endif
-#else
+
+#ifndef SK_DEPLOY
 #ifdef Q_OS_MACOS
-static const QString PATH_STORAGE = "/../../../storage";
 static const QString PATH_LOCALE  = "../../../locale";
 static const QString PATH_BACKEND = "../../../../../backend";
 static const QString PATH_RUN     = "../../../../run";
 static const QString PATH_BASH    = "../../../../bash";
 #else
-static const QString PATH_STORAGE = "/storage";
 static const QString PATH_LOCALE  = "locale";
 static const QString PATH_BACKEND = "../../backend";
 static const QString PATH_RUN     = "../run";
@@ -1922,7 +1922,7 @@ WControllerFileReply * ControllerCore::copyBackends(const QString & path) const
 
 void ControllerCore::loadEnvironment()
 {
-    QString fileName = WControllerFile::applicationPath("env");
+    QString fileName = WControllerFile::applicationPath(PATH_ENV);
 
     if (QFile::exists(fileName) == false) return;
 

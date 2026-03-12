@@ -385,6 +385,7 @@ echo ""
 if [ "$2" = "deploy" ]; then
 
     sh locale.sh $1 release
+    echo ""
 fi
 
 cd content

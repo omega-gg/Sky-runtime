@@ -787,6 +787,7 @@ if [ $os != "mobile" ]; then
     copyFolder "$run" "$path" "*.sky"
 
     generateQml "$path"
+    echo ""
 
     echo "COPYING bash"
 
