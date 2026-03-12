@@ -34,6 +34,7 @@ replace()
     apply $expression configure.sh
     apply $expression build.sh
     apply $expression deploy.sh
+    apply $expression locale.sh
 
     apply $expression content/generate.sh
 }
