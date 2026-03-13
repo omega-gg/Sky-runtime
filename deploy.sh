@@ -58,16 +58,23 @@ copyAndroid()
 
 copyFolder()
 {
-   find "$1" -type f -iname "$3" | while read -r file; do
+    find "$1" -type f -iname "$3" | while read -r file; do
 
-       path="${file#$1/}"
+        path="${file#$1/}"
 
-       target="$2/$(dirname "$path")"
+        target="$2/$(dirname "$path")"
 
-       mkdir -p "$target"
+        mkdir -p "$target"
 
-       cp "$file" "$target/"
-   done
+        output="$target/$(basename "$file")"
+
+        cp "$file" "$output"
+
+        if [ "$4" != "" ]; then
+
+            chmod "$4" "$output"
+        fi
+    done
 }
 
 deployMacOS()
@@ -784,14 +791,14 @@ if [ $os != "mobile" ]; then
 
     path="$deploy/run"
 
-    copyFolder "$run" "$path" "*.sky"
+    copyFolder "$run" "$path" "*.sky" "+x"
 
     generateQml "$path"
     echo ""
 
     echo "COPYING bash"
 
-    copyFolder "$bash" $deploy/bash "*.sh"
+    copyFolder "$bash" $deploy/bash "*.sh" "+x"
 
     echo "COPYING doc"
 
