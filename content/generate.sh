@@ -212,7 +212,7 @@ if [ $os = "mobile" -o "$2" = "all" -o "$2" = "deploy" ]; then
 
     echo "PATCHING bash"
 
-    find "$bash" -type f -name "*.sh" -exec chmod +x {} +
+    find "$bash" -type f -name "*.sh" -exec chmod +x {} + -exec git update-index --chmod=+x {} +
 
     if [ $1 = "iOS" ]; then
 
