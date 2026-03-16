@@ -149,13 +149,47 @@ if [ $os = "windows" ]; then
 
 elif [ $os = "macOS" ]; then
 
-    pkgutil --expand-full "$setup" temp
+    pkgutil --expand "$setup" temp
 
-    mv temp/Python_Framework.pkg/Payload/Python.framework/Versions/Current/* .
+    mkdir -p Python.framework
 
-    chmod +x python
+    cd Python.framework
+
+    cat "../temp/Python_Framework.pkg/Payload" | gunzip -dc | cpio -idm 2>/dev/null || true
+
+    cd ..
 
     rm -rf temp
+
+    mkdir -p bin
+
+    PATH_BIN="Python.framework/Versions/Current/bin/python3"
+
+    cat <<EOF > bin/python
+#!/bin/sh
+# NOTE: Resolve the physical location of the script even if called via symlink.
+SOURCE="\$0"
+while [ -h "\$SOURCE" ]; do
+    DIR="\$(cd -P "\$(dirname "\$SOURCE")" && pwd)"
+    SOURCE="\$(readlink "\$SOURCE")"
+    [[ \$SOURCE != /* ]] && SOURCE="\$DIR/\$SOURCE"
+done
+DIR="\$(cd -P "\$(dirname "\$SOURCE")" && pwd)"
+
+# NOTE: ROOT is the parent of the physical 'bin' folder.
+ROOT="\$(dirname "\$DIR")"
+
+export PYTHONHOME="\$ROOT/Python.framework/Versions/Current"
+export DYLD_FRAMEWORK_PATH="\$ROOT"
+
+exec "\$ROOT/$PATH_BIN" "\$@"
+EOF
+
+    path="bin/python"
+
+    chmod +x "$path"
+
+    ln -sf "$path" python
 
 else # [ $os = "linux" ]; then
 
