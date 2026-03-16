@@ -807,13 +807,19 @@ ControllerCore::ControllerCore() : WController()
     _bash = new WBashScript(this);
 
 #ifdef Q_OS_WIN
-    _bash->setPathBash(WControllerFile::applicationPath("git/usr/bin/bash.exe"));
+    path = WControllerFile::applicationPath("git/usr/bin/bash.exe");
+
+    _bash->setPathBash(path);
 #endif
 
     //---------------------------------------------------------------------------------------------
     // BashManager
 
     _manager = new WBashManager(this);
+
+#ifdef Q_OS_WIN
+    _manager->setPathBash(path);
+#endif
 
     connect(_manager, SIGNAL(finished    (const WBashManagerResult &)),
             this,     SLOT(onBashFinished(const WBashManagerResult &)));
