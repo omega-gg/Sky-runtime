@@ -167,9 +167,16 @@ elif [ $os = "macOS" ]; then
 
     cat <<EOF > bin/python
 #!/bin/sh
-# Since this script is always in the 'bin' folder,
-# ROOT is simply one level up.
-ROOT="\$(cd "\$(dirname "\$0")/.." && pwd)"
+# Get the absolute path of the directory containing THIS script
+BIN_DIR="\$(cd "\$(dirname "\$0")" && pwd)"
+
+# If called via symlink, 'bin' might be missing from the path calculation.
+# We force the ROOT to be the folder containing the Python.framework
+if [ "\$(basename "\$BIN_DIR")" = "bin" ]; then
+    ROOT="\$(dirname "\$BIN_DIR")"
+else
+    ROOT="\$BIN_DIR"
+fi
 
 export PYTHONHOME="\$ROOT/Python.framework/Versions/Current"
 export DYLD_FRAMEWORK_PATH="\$ROOT"
