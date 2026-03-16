@@ -228,18 +228,16 @@ if [ $os = "windows" ]; then
     fi
 fi
 
-if python -m ensurepip --upgrade >/dev/null 2>&1; then
+if ! python -m ensurepip --upgrade >/dev/null 2>&1; then
 
-    exit 0
+    script="get-pip.py"
+
+    curl --retry 3 -L -o "$script" "https://bootstrap.pypa.io/get-pip.py"
+
+    python "$script" --no-warn-script-location
+
+    rm -f "$script"
 fi
-
-script="get-pip.py"
-
-curl --retry 3 -L -o "$script" "https://bootstrap.pypa.io/get-pip.py"
-
-python "$script" --no-warn-script-location
-
-rm -f "$script"
 
 #--------------------------------------------------------------------------------------------------
 # Install
