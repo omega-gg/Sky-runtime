@@ -167,22 +167,14 @@ elif [ $os = "macOS" ]; then
 
     cat <<EOF > bin/python
 #!/bin/sh
-# NOTE: Resolve the physical location of the script even if called via symlink.
-SOURCE="\$0"
-while [ -h "\$SOURCE" ]; do
-    DIR="\$(cd -P "\$(dirname "\$SOURCE")" && pwd)"
-    SOURCE="\$(readlink "\$SOURCE")"
-    [[ \$SOURCE != /* ]] && SOURCE="\$DIR/\$SOURCE"
-done
-DIR="\$(cd -P "\$(dirname "\$SOURCE")" && pwd)"
-
-# NOTE: ROOT is the parent of the physical 'bin' folder.
-ROOT="\$(dirname "\$DIR")"
+# Since this script is always in the 'bin' folder,
+# ROOT is simply one level up.
+ROOT="\$(cd "\$(dirname "\$0")/.." && pwd)"
 
 export PYTHONHOME="\$ROOT/Python.framework/Versions/Current"
 export DYLD_FRAMEWORK_PATH="\$ROOT"
 
-exec "\$ROOT/$PATH_BIN" "\$@"
+exec "\$ROOT/$REAL_BIN" "\$@"
 EOF
 
     path="bin/python"
