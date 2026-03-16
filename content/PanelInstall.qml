@@ -127,6 +127,8 @@ Panel
         anchors.right : parent.right
         anchors.top   : parent.top
         anchors.bottom: buttonCheck.top
+
+        anchors.bottomMargin: st.dp8
     }
 
     ButtonCheckLabel
@@ -136,6 +138,8 @@ Panel
         anchors.left  : parent.left
         anchors.right : parent.right
         anchors.bottom: button.top
+
+        anchors.margins: st.dp8
 
         enabled: (pReady && pDone == false)
 
@@ -148,9 +152,12 @@ Panel
     {
         id: button
 
+        anchors.left  : parent.left
         anchors.bottom: parent.bottom
 
-        width: Math.round(parent.width / 2)
+        anchors.margins: st.dp8
+
+        width: Math.round((parent.width - st.dp24) / 2)
 
         visible: (pDone == false)
 
@@ -165,7 +172,9 @@ Panel
         anchors.right : parent.right
         anchors.bottom: parent.bottom
 
-        width: Math.round(parent.width / 2)
+        anchors.margins: st.dp8
+
+        width: button.width
 
         visible: (pDone == false)
 
@@ -181,6 +190,8 @@ Panel
         anchors.left  : parent.left
         anchors.right : parent.right
         anchors.bottom: parent.bottom
+
+        anchors.margins: st.dp8
 
         visible: pDone
 

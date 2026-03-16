@@ -4,13 +4,13 @@
 <context>
     <name>ControllerCore</name>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="960"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="965"/>
         <source>The script file does not exist %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="965"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="970"/>
         <source>
 Install in progress...
 </source>
@@ -18,98 +18,99 @@ Install in progress...
 </translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="980"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="985"/>
         <source>rm %1.sky
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="989"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="994"/>
         <source>rm -rf run/%1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1005"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1010"/>
         <source>cp %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1024"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1029"/>
         <source>generate %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1029"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1041"/>
         <source>---
 Install complete</source>
-        <translation type="unfinished"></translation>
+        <translation>---
+Installation complète</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1594"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1606"/>
         <source>Create .sky</source>
         <translation>Créer .sky</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1596"/>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1619"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1608"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1631"/>
         <source>Sky script (*.sky)</source>
         <translation>Script sky (*.sky)</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1617"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1629"/>
         <source>Create shortcut</source>
         <translation>Créer un raccourci</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1637"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1649"/>
         <source>Open .sky</source>
         <translation>Ouvrir .sky</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1639"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1651"/>
         <source>Sky (*.sky *.skz)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1677"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1689"/>
         <source>The run folder is absent from the archive.
 </source>
         <translation>Le dossier run est absent dans l&apos;archive.
 </translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1692"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1704"/>
         <source>The script name is not lower case.
 </source>
         <translation>Le nom du script n&apos;est pas en minuscule.
 </translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1697"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1709"/>
         <source>Script name: %1
 </source>
         <translation>Nom du script: %1
 </translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1730"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1742"/>
         <source>Invalid file: %1
 </source>
         <translation>Fichier invalide: %1
 </translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1735"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1747"/>
         <source>---
 Valid folder structure
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="2334"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="2346"/>
         <source>Sky runtime</source>
         <translation type="unfinished"></translation>
     </message>
@@ -199,27 +200,27 @@ Valid folder structure
 <context>
     <name>PageScript</name>
     <message>
-        <location filename="../../content/PageScript.qml" line="90"/>
+        <location filename="../../content/PageScript.qml" line="113"/>
         <source>New .sky</source>
         <translation>Nouveau .sky</translation>
     </message>
     <message>
-        <location filename="../../content/PageScript.qml" line="107"/>
+        <location filename="../../content/PageScript.qml" line="130"/>
         <source>Create shortcut</source>
         <translation>Créer un raccourci</translation>
     </message>
     <message>
-        <location filename="../../content/PageScript.qml" line="130"/>
+        <location filename="../../content/PageScript.qml" line="93"/>
         <source>Run script</source>
         <translation>Lancer le script</translation>
     </message>
     <message>
-        <location filename="../../content/PageScript.qml" line="146"/>
+        <location filename="../../content/PageScript.qml" line="149"/>
         <source>Open folder</source>
         <translation>Ouvrir le dossier</translation>
     </message>
     <message>
-        <location filename="../../content/PageScript.qml" line="177"/>
+        <location filename="../../content/PageScript.qml" line="180"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
@@ -301,22 +302,22 @@ Valid folder structure
 <context>
     <name>PanelInstall</name>
     <message>
-        <location filename="../../content/PanelInstall.qml" line="144"/>
+        <location filename="../../content/PanelInstall.qml" line="148"/>
         <source>⚠️ I trust the origin and content of this .skz archive</source>
         <translation>⚠️ J&apos;ai confiance sur l&apos;origine et le contenu de l&apos;archive .skz</translation>
     </message>
     <message>
-        <location filename="../../content/PanelInstall.qml" line="157"/>
+        <location filename="../../content/PanelInstall.qml" line="164"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../../content/PanelInstall.qml" line="174"/>
+        <location filename="../../content/PanelInstall.qml" line="183"/>
         <source>Install</source>
         <translation>Installer</translation>
     </message>
     <message>
-        <location filename="../../content/PanelInstall.qml" line="187"/>
+        <location filename="../../content/PanelInstall.qml" line="198"/>
         <source>Show </source>
         <translation>Afficher </translation>
     </message>

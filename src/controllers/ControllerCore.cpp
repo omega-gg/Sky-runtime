@@ -1031,6 +1031,13 @@ ControllerCore::ControllerCore() : WController()
         WControllerFile::generateQml(fileName, fileName, defines);
     }
 
+    // NOTE: Apply executable permissions on bash scripts.
+    WControllerFile::setPermissionFiles(path + "bash",
+                                        QStringList() << "*.sh",
+                                        WControllerFile::ExeOwner |
+                                        WControllerFile::ExeGroup |
+                                        WControllerFile::ExeOther);
+
     log.append(tr("---\n"
                   "Install complete"));
 
