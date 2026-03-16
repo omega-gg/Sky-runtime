@@ -377,7 +377,7 @@ private: // Variables
     QString _path;
     QString _pathData;
     QString _pathBin;
-    QString _pathBase;
+    QString _pathHome;
 
     WBackendIndex * _index;
 
