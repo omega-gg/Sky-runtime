@@ -21,6 +21,8 @@ content="$PWD/../content"
 
 bin="$PWD/../bin"
 
+bash="$PWD/../bash"
+
 #--------------------------------------------------------------------------------------------------
 # iOS
 
@@ -207,6 +209,10 @@ if [ $os = "mobile" -o "$2" = "all" -o "$2" = "deploy" ]; then
 
         rm -f $path/locale/.gitignore
     fi
+
+    echo "PATCHING bash"
+
+    find "$bash" -type f -name "*.sh" -exec chmod +x {} +
 
     if [ $1 = "iOS" ]; then
 
