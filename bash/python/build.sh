@@ -174,7 +174,7 @@ ROOT="\$(cd "\$(dirname "\$0")/.." && pwd)"
 export PYTHONHOME="\$ROOT/Python.framework/Versions/Current"
 export DYLD_FRAMEWORK_PATH="\$ROOT"
 
-exec "\$ROOT/$REAL_BIN" "\$@"
+exec "\$ROOT/$PATH_BIN" "\$@"
 EOF
 
     path="bin/python"
