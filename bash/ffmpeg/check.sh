@@ -54,7 +54,7 @@ getSky()
 
 sky="${SKY_PATH_BIN:-$(getSky)}/sky"
 
-bin="${SKY_PATH_FFMPEG:-sky/ffmpeg}"
+bin="${SKY_PATH_FFMPEG:-$sky/ffmpeg}"
 
 cd "$bin"
 
