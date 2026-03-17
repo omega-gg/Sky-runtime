@@ -26,10 +26,6 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-bin="$SKY_PATH_BIN/sky"
-
-python="${SKY_PATH_PYTHON:-$bin/python}"
-
 name="ffmpeg"
 
 version="N-122611-g7e9fe341df"
@@ -41,8 +37,22 @@ url="https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2026-02-0
 url_mac="https://evermeet.cx/ffmpeg"
 
 #--------------------------------------------------------------------------------------------------
-# Extract
+# Functions
 #--------------------------------------------------------------------------------------------------
+
+getSky()
+{
+    case `uname` in
+        MINGW*|MSYS*|CYGWIN*)
+            cygpath -u "$LOCALAPPDATA/Sky-runtime";;
+        Darwin*)
+            echo "$HOME/Library/Application Support/Sky-runtime";;
+        Linux*)
+            echo "${XDG_DATA_HOME:-$HOME/.local/share}/Sky-runtime";;
+        *)
+            echo "$HOME/.local/share/Sky-runtime";;
+    esac
+}
 
 extract()
 {
@@ -98,11 +108,19 @@ if [ $# != 1 ] || [ $# = 1 -a "$1" != "default" ]; then
 fi
 
 #--------------------------------------------------------------------------------------------------
+# Configuration
+#--------------------------------------------------------------------------------------------------
+
+sky="${SKY_PATH_BIN:-$(getSky)}/sky"
+
+python="${SKY_PATH_PYTHON:-$sky/python}"
+
+#--------------------------------------------------------------------------------------------------
 # Clean
 #--------------------------------------------------------------------------------------------------
 
-mkdir -p "$bin"
-cd       "$bin"
+mkdir -p "$sky"
+cd       "$sky"
 
 rm -rf "$name"
 

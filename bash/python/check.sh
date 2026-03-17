@@ -26,11 +26,35 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-bin="${SKY_PATH_PYTHON:-$SKY_PATH_BIN/sky/python}"
-
-python="${SKY_PATH_PYTHON:-$SKY_PATH_BIN/sky/python}"
-
 version="3.14.2"
+
+#--------------------------------------------------------------------------------------------------
+# Functions
+#--------------------------------------------------------------------------------------------------
+
+getSky()
+{
+    case `uname` in
+        MINGW*|MSYS*|CYGWIN*)
+            cygpath -u "$LOCALAPPDATA/Sky-runtime/bin";;
+        Darwin*)
+            echo "$HOME/Library/Application Support/Sky-runtime/bin";;
+        Linux*)
+            echo "${XDG_DATA_HOME:-$HOME/.local/share}/Sky-runtime/bin";;
+        *)
+            echo "$HOME/.local/share/Sky-runtime/bin";;
+    esac
+}
+
+#--------------------------------------------------------------------------------------------------
+# Configuration
+#--------------------------------------------------------------------------------------------------
+
+sky="${SKY_PATH_BIN:-$(getSky)}/sky"
+
+bin="${SKY_PATH_PYTHON:-$sky/python}"
+
+python="${SKY_PATH_PYTHON:-$sky/python}"
 
 #--------------------------------------------------------------------------------------------------
 # Environment

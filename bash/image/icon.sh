@@ -28,10 +28,6 @@ set -e
 
 root="$(dirname "$0")"
 
-ffmpeg="${SKY_PATH_FFMPEG:-$SKY_PATH_BIN/sky/ffmpeg}"
-
-magick="${SKY_PATH_IMAGE_MAGICK:-$SKY_PATH_BIN/sky/imageMagick}"
-
 size="64"
 
 position="bottom"
@@ -43,6 +39,20 @@ ratio="1.8"
 #--------------------------------------------------------------------------------------------------
 # Functions
 #--------------------------------------------------------------------------------------------------
+
+getSky()
+{
+    case `uname` in
+        MINGW*|MSYS*|CYGWIN*)
+            cygpath -u "$LOCALAPPDATA/Sky-runtime/bin";;
+        Darwin*)
+            echo "$HOME/Library/Application Support/Sky-runtime/bin";;
+        Linux*)
+            echo "${XDG_DATA_HOME:-$HOME/.local/share}/Sky-runtime/bin";;
+        *)
+            echo "$HOME/.local/share/Sky-runtime/bin";;
+    esac
+}
 
 getWidth()
 {
@@ -87,6 +97,12 @@ if [ $# -ge 7 ]; then ratio="$7"; fi
 #--------------------------------------------------------------------------------------------------
 # Run
 #--------------------------------------------------------------------------------------------------
+
+sky="${SKY_PATH_BIN:-$(getSky)}/sky"
+
+ffmpeg="${SKY_PATH_FFMPEG:-$sky/ffmpeg}"
+
+magick="${SKY_PATH_IMAGE_MAGICK:-$sky/imageMagick}"
 
 width=$(getWidth "$1")
 

@@ -26,8 +26,6 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-bin="$SKY_PATH_BIN/sky"
-
 name="python"
 
 version="3.14.2"
@@ -37,6 +35,20 @@ url="https://www.python.org/ftp/python/$version"
 #--------------------------------------------------------------------------------------------------
 # Functions
 #--------------------------------------------------------------------------------------------------
+
+getSky()
+{
+    case `uname` in
+        MINGW*|MSYS*|CYGWIN*)
+            cygpath -u "$LOCALAPPDATA/Sky-runtime/bin";;
+        Darwin*)
+            echo "$HOME/Library/Application Support/Sky-runtime/bin";;
+        Linux*)
+            echo "${XDG_DATA_HOME:-$HOME/.local/share}/Sky-runtime/bin";;
+        *)
+            echo "$HOME/.local/share/Sky-runtime/bin";;
+    esac
+}
 
 getPath()
 {
@@ -63,6 +75,12 @@ if [ $# != 1 ] || [ $# = 1 -a "$1" != "default" -a "$1" != "clean" ]; then
 fi
 
 #--------------------------------------------------------------------------------------------------
+# Configuration
+#--------------------------------------------------------------------------------------------------
+
+sky="${SKY_PATH_BIN:-$(getSky)}/sky"
+
+#--------------------------------------------------------------------------------------------------
 # Clean
 #--------------------------------------------------------------------------------------------------
 
@@ -70,7 +88,7 @@ if [ "$1" = "clean" ]; then
 
     echo "CLEANING"
 
-    rm -rf "$bin/$name"
+    rm -rf "$sky/$name"
 
     exit 0
 fi
@@ -97,8 +115,8 @@ fi
 # Clean
 #--------------------------------------------------------------------------------------------------
 
-mkdir -p "$bin"
-cd       "$bin"
+mkdir -p "$sky"
+cd       "$sky"
 
 rm -rf "$name"
 
@@ -194,7 +212,7 @@ else # [ $os = "linux" ]; then
 
     tar -xvf "$setup" --strip-components=1
 
-    ./configure --prefix="$bin/$name" --enable-optimizations
+    ./configure --prefix="$sky/$name" --enable-optimizations
 
     make -j$(nproc)
 
@@ -208,8 +226,8 @@ rm "$setup"
 #--------------------------------------------------------------------------------------------------
 
 case `uname` in
-    MINGW*|MSYS*|CYGWIN*) export PATH="$bin/$name:$PATH";;
-    *)                    export PATH="$bin/$name/bin:$PATH";;
+    MINGW*|MSYS*|CYGWIN*) export PATH="$sky/$name:$PATH";;
+    *)                    export PATH="$sky/$name/bin:$PATH";;
 esac
 
 #--------------------------------------------------------------------------------------------------

@@ -26,8 +26,6 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-ffmpeg="${SKY_PATH_FFMPEG:-$SKY_PATH_BIN/sky/ffmpeg}"
-
 width="3840"
 height="2160"
 
@@ -36,6 +34,20 @@ yuv="yuv420p"
 #--------------------------------------------------------------------------------------------------
 # Functions
 #--------------------------------------------------------------------------------------------------
+
+getSky()
+{
+    case `uname` in
+        MINGW*|MSYS*|CYGWIN*)
+            cygpath -u "$LOCALAPPDATA/Sky-runtime/bin";;
+        Darwin*)
+            echo "$HOME/Library/Application Support/Sky-runtime/bin";;
+        Linux*)
+            echo "${XDG_DATA_HOME:-$HOME/.local/share}/Sky-runtime/bin";;
+        *)
+            echo "$HOME/.local/share/Sky-runtime/bin";;
+    esac
+}
 
 append()
 {
@@ -104,6 +116,10 @@ fi
 #--------------------------------------------------------------------------------------------------
 # Configuration
 #--------------------------------------------------------------------------------------------------
+
+sky="${SKY_PATH_BIN:-$(getSky)}/sky"
+
+ffmpeg="${SKY_PATH_FFMPEG:-$sky/ffmpeg}"
 
 host=$(getOs)
 

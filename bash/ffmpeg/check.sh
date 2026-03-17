@@ -26,15 +26,35 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-bin="${SKY_PATH_PYTHON:-$SKY_PATH_BIN/sky/ffmpeg}"
-
 version="N-122611-g7e9fe341df"
 
 version_mac="8.0.1"
 
 #--------------------------------------------------------------------------------------------------
+# Functions
+#--------------------------------------------------------------------------------------------------
+
+getSky()
+{
+    case `uname` in
+        MINGW*|MSYS*|CYGWIN*)
+            cygpath -u "$LOCALAPPDATA/Sky-runtime";;
+        Darwin*)
+            echo "$HOME/Library/Application Support/Sky-runtime";;
+        Linux*)
+            echo "${XDG_DATA_HOME:-$HOME/.local/share}/Sky-runtime";;
+        *)
+            echo "$HOME/.local/share/Sky-runtime";;
+    esac
+}
+
+#--------------------------------------------------------------------------------------------------
 # Check
 #--------------------------------------------------------------------------------------------------
+
+sky="${SKY_PATH_BIN:-$(getSky)}/sky"
+
+bin="${SKY_PATH_FFMPEG:-sky/ffmpeg}"
 
 cd "$bin"
 

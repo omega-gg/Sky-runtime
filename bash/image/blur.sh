@@ -26,11 +26,27 @@ set -e
 # Settings
 #--------------------------------------------------------------------------------------------------
 
-ffmpeg="${SKY_PATH_FFMPEG:-$SKY_PATH_BIN/sky/ffmpeg}"
-
 strength="10"
 
 filter="gblur"
+
+#--------------------------------------------------------------------------------------------------
+# Functions
+#--------------------------------------------------------------------------------------------------
+
+getSky()
+{
+    case `uname` in
+        MINGW*|MSYS*|CYGWIN*)
+            cygpath -u "$LOCALAPPDATA/Sky-runtime/bin";;
+        Darwin*)
+            echo "$HOME/Library/Application Support/Sky-runtime/bin";;
+        Linux*)
+            echo "${XDG_DATA_HOME:-$HOME/.local/share}/Sky-runtime/bin";;
+        *)
+            echo "$HOME/.local/share/Sky-runtime/bin";;
+    esac
+}
 
 #--------------------------------------------------------------------------------------------------
 # Syntax
@@ -50,6 +66,10 @@ fi
 #--------------------------------------------------------------------------------------------------
 # Configuration
 #--------------------------------------------------------------------------------------------------
+
+sky="${SKY_PATH_BIN:-$(getSky)}/sky"
+
+ffmpeg="${SKY_PATH_FFMPEG:-$sky/ffmpeg}"
 
 if [ $# -ge 3 ]; then strength="$3"; fi
 
