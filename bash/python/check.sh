@@ -34,15 +34,27 @@ version="3.14.2"
 
 getSky()
 {
+    if [ -n "$SKY_PATH_BIN" ]; then
+
+        case `uname` in
+            MINGW*|MSYS*|CYGWIN*)
+                cygpath -u "$SKY_PATH_BIN/sky";;
+            *)
+                echo "$SKY_PATH_BIN/sky";;
+        esac
+
+        return
+    fi
+
     case `uname` in
         MINGW*|MSYS*|CYGWIN*)
-            cygpath -u "$LOCALAPPDATA/Sky-runtime/bin";;
+            cygpath -u "$LOCALAPPDATA/Sky-runtime/bin/sky";;
         Darwin*)
-            echo "$HOME/Library/Application Support/Sky-runtime/bin";;
+            echo "$HOME/Library/Application Support/Sky-runtime/bin/sky";;
         Linux*)
-            echo "${XDG_DATA_HOME:-$HOME/.local/share}/Sky-runtime/bin";;
+            echo "${XDG_DATA_HOME:-$HOME/.local/share}/Sky-runtime/bin/sky";;
         *)
-            echo "$HOME/.local/share/Sky-runtime/bin";;
+            echo "$HOME/.local/share/Sky-runtime/bin/sky";;
     esac
 }
 
@@ -50,7 +62,7 @@ getSky()
 # Configuration
 #--------------------------------------------------------------------------------------------------
 
-sky="${SKY_PATH_BIN:-$(getSky)}/sky"
+sky="$(getSky)"
 
 bin="${SKY_PATH_PYTHON:-$sky/python}"
 
@@ -76,7 +88,7 @@ esac
 
 cd "$bin"
 
-current="$(./python - << EOF
+current="$(python - << EOF
 import sys
 print("{}.{}.{}".format(*sys.version_info[:3]))
 EOF
