@@ -382,7 +382,7 @@ fi
 $qmake --version
 echo ""
 
-if [ "$2" = "deploy" ]; then
+if [ "$2" = "deploy" -a $qt != "qt4" ]; then
 
     sh locale.sh $1 release
     echo ""
