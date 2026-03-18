@@ -741,7 +741,7 @@ elif [ $1 = "macOS" ]; then
 
     #----------------------------------------------------------------------------------------------
 
-    # NOTE Qt5: codesign does not like the '.' in the "QtQuick.2" folder name.
+    # NOTE Qt5: codesign does not like the '.' in the 'QtQuick.2' folder name.
     if [ $qt = "qt5" ]; then
 
         mv QtQuick.2 QtQuick
