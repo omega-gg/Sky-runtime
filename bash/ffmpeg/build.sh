@@ -111,7 +111,7 @@ fi
 # Configuration
 #--------------------------------------------------------------------------------------------------
 
-sky="${SKY_PATH_BIN:-$(getSky)}/sky"
+sky="$(getSky)"
 
 python="${SKY_PATH_PYTHON:-$sky/python}"
 

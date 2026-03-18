@@ -38,15 +38,27 @@ url="https://www.python.org/ftp/python/$version"
 
 getSky()
 {
+    if [ -n "$SKY_PATH_BIN" ]; then
+
+        case `uname` in
+            MINGW*|MSYS*|CYGWIN*)
+                cygpath -u "$SKY_PATH_BIN/sky";;
+            *)
+                echo "$SKY_PATH_BIN/sky";;
+        esac
+
+        return
+    fi
+
     case `uname` in
         MINGW*|MSYS*|CYGWIN*)
-            cygpath -u "$LOCALAPPDATA/Sky-runtime/bin";;
+            cygpath -u "$LOCALAPPDATA/Sky-runtime/bin/sky";;
         Darwin*)
-            echo "$HOME/Library/Application Support/Sky-runtime/bin";;
+            echo "$HOME/Library/Application Support/Sky-runtime/bin/sky";;
         Linux*)
-            echo "${XDG_DATA_HOME:-$HOME/.local/share}/Sky-runtime/bin";;
+            echo "${XDG_DATA_HOME:-$HOME/.local/share}/Sky-runtime/bin/sky";;
         *)
-            echo "$HOME/.local/share/Sky-runtime/bin";;
+            echo "$HOME/.local/share/Sky-runtime/bin/sky";;
     esac
 }
 
@@ -78,7 +90,7 @@ fi
 # Configuration
 #--------------------------------------------------------------------------------------------------
 
-sky="${SKY_PATH_BIN:-$(getSky)}/sky"
+sky="$(getSky)"
 
 #--------------------------------------------------------------------------------------------------
 # Clean

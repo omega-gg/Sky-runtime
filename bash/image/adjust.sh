@@ -61,7 +61,7 @@ fi
 # Run
 #--------------------------------------------------------------------------------------------------
 
-sky="${SKY_PATH_BIN:-$(getSky)}/sky"
+sky="$(getSky)"
 
 ffmpeg="${SKY_PATH_FFMPEG:-$sky/sky/ffmpeg}"
 

@@ -52,7 +52,7 @@ getSky()
 # Check
 #--------------------------------------------------------------------------------------------------
 
-sky="${SKY_PATH_BIN:-$(getSky)}/sky"
+sky="$(getSky)"
 
 bin="${SKY_PATH_FFMPEG:-$sky/ffmpeg}"
 
