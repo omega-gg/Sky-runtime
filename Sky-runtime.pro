@@ -325,6 +325,10 @@ OTHER_FILES += environment.sh \
                dist/script/sky.sh \
                dist/locale/fr_FR.ts \
                dist/doc/readme.md \
+               dist/doc/about.md \
+               dist/doc/license.md \
+               dist/doc/fr/readme.md \
+               dist/doc/fr/about.md \
                dist/changes/1.1.0.md \
                dist/iOS/Info.plist \
                dist/iOS/LaunchScreen.storyboard \
