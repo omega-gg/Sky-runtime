@@ -797,7 +797,7 @@ if [ $os != "mobile" ]; then
 
     echo "COPYING run"
 
-    path="$deploy/run"
+    path="deploy/run"
 
     copyFolder "$run" "$path" "*.sky" "+x"
 
@@ -806,11 +806,11 @@ if [ $os != "mobile" ]; then
 
     echo "COPYING bash"
 
-    copyFolder "$bash" $deploy/bash "*.sh" "+x"
+    copyFolder "$bash" deploy/bash "*.sh" "+x"
 
     echo "COPYING doc"
 
-    copyFolder "$bash" $deploy/doc "*.md"
+    copyFolder "$bash" deploy/doc "*.md"
 fi
 
 #--------------------------------------------------------------------------------------------------
@@ -831,3 +831,10 @@ if [ $1 = "win64" ]; then
 
     rm archive.tar.bz2
 fi
+
+#--------------------------------------------------------------------------------------------------
+# Default folders
+#--------------------------------------------------------------------------------------------------
+
+mkdir deploy/storage
+mkdir deploy/bin
