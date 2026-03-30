@@ -13,6 +13,8 @@ SkyComponents="$Sky/src/SkyComponents"
 
 SkyPresentation="$Sky/src/SkyPresentation"
 
+Sky_runtime="$PWD/.."
+
 backend="$PWD/../../backend"
 
 #--------------------------------------------------------------------------------------------------
@@ -43,6 +45,27 @@ qt="qt6"
 #--------------------------------------------------------------------------------------------------
 # Functions
 #--------------------------------------------------------------------------------------------------
+
+copyFolder()
+{
+    find "$1" -type f -iname "$3" | while read -r file; do
+
+        path="${file#$1/}"
+
+        target="$2/$(dirname "$path")"
+
+        mkdir -p "$target"
+
+        output="$target/$(basename "$file")"
+
+        cp "$file" "$output"
+
+        if [ "$4" != "" ]; then
+
+            chmod "$4" "$output"
+        fi
+    done
+}
 
 copyAndroid()
 {
@@ -209,6 +232,14 @@ if [ $os = "mobile" -o "$2" = "all" -o "$2" = "deploy" ]; then
 
         rm -f $path/locale/.gitignore
     fi
+
+    echo "COPYING run"
+
+    copyFolder "$Sky_runtime/run" "$path/run" "*.sky" "+x"
+
+    echo "COPYING bash"
+
+    copyFolder "$Sky_runtime/bash" "$path/bash" "*.sh" "+x"
 
     if [ $1 = "iOS" ]; then
 

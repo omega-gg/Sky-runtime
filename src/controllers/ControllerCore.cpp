@@ -134,23 +134,21 @@ static const int CORE_CACHE_PIXMAP = 1048576 *  30; //  30 megabytes
 
 #ifdef Q_OS_MACOS
 static const QString PATH_STORAGE = "/../../../storage";
+static const QString PATH_RUN     = "../../../run";
+static const QString PATH_BASH    = "../../../bash";
 static const QString PATH_ENV     = "../../../env";
 #else
-static const QString PATH_STORAGE = "/storage";
+static const QString PATH_STORAGE = "storage";
+static const QString PATH_RUN     = "run";
+static const QString PATH_BASH    = "bash";
 static const QString PATH_ENV     = "env";
 #endif
 
 #ifndef SK_DEPLOY
 #ifdef Q_OS_MACOS
-static const QString PATH_LOCALE  = "../../../locale";
 static const QString PATH_BACKEND = "../../../../../backend";
-static const QString PATH_RUN     = "../../../../run";
-static const QString PATH_BASH    = "../../../../bash";
 #else
-static const QString PATH_LOCALE  = "locale";
 static const QString PATH_BACKEND = "../../backend";
-static const QString PATH_RUN     = "../run";
-static const QString PATH_BASH    = "../bash";
 #endif
 #endif
 
@@ -408,7 +406,7 @@ ControllerCore::ControllerCore() : WController()
     _pathData = QDir::fromNativeSeparators(WControllerFile::pathWritable());
 
 #ifdef SK_DEPLOY
-    QString path = QDir::currentPath() + PATH_STORAGE;
+    QString path = WControllerFile::applicationPath(PATH_STORAGE);
 
     // NOTE: When an application level storage folder is found we assume that we have to use it.
     //       This enables independent runtime instances to coexist on the system while having their
@@ -419,7 +417,7 @@ ControllerCore::ControllerCore() : WController()
     }
     else _path = _pathData;
 #else
-    _path = QDir::currentPath() + PATH_STORAGE;
+    _path = WControllerFile::applicationPath(PATH_STORAGE);
 #endif
 
     wControllerFile->setPathStorage(_path);
@@ -903,12 +901,8 @@ ControllerCore::ControllerCore() : WController()
 
     QList<QFileInfo> entries;
 
-#ifdef SK_DEPLOY
 #ifdef Q_OS_ANDROID
-    loadFolder(entries, "assets:/run");
-#else
-    loadFolder(entries, WControllerFile::applicationPath("run"));
-#endif
+    loadFolder(entries, "assets:/" + PATH_RUN);
 #else
     loadFolder(entries, WControllerFile::applicationPath(PATH_RUN));
 #endif
@@ -1100,7 +1094,7 @@ ControllerCore::ControllerCore() : WController()
 
     if (WControllerNetwork::extractUrlExtension(name) != "sky") name += ".sky";
 
-    QString fileName = getPathScript(name);
+    QString fileName = getPathRun(name);
 
     if (QFile::exists(fileName)) return fileName;
 
@@ -2028,7 +2022,7 @@ void ControllerCore::loadData(DataScript * script, const QString & fileName)
 
     QString name = parent + ".sky";
 
-    QString path = getPathScript(name);
+    QString path = getPathRun(name);
 
     if (QFile::exists(path))
     {
@@ -2137,27 +2131,19 @@ void ControllerCore::clearTranslators()
 
 //-------------------------------------------------------------------------------------------------
 
-QString ControllerCore::getPathScript(const QString & name) const
+QString ControllerCore::getPathRun(const QString & name) const
 {
-#ifdef SK_DEPLOY
 #ifdef Q_OS_ANDROID
-    return "assets:/run/" + name;
+    return "assets:/" + PATH_RUN + '/' + name;
 #else
-    return WControllerFile::applicationPath("run/" + name);
-#endif
-#else
-    return WControllerFile::applicationPath(PATH_RUN + "/" + name);
+    return WControllerFile::applicationPath(PATH_RUN + '/' + name);
 #endif
 }
 
 QString ControllerCore::getPathBash(const QString & name) const
 {
-#ifdef SK_DEPLOY
 #ifdef Q_OS_ANDROID
-    return "assets:/bash/" + name;
-#else
-    return WControllerFile::applicationPath("bash/" + name);
-#endif
+    return "assets:/" + PATH_BASH + '/' + name;
 #else
     return WControllerFile::applicationPath(PATH_BASH + "/" + name);
 #endif
