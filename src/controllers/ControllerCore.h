@@ -231,7 +231,7 @@ public: // Interface
     Q_INVOKABLE QString getVersion      (int index) const;
     Q_INVOKABLE QString getVersionParent(int index) const;
 
-    Q_INVOKABLE QByteArray getData(int index) const;
+    Q_INVOKABLE QString getData(int index) const;
 
     // Library
 
@@ -378,6 +378,8 @@ private: // Variables
     QString _pathData;
     QString _pathBin;
     QString _pathHome;
+
+    QStringList _defines;
 
     WBackendIndex * _index;
 

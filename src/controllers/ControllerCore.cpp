@@ -879,6 +879,11 @@ ControllerCore::ControllerCore() : WController()
 
     DataScript * script = new DataScript(this);
 
+    if (_defines.isEmpty())
+    {
+        _defines = WControllerFile::qmlDefines();
+    }
+
     loadData(script, fileName);
 
     return script;
@@ -992,14 +997,14 @@ ControllerCore::ControllerCore() : WController()
 
     QStringList list = WUnzipper::getFileNames(filePath);
 
-    QStringList scripts;
+    //QStringList scripts;
 
     foreach (const QString & string, list)
     {
-        if (string.startsWith("run/"))
+        /*if (string.startsWith("run/"))
         {
             scripts.append(string);
-        }
+        }*/
 
         log.append(QString(tr("cp %1\n")).arg(string));
     }
@@ -1008,22 +1013,22 @@ ControllerCore::ControllerCore() : WController()
 
     path = _pathHome + '/';
 
-    QStringList defines = WControllerFile::qmlDefines();
+    //QStringList defines = WControllerFile::qmlDefines();
 
 #ifdef SK_DEPLOY
     defines.append("DEPLOY");
 #endif
 
-    scripts.removeOne("run/");
+    //scripts.removeOne("run/");
 
-    foreach (const QString & script, scripts)
+    /*foreach (const QString & script, scripts)
     {
         QString fileName = path + script;
 
         log.append(QString(tr("generate %1\n")).arg(script));
 
-        WControllerFile::generateQml(fileName, fileName, defines);
-    }
+        WControllerFile::writeQml(fileName, fileName, defines);
+    }*/
 
     // NOTE: Apply executable permissions on bash scripts.
     WControllerFile::setPermissionFiles(path + "bash",
@@ -1532,13 +1537,13 @@ ControllerCore::ControllerCore() : WController()
     else return QString();
 }
 
-/* Q_INVOKABLE */ QByteArray ControllerCore::getData(int index) const
+/* Q_INVOKABLE */ QString ControllerCore::getData(int index) const
 {
     if (_script)
     {
         return _script->getData(index);
     }
-    else return QByteArray();
+    else return QString();
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -1956,7 +1961,7 @@ void ControllerCore::loadData(DataScript * script, const QString & fileName)
 {
     qDebug("LOADING %s", fileName.C_STR);
 
-    QByteArray data = WControllerFile::readAll(fileName);
+    QString data = WControllerFile::generateQml(fileName, _defines);
 
     QString line = Sk::getLine(data);
 
@@ -2292,6 +2297,11 @@ void ControllerCore::setSource(const QString & source)
 
     if (string.isEmpty() == false)
     {
+        if (_defines.isEmpty())
+        {
+            _defines = WControllerFile::qmlDefines();
+        }
+
         loadData(_script, QDir::fromNativeSeparators(string));
 
         applyTranslators(_script->getLocaleFiles());

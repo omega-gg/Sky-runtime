@@ -89,9 +89,9 @@
     return _items.at(index).versionParent;
 }
 
-/* Q_INVOKABLE */ QByteArray DataScript::getData(int index) const
+/* Q_INVOKABLE */ QString DataScript::getData(int index) const
 {
-    if (index < 0 || index >= count()) return QByteArray();
+    if (index < 0 || index >= count()) return QString();
 
     return _items.at(index).data;
 }

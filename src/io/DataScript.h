@@ -38,7 +38,7 @@ struct DataScriptItem
     QString version;
     QString versionParent;
 
-    QByteArray data;
+    QString data;
 };
 
 //-------------------------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ public: // Interface
     Q_INVOKABLE QString getVersion      (int index) const;
     Q_INVOKABLE QString getVersionParent(int index) const;
 
-    Q_INVOKABLE QByteArray getData(int index) const;
+    Q_INVOKABLE QString getData(int index) const;
 
     Q_INVOKABLE QStringList getLocaleFiles() const;
 
