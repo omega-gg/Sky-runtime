@@ -73,6 +73,8 @@ public: // Variables
     QString name;
     QString version;
 
+    QString bin;
+
     QString locale;
 
     int style;
@@ -122,6 +124,8 @@ public: // Variables
     stream.writeStartElement(name);
 
     stream.writeTextElement("version", version);
+
+    stream.writeTextElement("bin", bin);
 
     stream.writeTextElement("locale", locale);
 
@@ -222,6 +226,8 @@ public: // Variables
     action->name    = sk->name   ();
     action->version = sk->version();
 
+    action->bin = _bin;
+
     action->locale = _locale;
 
     action->style = _style;
@@ -267,6 +273,13 @@ bool DataLocal::extract(const QByteArray & array)
 
         return extract(content.toUtf8());
     }
+
+    //---------------------------------------------------------------------------------------------
+    // bin
+
+    if (WControllerXml::readNextStartElement(&stream, "bin") == false) return false;
+
+    _bin = WControllerXml::readNextString(&stream);
 
     //---------------------------------------------------------------------------------------------
     // locale
@@ -341,6 +354,22 @@ bool DataLocal::extract(const QByteArray & array)
 //-------------------------------------------------------------------------------------------------
 // Properties
 //-------------------------------------------------------------------------------------------------
+
+QString DataLocal::bin() const
+{
+    return _bin;
+}
+
+void DataLocal::setBin(const QString & path)
+{
+    if (_bin == path) return;
+
+    _bin = path;
+
+    emit binChanged();
+
+    save();
+}
 
 QString DataLocal::locale() const
 {

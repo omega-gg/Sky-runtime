@@ -30,6 +30,8 @@ class DataLocal : public WLocalObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString bin READ bin WRITE setBin NOTIFY binChanged)
+
     Q_PROPERTY(QString locale READ locale WRITE setLocale NOTIFY localeChanged)
 
     Q_PROPERTY(int style READ style WRITE setStyle NOTIFY styleChanged)
@@ -51,6 +53,8 @@ private: // Functions
     bool extract(const QByteArray & array);
 
 signals:
+    void binChanged();
+
     void localeChanged();
 
     void styleChanged();
@@ -71,6 +75,9 @@ signals:
     void broadcastPortChanged();
 
 public: // Properties
+    QString bin() const;
+    void    setBin(const QString & path);
+
     QString locale() const;
     void    setLocale(const QString & name);
 
@@ -102,6 +109,8 @@ public: // Properties
 
 private: // Variables
     QString _version;
+
+    QString _bin;
 
     QString _locale;
 

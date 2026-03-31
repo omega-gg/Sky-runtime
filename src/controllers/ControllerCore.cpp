@@ -133,12 +133,20 @@ static const int CORE_CACHE        = 1048576 * 100; // 100 megabytes
 static const int CORE_CACHE_PIXMAP = 1048576 *  30; //  30 megabytes
 
 #ifdef Q_OS_MACOS
-static const QString PATH_STORAGE = "/../../../storage";
+static const QString PATH_STORAGE = "../../../storage";
+static const QString PATH_BIN     = "../../../bin";
 static const QString PATH_RUN     = "../../../run";
 static const QString PATH_BASH    = "../../../bash";
 static const QString PATH_ENV     = "../../../env";
+#elif defined(Q_OS_LINUX)
+static const QString PATH_STORAGE = "../../storage";
+static const QString PATH_BIN     = "../../bin";
+static const QString PATH_RUN     = "../../run";
+static const QString PATH_BASH    = "../../bash";
+static const QString PATH_ENV     = "../../env";
 #else
 static const QString PATH_STORAGE = "storage";
+static const QString PATH_BIN     = "bin";
 static const QString PATH_RUN     = "run";
 static const QString PATH_BASH    = "bash";
 static const QString PATH_ENV     = "env";
@@ -663,26 +671,32 @@ ControllerCore::ControllerCore() : WController()
 
     loadEnvironment();
 
-    _pathBin = qgetenv("SKY_PATH_BIN");
+    _pathBin = _local.bin();
 
     if (_pathBin.isEmpty())
     {
-        _pathBin = _pathData + "/bin";
+        _pathBin = qgetenv("SKY_PATH_BIN");
 
-        _pathHome = _pathBin + "/home";
-
-        if (QFile::exists(_pathHome) == false && QDir().mkpath(_pathHome) == false)
+        if (_pathBin.isEmpty())
         {
-            qWarning("ControllerCore::run: Failed to create folder %s.", _pathHome.C_STR);
-        }
+            _pathBin = WControllerFile::applicationPath(PATH_BIN);
 
-        qputenv("SKY_PATH_BIN", _pathBin.toUtf8());
+            _pathHome = _pathBin + "/home";
+
+            qputenv("SKY_PATH_BIN", _pathBin.toUtf8());
+        }
+        else
+        {
+            _pathBin = QDir::fromNativeSeparators(_pathBin);
+
+            _pathHome = _pathBin + "/home";
+        }
     }
     else
     {
-        _pathBin = QDir::fromNativeSeparators(_pathBin);
-
         _pathHome = _pathBin + "/home";
+
+        qputenv("SKY_PATH_BIN", _pathBin.toUtf8());
     }
 
 #ifdef Q_OS_MACOS
