@@ -893,10 +893,7 @@ ControllerCore::ControllerCore() : WController()
 
     DataScript * script = new DataScript(this);
 
-    if (_defines.isEmpty())
-    {
-        _defines = WControllerFile::qmlDefines();
-    }
+    updateDefines();
 
     loadData(script, fileName);
 
@@ -1029,9 +1026,9 @@ ControllerCore::ControllerCore() : WController()
 
     //QStringList defines = WControllerFile::qmlDefines();
 
-#ifdef SK_DEPLOY
-    defines.append("DEPLOY");
-#endif
+//#ifdef SK_DEPLOY
+//    defines.append("DEPLOY");
+//#endif
 
     //scripts.removeOne("run/");
 
@@ -2148,6 +2145,17 @@ void ControllerCore::clearTranslators()
     _translators.clear();
 }
 
+void ControllerCore::updateDefines()
+{
+    if (_defines.isEmpty() == false) return;
+
+    _defines = WControllerFile::qmlDefines();
+
+#ifdef SK_DEPLOY
+    _defines.append("DEPLOY");
+#endif
+}
+
 //-------------------------------------------------------------------------------------------------
 
 QString ControllerCore::getPathRun(const QString & name) const
@@ -2311,10 +2319,7 @@ void ControllerCore::setSource(const QString & source)
 
     if (string.isEmpty() == false)
     {
-        if (_defines.isEmpty())
-        {
-            _defines = WControllerFile::qmlDefines();
-        }
+        updateDefines();
 
         loadData(_script, QDir::fromNativeSeparators(string));
 

@@ -300,6 +300,8 @@ private: // Functions
 
     void clearTranslators();
 
+    void updateDefines();
+
     QString getPathRun   (const QString & name) const;
     QString getPathBash  (const QString & name) const;
     QString getPathLocale(const QString & name) const;
