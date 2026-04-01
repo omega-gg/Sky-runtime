@@ -106,8 +106,10 @@ deployMacOS()
     -name "*.dylib" | while read -r plugin; do
 
         case "$plugin" in
-            */*/*/*) path="../../" ;;
-            *)       path="../"    ;;
+            */*/*/*/*) path="../../../../" ;;
+            */*/*/*)   path="../../../"    ;;
+            */*/*)     path="../../"       ;;
+            *)         path="../"          ;;
         esac
 
         installMacOS "$plugin" "$path"
@@ -426,7 +428,8 @@ elif [ $1 = "macOS" ]; then
         if [ $qt = "qt6" ]; then
 
             # NOTE: Required for the webview.
-            cp -r "$path"/resources $deploy
+            # NOTE macOS: resources have to be copied in the binary folder to be resolved.
+            cp -r "$path"/resources/* $deploy
 
             cp "$path"/QtWebEngineProcess* $deploy
         fi
