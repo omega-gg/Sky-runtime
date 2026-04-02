@@ -428,7 +428,7 @@ elif [ $1 = "macOS" ]; then
         if [ $qt = "qt6" ]; then
 
             # NOTE: Required for the webview.
-            # NOTE macOS: resources have to be copied in the binary folder to be resolved.
+            # NOTE: resources have to be copied in the binary folder to be resolved.
             cp -r "$path"/resources/* $deploy
 
             cp "$path"/QtWebEngineProcess* $deploy
@@ -530,7 +530,8 @@ elif [ $1 = "linux" ]; then
         if [ $qt = "qt6" ]; then
 
             # NOTE: Required for the webview.
-            cp -r "$path"/resources $deploy
+            # NOTE: resources have to be copied in the binary folder to be resolved.
+            cp -r "$path"/resources/* $deploy
 
             cp "$path"/QtWebEngineProcess* $deploy
         fi
