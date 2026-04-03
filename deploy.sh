@@ -35,12 +35,6 @@ storage="storageDefault"
 # Functions
 #--------------------------------------------------------------------------------------------------
 
-copyQml()
-{
-    cp "$path"/$1/*.$2   $deploy/$1
-    cp "$path"/$1/qmldir $deploy/$1
-}
-
 copyAndroid()
 {
     if [ $storage = "storageLight" ]; then
@@ -75,6 +69,12 @@ copyFolder()
             chmod "$4" "$output"
         fi
     done
+}
+
+copyQml()
+{
+    copyFolder "$path"/$1 $deploy/$1 "*.$2"
+    copyFolder "$path"/$1 $deploy/$1 "qmldir"
 }
 
 deployMacOS()
