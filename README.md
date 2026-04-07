@@ -11,8 +11,8 @@ minimalistic.
 <br>
 
 Sky-runtime is a good candidate for LLM-driven code generation, granting agility that fits the
-modern software development landscape. This runtime favors a client based approach that relies on
-local computing resources. It promotes lightweight sources .skz packages distribution instead of
+modern software landscape. This runtime favors a client based approach that relies on local
+computing resources. It promotes lightweight sources .skz packages distribution instead of
 binaries.
 <br>
 
