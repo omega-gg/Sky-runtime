@@ -8,13 +8,13 @@ Sky-runtime is a high performance, script-driven application runtime. It's desig
 based .sky scripts in tandem with [Sky kit](https://omega.gg/Sky/sources) C / C++ API(s) and Qt UI
 components. It enables versatile use cases and rapid iterations while keeping things simple and
 minimalistic.
-<br><br>
+<br>
 
 Sky-runtime is a good candidate for LLM-driven code generation, granting agility that fits the
 modern software development landscape. This runtime favors a client based approach that relies on
 local computing resources. It promotes lightweight sources .skz packages distribution instead of
 binaries.
-<br><br>
+<br>
 
 Sky-runtime relies on Bash / Python scripts to bridge the gap between low-level binaries and the
 application view. It's like a middleground between command-line scripting and feature-rich
