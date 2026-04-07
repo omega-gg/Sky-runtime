@@ -5,7 +5,7 @@
 [![GPLv3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl.html)
 
 Sky runtime is a high performance, script-driven aplication runtime. It's designed to run QML based
-.sky scripts in tandem with [Sky kit](https://omega.gg/Sky/sources) C/C++ API(s) and Qt UI
+.sky scripts in tandem with [Sky kit](https://omega.gg/Sky/sources) C / C++ API(s) and Qt UI
 components. It enables versatile use cases and rapid iterations while keeping things simple and
 minimalistic.
 <br><br>
