@@ -1,6 +1,10 @@
 # [Sky-runtime] 1.0.0-0
 
-Sky-runtime is a high performance, source-driven application runtime. It's designed to run QML
+### english / [français](documents/fr/Readme.html)
+
+#
+
+[Sky-runtime] is a high performance, source-driven application runtime. It's designed to run QML
 based .sky scripts in tandem with [Sky] C / C++ API(s) and Qt UI components. It enables versatile
 use cases and rapid iterations while keeping things simple and minimalistic.
 <br>
