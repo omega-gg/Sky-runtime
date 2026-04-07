@@ -24,7 +24,7 @@ resources. It promotes lightweight sources .skz packages distribution instead of
 
     sky <script> [options]
 
-    Where <script> is a .sky script or a .skz archive you want to run.
+    Where <script> is a .sky script or a .skz archive.
 
 ## Options
 
