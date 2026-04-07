@@ -29,6 +29,7 @@
 #include <QFileInfo>
 #ifdef QT_4
 #include <QDeclarativeItem>
+#include <QColor>
 #endif
 
 // Sk includes
@@ -42,14 +43,15 @@
 // Defines
 #define core ControllerCore::instance()
 
-#ifdef QT_4
-typedef QDeclarativeItem QQuickItem;
-#endif
-
 // Forward declarations
-class QQuickItem;
-class WControllerFileReply;
 class QTranslator;
+#ifdef QT_4
+class QGraphicsObject;
+class QDeclarativeItem;
+#else
+class QQuickItem;
+#endif
+class WControllerFileReply;
 class WWindow;
 class WCache;
 class WBackendIndex;
@@ -57,6 +59,10 @@ class WDeclarativeImage;
 class WDeclarativePlayer;
 class DataOnline;
 class DataScript;
+
+#ifdef QT_4
+typedef QDeclarativeItem QQuickItem;
+#endif
 
 //-------------------------------------------------------------------------------------------------
 // ControllerCoreItem
