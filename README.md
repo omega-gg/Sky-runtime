@@ -4,9 +4,13 @@
 [![appveyor](https://ci.appveyor.com/api/projects/status/yto6yi6aepvvl805?svg=true)](https://ci.appveyor.com/project/3unjee/Sky-runtime)
 [![GPLv3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl.html)
 
-The Sky runtime is a project driven aplication designed to run QML .sky files in tandem with [Sky kit](https://omega.gg/Sky/sources)
-C++ API(s) and UI components. It allows for versatile use cases while keeping things simple and
-minimalistic.
+Sky runtime is a high performance, script-driven aplication runtime. It's designed to run QML based
+.sky scripts in tandem with [Sky kit](https://omega.gg/Sky/sources) C++ API(s) and Qt UI components.
+It enables versatile use cases and rapid iterations while keeping things simple and minimalistic.
+<br><br>
+Sky runtime is a good candidate for LLM-driven code generation, with agility that fits the modern
+landscape. This runtime favors a client based approach that relies on local computing resources.
+It promotes lightweight sources .skz packages distribution instead of binaries.
 
 - [Bash scripts](bash/README.md)
 
