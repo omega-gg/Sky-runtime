@@ -9,9 +9,9 @@ Sky-runtime is a high performance, script-driven aplication runtime. It's design
 components. It enables versatile use cases and rapid iterations while keeping things simple and
 minimalistic.
 <br><br>
-Sky-runtime is a good candidate for LLM-driven code generation, with agility that fits the modern
-landscape. This runtime favors a client based approach that relies on local computing resources.
-It promotes lightweight sources .skz packages distribution instead of binaries.
+Sky-runtime is a good candidate for LLM-driven code generation, granting agility that fits the
+modern landscape. This runtime favors a client based approach that relies on local computing
+resources. It promotes lightweight sources .skz packages distribution instead of binaries.
 
 - [Bash scripts](bash/README.md)
 
