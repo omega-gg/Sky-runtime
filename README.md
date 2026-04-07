@@ -44,8 +44,8 @@ sky is built in C++ with [Sky kit](https://omega.gg/Sky/sources).<br>
 
 ## Requirements
 
-- [Sky](https://omega.gg/Sky/sources) latest version.
 - [Qt](https://download.qt.io/official_releases/qt) 6.10.0 or later.
+- [Sky](https://omega.gg/Sky/sources) latest version.
 
 On Windows:
 - [MinGW](https://sourceforge.net/projects/mingw) or [Git for Windows](https://git-for-windows.github.io).
