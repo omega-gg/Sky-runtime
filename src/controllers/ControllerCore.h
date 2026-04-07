@@ -28,7 +28,6 @@
 #include <QVariant>
 #include <QFileInfo>
 #ifdef QT_4
-#include <QDeclarativeItem>
 #include <QColor>
 #endif
 
