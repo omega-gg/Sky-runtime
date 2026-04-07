@@ -27,6 +27,9 @@
 #include <QImage>
 #include <QVariant>
 #include <QFileInfo>
+#ifdef QT_4
+#include <QDeclarativeItem>
+#endif
 
 // Sk includes
 #include <WController>

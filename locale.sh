@@ -35,7 +35,7 @@ lupdate()
 
     "$lupdate" src/ content/ run/ -recursive -ts dist/locale/fr_FR.ts
 
-    rm run/*.qml
+    rm -f run/*.qml
 
     echo ""
 }
