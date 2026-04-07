@@ -12,13 +12,17 @@ minimalistic.
 Sky-runtime is a good candidate for LLM-driven code generation, granting agility that fits the
 modern landscape. This runtime favors a client based approach that relies on local computing
 resources. It promotes lightweight sources .skz packages distribution instead of binaries.
+<br><br>
+Sky-runtime relies on Bash / Python scripts to bridge the gap between low-level binaries and the
+application view. It's like a middleground between command-line scripting and feature-rich
+applications. These underlying scripts can be used independently from the UI.
 
 - [Bash scripts](bash/README.md)
 
-## Extensions
+## Applications
 
-- [hypergonar](https://omega.gg/hypergonar/sources) - Frame compositor for generative software
 - [turbopixel](https://omega.gg/turbopixel/sources) - Efficient local image generator
+- [hypergonar](https://omega.gg/hypergonar/sources) - Frame compositor for generative software
 
 ## Usage
 
