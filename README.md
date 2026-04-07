@@ -53,7 +53,7 @@ sky is built in C++ with [Sky kit](https://omega.gg/Sky/sources).<br>
 - [Sky](https://omega.gg/Sky/sources) latest version.
 
 On Windows:
-- [MinGW](https://sourceforge.net/projects/mingw) or [Git for Windows](https://git-for-windows.github.io).
+- [Git for Windows](https://git-for-windows.github.io).
 
 ## 3rdparty
 
