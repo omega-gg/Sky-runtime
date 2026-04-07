@@ -721,7 +721,7 @@ ControllerCore::ControllerCore() : WController()
     //---------------------------------------------------------------------------------------------
     // Paths
 
-    qDebug("Sky runtime %s", sk->version().C_STR);
+    qDebug("Sky-runtime %s", sk->version().C_STR);
 
     qDebug("Path storage: %s", _path.C_STR);
     qDebug("Path log:     %s", wControllerFile->pathLog().C_STR);
@@ -1905,6 +1905,8 @@ void ControllerCore::help() const
 
     qInfo("Usage: sky <script> [options]\n"
           "\n"
+          "Where <script> is a .sky script or a .skz archive.\n"
+          "\n"
           "--help    Print the help\n"
           "--cli     Run the script headless");
 }
@@ -2358,7 +2360,7 @@ QString ControllerCore::name() const
     {
         return _script->name();
     }
-    else return tr("Sky runtime");
+    else return tr("Sky-runtime");
 }
 
 int ControllerCore::libraryCount() const

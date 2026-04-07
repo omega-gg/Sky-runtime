@@ -111,7 +111,7 @@ Valid folder structure
     </message>
     <message>
         <location filename="../../src/controllers/ControllerCore.cpp" line="2346"/>
-        <source>Sky runtime</source>
+        <source>Sky-runtime</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -119,7 +119,7 @@ Valid folder structure
     <name>DataScript</name>
     <message>
         <location filename="../../src/io/DataScript.cpp" line="137"/>
-        <source>Sky runtime</source>
+        <source>Sky-runtime</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

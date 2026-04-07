@@ -134,7 +134,7 @@ QString DataScript::name() const
 
     if (name.isEmpty())
     {
-        return tr("Sky runtime");
+        return tr("Sky-runtime");
     }
     else return name;
 }

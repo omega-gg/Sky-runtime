@@ -32,8 +32,6 @@ applications. These underlying scripts can be used independently from the UI.
 
     Where <script> is a .sky script or a .skz archive.
 
-## Options
-
     --help    Print the help
     --cli     Run the script headless
 

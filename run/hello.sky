@@ -49,7 +49,7 @@ SkyImage
 
     function onHelp()
     {
-        return "Welcome to Sky runtime " + sk.versionSky;
+        return "Welcome to Sky-runtime " + sk.versionSky;
     }
 
     //---------------------------------------------------------------------------------------------
