@@ -36,11 +36,11 @@ sky is built in C++ with [Sky kit](https://omega.gg/Sky/sources).<br>
 
 ## Platforms
 
-- Windows 32 bit / 64 bit.
+- Windows 32 bit and 64 bit.
 - macOS 64 bit.
-- Linux 32 bit / 64 bit.
+- Linux 32 bit and 64 bit.
 - iOS 64 bit.
-- Android 32 bit / 64 bit.
+- Android 32 bit and 64 bit.
 
 ## Requirements
 
