@@ -24,7 +24,6 @@ applications. These underlying scripts can be run independently from the UI.
 ## Applications
 
 - [turbopixel](https://omega.gg/turbopixel/sources) - Efficient local image generator
-- [hypergonar](https://omega.gg/hypergonar/sources) - Frame compositor for generative software
 
 ## Usage
 

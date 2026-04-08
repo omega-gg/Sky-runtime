@@ -1319,7 +1319,7 @@ ControllerCore::ControllerCore() : WController()
     {
         QString extension = WControllerNetwork::extractUrlExtension(name);
 
-        QString path = wControllerFile->pathPictures() + "/hypergonar/temp_"
+        QString path = wControllerFile->pathPictures() + '/' + this->name() + "/temp_"
                        +
                        sk->currentDateString() + "." + extension;
 
