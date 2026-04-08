@@ -1709,7 +1709,11 @@ ControllerCore::ControllerCore() : WController()
     }
     else name = Sk::sliceIn(name, "/", ".");
 
+#ifdef QT_4
+    if (name != name.toLower())
+#else
     if (name.isLower() == false)
+#endif
     {
         log.append(tr("The script name is not lower case.\n"));
 
