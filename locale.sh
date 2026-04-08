@@ -26,7 +26,7 @@ qt="qt6"
 
 lupdate()
 {
-    find run -type f -iname '*.sky' | while read -r file; do
+    $find run -type f -iname '*.sky' | while read -r file; do
 
         temp="${file%.sky}.qml"
 
@@ -94,6 +94,14 @@ if [ $qt = "qt6" ]; then
     fi
 else
     QtBin="$Qt/bin"
+fi
+
+# NOTE windows: Ensure we use the proper find.
+if [ -x /usr/bin/find ]; then
+
+    find="/usr/bin/find"
+else
+    find="find"
 fi
 
 #--------------------------------------------------------------------------------------------------

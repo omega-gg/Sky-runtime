@@ -93,16 +93,16 @@ deployMacOS()
         installMacOS "$file" ""
     done
 
-    find platforms \
-         imageformats \
-         tls \
-         multimedia \
-         QtQuick \
-         QtQml \
-         QtMultimedia \
-         QtWebView \
-         QtWebEngine \
-         QtWebChannel \
+    $find platforms \
+          imageformats \
+          tls \
+          multimedia \
+          QtQuick \
+          QtQml \
+          QtMultimedia \
+          QtWebView \
+          QtWebEngine \
+          QtWebChannel \
     -name "*.dylib" | while read -r plugin; do
 
         case "$plugin" in
@@ -203,14 +203,6 @@ else
     compiler="default"
 fi
 
-# NOTE windows: Ensure we use the proper find.
-if [ -x /usr/bin/find ]; then
-
-    find="/usr/bin/find"
-else
-    find="find"
-fi
-
 if [ $qt = "qt5" ]; then
 
     QtX="Qt5"
@@ -227,6 +219,14 @@ elif [ $qt = "qt6" ]; then
     else
         qx="6"
     fi
+fi
+
+# NOTE windows: Ensure we use the proper find.
+if [ -x /usr/bin/find ]; then
+
+    find="/usr/bin/find"
+else
+    find="find"
 fi
 
 #--------------------------------------------------------------------------------------------------

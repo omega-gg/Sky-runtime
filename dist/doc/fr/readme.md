@@ -5,7 +5,7 @@
 #
 
 [Sky-runtime] est un runtime applicatif 'source-driven' haute performance. Il est conçu pour exécuter
-des scripts .sky basés sur QML en s'appuyant sur les API(s) C / C++ de [Sky] et les composants
+des scripts .sky basés sur QML en s'appuyant sur les API C / C++ de [Sky] et les composants
 d’interface utilisateur Qt. Il permet des cas d’utilisation variés et des itérations rapides tout
 en restant simple et minimaliste.
 <br>

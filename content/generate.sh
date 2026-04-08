@@ -150,19 +150,19 @@ else
     os="default"
 fi
 
+if [ $os = "mobile" -o "$2" = "deploy" ]; then
+
+    path="qrc"
+else
+    path="$bin"
+fi
+
 # NOTE windows: Ensure we use the proper find.
 if [ -x /usr/bin/find ]; then
 
     find="/usr/bin/find"
 else
     find="find"
-fi
-
-if [ $os = "mobile" -o "$2" = "deploy" ]; then
-
-    path="qrc"
-else
-    path="$bin"
 fi
 
 cd ../dist
