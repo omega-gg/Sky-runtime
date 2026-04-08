@@ -1,13 +1,27 @@
 # [Sky-runtime] 1.0.0-0
 
-The Sky-runtime is a project driven aplication designed to run QML .sky files in tandem with [Sky kit]
-C++ API(s) and UI components. It allows for versatile use cases while keeping things simple and
-minimalistic.
+### english / [français](documents/fr/Readme.html)
+
+#
+
+[Sky-runtime] is a high performance, source-driven application runtime. It's designed to run QML
+based .sky scripts in tandem with [Sky] C / C++ API(s) and Qt UI components. It enables versatile
+use cases and rapid iterations while keeping things simple and minimalistic.
+<br>
+
+Sky-runtime is a good candidate for LLM-assisted code generation, granting agility that fits the
+modern software landscape. It favors a client based approach that relies on local computing
+resources and promotes lightweight sources .skz packages distribution instead of binaries.
+<br>
+
+Sky-runtime relies on Bash / Python scripts to bridge the gap between low-level binaries and the
+application view. It's like a middleground between command-line scripting and feature-rich
+applications. These underlying scripts can be run independently from the UI.
 
 
 # Technology
 
-sky is built in C++ with [Sky kit].
+Sky-runtime is built in C++ with [Sky kit].
 
 
 # Credits
@@ -23,13 +37,9 @@ libtorrent Library: [Arvid Norberg](https://www.libtorrent.org)
 
 # Contacts
 
-Forum: [https://omega.gg/forum][Forum]
-
 Mail: [contact@omega.gg][Mail]
 
 Twitter: [@omega_gg][Twitter]
-
-[Forum]: https://omega.gg/forum
 
 [Mail]: https://omega.gg/contact
 
@@ -59,10 +69,3 @@ omega: [https://omega.gg/about][omega]
 Sky kit: [https://omega.gg/Sky][Sky kit]
 
 [Sky kit]: https://omega.gg/Sky
-
-
-# About
-
-[Sky-runtime] by [omega] for Motion Freedom.
-
-License: [GPLv3](documents/license.html).
