@@ -314,7 +314,11 @@ if [ $1 = "win64" ]; then
     rm -rf   "$Git_path"
     mkdir -p "$Git_path"
 
-    tar -xvf archive.tar.bz2 -C "$Git_path"
+    echo "$Git_path"
+
+    tar -xf archive.tar.bz2 -C "$Git_path"
+
+    echo "DONE"
 
     rm archive.tar.bz2
 fi

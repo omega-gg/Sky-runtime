@@ -841,7 +841,7 @@ if [ $1 = "win64" ]; then
 
     mkdir -p "$path"
 
-    tar -xvf archive.tar.bz2 -C "$path"
+    tar -xf archive.tar.bz2 -C "$path"
 
     rm archive.tar.bz2
 fi
