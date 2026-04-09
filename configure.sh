@@ -311,14 +311,18 @@ if [ $1 = "win64" ]; then
 
     echo "COPYING git"
 
-    rm -rf   "$Git_path"
-    mkdir -p "$Git_path"
+    rm -rf "$Git_path"
 
-    echo "$Git_path"
+    space=$(df -m . | awk 'NR==2 {print $4}')
 
-    tar -xf archive.tar.bz2 -C "$Git_path"
+    if [ "$space" -gt 500 ]; then
 
-    echo "DONE"
+        mkdir -p "$Git_path"
+
+        tar -xf archive.tar.bz2 -C "$Git_path"
+    else
+        echo "configure: Not enough disk space for git."
+    fi
 
     rm archive.tar.bz2
 fi
