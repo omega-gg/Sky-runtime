@@ -305,14 +305,16 @@ fi
 
 if [ $1 = "win64" ]; then
 
-    echo "COPYING git"
+    echo "DOWNLOADING git"
 
     curl --retry 3 -L -o archive.tar.bz2 "$Git_url"
+
+    echo "COPYING git"
 
     rm -rf   "$Git_path"
     mkdir -p "$Git_path"
 
-    tar -xjf archive.tar.bz2 -C "$Git_path"
+    tar -xvf archive.tar.bz2 -C "$Git_path"
 
     rm archive.tar.bz2
 fi
