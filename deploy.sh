@@ -841,7 +841,13 @@ if [ $1 = "win64" ]; then
 
     mkdir -p "$path"
 
-    tar -xf archive.tar.bz2 -C "$path"
+    # NOTE: 7z seems to work better on appveyor.
+    if command -v 7z > /dev/null 2>&1; then
+
+        7z x archive.tar.bz2 -so | 7z x -si -ttar -o"$path" > /dev/null
+    else
+        tar -xf archive.tar.bz2 -C "$path"
+    fi
 
     rm archive.tar.bz2
 fi
