@@ -32,13 +32,14 @@ environment:
       platform: win64
       compiler: msvc
 
+# NOTE: Excluding symlinks that seems to cause issue for 7z.
 build_script:
   - sh environment.sh %compiler%
   - sh environment.sh %qt%
   - sh build.sh %platform% all
   - cd deploy
   - rm .gitignore
-  - 7z a ../Sky-runtime-%platform%-%qt%.zip *
+  - 7z a ../Sky-runtime-%platform%-%qt%.zip * -xr!git\dev -xr!git\etc\mtab
 
 artifacts:
   - path: Sky-runtime-%platform%-%qt%.zip
