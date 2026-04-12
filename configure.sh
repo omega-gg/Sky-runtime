@@ -315,9 +315,9 @@ if [ $1 = "win64" ]; then
     mkdir -p "$Git_path"
 
     # NOTE: 7z seems to work better on appveyor.
-    if command -v 7z > /dev/null 2>&1; then
+    if [ "$APPVEYOR" = "True" ]; then
 
-        7z x archive.tar.bz2 -so | 7z x -si -ttar -o"$Git_path" > /dev/null
+        7z x archive.tar.bz2 -so | 7z x -si -ttar -o"$Git_path" -snl > /dev/null
     else
         tar -xf archive.tar.bz2 -C "$Git_path"
     fi

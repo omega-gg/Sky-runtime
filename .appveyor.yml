@@ -2,7 +2,7 @@ image: Visual Studio 2022
 
 clone_folder: C:\dev\workspace\Sky-runtime
 
-max_jobs_timeout: 90
+timeout: 90
 
 environment:
   matrix:
@@ -41,7 +41,7 @@ build_script:
   - sh build.sh %platform% all
   - cd deploy
   - rm .gitignore
-  - 7z a ../Sky-runtime-%platform%-%qt%.zip * -xr!git\dev -xr!git\etc\mtab
+  - 7z a ../Sky-runtime-%platform%-%qt%.zip *
 
 artifacts:
   - path: Sky-runtime-%platform%-%qt%.zip
