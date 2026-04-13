@@ -23,7 +23,7 @@
 // Qt includes
 // NOTE: Required for Q_OS_LINUX.
 #include <QtGlobal>
-#if defined(Q_OS_LINUX) && defined(Q_OS_ANDROID) == false && defined(QT_6)
+#if SK_DESKTOP && QT_6
 #include <QtWebEngineQuick>
 #endif
 
@@ -39,6 +39,11 @@
 
 int main(int argc, char * argv[])
 {
+#if SK_DESKTOP && QT_6
+    // NOTE: This has to be done before creating QGuiApplication.
+    QtWebEngineQuick::initialize();
+#endif
+
 #ifdef QT_4
     QApplication * application = WApplication::create(argc, argv, Sk::Multiple);
 #else
@@ -49,10 +54,6 @@ int main(int argc, char * argv[])
 
 #ifndef SK_DEPLOY
     Sk::setCurrentPath(QCoreApplication::applicationDirPath());
-#endif
-
-#if defined(Q_OS_LINUX) && defined(Q_OS_ANDROID) == false && defined(QT_6)
-    QtWebEngineQuick::initialize();
 #endif
 
     //---------------------------------------------------------------------------------------------

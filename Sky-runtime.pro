@@ -38,7 +38,7 @@ contains(QT_MAJOR_VERSION, 4) {
 
     unix:!android:QT += widgets
 
-    !win32-g++:unix:!android:QT += webenginequick
+    !win32-g++:!ios:!android:QT += webenginequick
 }
 
 greaterThan(QT_MAJOR_VERSION, 4) {
