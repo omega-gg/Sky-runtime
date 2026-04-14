@@ -23,7 +23,7 @@
 // Qt includes
 // NOTE: Required for Q_OS_LINUX.
 #include <QtGlobal>
-#if SK_DESKTOP && QT_6
+#if SK_DESKTOP && QT_6 && defined(__MINGW32__) == false
 #include <QtWebEngineQuick>
 #endif
 
@@ -39,7 +39,7 @@
 
 int main(int argc, char * argv[])
 {
-#if SK_DESKTOP && QT_6
+#if SK_DESKTOP && QT_6 && defined(__MINGW32__) == false
     // NOTE: This has to be done before creating QGuiApplication.
     QtWebEngineQuick::initialize();
 #endif
