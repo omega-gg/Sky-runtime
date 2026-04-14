@@ -844,7 +844,7 @@ if [ $1 = "win64" ]; then
     # NOTE: 7z seems to work better on appveyor.
     if [ "$APPVEYOR" = "True" ]; then
 
-        7z x archive.tar.bz2 -so | 7z x -si -ttar -o"$path" -snl > /dev/null
+        7z x archive.tar.bz2 -so | 7z x -si -ttar -o"$path" > /dev/null
     else
         tar -xf archive.tar.bz2 -C "$path"
     fi

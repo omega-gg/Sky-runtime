@@ -39,7 +39,7 @@ build_script:
   - sh build.sh %platform% all
   - cd deploy
   - rm .gitignore
-  - 7z a ../Sky-runtime-%platform%-%qt%.zip *
+  - 7z a ../Sky-runtime-%platform%-%qt%.zip * -xr!git\dev -xr!git\etc\mtab
 
 artifacts:
   - path: Sky-runtime-%platform%-%qt%.zip
