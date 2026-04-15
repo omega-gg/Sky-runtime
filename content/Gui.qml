@@ -848,14 +848,7 @@ Item
         // NOTE: Since the text is fading out on press, we keep it underlined when pressed.
         font.underline: isHovered
 
-        onClicked:
-        {
-            if (pVersion)
-            {
-                openUrl("https://omega.gg/Sky/get");
-            }
-            else toggleUi();
-        }
+        onClicked: toggleUi()
     }
 
     TextDefaultLink
@@ -965,6 +958,30 @@ Item
                     easing.type: st.easing
                 }
             }
+        }
+
+        ButtonPiano
+        {
+            anchors.right : buttonLock.left
+            anchors.top   : buttonsWindow.top
+            anchors.bottom: buttonsWindow.bottom
+
+            anchors.rightMargin: st.dp16
+
+            borderLeft  : borderSize
+            borderRight : borderSize
+            borderBottom: borderSize
+
+            padding: st.dp16
+
+            visible: (pVersion && st.isTight == false)
+
+            checkable: true
+            checked  : true
+
+            text: qsTr("Update")
+
+            onClicked: openUrl("https://omega.gg/Sky/get")
         }
 
         ButtonPianoWindow
