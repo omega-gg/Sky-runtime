@@ -28,9 +28,10 @@ environment:
       platform: win64
       compiler: mingw
 
-    - qt: qt6
-      platform: win64
-      compiler: msvc
+    # NOTE appveyor: This takes more than an hour and hits the limit.
+    # - qt: qt6
+    #   platform: win64
+    #   compiler: msvc
 
 # NOTE: Excluding symlinks that seems to cause issue for 7z.
 build_script:
