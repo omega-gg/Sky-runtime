@@ -30,12 +30,6 @@ import QtQuick.Controls.Fusion
 Item
 {
     //---------------------------------------------------------------------------------------------
-    // Properties
-    //---------------------------------------------------------------------------------------------
-
-    property string pathBin: sk.getEnv("SKY_PATH_BIN")
-
-    //---------------------------------------------------------------------------------------------
     // Aliases
     //---------------------------------------------------------------------------------------------
 
@@ -43,6 +37,29 @@ Item
 
     //---------------------------------------------------------------------------------------------
     // Functions
+    //---------------------------------------------------------------------------------------------
+
+    function browseBin()
+    {
+        var path = core.getExistingDirectory(qsTr("Select a bin folder"), core.pathBin);
+
+        if (path == "") return;
+
+        editBin.text = core.applyBin(path);
+    }
+
+    function applyBin(text)
+    {
+        editBin.text = core.applyBin(text);
+    }
+
+    function resetBin()
+    {
+        core.resetBin();
+
+        editBin.text = core.pathBin;
+    }
+
     //---------------------------------------------------------------------------------------------
     // Private
 
@@ -173,34 +190,13 @@ Item
 
             ButtonPianoFull
             {
-                id: buttonFolder
+                id: buttonApplication
 
                 anchors.left: buttonOpen.right
 
                 anchors.leftMargin: st.dp16
 
                 borderLeft  : borderSize
-                borderRight : borderSize
-                borderTop   : borderSize
-                borderBottom: borderSize
-
-                padding: st.dp16
-
-                icon          : st.icon_external
-                iconSourceSize: st.size14x14
-
-                text: qsTr("User folder")
-
-                onClicked: gui.openFile(controllerFile.pathStorage)
-            }
-
-            ButtonPianoFull
-            {
-                id: buttonApplication
-
-                anchors.left: buttonFolder.right
-                anchors.top : buttonFolder.top
-
                 borderRight : borderSize
                 borderTop   : borderSize
                 borderBottom: borderSize
@@ -217,7 +213,7 @@ Item
 
             ButtonPianoFull
             {
-                id: buttonBin
+                id: buttonStorage
 
                 anchors.left: buttonApplication.right
                 anchors.top : buttonApplication.top
@@ -228,17 +224,12 @@ Item
 
                 padding: st.dp16
 
-                enabled: (pathBin != "")
-
                 icon          : st.icon_external
                 iconSourceSize: st.size14x14
 
-                text: qsTr("SKY_PATH_BIN")
+                text: qsTr("Storage folder")
 
-                // FIXME Qt5.14: Sometimes sk.textWidth() is too short.
-                itemText.elide: Text.ElideNone
-
-                onClicked: gui.openFile(pathBin)
+                onClicked: gui.openFile(controllerFile.pathStorage)
             }
 
 //#QT_6
@@ -246,7 +237,7 @@ Item
             {
                 id: comboLanguages
 
-                anchors.left: buttonBin.right
+                anchors.left: buttonStorage.right
 
                 anchors.leftMargin: st.dp16
 
@@ -265,6 +256,89 @@ Item
 //#END
         }
 
+        TextBase
+        {
+            anchors.left : parent.left
+            anchors.right: parent.right
+
+            anchors.margins: st.dp16
+
+            visible: textHelp.visible
+
+            text: qsTr("SKY_PATH_BIN")
+
+            font.pixelSize: st.dp20
+        }
+
+        Row
+        {
+            anchors.left : parent.left
+            anchors.right: parent.right
+
+            anchors.margins: st.dp16
+
+            LineEditBox
+            {
+                id: editBin
+
+                width: Math.min(parent.width - buttonReset.width - buttonBrowse.width, st.dp640)
+
+                text: core.pathBin
+
+                font.pixelSize: st.dp14
+
+                onIsFocusedChanged: if (isFocused == false) applyBin(text)
+            }
+
+            ButtonPianoIcon
+            {
+                id: buttonReset
+
+                borderLeft  : borderSize
+                borderTop   : borderSize
+                borderBottom: borderSize
+
+                height: editBin.height
+
+                icon          : st.icon_refresh
+                iconSourceSize: st.size16x16
+
+                onClicked: resetBin()
+            }
+
+            ButtonPiano
+            {
+                id: buttonBrowse
+
+                borderLeft  : borderSize
+                borderRight : borderSize
+                borderTop   : borderSize
+                borderBottom: borderSize
+
+                height: editBin.height
+
+                padding: st.dp16
+
+                text: qsTr("Browse")
+
+                onClicked: browseBin()
+            }
+        }
+
+        TextBase
+        {
+            anchors.left : parent.left
+            anchors.right: parent.right
+
+            anchors.margins: st.dp16
+
+            visible: textHelp.visible
+
+            text: qsTr("Template")
+
+            font.pixelSize: st.dp20
+        }
+
         TextEditCopy
         {
             id: textTemplate
@@ -281,8 +355,6 @@ Item
 
         TextBase
         {
-            id: itemHelp
-
             anchors.left : parent.left
             anchors.right: parent.right
 

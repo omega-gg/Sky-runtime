@@ -673,31 +673,13 @@ ControllerCore::ControllerCore() : WController()
 
     _pathBin = _local.bin();
 
-    if (_pathBin.isEmpty())
-    {
-        _pathBin = qgetenv("SKY_PATH_BIN");
-
-        if (_pathBin.isEmpty())
-        {
-            _pathBin = WControllerFile::applicationPath(PATH_BIN);
-
-            _pathHome = _pathBin + "/home";
-
-            qputenv("SKY_PATH_BIN", _pathBin.toUtf8());
-        }
-        else
-        {
-            _pathBin = QDir::fromNativeSeparators(_pathBin);
-
-            _pathHome = _pathBin + "/home";
-        }
-    }
-    else
+    if (_pathBin.isEmpty() == false)
     {
         _pathHome = _pathBin + "/home";
 
         qputenv("SKY_PATH_BIN", _pathBin.toUtf8());
     }
+    else applyPaths();
 
 #ifdef Q_OS_MACOS
     // FIXME Qt6/macOS: This seems required for the WebView to load when deploying the application.
@@ -885,6 +867,12 @@ ControllerCore::ControllerCore() : WController()
 
     connect(&_watcher, SIGNAL(filesModified(const QString &, const QStringList &)),
             this,      SLOT(onFilesModified(const QString &, const QStringList &)));
+
+
+    //---------------------------------------------------------------------------------------------
+    // Save
+
+    _local.save();
 }
 
 /* Q_INVOKABLE */ DataScript * ControllerCore::loadScript(const QString & fileName)
@@ -1558,6 +1546,44 @@ ControllerCore::ControllerCore() : WController()
 }
 
 //-------------------------------------------------------------------------------------------------
+// Bin
+
+/* Q_INVOKABLE */ QString ControllerCore::applyBin(const QString & path)
+{
+    if (_pathBin == path) return _pathBin;
+
+    if (path.isEmpty())
+    {
+        resetBin();
+
+        return _pathBin;
+    }
+
+    if (QFile::exists(path) == false) return _pathBin;
+
+    _pathBin = QDir::fromNativeSeparators(path);
+
+    _pathHome = _pathBin + "/home";
+
+    qputenv("SKY_PATH_BIN", _pathBin.toUtf8());
+
+    _local.setBin(_pathBin);
+
+    _local.save();
+
+    return _pathBin;
+}
+
+/* Q_INVOKABLE */ void ControllerCore::resetBin()
+{
+    applyPaths();
+
+    _local.setBin("");
+
+    _local.save();
+}
+
+//-------------------------------------------------------------------------------------------------
 // Library
 
 /* Q_INVOKABLE */ QStringList ControllerCore::getLibraryNames() const
@@ -1884,9 +1910,42 @@ ControllerCore::ControllerCore() : WController()
 
     if (output.isEmpty()) return QString();
 
+    return output;
+#else
+    Q_UNUSED(title); Q_UNUSED(filter); Q_UNUSED(path);
+
+    return QString();
+#endif
+}
+
+/* Q_INVOKABLE static */ QString ControllerCore::getOpenFileUrl(const QString & title,
+                                                                const QString & filter,
+                                                                const QString & path)
+{
+#ifdef SK_DESKTOP
+    QString output = QFileDialog::getOpenFileName(NULL, title, path, filter);
+
+    if (output.isEmpty()) return QString();
+
     return WControllerFile::fileUrl(output);
 #else
     Q_UNUSED(title); Q_UNUSED(filter); Q_UNUSED(path);
+
+    return QString();
+#endif
+}
+
+/* Q_INVOKABLE static */ QString ControllerCore::getExistingDirectory(const QString & title,
+                                                                      const QString & path)
+{
+#ifdef SK_DESKTOP
+    QString output = QFileDialog::getExistingDirectory(NULL, title, path);
+
+    if (output.isEmpty()) return QString();
+
+    return output;
+#else
+    Q_UNUSED(title); Q_UNUSED(path);
 
     return QString();
 #endif
@@ -1913,6 +1972,17 @@ void ControllerCore::help() const
           "\n"
           "--help    Print the help\n"
           "--cli     Run the script headless");
+}
+
+void ControllerCore::applyPaths()
+{
+    _pathBin = WControllerFile::applicationPath(PATH_BIN);
+
+    _pathBin = QDir::fromNativeSeparators(_pathBin);
+
+    _pathHome = _pathBin + "/home";
+
+    qputenv("SKY_PATH_BIN", _pathBin.toUtf8());
 }
 
 bool ControllerCore::createPath(const QString & path) const

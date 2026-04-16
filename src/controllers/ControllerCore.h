@@ -232,6 +232,12 @@ public: // Interface
 
     Q_INVOKABLE QString getPathStorage(const QString & name) const;
 
+    // Bin
+
+    Q_INVOKABLE QString applyBin(const QString & path);
+
+    Q_INVOKABLE void resetBin();
+
     // Script
 
     Q_INVOKABLE QString getName(int index) const;
@@ -285,8 +291,17 @@ public: // Static functions
                                                const QString & filter = QString(),
                                                const QString & path   = QString());
 
+    Q_INVOKABLE static QString getOpenFileUrl(const QString & title,
+                                              const QString & filter = QString(),
+                                              const QString & path   = QString());
+
+    Q_INVOKABLE static QString getExistingDirectory(const QString & title,
+                                                    const QString & path = QString());
+
 private: // Functions
     void help() const;
+
+    void applyPaths();
 
     bool createPath(const QString & path) const;
 
