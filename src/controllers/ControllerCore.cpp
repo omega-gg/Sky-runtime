@@ -846,10 +846,11 @@ ControllerCore::ControllerCore() : WController()
 
     QString locale = _local.locale();
 
-    if (locale.isEmpty() == false)
+    if (locale.isEmpty())
     {
-        sk->setLocale(locale);
+        sk->setLocale(QLocale::system().name());
     }
+    else sk->setLocale(locale);
 
     _translator = new QTranslator(this);
 

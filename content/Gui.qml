@@ -979,7 +979,7 @@ Item
             checkable: true
             checked  : true
 
-            text: qsTr("Update")
+            text: qsTr("Update sky")
 
             onClicked: openUrl("https://omega.gg/Sky/get")
         }
