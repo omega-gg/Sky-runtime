@@ -256,7 +256,7 @@ Item
 //#END
         }
 
-        TextBase
+        TextLink
         {
             anchors.left : parent.left
             anchors.right: parent.right
@@ -268,6 +268,8 @@ Item
             text: qsTr("SKY_PATH_BIN")
 
             font.pixelSize: st.dp20
+
+            onClicked: gui.openFile(core.pathBin)
         }
 
         Row
