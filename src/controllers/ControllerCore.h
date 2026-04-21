@@ -309,8 +309,6 @@ private: // Functions
 
     WControllerFileReply * copyBackends(const QString & path) const;
 
-    void loadEnvironment();
-
     void loadData(DataScript * script, const QString & fileName);
 
     void loadFolder(QList<QFileInfo> & entries, const QString & path);

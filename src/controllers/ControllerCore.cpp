@@ -137,19 +137,16 @@ static const QString PATH_STORAGE = "../../../storage";
 static const QString PATH_BIN     = "../../../bin";
 static const QString PATH_RUN     = "../../../run";
 static const QString PATH_BASH    = "../../../bash";
-static const QString PATH_ENV     = "../../../env";
 #elif defined(Q_OS_LINUX)
 static const QString PATH_STORAGE = "../../storage";
 static const QString PATH_BIN     = "../../bin";
 static const QString PATH_RUN     = "../../run";
 static const QString PATH_BASH    = "../../bash";
-static const QString PATH_ENV     = "../../env";
 #else
 static const QString PATH_STORAGE = "storage";
 static const QString PATH_BIN     = "bin";
 static const QString PATH_RUN     = "run";
 static const QString PATH_BASH    = "bash";
-static const QString PATH_ENV     = "env";
 #endif
 
 #ifndef SK_DEPLOY
@@ -668,8 +665,6 @@ ControllerCore::ControllerCore() : WController()
 
     //---------------------------------------------------------------------------------------------
     // Environment
-
-    loadEnvironment();
 
     _pathBin = _local.bin();
 
@@ -2017,32 +2012,6 @@ WControllerFileReply * ControllerCore::copyBackends(const QString & path) const
 #else
     return WControllerPlaylist::copyBackends(WControllerFile::applicationPath(PATH_BACKEND), path);
 #endif
-}
-
-void ControllerCore::loadEnvironment()
-{
-    QString fileName = WControllerFile::applicationPath(PATH_ENV);
-
-    if (QFile::exists(fileName) == false) return;
-
-    QString data = WControllerFile::readAll(fileName);
-
-    data.remove('\r');
-
-    QStringList lines = Sk::split(data, '\n');
-
-    foreach (const QString & line, lines)
-    {
-        int index = line.indexOf('=');
-
-        if (index < 1) continue;
-
-        QString key = line.left(index).trimmed();
-
-        QString value = line.mid(index + 1).trimmed();
-
-        Sk::setEnv(key, value.toUtf8());
-    }
 }
 
 void ControllerCore::loadData(DataScript * script, const QString & fileName)
