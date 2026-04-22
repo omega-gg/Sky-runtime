@@ -102,7 +102,7 @@ Item
 
             anchors.horizontalCenter: parent.horizontalCenter
 
-            text: qsTr("Welcome to Sky ") + sk.version
+            text: qsTr("Welcome to Sky ") + sk.getVersionLite(sk.version)
 
             font.pixelSize: st.dp32
         }
