@@ -33,6 +33,11 @@ Item
     /* read */ property bool hasRecent: true
 
     //---------------------------------------------------------------------------------------------
+    // Private
+
+    property bool pVersion: (online.version && online.version != sk.version)
+
+    //---------------------------------------------------------------------------------------------
     // Events
     //---------------------------------------------------------------------------------------------
 
@@ -97,7 +102,7 @@ Item
 
             anchors.horizontalCenter: parent.horizontalCenter
 
-            text: qsTr("Welcome to Sky")
+            text: qsTr("Welcome to Sky ") + sk.version
 
             font.pixelSize: st.dp32
         }
@@ -181,7 +186,8 @@ Item
             anchors.top: (hasRecent) ? rowB.bottom
                                      : row.bottom
 
-            anchors.topMargin: st.dp16
+            anchors.topMargin: (hasRecent) ? st.dp16
+                                           : st.dp24
 
             anchors.horizontalCenter: parent.horizontalCenter
 
@@ -198,5 +204,23 @@ Item
 
             onClicked: pageDefault.page = 1
         }
+    }
+
+    ButtonPiano
+    {
+        anchors.left  : parent.left
+        anchors.bottom: parent.bottom
+
+        anchors.margins: st.dp8
+
+        visible: pVersion
+
+        text: qsTr("Sky update available")
+
+        background.radius: st.dp8
+
+        font.pixelSize: st.dp14
+
+        onClicked: openUrl("https://omega.gg/Sky/get")
     }
 }

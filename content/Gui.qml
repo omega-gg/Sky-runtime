@@ -44,11 +44,6 @@ Item
     property int popupMargin: st.dp32
 
     //---------------------------------------------------------------------------------------------
-    // Private
-
-    property bool pVersion: (online.version && online.version != sk.version)
-
-    //---------------------------------------------------------------------------------------------
     // Settings
     //---------------------------------------------------------------------------------------------
 
@@ -842,8 +837,7 @@ Item
         anchors.right: itemText.left
         anchors.top  : parent.top
 
-        text: (pVersion) ? qsTr("Update available")
-                         : qsTr("F1 for console")
+        text: qsTr("F1 for console")
 
         // NOTE: Since the text is fading out on press, we keep it underlined when pressed.
         font.underline: isHovered
@@ -958,30 +952,6 @@ Item
                     easing.type: st.easing
                 }
             }
-        }
-
-        ButtonPiano
-        {
-            anchors.right : buttonLock.left
-            anchors.top   : buttonsWindow.top
-            anchors.bottom: buttonsWindow.bottom
-
-            anchors.rightMargin: st.dp16
-
-            borderLeft  : borderSize
-            borderRight : borderSize
-            borderBottom: borderSize
-
-            padding: st.dp16
-
-            visible: (pVersion && st.isTight == false)
-
-            checkable: true
-            checked  : true
-
-            text: qsTr("Update sky")
-
-            onClicked: openUrl("https://omega.gg/Sky/get")
         }
 
         ButtonPianoWindow
