@@ -23,7 +23,7 @@ applications. These underlying scripts can be run independently from the UI.
 
 ## Applications
 
-- [turbopixel](https://omega.gg/turbopixel/sources) - Efficient local image generator
+- [turbopixel](https://omega.gg/turbopixel) - Efficient local image generator
 
 ## Usage
 
