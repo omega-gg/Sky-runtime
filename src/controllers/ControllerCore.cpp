@@ -2389,6 +2389,11 @@ QString ControllerCore::pathBin() const
     return _pathBin;
 }
 
+QString ControllerCore::pathShots() const
+{
+    return _path + "/screenshots";
+}
+
 int ControllerCore::count() const
 {
     if (_script)

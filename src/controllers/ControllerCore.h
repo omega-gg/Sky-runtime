@@ -101,7 +101,8 @@ class ControllerCore : public WController
 
     Q_PROPERTY(QString path READ path NOTIFY sourceChanged)
 
-    Q_PROPERTY(QString pathBin READ pathBin CONSTANT)
+    Q_PROPERTY(QString pathBin   READ pathBin   CONSTANT)
+    Q_PROPERTY(QString pathShots READ pathShots CONSTANT)
 
     Q_PROPERTY(int count READ count NOTIFY sourceChanged)
 
@@ -370,8 +371,9 @@ public: // Properties
     QString source() const;
     void    setSource(const QString & source);
 
-    QString path   () const;
-    QString pathBin() const;
+    QString path     () const;
+    QString pathBin  () const;
+    QString pathShots() const;
 
     int count() const;
 

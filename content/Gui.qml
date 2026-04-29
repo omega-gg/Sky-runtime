@@ -707,7 +707,11 @@ Item
 
             if (event.isAutoRepeat) return;
 
-            window.writeShot(core.pathShots);
+            var path = core.pathShots;
+
+            window.writeShot(path);
+
+            popup.showText(qsTr("Screenshot saved in: ") + path);
         }
         else if (event.key == Qt.Key_F11)
         {
