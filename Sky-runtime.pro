@@ -57,6 +57,10 @@ DEFINES += QUAZIP_BUILD \
            SK_MULTIMEDIA_LIBRARY SK_TORRENT_LIBRARY \
            SK_CHARSET SK_BACKEND_LOCAL #SK_BACKEND_LOG
 
+win32|macx:contains(QT_MAJOR_VERSION, 6) {
+    DEFINES += QWK_CORE_LIBRARY QWK_QUICK_LIBRARY
+}
+
 # NOTE iOS: It seems we have an issue with 'takeItemShot'.
 ios:DEFINES += SK_NO_TORRENT SK_NO_ITEM_SHOT
 
@@ -72,13 +76,8 @@ win32-msvc* {
 
 #DEFINES += SK_SOFTWARE
 
-contains(QT_MAJOR_VERSION, 4) {
-    CONFIG(release, debug|release) {
-
-        win32:DEFINES += SK_WIN_NATIVE
-    }
-} else {
-    win32:DEFINES += SK_WIN_NATIVE
+win32|macx:contains(QT_MAJOR_VERSION, 6) {
+    DEFINES += SK_WINDOW_NATIVE
 }
 
 deploy|ios|android {
@@ -116,6 +115,10 @@ include(src/3rdparty/quazip/quazip.pri)
 include(src/3rdparty/libcharsetdetect/libcharsetdetect.pri)
 include(src/3rdparty/zxing-cpp/zxing-cpp.pri)
 
+win32|macx:contains(QT_MAJOR_VERSION, 6) {
+    include(src/3rdparty/qwindowkit/qwindowkit.pri)
+}
+
 include(bash/bash.pri)
 
 INCLUDEPATH += $$SK/include/SkCore \
@@ -145,6 +148,13 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 
 unix:!macx:!ios:!android:greaterThan(QT_MAJOR_VERSION, 4) {
     INCLUDEPATH += $$SK/include/$$QTX/QtDBus
+}
+
+win32|macx:contains(QT_MAJOR_VERSION, 6) {
+    INCLUDEPATH += $$SK/include/SkGui/QWKCore \
+                   $$SK/include/SkGui/QWKCore/private \
+                   $$SK/include/SkGui/QWKQuick \
+                   $$SK/include/SkGui/QWKQuick/private
 }
 
 # CONFIG(debug, debug|release) {
@@ -182,6 +192,9 @@ win32-msvc*:LIBS += Advapi32.lib Iphlpapi.lib
 
 # Windows dependency for ShellExecuteA and SystemParametersInfo
 win32-msvc*:LIBS += shell32.lib User32.lib
+
+# Windows dependency for qwindowkit
+win32-g++:LIBS += -lgdi32
 
 unix:!ios:!android:LIBS += -L$$SK/lib -lvlc \
                            -L$$SK/lib -ltorrent-rasterbar \
