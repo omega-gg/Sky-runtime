@@ -30,6 +30,8 @@ name="python"
 
 version="3.14.2"
 
+release="20251205"
+
 url="https://www.python.org/ftp/python/$version"
 
 #--------------------------------------------------------------------------------------------------
@@ -144,7 +146,18 @@ if [ $os = "windows" ]; then
 
 elif [ $os = "macOS" ]; then
 
-    setup="python-$version-macos11.pkg"
+    url="https://github.com/astral-sh/python-build-standalone/releases/download/$release"
+
+    # NOTE macOS: Detect the hardware architecture, not the caller's. Under Rosetta uname reports
+    #             x86_64 but we want the native arm64 build.
+    if [ "$(sysctl -n hw.optional.arm64 2>/dev/null)" = "1" ]; then
+
+        arch="aarch64-apple-darwin"
+    else
+        arch="x86_64-apple-darwin"
+    fi
+
+    setup="cpython-$version+$release-$arch-install_only.tar.gz"
 
 else # [ $os = "linux" ]; then
 
@@ -170,46 +183,9 @@ if [ $os = "windows" ]; then
 
 elif [ $os = "macOS" ]; then
 
-    pkgutil --expand "$setup" temp
+    tar -xf "$setup" --strip-components=1
 
-    mkdir -p Python.framework
-
-    cd Python.framework
-
-    cat "../temp/Python_Framework.pkg/Payload" | gunzip -dc | cpio -idm 2>/dev/null || true
-
-    cd ..
-
-    rm -rf temp
-
-    mkdir -p bin
-
-    PATH_BIN="Python.framework/Versions/Current/bin/python3"
-
-    cat <<EOF > bin/python
-#!/bin/sh
-# Get the absolute path of the directory containing THIS script
-BIN_DIR="\$(cd "\$(dirname "\$0")" && pwd)"
-
-# If called via symlink, 'bin' might be missing from the path calculation.
-# We force the ROOT to be the folder containing the Python.framework
-if [ "\$(basename "\$BIN_DIR")" = "bin" ]; then
-    ROOT="\$(dirname "\$BIN_DIR")"
-else
-    ROOT="\$BIN_DIR"
-fi
-
-export PYTHONHOME="\$ROOT/Python.framework/Versions/Current"
-export DYLD_FRAMEWORK_PATH="\$ROOT"
-
-exec "\$ROOT/$PATH_BIN" "\$@"
-EOF
-
-    path="bin/python"
-
-    chmod +x "$path"
-
-    ln -sf "$path" python
+    ln -sf python3 bin/python
 
 else # [ $os = "linux" ]; then
 
