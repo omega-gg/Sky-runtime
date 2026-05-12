@@ -32,7 +32,7 @@ version="3.14.2"
 
 release="20251205"
 
-url="https://www.python.org/ftp/python/$version"
+url="https://github.com/astral-sh/python-build-standalone/releases/download/$release"
 
 #--------------------------------------------------------------------------------------------------
 # Functions
@@ -137,37 +137,33 @@ if [ $os = "windows" ]; then
 
     case "$(uname -m)" in
 
-        x86_64|amd64)  setup="python-$version-embed-amd64.zip";;
-        i686|x86)      setup="python-$version-embed-win32.zip";;
-        aarch64|arm64) setup="python-$version-embed-arm64.zip";;
-        *)             setup="python-$version-embed-amd64.zip";;
+        x86_64|amd64)  arch="x86_64-pc-windows-msvc";;
+        i686|x86)      arch="i686-pc-windows-msvc";;
+        aarch64|arm64) arch="aarch64-pc-windows-msvc";;
+        *)             arch="x86_64-pc-windows-msvc";;
     esac
 
-else
-    url="https://github.com/astral-sh/python-build-standalone/releases/download/$release"
+elif [ $os = "macOS" ]; then
 
-    if [ $os = "macOS" ]; then
+    # NOTE macOS: Detect the hardware architecture, not the caller's. Under Rosetta uname
+    #             reports x86_64 but we want the native arm64 build.
+    if [ "$(sysctl -n hw.optional.arm64 2>/dev/null)" = "1" ]; then
 
-        # NOTE macOS: Detect the hardware architecture, not the caller's. Under Rosetta uname
-        #             reports x86_64 but we want the native arm64 build.
-        if [ "$(sysctl -n hw.optional.arm64 2>/dev/null)" = "1" ]; then
-
-            arch="aarch64-apple-darwin"
-        else
-            arch="x86_64-apple-darwin"
-        fi
-    else # [ $os = "linux" ]; then
-
-        case "$(uname -m)" in
-
-            x86_64|amd64)  arch="x86_64-unknown-linux-gnu";;
-            aarch64|arm64) arch="aarch64-unknown-linux-gnu";;
-            *)             arch="x86_64-unknown-linux-gnu";;
-        esac
+        arch="aarch64-apple-darwin"
+    else
+        arch="x86_64-apple-darwin"
     fi
+else # [ $os = "linux" ]; then
 
-    setup="cpython-$version+$release-$arch-install_only.tar.gz"
+    case "$(uname -m)" in
+
+        x86_64|amd64)  arch="x86_64-unknown-linux-gnu";;
+        aarch64|arm64) arch="aarch64-unknown-linux-gnu";;
+        *)             arch="x86_64-unknown-linux-gnu";;
+    esac
 fi
+
+setup="cpython-$version+$release-$arch-install_only.tar.gz"
 
 url="$url/$setup"
 
@@ -177,30 +173,11 @@ curl --retry 3 -L -o "$setup" "$url"
 # Extract
 #--------------------------------------------------------------------------------------------------
 
-if [ $os = "windows" ]; then
+tar -xf "$setup" --strip-components=1
 
-    input=$(getPath "$PWD/$setup")
-
-    output=$(getPath "$PWD")
-
-    powershell -NoProfile -Command \
-        "Expand-Archive -Path '$input' -DestinationPath '$output' -Force"
-
-elif [ $os = "macOS" ]; then
-
-    tar -xf "$setup" --strip-components=1
+if [ $os != "windows" ]; then
 
     ln -sf python3 bin/python
-
-else # [ $os = "linux" ]; then
-
-    tar -xvf "$setup" --strip-components=1
-
-    ./configure --prefix="$sky/$name" --enable-optimizations
-
-    make -j$(nproc)
-
-    make install
 fi
 
 rm "$setup"
@@ -213,36 +190,3 @@ case `uname` in
     MINGW*|MSYS*|CYGWIN*) export PATH="$sky/$name:$PATH";;
     *)                    export PATH="$sky/$name/bin:$PATH";;
 esac
-
-#--------------------------------------------------------------------------------------------------
-# Enable pip
-#--------------------------------------------------------------------------------------------------
-
-if [ $os = "windows" ]; then
-
-    path="$(echo "$version" | awk -F. '{print $1$2}')"
-
-    path="python$path._pth"
-
-    if [ -f "$path" ]; then
-
-        sed -i "s/^# *import site/import site/" "$path"
-    fi
-fi
-
-if ! python -m ensurepip --upgrade >/dev/null 2>&1; then
-
-    script="get-pip.py"
-
-    curl --retry 3 -L -o "$script" "https://bootstrap.pypa.io/get-pip.py"
-
-    python "$script" --no-warn-script-location
-
-    rm -f "$script"
-fi
-
-#--------------------------------------------------------------------------------------------------
-# Install
-#--------------------------------------------------------------------------------------------------
-
-python -m pip install virtualenv
