@@ -135,33 +135,38 @@ cd "$name"
 
 if [ $os = "windows" ]; then
 
-    arch="$(uname -m)"
+    case "$(uname -m)" in
 
-    case "$arch" in
         x86_64|amd64)  setup="python-$version-embed-amd64.zip";;
         i686|x86)      setup="python-$version-embed-win32.zip";;
         aarch64|arm64) setup="python-$version-embed-arm64.zip";;
         *)             setup="python-$version-embed-amd64.zip";;
     esac
 
-elif [ $os = "macOS" ]; then
-
+else
     url="https://github.com/astral-sh/python-build-standalone/releases/download/$release"
 
-    # NOTE macOS: Detect the hardware architecture, not the caller's. Under Rosetta uname reports
-    #             x86_64 but we want the native arm64 build.
-    if [ "$(sysctl -n hw.optional.arm64 2>/dev/null)" = "1" ]; then
+    if [ $os = "macOS" ]; then
 
-        arch="aarch64-apple-darwin"
-    else
-        arch="x86_64-apple-darwin"
+        # NOTE macOS: Detect the hardware architecture, not the caller's. Under Rosetta uname
+        #             reports x86_64 but we want the native arm64 build.
+        if [ "$(sysctl -n hw.optional.arm64 2>/dev/null)" = "1" ]; then
+
+            arch="aarch64-apple-darwin"
+        else
+            arch="x86_64-apple-darwin"
+        fi
+    else # [ $os = "linux" ]; then
+
+        case "$(uname -m)" in
+
+            x86_64|amd64)  arch="x86_64-unknown-linux-gnu";;
+            aarch64|arm64) arch="aarch64-unknown-linux-gnu";;
+            *)             arch="x86_64-unknown-linux-gnu";;
+        esac
     fi
 
     setup="cpython-$version+$release-$arch-install_only.tar.gz"
-
-else # [ $os = "linux" ]; then
-
-    setup="Python-$version.tar.xz"
 fi
 
 url="$url/$setup"

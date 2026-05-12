@@ -137,7 +137,8 @@ static const QString PATH_STORAGE = "../../../storage";
 static const QString PATH_BIN     = "../../../bin";
 static const QString PATH_RUN     = "../../../run";
 static const QString PATH_BASH    = "../../../bash";
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) && defined(SK_DEPLOY)
+// NOTE linux: Taking the AppImage folder tree into account.
 static const QString PATH_STORAGE = "../../storage";
 static const QString PATH_BIN     = "../../bin";
 static const QString PATH_RUN     = "../../run";
