@@ -43,9 +43,9 @@ getSky()
 
     case `uname` in
         MINGW*|MSYS*|CYGWIN*)
-            cygpath -u "$SKY_PATH_BIN/sky";;
+            cygpath -u "$SKY_PATH_BIN/gg.omega";;
         *)
-            echo "$SKY_PATH_BIN/sky";;
+            echo "$SKY_PATH_BIN/gg.omega";;
     esac
 }
 

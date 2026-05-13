@@ -36,15 +36,18 @@ version_mac="8.0.1"
 
 getSky()
 {
+    if [ -z "$SKY_PATH_BIN" ]; then
+
+        echo "SKY_PATH_BIN is not set" >&2
+
+        return
+    fi
+
     case `uname` in
         MINGW*|MSYS*|CYGWIN*)
-            cygpath -u "$LOCALAPPDATA/Sky-runtime";;
-        Darwin*)
-            echo "$HOME/Library/Application Support/Sky-runtime";;
-        Linux*)
-            echo "${XDG_DATA_HOME:-$HOME/.local/share}/Sky-runtime";;
+            cygpath -u "$SKY_PATH_BIN/gg.omega";;
         *)
-            echo "$HOME/.local/share/Sky-runtime";;
+            echo "$SKY_PATH_BIN/gg.omega";;
     esac
 }
 
