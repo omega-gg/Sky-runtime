@@ -346,6 +346,7 @@ OTHER_FILES += environment.sh \
                dist/doc/license.md \
                dist/doc/fr/readme.md \
                dist/doc/fr/about.md \
+               dist/changes/3.1.1.md \
                dist/iOS/Info.plist \
                dist/iOS/LaunchScreen.storyboard \
                dist/iOS/Images.xcassets/Contents.json \
