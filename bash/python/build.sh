@@ -30,9 +30,13 @@ name="python"
 
 version="3.14.2"
 
+version_uv="0.11.14"
+
 release="20251205"
 
 url="https://github.com/astral-sh/python-build-standalone/releases/download/$release"
+
+url_uv="https://github.com/astral-sh/uv/releases/download/$version_uv"
 
 #--------------------------------------------------------------------------------------------------
 # Functions
@@ -190,3 +194,32 @@ case `uname` in
     MINGW*|MSYS*|CYGWIN*) export PATH="$sky/$name:$PATH";;
     *)                    export PATH="$sky/$name/bin:$PATH";;
 esac
+
+#--------------------------------------------------------------------------------------------------
+# uv
+#--------------------------------------------------------------------------------------------------
+
+if [ $os = "windows" ]; then
+
+    setup="uv-$arch.zip"
+else
+    setup="uv-$arch.tar.gz"
+fi
+
+curl --retry 3 -L -o "$setup" "$url_uv/$setup"
+
+if [ $os = "windows" ]; then
+
+    unzip -jq "$setup" -d .
+else
+    tar -xf "$setup" --strip-components=1 -C bin
+fi
+
+rm "$setup"
+
+#--------------------------------------------------------------------------------------------------
+# Versions
+#--------------------------------------------------------------------------------------------------
+
+python --version
+uv     --version
