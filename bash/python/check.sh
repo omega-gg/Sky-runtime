@@ -57,7 +57,7 @@ sky="$(getSky)"
 
 bin="${SKY_PATH_PYTHON:-$sky/python}"
 
-python="${SKY_PATH_PYTHON:-$sky/python/3.14.2}"
+python="${SKY_PATH_PYTHON:-$sky/python}"
 
 #--------------------------------------------------------------------------------------------------
 # Environment

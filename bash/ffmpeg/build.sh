@@ -116,7 +116,7 @@ fi
 
 sky="$(getSky)"
 
-python="${SKY_PATH_PYTHON:-$sky/python/3.14.2}"
+python="${SKY_PATH_PYTHON:-$sky/python}"
 
 #--------------------------------------------------------------------------------------------------
 # Clean
