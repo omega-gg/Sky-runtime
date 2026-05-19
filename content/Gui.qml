@@ -662,7 +662,9 @@ Item
 
         var object = getObject();
 
-        if (object && object.onDrop && object.onDrop(text)) return;
+        if ((object && object.onDrop && object.onDrop(text))
+            ||
+            controllerFile.urlIsSky(text) == false) return;
 
         console.debug("> load " + text);
 
