@@ -671,7 +671,7 @@ ControllerCore::ControllerCore() : WController()
 
     if (_pathBin.isEmpty() == false)
     {
-        _pathHome = _pathBin + "/home";
+        _pathSkz = _pathBin + "/skz";
 
         qputenv("SKY_PATH_BIN", _pathBin.toUtf8());
     }
@@ -908,7 +908,7 @@ ControllerCore::ControllerCore() : WController()
     loadFolder(entries, WControllerFile::applicationPath(PATH_RUN));
 #endif
 
-    loadFolder(entries, _pathHome + "/run");
+    loadFolder(entries, _pathSkz + "/run");
 
 #ifndef QT_OLD
     // NOTE: We want test.sky to be listed before test-extra.sky.
@@ -967,7 +967,7 @@ ControllerCore::ControllerCore() : WController()
 
     QList<QFileInfo> entries;
 
-    loadFolder(entries, _pathHome + "/run");
+    loadFolder(entries, _pathSkz + "/run");
 
     QString match = name + '-';
 
@@ -982,7 +982,7 @@ ControllerCore::ControllerCore() : WController()
         WControllerFile::deleteFile(info.absoluteFilePath());
     }
 
-    QString path = _pathHome + "/bash/" + name + '/';
+    QString path = _pathSkz + "/bash/" + name + '/';
 
     if (QFile::exists(path))
     {
@@ -1005,9 +1005,9 @@ ControllerCore::ControllerCore() : WController()
         log.append(QString(tr("cp %1\n")).arg(string));
     }
 
-    WUnzipper::extract(filePath, _pathHome);
+    WUnzipper::extract(filePath, _pathSkz);
 
-    path = _pathHome + '/';
+    path = _pathSkz + '/';
 
     //QStringList defines = WControllerFile::qmlDefines();
 
@@ -1099,7 +1099,7 @@ ControllerCore::ControllerCore() : WController()
 
     if (QFile::exists(fileName)) return fileName;
 
-    fileName = _pathHome + "/run/" + name;
+    fileName = _pathSkz + "/run/" + name;
 
     if (QFile::exists(fileName)) return fileName;
 
@@ -1116,7 +1116,7 @@ ControllerCore::ControllerCore() : WController()
 
     if (QFile::exists(fileName)) return fileName;
 
-    fileName = _pathHome + "/bash/" + name;
+    fileName = _pathSkz + "/bash/" + name;
 
     if (QFile::exists(fileName)) return fileName;
 
@@ -1500,7 +1500,7 @@ ControllerCore::ControllerCore() : WController()
 
 /* Q_INVOKABLE */ QString ControllerCore::getPathStorage(const QString & name) const
 {
-    return _pathHome + "/storage/" + name;
+    return _pathSkz + "/storage/" + name;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -1560,7 +1560,7 @@ ControllerCore::ControllerCore() : WController()
 
     _pathBin = QDir::fromNativeSeparators(path);
 
-    _pathHome = _pathBin + "/home";
+    _pathSkz = _pathBin + "/skz";
 
     qputenv("SKY_PATH_BIN", _pathBin.toUtf8());
 
@@ -1977,7 +1977,7 @@ void ControllerCore::applyPaths()
 
     _pathBin = QDir::fromNativeSeparators(_pathBin);
 
-    _pathHome = _pathBin + "/home";
+    _pathSkz = _pathBin + "/skz";
 
     qputenv("SKY_PATH_BIN", _pathBin.toUtf8());
 }
@@ -2091,7 +2091,7 @@ void ControllerCore::loadData(DataScript * script, const QString & fileName)
     {
         loadData(script, path);
     }
-    else loadData(script, _pathHome + "/run/" + name);
+    else loadData(script, _pathSkz + "/run/" + name);
 }
 
 void ControllerCore::loadFolder(QList<QFileInfo> & entries, const QString & path)
