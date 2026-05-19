@@ -46,6 +46,8 @@ Panel
         anchors.left : parent.left
         anchors.right: parent.right
 
+        button.anchors.rightMargin: st.dp4
+
         checked: false
 
         text: qsTr("Associate .sky files")

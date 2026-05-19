@@ -108,6 +108,8 @@ Item
         anchors.right : parent.right
         anchors.bottom: parent.bottom
 
+        focusSize: st.dp1
+
         textDefault: qsTr('>')
 
         autoSelect: false
