@@ -823,6 +823,10 @@ if [ $os != "mobile" ]; then
     echo "COPYING doc"
 
     copyFolder "$bash" deploy/doc "*.md"
+
+    # NOTE: Convert Windows CRLF line endings to Unix LF.
+    $find deploy -type f \( -iname "*.sky" -o -iname "*.sh" -o -iname "*.md" \) \
+                 -exec sed -i 's/\r//g' {} +
 fi
 
 #--------------------------------------------------------------------------------------------------
