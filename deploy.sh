@@ -826,7 +826,7 @@ if [ $os != "mobile" ]; then
 
     # NOTE: Convert Windows CRLF line endings to Unix LF.
     $find deploy -type f \( -iname "*.sky" -o -iname "*.sh" -o -iname "*.md" \) \
-                 -exec sed -i 's/\r//g' {} +
+                 -exec perl -i -pe 's/\r//g' {} +
 fi
 
 #--------------------------------------------------------------------------------------------------
