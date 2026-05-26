@@ -330,12 +330,12 @@ OTHER_FILES += environment.sh \
                content/PageConsole.qml \
                content/PageScript.qml \
                content/PageScriptDefault.qml \
-               run/hello.sky \
-               run/player.sky \
-               run/web-view.sky \
-               test/hello.sky \
-               test/player.sky \
-               test/web-view.sky \
+               run/sky-hello.sky \
+               run/sky-player.sky \
+               run/sky-web-view.sky \
+               test/sky-hello.sky \
+               test/sky-player.sky \
+               test/sky-web-view.sky \
                include/generate.sh \
                dist/sky.rc \
                dist/script/start.sh \
