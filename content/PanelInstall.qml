@@ -84,7 +84,11 @@ Panel
     {
         if (pReady == false) return;
 
+        pReady = false;
+
         var data = core.installArchive(fileName, name);
+
+        pReady = true;
 
         var log = data[1];
 
@@ -104,6 +108,13 @@ Panel
         hidePanel();
 
         pageDefault.showScript(name);
+    }
+
+    function runScript()
+    {
+        hidePanel();
+
+        gui.run(name);
     }
 
     //---------------------------------------------------------------------------------------------
@@ -159,11 +170,11 @@ Panel
 
         width: Math.round((parent.width - st.dp24) / 2)
 
-        visible: (pDone == false)
+        text: (pDone) ? qsTr("Show the script")
+                      : qsTr("Cancel")
 
-        text: qsTr("Cancel")
-
-        onClicked: hidePanel()
+        onClicked: (pDone) ? showScript()
+                           : hidePanel()
     }
 
     ButtonPush
@@ -176,27 +187,12 @@ Panel
 
         width: button.width
 
-        visible: (pDone == false)
-
         enabled: (pReady && buttonCheck.checked)
 
-        text: qsTr("Install")
+        text: (pDone) ? qsTr("Run ") + name
+                      : qsTr("Install")
 
-        onClicked: install()
-    }
-
-    ButtonPush
-    {
-        anchors.left  : parent.left
-        anchors.right : parent.right
-        anchors.bottom: parent.bottom
-
-        anchors.margins: st.dp8
-
-        visible: pDone
-
-        text: qsTr("Show ") + name
-
-        onClicked: showScript()
+        onClicked: (pDone) ? runScript()
+                           : install()
     }
 }
