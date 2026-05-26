@@ -1,4 +1,4 @@
-// player 3.1.1-0
+// sky-hello 3.1.1-0
 //=================================================================================================
 /*
     Copyright (C) 2015-2026 Sky kit authors. <http://omega.gg/Sky>
@@ -24,13 +24,16 @@
 Item
 {
     //---------------------------------------------------------------------------------------------
-    // Events
+    // Children
     //---------------------------------------------------------------------------------------------
 
-    function onCreate(ui)
+    Rectangle
     {
-        var path = core.path + "/../../indy/dist/room/attic/";
+        width : st.dp(128)
+        height: width
 
-        ui.load(path + "content/upscale/attic.mp4", 2000);
+        anchors.centerIn: parent
+
+        color: "red"
     }
 }

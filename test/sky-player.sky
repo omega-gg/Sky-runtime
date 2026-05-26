@@ -1,4 +1,4 @@
-// web-view 3.1.1-0
+// sky-player 3.1.1-0
 //=================================================================================================
 /*
     Copyright (C) 2015-2026 Sky kit authors. <http://omega.gg/Sky>
@@ -29,6 +29,8 @@ Item
 
     function onCreate(ui)
     {
-        ui.load("https://sparkjs.dev/examples/editor/index.html");
+        var path = core.path + "/../../indy/dist/room/attic/";
+
+        ui.load(path + "content/upscale/attic.mp4", 2000);
     }
 }

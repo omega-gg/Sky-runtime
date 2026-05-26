@@ -1,4 +1,4 @@
-// hello 3.1.1-0
+// sky-web-view 3.1.1-0
 //=================================================================================================
 /*
     Copyright (C) 2015-2026 Sky kit authors. <http://omega.gg/Sky>
@@ -24,16 +24,11 @@
 Item
 {
     //---------------------------------------------------------------------------------------------
-    // Children
+    // Events
     //---------------------------------------------------------------------------------------------
 
-    Rectangle
+    function onCreate(ui)
     {
-        width : st.dp(128)
-        height: width
-
-        anchors.centerIn: parent
-
-        color: "red"
+        ui.load("https://sparkjs.dev/examples/editor/index.html");
     }
 }
