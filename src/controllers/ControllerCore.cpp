@@ -880,10 +880,7 @@ ControllerCore::ControllerCore() : WController()
 
     updateDefines();
 
-    if (loadData(script, fileName) == false)
-    {
-        qWarning("ControllerCore::loadScript: Failed to load %s", fileName.C_STR);
-    }
+    loadData(script, fileName);
 
     return script;
 }
@@ -2032,7 +2029,12 @@ bool ControllerCore::loadData(DataScript * script, const QString & fileName)
 
     QStringList list = Sk::split(line, ':');
 
-    if (list.isEmpty()) return false;
+    if (list.isEmpty())
+    {
+        qWarning("ControllerCore::loadData: Failed to load %s", fileName.C_STR);
+
+        return false;
+    }
 
     int index;
 
@@ -2041,7 +2043,12 @@ bool ControllerCore::loadData(DataScript * script, const QString & fileName)
 
     QStringList pair = Sk::split(list.at(index).simplified(), ' ');
 
-    if (pair.isEmpty()) return false;
+    if (pair.isEmpty())
+    {
+        qWarning("ControllerCore::loadData: Failed to load %s", fileName.C_STR);
+
+        return false;
+    }
 
     QString parent = pair.at(0);
 
@@ -2379,7 +2386,6 @@ void ControllerCore::setSource(const QString & source)
 
             _watcher.addFile(string);
         }
-        else qWarning("ControllerCore::setSource: Failed to load %s", string.C_STR);
     }
 
     emit sourceChanged();
