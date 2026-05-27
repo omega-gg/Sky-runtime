@@ -50,11 +50,11 @@ Item
 
     function applyBin(text)
     {
-        var textOld = editBin.text;
+        var path = core.pathBin;
 
         editBin.text = core.applyBin(text);
 
-        if (editBin.text == textOld) return;
+        if (core.pathBin == path) return;
 
         pageBrowse.updateLibrary();
     }
