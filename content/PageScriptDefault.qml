@@ -45,12 +45,18 @@ Item
 
         if (path == "") return;
 
-        editBin.text = core.applyBin(path);
+        applyBin(path);
     }
 
     function applyBin(text)
     {
+        var textOld = editBin.text;
+
         editBin.text = core.applyBin(text);
+
+        if (editBin.text == textOld) return;
+
+        pageBrowse.updateLibrary();
     }
 
     function resetBin()
