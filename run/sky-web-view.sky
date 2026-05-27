@@ -38,7 +38,7 @@ Item
     property int topMargin: gui.topMargin
 
     property int timeout    : 30000
-    property int timeoutLoad:  1000
+    property int timeoutLoad:  3000
 
     //---------------------------------------------------------------------------------------------
     // Aliases
