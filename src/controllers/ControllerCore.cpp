@@ -880,7 +880,10 @@ ControllerCore::ControllerCore() : WController()
 
     updateDefines();
 
-    loadData(script, fileName);
+    if (loadData(script, fileName) == false)
+    {
+        qWarning("ControllerCore::loadScript: Failed to load %s", fileName.C_STR);
+    }
 
     return script;
 }
@@ -2015,7 +2018,7 @@ WControllerFileReply * ControllerCore::copyBackends(const QString & path) const
 #endif
 }
 
-void ControllerCore::loadData(DataScript * script, const QString & fileName)
+bool ControllerCore::loadData(DataScript * script, const QString & fileName)
 {
     qDebug("LOADING %s", fileName.C_STR);
 
@@ -2029,7 +2032,7 @@ void ControllerCore::loadData(DataScript * script, const QString & fileName)
 
     QStringList list = Sk::split(line, ':');
 
-    if (list.isEmpty()) return;
+    if (list.isEmpty()) return false;
 
     int index;
 
@@ -2038,7 +2041,7 @@ void ControllerCore::loadData(DataScript * script, const QString & fileName)
 
     QStringList pair = Sk::split(list.at(index).simplified(), ' ');
 
-    if (pair.isEmpty()) return;
+    if (pair.isEmpty()) return false;
 
     QString parent = pair.at(0);
 
@@ -2081,7 +2084,7 @@ void ControllerCore::loadData(DataScript * script, const QString & fileName)
 
     script->prepend(item);
 
-    if (parent == "sky") return;
+    if (parent == "sky") return true;
 
     QString name = parent + ".sky";
 
@@ -2089,9 +2092,9 @@ void ControllerCore::loadData(DataScript * script, const QString & fileName)
 
     if (QFile::exists(path))
     {
-        loadData(script, path);
+        return loadData(script, path);
     }
-    else loadData(script, _pathSkz + "/run/" + name);
+    else return loadData(script, _pathSkz + "/run/" + name);
 }
 
 void ControllerCore::loadFolder(QList<QFileInfo> & entries, const QString & path)
@@ -2368,13 +2371,15 @@ void ControllerCore::setSource(const QString & source)
     {
         updateDefines();
 
-        loadData(_script, QDir::fromNativeSeparators(string));
+        if (loadData(_script, QDir::fromNativeSeparators(string)))
+        {
+            applyTranslators(_script->getLocaleFiles());
 
-        applyTranslators(_script->getLocaleFiles());
+            saveRecent(string);
 
-        saveRecent(string);
-
-        _watcher.addFile(string);
+            _watcher.addFile(string);
+        }
+        else qWarning("ControllerCore::setSource: Failed to load %s", string.C_STR);
     }
 
     emit sourceChanged();
