@@ -15,6 +15,8 @@ run="$PWD/run"
 
 bash="$PWD/bash"
 
+source="https://github.com/omega-gg"
+
 #--------------------------------------------------------------------------------------------------
 # Windows
 
@@ -165,6 +167,13 @@ generateQml()
    fi
 
    "$Sky"/deploy/qmlGenerator "$1" "$1" "$defines"
+}
+
+clone()
+{
+    git clone --depth 1 $source/$1
+
+    rm -rf $1/.git
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -835,6 +844,7 @@ fi
 
 if [ $1 = "win64" ]; then
 
+    echo ""
     echo "DOWNLOADING git"
 
     curl --retry 3 -L -o archive.tar.bz2 "$Git_url"
@@ -857,8 +867,27 @@ if [ $1 = "win64" ]; then
 fi
 
 #--------------------------------------------------------------------------------------------------
+# Source
+#--------------------------------------------------------------------------------------------------
+
+echo ""
+echo "COPYING source"
+
+cd deploy
+
+mkdir source
+cd    source
+
+clone 3rdparty
+clone assets
+clone Sky
+clone Sky-runtime
+
+cd -
+
+#--------------------------------------------------------------------------------------------------
 # Default folders
 #--------------------------------------------------------------------------------------------------
 
-mkdir deploy/storage
-mkdir deploy/bin
+mkdir storage
+mkdir bin
