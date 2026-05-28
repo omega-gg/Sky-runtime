@@ -264,8 +264,6 @@ public: // Static functions
 
     Q_INVOKABLE static QString openScript();
 
-    Q_INVOKABLE static bool fileIsArchive(const QString & fileName);
-
     // QVariantList contains: bool ok, QString name, QString log.
     Q_INVOKABLE static QVariantList checkArchive(const QString & fileName);
 

@@ -122,7 +122,7 @@ Item
 
         loader.source = "";
 
-        if (core.fileIsArchive(source))
+        if (controllerFile.urlIsSkz(source))
         {
             core.source = "";
 

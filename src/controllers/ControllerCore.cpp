@@ -1687,12 +1687,6 @@ ControllerCore::ControllerCore() : WController()
 #endif
 }
 
-
-/* Q_INVOKABLE static */ bool ControllerCore::fileIsArchive(const QString & fileName)
-{
-    return fileName.endsWith(".skz", Qt::CaseInsensitive);
-}
-
 /* Q_INVOKABLE static */ QVariantList ControllerCore::checkArchive(const QString & fileName)
 {
     QString log;
