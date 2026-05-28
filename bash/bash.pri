@@ -1,3 +1,4 @@
+include(bash/sky.pri)
 include(bash/bash.pri)
 include(image/image.pri)
 include(video/video.pri)
