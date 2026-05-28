@@ -4,4 +4,5 @@
 
 ## Tools
 
-- [deploy.sh](deploy.sh): Deploy the folder to the $SKY_PATH_BIN/skz folder.
+- [deploy.sh](deploy.sh): Deploy the folder to the $SKY_PATH_BIN/skz folder
+- [skz.sh](skz.sh): Create a .skz distributable archive

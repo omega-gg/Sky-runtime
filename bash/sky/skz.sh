@@ -47,23 +47,6 @@ copyFolder()
     done
 }
 
-getSky()
-{
-    if [ -z "$SKY_PATH_BIN" ]; then
-
-        echo "SKY_PATH_BIN is not set" >&2
-
-        return
-    fi
-
-    case `uname` in
-        MINGW*|MSYS*|CYGWIN*)
-            cygpath -u "$SKY_PATH_BIN/gg.omega";;
-        *)
-            echo "$SKY_PATH_BIN/gg.omega";;
-    esac
-}
-
 getPath()
 {
     path="$1"
@@ -80,12 +63,12 @@ getPath()
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
-if [ $# != 2 -a $# != 3 ] || [ $# = 3 -a "$3" != "all" ]; then
+if [ $# != 3 ]; then
 
-    echo "Usage: deploy <folder> <name> [all]"
+    echo "Usage: skz <folder> <name> <output (skz)>"
     echo ""
     echo "example:"
-    echo "    deploy path/to/turbopixel turbopixel"
+    echo "    skz path/to/turbopixel turbopixel turbopixel-1.0.0.skz"
 
     exit 1
 fi
@@ -94,9 +77,11 @@ fi
 # Configuration
 #--------------------------------------------------------------------------------------------------
 
-skz="$(getSky)/../skz"
+skz="$PWD/skz"
 
 input=$(getPath "$1")
+
+output=$(getPath "$3")
 
 # NOTE windows: Ensure we use the proper find.
 if [ -x /usr/bin/find ]; then
@@ -118,31 +103,24 @@ doc="$skz/doc/$2"
 # Create folder
 #--------------------------------------------------------------------------------------------------
 
-echo "DEPLOYING $2"
+echo "CREATING $2 skz"
 
+mkdir -p "$skz"
 mkdir -p "$run"
-
-if [ "$3" = "all" ]; then
-
-    mkdir -p "$bash"
-    mkdir -p "$locale"
-    mkdir -p "$doc"
-fi
+mkdir -p "$bash"
+mkdir -p "$locale"
+mkdir -p "$doc"
 
 #--------------------------------------------------------------------------------------------------
 # Deploy
 #--------------------------------------------------------------------------------------------------
 
-copyFolder "$input/run" "$run" "*.sky" "+x"
+copyFolder "$input/run"    "$run"    "*.sky" "+x"
+copyFolder "$input/bash"   "$bash"   "*.sh"  "+x"
+copyFolder "$input/locale" "$locale" "*.qm"
+copyFolder "$input"        "$doc"    "*.md"
 
-if [ "$3" = "all" ]; then
-
-    copyFolder "$input/bash"   "$bash"   "*.sh"  "+x"
-    copyFolder "$input/locale" "$locale" "*.qm"
-    copyFolder "$input"        "$doc"    "*.md"
-
-    cp -f "$input"/*.md "$doc"
-fi
+cp -f "$input"/*.md "$doc"
 
 #--------------------------------------------------------------------------------------------------
 # Clean files
@@ -150,12 +128,8 @@ fi
 
 # NOTE: Convert Windows CRLF line endings to Unix LF.
 
-$find "$run" -type f \( -iname "$2*.sky" \) -exec perl -i -pe 's/\r//g' {} +
-
-if [ "$3" = "all" ]; then
-
-    $find "$bash" -type f \( -iname "*.sh" \) -exec perl -i -pe 's/\r//g' {} +
-fi
+$find "$run"  -type f \( -iname "$2*.sky" \) -exec perl -i -pe 's/\r//g' {} +
+$find "$bash" -type f \( -iname "*.sh"    \) -exec perl -i -pe 's/\r//g' {} +
 
 #--------------------------------------------------------------------------------------------------
 # Clean
@@ -163,12 +137,29 @@ fi
 
 set +e
 
-rmdir "$bash" 2>/dev/null
-
-if [ "$3" = "all" ]; then
-
-    rmdir "$locale" 2>/dev/null
-    rmdir "$doc"    2>/dev/null
-fi
+rmdir "$bash"   2>/dev/null
+rmdir "$locale" 2>/dev/null
+rmdir "$doc"    2>/dev/null
 
 set -e
+
+#--------------------------------------------------------------------------------------------------
+# Archive
+#--------------------------------------------------------------------------------------------------
+
+cd "$skz"
+
+if command -v 7z >/dev/null 2>&1; then
+
+    7z a -tzip "$output" *
+else
+    zip -r "$output" *
+fi
+
+cd -
+
+#--------------------------------------------------------------------------------------------------
+# Clean
+#--------------------------------------------------------------------------------------------------
+
+rm -rf "$skz"
