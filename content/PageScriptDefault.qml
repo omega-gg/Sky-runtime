@@ -61,9 +61,15 @@ Item
 
     function resetBin()
     {
+        var path = core.pathBin;
+
         core.resetBin();
 
         editBin.text = core.pathBin;
+
+        if (core.pathBin == path) return;
+
+        pageBrowse.updateLibrary();
     }
 
     //---------------------------------------------------------------------------------------------
@@ -333,6 +339,20 @@ Item
             }
         }
 
+        TextEditCopy
+        {
+            id: textHelp
+
+            anchors.left : parent.left
+            anchors.right: parent.right
+
+            anchors.margins: st.dp16
+
+            visible: (help != "")
+
+            text: help
+        }
+
         TextBase
         {
             anchors.left : parent.left
@@ -340,7 +360,7 @@ Item
 
             anchors.margins: st.dp16
 
-            visible: textHelp.visible
+            visible: textTemplate.visible
 
             text: qsTr("Template")
 
@@ -359,34 +379,6 @@ Item
             visible: (template != "")
 
             text: template
-        }
-
-        TextBase
-        {
-            anchors.left : parent.left
-            anchors.right: parent.right
-
-            anchors.margins: st.dp16
-
-            visible: textHelp.visible
-
-            text: qsTr("Help")
-
-            font.pixelSize: st.dp20
-        }
-
-        TextEditCopy
-        {
-            id: textHelp
-
-            anchors.left : parent.left
-            anchors.right: parent.right
-
-            anchors.margins: st.dp16
-
-            visible: (help != "")
-
-            text: help
         }
     }
 }

@@ -154,36 +154,6 @@ Item
 
         TextEditCopy
         {
-            id: textTemplate
-
-            anchors.left : parent.left
-            anchors.right: parent.right
-
-            anchors.margins: st.dp16
-
-            visible: (template != "")
-
-            text: template
-        }
-
-        TextBase
-        {
-            id: itemHelp
-
-            anchors.left : parent.left
-            anchors.right: parent.right
-
-            anchors.margins: st.dp16
-
-            visible: textHelp.visible
-
-            text: qsTr("Help")
-
-            font.pixelSize: st.dp20
-        }
-
-        TextEditCopy
-        {
             id: textHelp
 
             anchors.left : parent.left
@@ -194,6 +164,34 @@ Item
             visible: (help != "")
 
             text: help
+        }
+
+        TextBase
+        {
+            anchors.left : parent.left
+            anchors.right: parent.right
+
+            anchors.margins: st.dp16
+
+            visible: textTemplate.visible
+
+            text: qsTr("Template")
+
+            font.pixelSize: st.dp20
+        }
+
+        TextEditCopy
+        {
+            id: textTemplate
+
+            anchors.left : parent.left
+            anchors.right: parent.right
+
+            anchors.margins: st.dp16
+
+            visible: (template != "")
+
+            text: template
         }
     }
 }

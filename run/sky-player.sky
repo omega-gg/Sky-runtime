@@ -189,19 +189,19 @@ Player
     function onHelp()
     {
         return "Welcome to Sky player " + sk.versionSky + "\n" +
-                "\n" +
-                "keyboard:\n" +
-                "- Return    switch to fullscreen\n" +
-                "- Space     toggle play / pause\n" +
-                "- Arrows    seek the timeline\n" +
-                "- Shift     seek faster\n" +
-                "\n" +
-                "console:\n" +
-                "> load <source> [time]    load the video\n" +
-                "> play                    play the video\n" +
-                "> pause                   pause the video\n" +
-                "> stop                    stop the video\n" +
-                "> seek <time>             seek at the given time";
+               "\n" +
+               "keyboard:\n" +
+               "- Return    switch to fullscreen\n" +
+               "- Space     toggle play / pause\n" +
+               "- Arrows    seek the timeline\n" +
+               "- Shift     seek faster\n" +
+               "\n" +
+               "console:\n" +
+               "> load <source> [time]    load the video\n" +
+               "> play                    play the video\n" +
+               "> pause                   pause the video\n" +
+               "> stop                    stop the video\n" +
+               "> seek <time>             seek at the given time";
     }
 
     //---------------------------------------------------------------------------------------------
