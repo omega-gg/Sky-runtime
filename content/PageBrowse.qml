@@ -98,9 +98,9 @@ Item
         list.currentIndex = 0;
     }
 
-    function getTemplate(name)
+    function getTemplate(header)
     {
-        return "// " + name + "\n" +
+        return header + "\n" +
                "\n" +
                "import QtQuick\n" +
                "import Sky\n\n" +
@@ -122,9 +122,7 @@ Item
 
         if (index == 0)
         {
-            var name = "sky " + sk.versionSky;
-
-            template = getTemplate(name);
+            template = getTemplate("// sky " + sk.versionSky);
 
             help = gui.onHelp();
 
@@ -133,46 +131,29 @@ Item
 
         var fileName = core.getLibraryFileName(index);
 
-        var script = core.loadScript(fileName);
+        var data = core.qmlStrip(fileName);
 
-        if (script == null) return;
+        var object;
 
-        var count = script.count;
-
-        var objects = new Array;
-
-        for (var i = 0; i < script.count; i++)
+        try
         {
-            gui.loadObjects(objects, script, i);
+            object = Qt.createQmlObject(data, gui, Qt.resolvedUrl("Gui.qml"));
+        }
+        catch (error)
+        {
+            console.debug(error);
         }
 
-        if (objects.length != count)
-        {
-            script.deleteNow();
-
-            return;
-        }
-
-        index = script.count - 1;
-
-        var object = objects[count - 1];
+        if (object.onHelp) help = object.onHelp();
+        else               help = "";
 
         if (object.onTemplate == undefined)
         {
-            /* var */ name = script.getName(index) + " " + script.getVersion(index);
-
-            template = getTemplate(name);
+            template = getTemplate(core.qmlHeader(data));
         }
         else template = object.onTemplate();
 
-        if (object.onHelp) help = object.onHelp();
-
-        for (/* var */ i = 0; i < objects.length; i++)
-        {
-            objects[i].destroy();
-        }
-
-        script.deleteNow();
+        object.destroy();
     }
 
     function pGetMargin()

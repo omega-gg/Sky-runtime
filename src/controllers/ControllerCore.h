@@ -297,6 +297,13 @@ public: // Static functions
     Q_INVOKABLE static QString getExistingDirectory(const QString & title,
                                                     const QString & path = QString());
 
+    // QML
+
+    // NOTE: This functions strips everything and keeps version, onHelp and onTemplate.
+    Q_INVOKABLE static QString qmlStrip(const QString & fileName);
+
+    Q_INVOKABLE static QString qmlHeader(const QString & qml);
+
 private: // Functions
     void help() const;
 
@@ -325,6 +332,10 @@ private: // Functions
     QString getPathRun   (const QString & name) const;
     QString getPathBash  (const QString & name) const;
     QString getPathLocale(const QString & name) const;
+
+private: // Static functions
+    // QML
+    static QString qmlExtractFunction(const QString & qml, const QString & match);
 
 private slots:
     void onLoaded     ();

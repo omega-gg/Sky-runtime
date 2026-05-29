@@ -1943,6 +1943,79 @@ ControllerCore::ControllerCore() : WController()
 }
 
 //-------------------------------------------------------------------------------------------------
+// QML
+
+// NOTE: This functions strips everything and keeps version, onHelp and onTemplate.
+/* Q_INVOKABLE static */ QString ControllerCore::qmlStrip(const QString & fileName)
+{
+    QString qml = WControllerFile::readAll(fileName);
+
+    if (qml.isEmpty()) return QString();
+
+    QString version;
+
+    int index = qml.indexOf("property string version");
+
+    if (index != -1)
+    {
+        int indexA = qml.indexOf('"', index);
+
+        if (indexA != -1)
+        {
+            indexA++;
+
+            int indexB = qml.indexOf('"', indexA);
+
+            if (indexB != -1)
+            {
+                version = qml.mid(indexA, indexB - indexA);
+            }
+        }
+    }
+
+    QString onHelp     = qmlExtractFunction(qml, "function onHelp");
+    QString onTemplate = qmlExtractFunction(qml, "function onTemplate");
+
+    QString result;
+
+    QString header = Sk::getLine(qml);
+
+    // NOTE: This is useful to parse the name and the version.
+    if (header.startsWith("//")) result += header + '\n';
+
+#ifdef QT_4
+    result += "import QtQuick 1.0\nQtObject {";
+#else
+    result += "import QtQuick 2.0\nQtObject {";
+#endif
+
+    if (version.isEmpty() == false)
+    {
+        result += "\nproperty string version: \"" + version + '"';
+    }
+
+    if (onHelp    .isEmpty() == false) result += '\n' + onHelp;
+    if (onTemplate.isEmpty() == false) result += '\n' + onTemplate;
+
+    return result + "\n}";
+}
+
+/* Q_INVOKABLE static */ QString ControllerCore::qmlHeader(const QString & qml)
+{
+    QString line = Sk::getLine(qml);
+
+    if (line.isEmpty() || line.startsWith("//") == false) return QString();
+
+    int index = line.indexOf(':');
+
+    if (index == -1)
+    {
+        return line.simplified();
+    }
+    else return line.left(index).simplified();
+}
+
+//-------------------------------------------------------------------------------------------------
 // Functions private
 //-------------------------------------------------------------------------------------------------
 
@@ -2234,6 +2307,52 @@ QString ControllerCore::getPathLocale(const QString & name) const
 #else
     return "locale/" + name + ".qm";
 #endif
+}
+
+//-------------------------------------------------------------------------------------------------
+// Private static functions
+//-------------------------------------------------------------------------------------------------
+// QML
+
+/* static */ QString ControllerCore::qmlExtractFunction(const QString & qml, const QString & match)
+{
+    int indexA = qml.indexOf(match);
+
+    if (indexA == -1) return QString();
+
+    int indexB = qml.indexOf('{', indexA);
+
+    if (indexB == -1) return QString();
+
+    int depth = 0;
+
+    while (indexB < qml.length())
+    {
+        QChar character = qml.at(indexB);
+
+        if (character == '{')
+        {
+            depth++;
+
+            indexB++;
+
+            continue;
+        }
+
+        if (character == '}')
+        {
+            depth--;
+
+            if (depth == 0)
+            {
+                return qml.mid(indexA, indexB - indexA + 1);
+            }
+        }
+
+        indexB++;
+    }
+
+    return QString();
 }
 
 //-------------------------------------------------------------------------------------------------
