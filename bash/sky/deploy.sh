@@ -108,6 +108,8 @@ fi
 
 run="$skz/run"
 
+src="$skz/src/$2"
+
 bash="$skz/bash/$2"
 
 locale="$skz/locale/$2"
@@ -121,6 +123,7 @@ doc="$skz/doc/$2"
 echo "DEPLOYING $2"
 
 mkdir -p "$run"
+mkdir -p "$src"
 
 if [ "$3" = "all" ]; then
 
@@ -134,6 +137,12 @@ fi
 #--------------------------------------------------------------------------------------------------
 
 copyFolder "$input/run" "$run" "*.sky" "+x"
+copyFolder "$input/src" "$src" "*.qml" "+x"
+
+if [ -f "$input/src/qmldir" ]; then
+
+    cp -f "$input/src/qmldir" "$src"
+fi
 
 if [ "$3" = "all" ]; then
 
@@ -151,6 +160,7 @@ fi
 # NOTE: Convert Windows CRLF line endings to Unix LF.
 
 $find "$run" -type f \( -iname "$2*.sky" \) -exec perl -i -pe 's/\r//g' {} +
+$find "$src" -type f \( -iname "$2*.qml" \) -exec perl -i -pe 's/\r//g' {} +
 
 if [ "$3" = "all" ]; then
 

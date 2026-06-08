@@ -4,13 +4,13 @@
 <context>
     <name>ControllerCore</name>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="960"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="962"/>
         <source>The script file does not exist %1
 </source>
         <translation>Le fichier de script n&apos;existe pas %1</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="965"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="967"/>
         <source>
 Install in progress...
 </source>
@@ -18,86 +18,87 @@ Install in progress...
 </translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="980"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="982"/>
         <source>rm %1.sky
 </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="989"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="991"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1000"/>
         <source>rm -rf run/%1
 </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1005"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1016"/>
         <source>cp %1
 </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1036"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1047"/>
         <source>---
 Install complete</source>
         <translation>---
 Installation complète</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1639"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1652"/>
         <source>Create .sky</source>
         <translation>Créer .sky</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1641"/>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1664"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1654"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1677"/>
         <source>Sky script (*.sky)</source>
         <translation>Script sky (*.sky)</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1662"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1675"/>
         <source>Create shortcut</source>
         <translation>Créer un raccourci</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1682"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1695"/>
         <source>Open .sky</source>
         <translation>Ouvrir .sky</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1684"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1697"/>
         <source>Sky (*.sky *.skz)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1722"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1742"/>
         <source>The run folder is absent from the archive.
 </source>
         <translation>Le dossier run est absent dans l&apos;archive.
 </translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1741"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1761"/>
         <source>The script name is not lower case.
 </source>
         <translation>Le nom du script n&apos;est pas en minuscule.
 </translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1746"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1766"/>
         <source>Script name: %1
 </source>
         <translation>Nom du script: %1
 </translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1779"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1791"/>
         <source>Invalid file: %1
 </source>
         <translation>Fichier invalide: %1
 </translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="1784"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="1796"/>
         <source>---
 Valid folder structure
 </source>
@@ -105,7 +106,7 @@ Valid folder structure
 Structure de dossier valide</translation>
     </message>
     <message>
-        <location filename="../../src/controllers/ControllerCore.cpp" line="2413"/>
+        <location filename="../../src/controllers/ControllerCore.cpp" line="2791"/>
         <source>Sky-runtime</source>
         <translation></translation>
     </message>
@@ -205,6 +206,11 @@ Structure de dossier valide</translation>
         <translation>Créer un raccourci</translation>
     </message>
     <message>
+        <location filename="../../content/PageScript.qml" line="178"/>
+        <source>Template</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../content/PageScript.qml" line="93"/>
         <source>Run script</source>
         <translation>Lancer le script</translation>
@@ -215,9 +221,8 @@ Structure de dossier valide</translation>
         <translation>Ouvrir le dossier</translation>
     </message>
     <message>
-        <location filename="../../content/PageScript.qml" line="180"/>
         <source>Help</source>
-        <translation>Aide</translation>
+        <translation type="vanished">Aide</translation>
     </message>
 </context>
 <context>
@@ -228,49 +233,48 @@ Structure de dossier valide</translation>
         <translation>Selectionnez un dossier bin</translation>
     </message>
     <message>
-        <location filename="../../content/PageScriptDefault.qml" line="75"/>
+        <location filename="../../content/PageScriptDefault.qml" line="87"/>
         <source>Default langauge</source>
         <translation>Langage par défaut</translation>
     </message>
     <message>
-        <location filename="../../content/PageScriptDefault.qml" line="169"/>
+        <location filename="../../content/PageScriptDefault.qml" line="181"/>
         <source>New .sky</source>
         <translation>Nouveau .sky</translation>
     </message>
     <message>
-        <location filename="../../content/PageScriptDefault.qml" line="186"/>
+        <location filename="../../content/PageScriptDefault.qml" line="198"/>
         <source>Open .sky script</source>
         <translation>Ouvrir .sky script</translation>
     </message>
     <message>
-        <location filename="../../content/PageScriptDefault.qml" line="209"/>
+        <location filename="../../content/PageScriptDefault.qml" line="221"/>
         <source>Application folder</source>
         <translation>Dossier application</translation>
     </message>
     <message>
-        <location filename="../../content/PageScriptDefault.qml" line="230"/>
+        <location filename="../../content/PageScriptDefault.qml" line="242"/>
         <source>Storage folder</source>
         <translation>Dossier storage</translation>
     </message>
     <message>
-        <location filename="../../content/PageScriptDefault.qml" line="268"/>
+        <location filename="../../content/PageScriptDefault.qml" line="280"/>
         <source>SKY_PATH_BIN</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../content/PageScriptDefault.qml" line="324"/>
+        <location filename="../../content/PageScriptDefault.qml" line="336"/>
         <source>Browse</source>
         <translation>Parcourir</translation>
     </message>
     <message>
-        <location filename="../../content/PageScriptDefault.qml" line="339"/>
+        <location filename="../../content/PageScriptDefault.qml" line="365"/>
         <source>Template</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../content/PageScriptDefault.qml" line="367"/>
         <source>Help</source>
-        <translation>Aide</translation>
+        <translation type="vanished">Aide</translation>
     </message>
 </context>
 <context>

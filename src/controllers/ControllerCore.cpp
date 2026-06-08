@@ -673,6 +673,8 @@ ControllerCore::ControllerCore() : WController()
     {
         _pathSkz = _pathBin + "/skz";
 
+        wControllerDeclarative->engine()->addImportPath(_pathSkz + "/src");
+
         qputenv("SKY_PATH_BIN", _pathBin.toUtf8());
     }
     else applyPaths();
@@ -982,7 +984,16 @@ ControllerCore::ControllerCore() : WController()
         WControllerFile::deleteFile(info.absoluteFilePath());
     }
 
-    QString path = _pathSkz + "/bash/" + name + '/';
+    QString path = _pathSkz + "/src/" + name + '/';
+
+    if (QFile::exists(path))
+    {
+        log.append(QString(tr("rm -rf run/%1\n")).arg(path));
+
+        WControllerFile::deleteFolder(path);
+    }
+
+    path = _pathSkz + "/bash/" + name + '/';
 
     if (QFile::exists(path))
     {
@@ -1562,6 +1573,8 @@ ControllerCore::ControllerCore() : WController()
 
     _pathSkz = _pathBin + "/skz";
 
+    wControllerDeclarative->engine()->addImportPath(_pathSkz + "/src");
+
     qputenv("SKY_PATH_BIN", _pathBin.toUtf8());
 
     _local.setBin(_pathBin);
@@ -1693,8 +1706,17 @@ ControllerCore::ControllerCore() : WController()
 
     QStringList list = WUnzipper::getFileNames(WControllerFile::filePath(fileName));
 
-    list.removeOne("run/");
-    list.removeOne("bash/");
+    QString startRun    = "run/";
+    QString startSrc    = "src/";
+    QString startBash   = "bash/";
+    QString startLocale = "locale/";
+    QString startDoc    = "doc/";
+
+    list.removeOne(startRun);
+    list.removeOne(startSrc);
+    list.removeOne(startBash);
+    list.removeOne(startLocale);
+    list.removeOne(startDoc);
 
     QStringList scripts;
 
@@ -1704,7 +1726,11 @@ ControllerCore::ControllerCore() : WController()
     {
         QString string = list.at(index);
 
-        if (string.startsWith("run/"))
+        if (string.startsWith(startRun))
+        {
+            scripts.append(list.takeAt(index));
+        }
+        else if (string.startsWith(startSrc))
         {
             scripts.append(list.takeAt(index));
         }
@@ -1743,14 +1769,6 @@ ControllerCore::ControllerCore() : WController()
     {
         log.append(string + '\n');
     }
-
-    QString startBash   = "bash/";
-    QString startLocale = "locale/";
-    QString startDoc    = "doc/";
-
-    list.removeOne(startBash);
-    list.removeOne(startLocale);
-    list.removeOne(startDoc);
 
     QString path = name + '/';
 
@@ -2046,6 +2064,8 @@ void ControllerCore::applyPaths()
 
     _pathSkz = _pathBin + "/skz";
 
+    wControllerDeclarative->engine()->addImportPath(_pathSkz + "/src");
+
     qputenv("SKY_PATH_BIN", _pathBin.toUtf8());
 }
 
@@ -2273,6 +2293,8 @@ void ControllerCore::updateDefines()
 {
     if (_defines.isEmpty() == false) return;
 
+    registerTypes();
+
     _defines = WControllerFile::qmlDefines();
 
 #ifdef SK_DEPLOY
@@ -2313,6 +2335,233 @@ QString ControllerCore::getPathLocale(const QString & name) const
 // Private static functions
 //-------------------------------------------------------------------------------------------------
 // QML
+
+/* static */ void ControllerCore::registerTypes()
+{
+#ifdef SK_DEPLOY
+    // SkyBase
+    qmlRegisterType(QUrl("qrc:/Style.qml"),                "Sky", 1, 0, "Style");
+    qmlRegisterType(QUrl("qrc:/SkyWindow.qml"),            "Sky", 1, 0, "SkyWindow");
+    qmlRegisterType(QUrl("qrc:/ItemSlide.qml"),            "Sky", 1, 0, "ItemSlide");
+    qmlRegisterType(QUrl("qrc:/ItemWipe.qml"),             "Sky", 1, 0, "ItemWipe");
+    qmlRegisterType(QUrl("qrc:/ItemScan.qml"),             "Sky", 1, 0, "ItemScan");
+    qmlRegisterType(QUrl("qrc:/LoaderSlide.qml"),          "Sky", 1, 0, "LoaderSlide");
+    qmlRegisterType(QUrl("qrc:/LoaderWipe.qml"),           "Sky", 1, 0, "LoaderWipe");
+    qmlRegisterType(QUrl("qrc:/AreaPanel.qml"),            "Sky", 1, 0, "AreaPanel");
+    qmlRegisterType(QUrl("qrc:/AreaContextual.qml"),       "Sky", 1, 0, "AreaContextual");
+    qmlRegisterType(QUrl("qrc:/RectangleBorders.qml"),     "Sky", 1, 0, "RectangleBorders");
+    qmlRegisterType(QUrl("qrc:/RectangleBordersDrop.qml"), "Sky", 1, 0, "RectangleBordersDrop");
+    qmlRegisterType(QUrl("qrc:/RectangleShadow.qml"),      "Sky", 1, 0, "RectangleShadow");
+    qmlRegisterType(QUrl("qrc:/RectangleShadowClick.qml"), "Sky", 1, 0, "RectangleShadowClick");
+    qmlRegisterType(QUrl("qrc:/RectangleTag.qml"),         "Sky", 1, 0, "RectangleTag");
+    qmlRegisterType(QUrl("qrc:/ImageBarcode.qml"),         "Sky", 1, 0, "ImageBarcode");
+    qmlRegisterType(QUrl("qrc:/ImageTag.qml"),             "Sky", 1, 0, "ImageTag");
+    qmlRegisterType(QUrl("qrc:/CursorSvg.qml"),            "Sky", 1, 0, "CursorSvg");
+    qmlRegisterType(QUrl("qrc:/CursorTouch.qml"),          "Sky", 1, 0, "CursorTouch");
+    qmlRegisterType(QUrl("qrc:/TextBase.qml"),             "Sky", 1, 0, "TextBase");
+    qmlRegisterType(QUrl("qrc:/TextClick.qml"),            "Sky", 1, 0, "TextClick");
+    qmlRegisterType(QUrl("qrc:/TextLink.qml"),             "Sky", 1, 0, "TextLink");
+    qmlRegisterType(QUrl("qrc:/TextSubtitle.qml"),         "Sky", 1, 0, "TextSubtitle");
+    qmlRegisterType(QUrl("qrc:/BasePanel.qml"),            "Sky", 1, 0, "BasePanel");
+    qmlRegisterType(QUrl("qrc:/BasePanelContextual.qml"),  "Sky", 1, 0, "BasePanelContextual");
+    qmlRegisterType(QUrl("qrc:/BaseButton.qml"),           "Sky", 1, 0, "BaseButton");
+    qmlRegisterType(QUrl("qrc:/BaseLineEdit.qml"),         "Sky", 1, 0, "BaseLineEdit");
+    qmlRegisterType(QUrl("qrc:/BaseTextEdit.qml"),         "Sky", 1, 0, "BaseTextEdit");
+    qmlRegisterType(QUrl("qrc:/BaseConsole.qml"),          "Sky", 1, 0, "BaseConsole");
+    qmlRegisterType(QUrl("qrc:/ColumnAuto.qml"),           "Sky", 1, 0, "ColumnAuto");
+    qmlRegisterType(QUrl("qrc:/BaseFlickable.qml"),        "Sky", 1, 0, "BaseFlickable");
+    qmlRegisterType(QUrl("qrc:/FlickablePages.qml"),       "Sky", 1, 0, "FlickablePages");
+    qmlRegisterType(QUrl("qrc:/BaseScrollBar.qml"),        "Sky", 1, 0, "BaseScrollBar");
+    qmlRegisterType(QUrl("qrc:/BaseSlider.qml"),           "Sky", 1, 0, "BaseSlider");
+    qmlRegisterType(QUrl("qrc:/BasePlayerBrowser.qml"),    "Sky", 1, 0, "BasePlayerBrowser");
+    qmlRegisterType(QUrl("qrc:/Subtitle.qml"),             "Sky", 1, 0, "Subtitle");
+    qmlRegisterType(QUrl("qrc:/AnimatedSlide.qml"),        "Sky", 1, 0, "AnimatedSlide");
+    qmlRegisterType(QUrl("qrc:/AnimatedSlideImage.qml"),   "Sky", 1, 0, "AnimatedSlideImage");
+    qmlRegisterType(QUrl("qrc:/AnimatedLoader.qml"),       "Sky", 1, 0, "AnimatedLoader");
+    qmlRegisterType(QUrl("qrc:/CodeNumber.qml"),           "Sky", 1, 0, "CodeNumber");
+    qmlRegisterType(QUrl("qrc:/CodeInput.qml"),            "Sky", 1, 0, "CodeInput");
+
+    // SkyComponents
+    qmlRegisterType(QUrl("qrc:/StyleComponents.qml"),       "Sky", 1, 0, "StyleComponents");
+    qmlRegisterType(QUrl("qrc:/ViewPlaylist.qml"),          "Sky", 1, 0, "ViewPlaylist");
+    qmlRegisterType(QUrl("qrc:/PageSlide.qml"),             "Sky", 1, 0, "PageSlide");
+    qmlRegisterType(QUrl("qrc:/PageWipe.qml"),              "Sky", 1, 0, "PageWipe");
+    qmlRegisterType(QUrl("qrc:/LineHorizontal.qml"),        "Sky", 1, 0, "LineHorizontal");
+    qmlRegisterType(QUrl("qrc:/LineHorizontalDrop.qml"),    "Sky", 1, 0, "LineHorizontalDrop");
+    qmlRegisterType(QUrl("qrc:/LineVertical.qml"),          "Sky", 1, 0, "LineVertical");
+    qmlRegisterType(QUrl("qrc:/BorderHorizontal.qml"),      "Sky", 1, 0, "BorderHorizontal");
+    qmlRegisterType(QUrl("qrc:/BorderVertical.qml"),        "Sky", 1, 0, "BorderVertical");
+    qmlRegisterType(QUrl("qrc:/BorderButton.qml"),          "Sky", 1, 0, "BorderButton");
+    qmlRegisterType(QUrl("qrc:/WindowScale.qml"),           "Sky", 1, 0, "WindowScale");
+    qmlRegisterType(QUrl("qrc:/RectangleLogo.qml"),         "Sky", 1, 0, "RectangleLogo");
+    qmlRegisterType(QUrl("qrc:/RectangleLive.qml"),         "Sky", 1, 0, "RectangleLive");
+    qmlRegisterType(QUrl("qrc:/BorderImageBack.qml"),       "Sky", 1, 0, "BorderImageBack");
+    qmlRegisterType(QUrl("qrc:/BorderImageScaleBack.qml"),  "Sky", 1, 0, "BorderImageScaleBack");
+    qmlRegisterType(QUrl("qrc:/BorderImageShadow.qml"),     "Sky", 1, 0, "BorderImageShadow");
+    qmlRegisterType(QUrl("qrc:/Icon.qml"),                  "Sky", 1, 0, "Icon");
+    qmlRegisterType(QUrl("qrc:/IconOverlay.qml"),           "Sky", 1, 0, "IconOverlay");
+    qmlRegisterType(QUrl("qrc:/IconLoading.qml"),           "Sky", 1, 0, "IconLoading");
+    qmlRegisterType(QUrl("qrc:/TextRich.qml"),              "Sky", 1, 0, "TextRich");
+    qmlRegisterType(QUrl("qrc:/TextDate.qml"),              "Sky", 1, 0, "TextDate");
+    qmlRegisterType(QUrl("qrc:/TextListDefault.qml"),       "Sky", 1, 0, "TextListDefault");
+    qmlRegisterType(QUrl("qrc:/Panel.qml"),                 "Sky", 1, 0, "Panel");
+    qmlRegisterType(QUrl("qrc:/PanelContextual.qml"),       "Sky", 1, 0, "PanelContextual");
+    qmlRegisterType(QUrl("qrc:/PanelContextualLoader.qml"), "Sky", 1, 0, "PanelContextualLoader");
+    qmlRegisterType(QUrl("qrc:/PanelImage.qml"),            "Sky", 1, 0, "PanelImage");
+    qmlRegisterType(QUrl("qrc:/BaseToolTip.qml"),           "Sky", 1, 0, "BaseToolTip");
+    qmlRegisterType(QUrl("qrc:/SkyToolTip.qml"),            "Sky", 1, 0, "SkyToolTip");
+    qmlRegisterType(QUrl("qrc:/BarWindow.qml"),             "Sky", 1, 0, "BarWindow");
+    qmlRegisterType(QUrl("qrc:/BarTitle.qml"),              "Sky", 1, 0, "BarTitle");
+    qmlRegisterType(QUrl("qrc:/BarTitleSmall.qml"),         "Sky", 1, 0, "BarTitleSmall");
+    qmlRegisterType(QUrl("qrc:/BarTitleText.qml"),          "Sky", 1, 0, "BarTitleText");
+    qmlRegisterType(QUrl("qrc:/BarSetting.qml"),            "Sky", 1, 0, "BarSetting");
+    qmlRegisterType(QUrl("qrc:/BarSettingReset.qml"),       "Sky", 1, 0, "BarSettingReset");
+    qmlRegisterType(QUrl("qrc:/BarProgress.qml"),           "Sky", 1, 0, "BarProgress");
+    qmlRegisterType(QUrl("qrc:/BaseButtonPush.qml"),        "Sky", 1, 0, "BaseButtonPush");
+    qmlRegisterType(QUrl("qrc:/BaseButtonPiano.qml"),       "Sky", 1, 0, "BaseButtonPiano");
+    qmlRegisterType(QUrl("qrc:/ButtonPush.qml"),            "Sky", 1, 0, "ButtonPush");
+    qmlRegisterType(QUrl("qrc:/ButtonPushIcon.qml"),        "Sky", 1, 0, "ButtonPushIcon");
+    qmlRegisterType(QUrl("qrc:/ButtonPushFull.qml"),        "Sky", 1, 0, "ButtonPushFull");
+    qmlRegisterType(QUrl("qrc:/ButtonPushLeft.qml"),        "Sky", 1, 0, "ButtonPushLeft");
+    qmlRegisterType(QUrl("qrc:/ButtonPushLeftIcon.qml"),    "Sky", 1, 0, "ButtonPushLeftIcon");
+    qmlRegisterType(QUrl("qrc:/ButtonPushLeftFull.qml"),    "Sky", 1, 0, "ButtonPushLeftFull");
+    qmlRegisterType(QUrl("qrc:/ButtonPushCenter.qml"),      "Sky", 1, 0, "ButtonPushCenter");
+    qmlRegisterType(QUrl("qrc:/ButtonPushCenterIcon.qml"),  "Sky", 1, 0, "ButtonPushCenterIcon");
+    qmlRegisterType(QUrl("qrc:/ButtonPushCenterFull.qml"),  "Sky", 1, 0, "ButtonPushCenterFull");
+    qmlRegisterType(QUrl("qrc:/ButtonPushRight.qml"),       "Sky", 1, 0, "ButtonPushRight");
+    qmlRegisterType(QUrl("qrc:/ButtonPushRightIcon.qml"),   "Sky", 1, 0, "ButtonPushRightIcon");
+    qmlRegisterType(QUrl("qrc:/ButtonPushRightFull.qml"),   "Sky", 1, 0, "ButtonPushRightFull");
+    qmlRegisterType(QUrl("qrc:/ButtonPushOverlay.qml"),     "Sky", 1, 0, "ButtonPushOverlay");
+    qmlRegisterType(QUrl("qrc:/ButtonRound.qml"),           "Sky", 1, 0, "ButtonRound");
+    qmlRegisterType(QUrl("qrc:/ButtonExtra.qml"),           "Sky", 1, 0, "ButtonExtra");
+    qmlRegisterType(QUrl("qrc:/ButtonExtraFull.qml"),       "Sky", 1, 0, "ButtonExtraFull");
+    qmlRegisterType(QUrl("qrc:/ButtonWide.qml"),            "Sky", 1, 0, "ButtonWide");
+    qmlRegisterType(QUrl("qrc:/ButtonWideFull.qml"),        "Sky", 1, 0, "ButtonWideFull");
+    qmlRegisterType(QUrl("qrc:/ButtonWideExtra.qml"),       "Sky", 1, 0, "ButtonWideExtra");
+    qmlRegisterType(QUrl("qrc:/ButtonWideExtraFull.qml"),   "Sky", 1, 0, "ButtonWideExtraFull");
+    qmlRegisterType(QUrl("qrc:/ButtonPiano.qml"),           "Sky", 1, 0, "ButtonPiano");
+    qmlRegisterType(QUrl("qrc:/ButtonPianoIcon.qml"),       "Sky", 1, 0, "ButtonPianoIcon");
+    qmlRegisterType(QUrl("qrc:/ButtonPianoFull.qml"),       "Sky", 1, 0, "ButtonPianoFull");
+    qmlRegisterType(QUrl("qrc:/ButtonPianoAction.qml"),     "Sky", 1, 0, "ButtonPianoAction");
+    qmlRegisterType(QUrl("qrc:/ButtonPianoWindow.qml"),     "Sky", 1, 0, "ButtonPianoWindow");
+    qmlRegisterType(QUrl("qrc:/ButtonPianoReset.qml"),      "Sky", 1, 0, "ButtonPianoReset");
+    qmlRegisterType(QUrl("qrc:/ButtonCheck.qml"),           "Sky", 1, 0, "ButtonCheck");
+    qmlRegisterType(QUrl("qrc:/ButtonCheckText.qml"),       "Sky", 1, 0, "ButtonCheckText");
+    qmlRegisterType(QUrl("qrc:/ButtonCheckLabel.qml"),      "Sky", 1, 0, "ButtonCheckLabel");
+    qmlRegisterType(QUrl("qrc:/ButtonImage.qml"),           "Sky", 1, 0, "ButtonImage");
+    qmlRegisterType(QUrl("qrc:/ButtonImageBorders.qml"),    "Sky", 1, 0, "ButtonImageBorders");
+    qmlRegisterType(QUrl("qrc:/ButtonMask.qml"),            "Sky", 1, 0, "ButtonMask");
+    qmlRegisterType(QUrl("qrc:/ButtonStream.qml"),          "Sky", 1, 0, "ButtonStream");
+    qmlRegisterType(QUrl("qrc:/ButtonsWindow.qml"),         "Sky", 1, 0, "ButtonsWindow");
+    qmlRegisterType(QUrl("qrc:/ButtonsCheck.qml"),          "Sky", 1, 0, "ButtonsCheck");
+    qmlRegisterType(QUrl("qrc:/ButtonsItem.qml"),           "Sky", 1, 0, "ButtonsItem");
+    qmlRegisterType(QUrl("qrc:/BaseLabelRound.qml"),        "Sky", 1, 0, "BaseLabelRound");
+    qmlRegisterType(QUrl("qrc:/LabelRound.qml"),            "Sky", 1, 0, "LabelRound");
+    qmlRegisterType(QUrl("qrc:/LabelRoundAnimated.qml"),    "Sky", 1, 0, "LabelRoundAnimated");
+    qmlRegisterType(QUrl("qrc:/LabelRoundIcon.qml"),        "Sky", 1, 0, "LabelRoundIcon");
+    qmlRegisterType(QUrl("qrc:/LabelRoundFull.qml"),        "Sky", 1, 0, "LabelRoundFull");
+    qmlRegisterType(QUrl("qrc:/LabelRoundInfo.qml"),        "Sky", 1, 0, "LabelRoundInfo");
+    qmlRegisterType(QUrl("qrc:/LabelLoading.qml"),          "Sky", 1, 0, "LabelLoading");
+    qmlRegisterType(QUrl("qrc:/LabelLoadingText.qml"),      "Sky", 1, 0, "LabelLoadingText");
+    qmlRegisterType(QUrl("qrc:/LabelLoadingButton.qml"),    "Sky", 1, 0, "LabelLoadingButton");
+    qmlRegisterType(QUrl("qrc:/LabelStream.qml"),           "Sky", 1, 0, "LabelStream");
+    qmlRegisterType(QUrl("qrc:/LabelWide.qml"),             "Sky", 1, 0, "LabelWide");
+    qmlRegisterType(QUrl("qrc:/SkyPopup.qml"),              "Sky", 1, 0, "SkyPopup");
+    qmlRegisterType(QUrl("qrc:/SkyCheckBox.qml"),           "Sky", 1, 0, "SkyCheckBox");
+    qmlRegisterType(QUrl("qrc:/CheckBoxText.qml"),          "Sky", 1, 0, "CheckBoxText");
+    qmlRegisterType(QUrl("qrc:/LineEdit.qml"),              "Sky", 1, 0, "LineEdit");
+    qmlRegisterType(QUrl("qrc:/LineEditCopy.qml"),          "Sky", 1, 0, "LineEditCopy");
+    qmlRegisterType(QUrl("qrc:/LineEditLabel.qml"),         "Sky", 1, 0, "LineEditLabel");
+    qmlRegisterType(QUrl("qrc:/LineEditValue.qml"),         "Sky", 1, 0, "LineEditValue");
+    qmlRegisterType(QUrl("qrc:/LineEditBox.qml"),           "Sky", 1, 0, "LineEditBox");
+    qmlRegisterType(QUrl("qrc:/LineEditBoxClear.qml"),      "Sky", 1, 0, "LineEditBoxClear");
+    qmlRegisterType(QUrl("qrc:/ParagraphEdit.qml"),         "Sky", 1, 0, "ParagraphEdit");
+    qmlRegisterType(QUrl("qrc:/Console.qml"),               "Sky", 1, 0, "Console");
+    qmlRegisterType(QUrl("qrc:/ColumnScroll.qml"),          "Sky", 1, 0, "ColumnScroll");
+    qmlRegisterType(QUrl("qrc:/BaseList.qml"),              "Sky", 1, 0, "BaseList");
+    qmlRegisterType(QUrl("qrc:/List.qml"),                  "Sky", 1, 0, "List");
+    qmlRegisterType(QUrl("qrc:/ListCompletion.qml"),        "Sky", 1, 0, "ListCompletion");
+    qmlRegisterType(QUrl("qrc:/ListContextual.qml"),        "Sky", 1, 0, "ListContextual");
+    qmlRegisterType(QUrl("qrc:/BaseGrid.qml"),              "Sky", 1, 0, "BaseGrid");
+    qmlRegisterType(QUrl("qrc:/GridPlaylist.qml"),          "Sky", 1, 0, "GridPlaylist");
+    qmlRegisterType(QUrl("qrc:/ScrollArea.qml"),            "Sky", 1, 0, "ScrollArea");
+    qmlRegisterType(QUrl("qrc:/SkyScrollBar.qml"),          "Sky", 1, 0, "SkyScrollBar");
+    qmlRegisterType(QUrl("qrc:/ScrollList.qml"),            "Sky", 1, 0, "ScrollList");
+    qmlRegisterType(QUrl("qrc:/ScrollListDefault.qml"),     "Sky", 1, 0, "ScrollListDefault");
+    qmlRegisterType(QUrl("qrc:/ScrollContextual.qml"),      "Sky", 1, 0, "ScrollContextual");
+    qmlRegisterType(QUrl("qrc:/ScrollCompletion.qml"),      "Sky", 1, 0, "ScrollCompletion");
+    qmlRegisterType(QUrl("qrc:/ScrollerVertical.qml"),      "Sky", 1, 0, "ScrollerVertical");
+    qmlRegisterType(QUrl("qrc:/ScrollerList.qml"),          "Sky", 1, 0, "ScrollerList");
+    qmlRegisterType(QUrl("qrc:/SkySlider.qml"),             "Sky", 1, 0, "SkySlider");
+    qmlRegisterType(QUrl("qrc:/SliderVolume.qml"),          "Sky", 1, 0, "SliderVolume");
+    qmlRegisterType(QUrl("qrc:/SliderStream.qml"),          "Sky", 1, 0, "SliderStream");
+    qmlRegisterType(QUrl("qrc:/SliderWide.qml"),            "Sky", 1, 0, "SliderWide");
+    qmlRegisterType(QUrl("qrc:/BaseTabs.qml"),              "Sky", 1, 0, "BaseTabs");
+    qmlRegisterType(QUrl("qrc:/Tabs.qml"),                  "Sky", 1, 0, "Tabs");
+    qmlRegisterType(QUrl("qrc:/TabsBrowser.qml"),           "Sky", 1, 0, "TabsBrowser");
+    qmlRegisterType(QUrl("qrc:/TabsTrack.qml"),             "Sky", 1, 0, "TabsTrack");
+    qmlRegisterType(QUrl("qrc:/TabsPlayer.qml"),            "Sky", 1, 0, "TabsPlayer");
+    qmlRegisterType(QUrl("qrc:/BaseWall.qml"),              "Sky", 1, 0, "BaseWall");
+    qmlRegisterType(QUrl("qrc:/Wall.qml"),                  "Sky", 1, 0, "Wall");
+    qmlRegisterType(QUrl("qrc:/WallBookmarkTrack.qml"),     "Sky", 1, 0, "WallBookmarkTrack");
+    qmlRegisterType(QUrl("qrc:/WallVideo.qml"),             "Sky", 1, 0, "WallVideo");
+    qmlRegisterType(QUrl("qrc:/PlayerBrowser.qml"),         "Sky", 1, 0, "PlayerBrowser");
+    qmlRegisterType(QUrl("qrc:/ItemList.qml"),              "Sky", 1, 0, "ItemList");
+    qmlRegisterType(QUrl("qrc:/ItemGrid.qml"),              "Sky", 1, 0, "ItemGrid");
+    qmlRegisterType(QUrl("qrc:/ItemTab.qml"),               "Sky", 1, 0, "ItemTab");
+    qmlRegisterType(QUrl("qrc:/ItemWall.qml"),              "Sky", 1, 0, "ItemWall");
+
+    qmlRegisterType(QUrl("qrc:/ComponentList.qml"),              "Sky", 1, 0, "ComponentList");
+    qmlRegisterType(QUrl("qrc:/ComponentListFull.qml"),          "Sky", 1, 0, "ComponentListFull");
+    qmlRegisterType(QUrl("qrc:/ComponentContextual.qml"),        "Sky", 1, 0, "ComponentContextual");
+    qmlRegisterType(QUrl("qrc:/ComponentCompletion.qml"),        "Sky", 1, 0, "ComponentCompletion");
+    qmlRegisterType(QUrl("qrc:/ComponentGrid.qml"),              "Sky", 1, 0, "ComponentGrid");
+    qmlRegisterType(QUrl("qrc:/ComponentGridTrack.qml"),         "Sky", 1, 0, "ComponentGridTrack");
+    qmlRegisterType(QUrl("qrc:/ComponentTab.qml"),               "Sky", 1, 0, "ComponentTab");
+    qmlRegisterType(QUrl("qrc:/ComponentTabBrowser.qml"),        "Sky", 1, 0, "ComponentTabBrowser");
+    qmlRegisterType(QUrl("qrc:/ComponentTabTrack.qml"),          "Sky", 1, 0, "ComponentTabTrack");
+    qmlRegisterType(QUrl("qrc:/ComponentWall.qml"),              "Sky", 1, 0, "ComponentWall");
+    qmlRegisterType(QUrl("qrc:/ComponentWallBookmarkTrack.qml"), "Sky", 1, 0, "ComponentWallBookmarkTrack");
+    qmlRegisterType(QUrl("qrc:/ContextualCategory.qml"),         "Sky", 1, 0, "ContextualCategory");
+    qmlRegisterType(QUrl("qrc:/ContextualItem.qml"),             "Sky", 1, 0, "ContextualItem");
+    qmlRegisterType(QUrl("qrc:/ContextualItemCover.qml"),        "Sky", 1, 0, "ContextualItemCover");
+    qmlRegisterType(QUrl("qrc:/ContextualItemConfirm.qml"),      "Sky", 1, 0, "ContextualItemConfirm");
+
+    // SkyContent
+    qmlRegisterType(QUrl("qrc:/StyleApplication.qml"),  "Sky", 1, 0, "StyleApplication");
+    qmlRegisterType(QUrl("qrc:/Main.qml"),              "Sky", 1, 0, "Main");
+    qmlRegisterType(QUrl("qrc:/Gui.qml"),               "Sky", 1, 0, "Gui");
+    qmlRegisterType(QUrl("qrc:/ItemCheck.qml"),         "Sky", 1, 0, "ItemCheck");
+    qmlRegisterType(QUrl("qrc:/BackgroundLink.qml"),    "Sky", 1, 0, "BackgroundLink");
+    qmlRegisterType(QUrl("qrc:/TextDefault.qml"),       "Sky", 1, 0, "TextDefault");
+    qmlRegisterType(QUrl("qrc:/TextDefaultLink.qml"),   "Sky", 1, 0, "TextDefaultLink");
+    qmlRegisterType(QUrl("qrc:/TextEditCopy.qml"),      "Sky", 1, 0, "TextEditCopy");
+    qmlRegisterType(QUrl("qrc:/RowRecent.qml"),         "Sky", 1, 0, "RowRecent");
+    qmlRegisterType(QUrl("qrc:/RowCheck.qml"),          "Sky", 1, 0, "RowCheck");
+    qmlRegisterType(QUrl("qrc:/WebViewer.qml"),         "Sky", 1, 0, "WebViewer");
+    qmlRegisterType(QUrl("qrc:/PanelAssociate.qml"),    "Sky", 1, 0, "PanelAssociate");
+    qmlRegisterType(QUrl("qrc:/PanelInstall.qml"),      "Sky", 1, 0, "PanelInstall");
+    qmlRegisterType(QUrl("qrc:/PageDefault.qml"),       "Sky", 1, 0, "PageDefault");
+    qmlRegisterType(QUrl("qrc:/PageWelcome.qml"),       "Sky", 1, 0, "PageWelcome");
+    qmlRegisterType(QUrl("qrc:/PageBrowse.qml"),        "Sky", 1, 0, "PageBrowse");
+    qmlRegisterType(QUrl("qrc:/PageConsole.qml"),       "Sky", 1, 0, "PageConsole");
+    qmlRegisterType(QUrl("qrc:/PageScript.qml"),        "Sky", 1, 0, "PageScript");
+    qmlRegisterType(QUrl("qrc:/PageScriptDefault.qml"), "Sky", 1, 0, "PageScriptDefault");
+#else
+    QDir dir(QDir::currentPath());
+
+    QStringList list = dir.entryList(QStringList() << "*.qml", QDir::Files);
+
+    QString base = dir.absolutePath() + '/';
+
+    foreach (const QString & path, list)
+    {
+        QString name = path.left(path.size() - 4);
+
+        qmlRegisterType(QUrl::fromLocalFile(base + path), "Sky", 1, 0, name.C_UTF);
+    }
+#endif
+}
 
 /* static */ QString ControllerCore::qmlExtractFunction(const QString & qml, const QString & match)
 {

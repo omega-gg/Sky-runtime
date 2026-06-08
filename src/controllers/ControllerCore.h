@@ -335,6 +335,9 @@ private: // Functions
 
 private: // Static functions
     // QML
+
+    static void registerTypes();
+
     static QString qmlExtractFunction(const QString & qml, const QString & match);
 
 private slots:
