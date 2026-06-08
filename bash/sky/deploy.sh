@@ -139,10 +139,7 @@ fi
 copyFolder "$input/run" "$run" "*.sky" "+x"
 copyFolder "$input/src" "$src" "*.qml" "+x"
 
-if [ -f "$input/src/qmldir" ]; then
-
-    cp -f "$input/src/qmldir" "$src"
-fi
+cp -f "$input/src/qmldir" "$src"
 
 if [ "$3" = "all" ]; then
 
@@ -160,7 +157,7 @@ fi
 # NOTE: Convert Windows CRLF line endings to Unix LF.
 
 $find "$run" -type f \( -iname "$2*.sky" \) -exec perl -i -pe 's/\r//g' {} +
-$find "$src" -type f \( -iname "$2*.qml" \) -exec perl -i -pe 's/\r//g' {} +
+$find "$src" -type f \( -iname "*.qml"   \) -exec perl -i -pe 's/\r//g' {} +
 
 if [ "$3" = "all" ]; then
 
@@ -173,10 +170,11 @@ fi
 
 set +e
 
-rmdir "$bash" 2>/dev/null
+rmdir "$src" 2>/dev/null
 
 if [ "$3" = "all" ]; then
 
+    rmdir "$bash"   2>/dev/null
     rmdir "$locale" 2>/dev/null
     rmdir "$doc"    2>/dev/null
 fi

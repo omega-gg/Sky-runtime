@@ -93,6 +93,8 @@ fi
 
 run="$skz/run"
 
+src="$skz/src/$2"
+
 bash="$skz/bash/$2"
 
 locale="$skz/locale/$2"
@@ -106,7 +108,9 @@ doc="$skz/doc/$2"
 echo "CREATING $2 skz"
 
 mkdir -p "$skz"
+
 mkdir -p "$run"
+mkdir -p "$src"
 mkdir -p "$bash"
 mkdir -p "$locale"
 mkdir -p "$doc"
@@ -116,9 +120,12 @@ mkdir -p "$doc"
 #--------------------------------------------------------------------------------------------------
 
 copyFolder "$input/run"    "$run"    "*.sky" "+x"
+copyFolder "$input/src"    "$src"    "*.qml" "+x"
 copyFolder "$input/bash"   "$bash"   "*.sh"  "+x"
 copyFolder "$input/locale" "$locale" "*.qm"
 copyFolder "$input"        "$doc"    "*.md"
+
+cp -f "$input/src/qmldir" "$src"
 
 cp -f "$input"/*.md "$doc"
 
@@ -129,6 +136,7 @@ cp -f "$input"/*.md "$doc"
 # NOTE: Convert Windows CRLF line endings to Unix LF.
 
 $find "$run"  -type f \( -iname "$2*.sky" \) -exec perl -i -pe 's/\r//g' {} +
+$find "$src"  -type f \( -iname "*.qml"   \) -exec perl -i -pe 's/\r//g' {} +
 $find "$bash" -type f \( -iname "*.sh"    \) -exec perl -i -pe 's/\r//g' {} +
 
 #--------------------------------------------------------------------------------------------------
