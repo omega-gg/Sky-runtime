@@ -2526,7 +2526,7 @@ QString ControllerCore::getPathLocale(const QString & name) const
     qmlRegisterType(QUrl("qrc:/ContextualItemCover.qml"),        "Sky", 1, 0, "ContextualItemCover");
     qmlRegisterType(QUrl("qrc:/ContextualItemConfirm.qml"),      "Sky", 1, 0, "ContextualItemConfirm");
 
-    // SkyContent
+    // Sky-runtime
     qmlRegisterType(QUrl("qrc:/StyleApplication.qml"),  "Sky", 1, 0, "StyleApplication");
     qmlRegisterType(QUrl("qrc:/Main.qml"),              "Sky", 1, 0, "Main");
     qmlRegisterType(QUrl("qrc:/Gui.qml"),               "Sky", 1, 0, "Gui");
