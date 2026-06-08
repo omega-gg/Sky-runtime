@@ -103,7 +103,8 @@ Installation complète</translation>
 Valid folder structure
 </source>
         <translation>---
-Structure de dossier valide</translation>
+Structure de dossier valide
+</translation>
     </message>
     <message>
         <location filename="../../src/controllers/ControllerCore.cpp" line="2791"/>

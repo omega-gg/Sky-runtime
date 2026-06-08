@@ -1730,10 +1730,6 @@ ControllerCore::ControllerCore() : WController()
         {
             scripts.append(list.takeAt(index));
         }
-        else if (string.startsWith(startSrc))
-        {
-            scripts.append(list.takeAt(index));
-        }
         else index++;
     }
 
@@ -1776,17 +1772,20 @@ ControllerCore::ControllerCore() : WController()
     startLocale += path;
     startDoc    += path;
 
-    list.removeOne(startBash);
-    list.removeOne(startLocale);
-    list.removeOne(startDoc);
-
     foreach (const QString & string, list)
     {
-        if (string.startsWith(startBash)
+        if (string.startsWith(startSrc)
+            ||
+            string.startsWith(startBash)
             ||
             string.startsWith(startLocale)
             ||
-            string.startsWith(startDoc)) continue;
+            string.startsWith(startDoc))
+        {
+            log.append(string + '\n');
+
+            continue;
+        }
 
         log.append(QString(tr("Invalid file: %1\n")).arg(string));
 
