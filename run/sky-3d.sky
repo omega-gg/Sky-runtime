@@ -1,0 +1,111 @@
+// sky-3d 1.0.0 : sky 3.1.1-0
+// https://raw.githubusercontent.com/omega-gg/Sky-runtime/refs/heads/master/script/player.sky
+//=================================================================================================
+/*
+    Copyright (C) 2015-2026 Sky kit authors. <http://omega.gg/Sky>
+
+    Author: Benjamin Arnaud. <http://bunjee.me> <bunjee@omega.gg>
+
+    This file is part of the Sky kit runtime.
+
+    - GNU Lesser General Public License Usage:
+    This file may be used under the terms of the GNU Lesser General Public License version 3 as
+    published by the Free Software Foundation and appearing in the LICENSE.md file included in the
+    packaging of this file. Please review the following information to ensure the GNU Lesser
+    General Public License requirements will be met: https://www.gnu.org/licenses/lgpl.html.
+
+    - Private License Usage:
+    Sky kit licensees holding valid private licenses may use this file in accordance with the
+    private license agreement provided with the Software or, alternatively, in accordance with the
+    terms contained in written agreement between you and Sky kit authors. For further information
+    contact us at contact@omega.gg.
+*/
+//=================================================================================================
+
+import QtQuick
+import QtQuick3D
+
+import Sky
+
+View3D
+{
+    //---------------------------------------------------------------------------------------------
+    // Functions
+    //---------------------------------------------------------------------------------------------
+
+    function onHelp()
+    {
+        return "Welcome to Sky 3d " + sk.versionSky + "\n";
+    }
+
+    //---------------------------------------------------------------------------------------------
+    // Children
+    //---------------------------------------------------------------------------------------------
+
+    environment: SceneEnvironment
+    {
+        backgroundMode: SceneEnvironment.Color
+
+        clearColor: "darkslategray"
+    }
+
+    PerspectiveCamera
+    {
+        position: Qt.vector3d(0, 0, 300)
+    }
+
+    DirectionalLight
+    {
+        eulerRotation: Qt.vector3d(-30, -30, 0)
+    }
+
+    Model
+    {
+        source: "#Cube"
+
+        materials: PrincipledMaterial { baseColor: "tomato" }
+
+        PropertyAnimation on eulerRotation.y
+        {
+            from: 0
+            to  : 360
+
+            duration: 4000
+
+            loops: Animation.Infinite
+
+            running: true
+        }
+    }
+
+    TextBase
+    {
+        id: itemText
+
+        anchors.left  : parent.left
+        anchors.bottom: parent.bottom
+
+        anchors.margins: st.dp24
+
+        text: "Sky " + sk.versionSky + "\nQt  " + sk.versionQt
+
+        color: st.text2_color
+
+        font.family   : "consolas"
+        font.pixelSize: st.dp18
+    }
+
+    TextBase
+    {
+        anchors.right : parent.right
+        anchors.bottom: parent.bottom
+
+        anchors.margins: itemText.anchors.margins
+
+        text: (window.graphicsApiName) ? window.graphicsApiName() : ""
+
+        color: itemText.color
+
+        font: itemText.font
+    }
+}

@@ -332,9 +332,11 @@ OTHER_FILES += environment.sh \
                content/PageScriptDefault.qml \
                run/sky-hello.sky \
                run/sky-player.sky \
+               run/sky-3d.sky \
                run/sky-web-view.sky \
                test/sky-hello.sky \
                test/sky-player.sky \
+               test/sky-3d.sky \
                test/sky-web-view.sky \
                include/generate.sh \
                dist/sky.rc \
