@@ -2,4 +2,8 @@
 
 ## Tools
 
-- [check.sh](check.sh): Check the install validity
+### [check.sh](check.sh): Check the install validity
+
+```
+Usage: check
+```

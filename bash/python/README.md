@@ -6,5 +6,17 @@ Place your python binaries into the SKY_PATH_BIN/python folder or set SKY_PATH_P
 
 ## Tools
 
-- [build.sh](build.sh): Install python in the SKY_PATH_BIN folder
-- [check.sh](check.sh): Check the install validity
+### [build.sh](build.sh): Install python in the SKY_PATH_BIN folder
+
+```
+Usage: build <default | clean>
+
+example:
+    build default
+```
+
+### [check.sh](check.sh): Check the install validity
+
+```
+Usage: check
+```
