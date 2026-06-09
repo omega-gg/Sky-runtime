@@ -2337,6 +2337,7 @@ QString ControllerCore::getPathLocale(const QString & name) const
 
 /* static */ void ControllerCore::registerTypes()
 {
+#ifndef QT_4
 #ifdef SK_DEPLOY
     // SkyBase
     qmlRegisterType(QUrl("qrc:/Style.qml"),                "Sky", 1, 0, "Style");
@@ -2560,6 +2561,7 @@ QString ControllerCore::getPathLocale(const QString & name) const
         qmlRegisterType(QUrl::fromLocalFile(base + path), "Sky", 1, 0, name.C_UTF);
     }
 #endif
+#endif // QT_4
 }
 
 /* static */ QString ControllerCore::qmlExtractFunction(const QString & qml, const QString & match)
