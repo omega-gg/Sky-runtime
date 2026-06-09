@@ -100,6 +100,7 @@ deployMacOS()
           tls \
           multimedia \
           QtQuick \
+          QtQuick3D \
           QtQml \
           QtMultimedia \
           QtWebView \
@@ -311,6 +312,7 @@ if [ $qt != "qt4" ]; then
         mkdir -p $deploy/multimedia
 
         mkdir -p $deploy/QtQml/WorkerScript
+        mkdir -p $deploy/QtQuick3D
 
         if [ $compiler != "mingw" ]; then
 
@@ -389,6 +391,7 @@ if [ $os = "windows" ]; then
             cp "$path/$QtX"Concurrent.dll  $deploy
             cp "$path/$QtX"Core5Compat.dll $deploy
             cp "$path/$QtX"QmlMeta.dll     $deploy
+            cp "$path/$QtX"ShaderTools.dll $deploy
 
             if [ $compiler != "mingw" ]; then
 
@@ -428,6 +431,7 @@ if [ $os = "windows" ]; then
         if [ $qt = "qt6" ]; then
 
             copyQml QtQml/WorkerScript dll
+            copyQml QtQuick3D          dll
 
             if [ $compiler != "mingw" ]; then
 
@@ -477,6 +481,7 @@ elif [ $1 = "macOS" ]; then
             cp "$path"/QtCore5Compat.dylib $deploy
             cp "$path"/QtQmlMeta.dylib     $deploy
             cp "$path"/QtPositioning.dylib $deploy
+            cp "$path"/QtShaderTools.dylib $deploy
             cp "$path"/QtWeb*.dylib        $deploy
         fi
 
@@ -514,6 +519,7 @@ elif [ $1 = "macOS" ]; then
         if [ $qt = "qt6" ]; then
 
             copyQml QtQml/WorkerScript dylib
+            copyQml QtQuick3D          dylib
 
             copyQml QtWebView    dylib
             copyQml QtWebEngine  dylib
@@ -594,6 +600,7 @@ elif [ $1 = "linux" ]; then
             cp "$path/lib$QtX"Core5Compat.so.$qx $deploy
             cp "$path/lib$QtX"QmlMeta.so.$qx     $deploy
             cp "$path/lib$QtX"Positioning.so.$qx $deploy
+            cp "$path/lib$QtX"ShaderTools.so.$qx $deploy
             cp "$path/lib$QtX"Web*.so.$qx        $deploy
         fi
 
@@ -634,6 +641,7 @@ elif [ $1 = "linux" ]; then
         if [ $qt = "qt6" ]; then
 
             copyQml QtQml/WorkerScript so
+            copyQml QtQuick3D          so
 
             copyQml QtWebView    so
             copyQml QtWebEngine  so

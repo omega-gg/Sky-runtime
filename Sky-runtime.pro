@@ -25,7 +25,7 @@ contains(QT_MAJOR_VERSION, 4) {
 
     android:QT += androidextras
 } else {
-    QT += opengl quick network xml svg multimedia core5compat quickcontrols2
+    QT += opengl quick network xml svg multimedia core5compat quickcontrols2 quick3d
 
     !win32-g++:QT += webview
 
