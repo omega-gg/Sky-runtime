@@ -72,10 +72,12 @@ esac
 # Check
 #--------------------------------------------------------------------------------------------------
 
-case `uname` in
-MINGW*) os="windows";;
-*)      os="other";;
-esac
+if [ ! -d "$bin" ]; then
+
+    echo "Python $version is not installed"
+
+    exit 1
+fi
 
 cd "$bin"
 
