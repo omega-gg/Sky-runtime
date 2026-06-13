@@ -32,11 +32,35 @@ copyFolder()
 
         folder="${file#$1/}"
 
-        folder="$2/$(dirname "$folder")"
+        if [ "$folder" = "${folder%/*}" ]; then
+
+            folder="$2/."
+        else
+            folder="$2/${folder%/*}"
+        fi
 
         mkdir -p "$folder"
 
-        output="$folder/$(basename "$file")"
+        output="$folder/${file##*/}"
+
+        cp "$file" "$output"
+
+        if [ "$4" != "" ]; then
+
+            chmod "$4" "$output"
+        fi
+    done
+}
+
+copyFolderLite()
+{
+    mkdir -p "$2"
+
+    $find "$1" -maxdepth 1 -type f -iname "$3" | while read -r file; do
+
+        name="${file##*/}"
+
+        output="$2/$name"
 
         cp "$file" "$output"
 
@@ -80,9 +104,9 @@ getPath()
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
-if [ $# != 2 -a $# != 3 ] || [ $# = 3 -a "$3" != "all" ]; then
+if [ $# != 2 -a $# != 3 ] || [ $# = 3 -a "$3" != "src" -a "$3" != "all" ]; then
 
-    echo "Usage: deploy <folder> <name> [all]"
+    echo "Usage: deploy <folder> <name> [src | all]"
     echo ""
     echo "example:"
     echo "    deploy path/to/turbopixel turbopixel"
@@ -116,6 +140,13 @@ locale="$skz/locale/$2"
 
 doc="$skz/doc/$2"
 
+if [ "$3" = "src" -o "$3" = "all" ]; then
+
+    copy="src"
+else
+    copy="default"
+fi
+
 #--------------------------------------------------------------------------------------------------
 # Create folder
 #--------------------------------------------------------------------------------------------------
@@ -123,7 +154,11 @@ doc="$skz/doc/$2"
 echo "DEPLOYING $2"
 
 mkdir -p "$run"
-mkdir -p "$src"
+
+if [ $copy = "src" ]; then
+
+    mkdir -p "$src"
+fi
 
 if [ "$3" = "all" ]; then
 
@@ -136,18 +171,20 @@ fi
 # Deploy
 #--------------------------------------------------------------------------------------------------
 
-copyFolder "$input/run" "$run" "*.sky" "+x"
-copyFolder "$input/src" "$src" "*.qml" "+x"
+copyFolderLite "$input/run" "$run" "*.sky" "+x"
 
-cp -f "$input/src/qmldir" "$src"
+if [ $copy = "src" ]; then
+
+    copyFolder "$input/src" "$src" "*.qml" "+x"
+
+    cp -f "$input/src/qmldir" "$src"
+fi
 
 if [ "$3" = "all" ]; then
 
     copyFolder "$input/bash"   "$bash"   "*.sh"  "+x"
     copyFolder "$input/locale" "$locale" "*.qm"
     copyFolder "$input"        "$doc"    "*.md"
-
-    cp -f "$input"/*.md "$doc"
 fi
 
 #--------------------------------------------------------------------------------------------------
@@ -157,7 +194,11 @@ fi
 # NOTE: Convert Windows CRLF line endings to Unix LF.
 
 $find "$run" -type f \( -iname "$2*.sky" \) -exec perl -i -pe 's/\r//g' {} +
-$find "$src" -type f \( -iname "*.qml"   \) -exec perl -i -pe 's/\r//g' {} +
+
+if [ $copy = "src" ]; then
+
+    $find "$src" -type f \( -iname "*.qml" \) -exec perl -i -pe 's/\r//g' {} +
+fi
 
 if [ "$3" = "all" ]; then
 
@@ -168,15 +209,22 @@ fi
 # Clean
 #--------------------------------------------------------------------------------------------------
 
-set +e
+if [ $copy = "src" ]; then
 
-rmdir "$src" 2>/dev/null
+    set +e
+
+    rmdir "$src" 2>/dev/null
+
+    set -e
+fi
 
 if [ "$3" = "all" ]; then
+
+    set +e
 
     rmdir "$bash"   2>/dev/null
     rmdir "$locale" 2>/dev/null
     rmdir "$doc"    2>/dev/null
-fi
 
-set -e
+    set -e
+fi
