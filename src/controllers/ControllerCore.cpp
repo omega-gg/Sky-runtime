@@ -947,7 +947,11 @@ ControllerCore::ControllerCore() : WController()
 
 /* Q_INVOKABLE */ void ControllerCore::reloadScript(int index)
 {
-    if (_script) _script->reload(index);
+    if (_script == NULL) return;
+
+    updateDefines();
+
+    _script->reload(index, _defines);
 }
 
 /* Q_INVOKABLE */ QVariantList ControllerCore::installArchive(const QString & fileName,

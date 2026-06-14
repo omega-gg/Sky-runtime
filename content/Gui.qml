@@ -193,7 +193,7 @@ Item
 
         if (length == 0) return;
 
-        core.bashSkip();
+        core.bashClear();
 
         core.clearWatchers();
 

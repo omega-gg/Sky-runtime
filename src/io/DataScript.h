@@ -61,7 +61,7 @@ public: // Interface
     Q_INVOKABLE void append (struct DataScriptItem & item);
     Q_INVOKABLE void prepend(struct DataScriptItem & item);
 
-    Q_INVOKABLE void reload(int index);
+    Q_INVOKABLE void reload(int index, const QStringList & defines);
 
     Q_INVOKABLE void clear();
 

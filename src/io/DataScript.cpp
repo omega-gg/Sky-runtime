@@ -49,13 +49,13 @@
     emit countChanged();
 }
 
-/* Q_INVOKABLE */ void DataScript::reload(int index)
+/* Q_INVOKABLE */ void DataScript::reload(int index, const QStringList & defines)
 {
     if (index < 0 || index >= count()) return;
 
     DataScriptItem & item = _items[index];
 
-    item.data = WControllerFile::readAll(item.fileName);
+    item.data = WControllerFile::generateQml(item.fileName, defines);
 }
 
 /* Q_INVOKABLE */ void DataScript::clear()
