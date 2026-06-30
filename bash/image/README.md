@@ -1,4 +1,4 @@
-﻿# [Bash](../README.md) Image tools
+# [Bash](../README.md) Image tools
 
 ## Configuration
 

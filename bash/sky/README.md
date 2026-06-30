@@ -1,4 +1,4 @@
-﻿# [Sky](../README.md) Sky tools
+# [Sky](../README.md) Sky tools
 
 ## Configuration
 

@@ -1,4 +1,4 @@
-﻿# [Bash](../README.md) Python tools
+# [Bash](../README.md) Python tools
 
 ## Configuration
 

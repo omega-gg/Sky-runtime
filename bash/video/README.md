@@ -1,4 +1,4 @@
-﻿# [Bash](../README.md) Video tools
+# [Bash](../README.md) Video tools
 
 ## Configuration
 

@@ -1,4 +1,4 @@
-﻿# [Bash](../README.md) FFmpeg tools
+# [Bash](../README.md) FFmpeg tools
 
 ## Configuration
 

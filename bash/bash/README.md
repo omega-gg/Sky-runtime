@@ -1,4 +1,4 @@
-﻿# [Bash](../README.md) Bash tools
+# [Bash](../README.md) Bash tools
 
 ## Tools
 
