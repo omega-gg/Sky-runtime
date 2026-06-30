@@ -1,4 +1,4 @@
-# [Bash](../README.md) Python tools
+﻿# [Bash](../README.md) Python tools
 
 ## Configuration
 
@@ -6,7 +6,7 @@ Place your python binaries into the SKY_PATH_BIN/python folder or set SKY_PATH_P
 
 ## Tools
 
-### [build.sh](build.sh): Install python in the SKY_PATH_BIN folder
+### [build.sh](build.sh) - Install python in the SKY_PATH_BIN folder
 
 ```
 Usage: build <default | clean>
@@ -15,7 +15,7 @@ example:
     build default
 ```
 
-### [check.sh](check.sh): Check the install validity
+### [check.sh](check.sh) - Check the install validity
 
 ```
 Usage: check
