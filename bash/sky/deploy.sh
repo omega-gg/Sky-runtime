@@ -171,8 +171,6 @@ fi
 # Deploy
 #--------------------------------------------------------------------------------------------------
 
-copyFolderLite "$input/run" "$run" "*.sky" "+x"
-
 if [ $copy = "src" ]; then
 
     copyFolder "$input/src" "$src" "*.qml" "+x"
@@ -186,6 +184,9 @@ if [ "$3" = "all" ]; then
     copyFolder "$input/locale" "$locale" "*.qm"
     copyFolder "$input"        "$doc"    "*.md"
 fi
+
+# NOTE: Copy .sky(s) at the end so we trigger the reload in Sky-runtime after copying everything.
+copyFolderLite "$input/run" "$run" "*.sky" "+x"
 
 #--------------------------------------------------------------------------------------------------
 # Clean files
