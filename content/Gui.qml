@@ -199,8 +199,6 @@ Item
 
         core.clearWatchers();
 
-        core.clearComponentCache();
-
         var index = length - 1;
 
         core.reloadScript(index);
