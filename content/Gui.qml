@@ -214,9 +214,12 @@ Item
             if (object.onRefresh) object.onRefresh();
         }
 
-        reloadScript(index);
-
-        pFocus();
+//#QT_4
+        reloadScriptFull(index);
+//#ELSE
+        // NOTE: callLater is required for clearComponentCache to be properly applied.
+        Qt.callLater(reloadScriptFull, index);
+//#END
     }
 
     function reload()
@@ -226,7 +229,13 @@ Item
         if (source == "") return;
 
         run("");
+
+//#QT_4
         run(source);
+//#ELSE
+        // NOTE: callLater is required for clearComponentCache to be properly applied.
+        Qt.callLater(run, source);
+//#END
     }
 
     function unload() { run("") }
@@ -308,6 +317,15 @@ Item
 
         if (object.onRefresh) object.onRefresh(parent);
         if (object.onRun)     object.onRun    (parent);
+    }
+
+    function reloadScriptFull(index)
+    {
+        core.clearComponentCache();
+
+        reloadScript(index);
+
+        pFocus();
     }
 
     function loadObject(parent, index)
