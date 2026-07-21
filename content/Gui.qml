@@ -116,7 +116,9 @@ Item
             }
         }
 
-        core.bashSkip();
+        core.bashClear();
+
+        core.clearComponentCache();
 
         objects = new Array;
 
@@ -196,6 +198,8 @@ Item
         core.bashClear();
 
         core.clearWatchers();
+
+        core.clearComponentCache();
 
         var index = length - 1;
 
