@@ -132,42 +132,39 @@ installMacOS()
 
 generateQml()
 {
-   if [ $qt = "qt4" ]; then
+    if [ $qt = "qt4" ]; then
 
-       defines="QT_4 QT_OLD"
+        defines="QT_4 QT_OLD"
 
-   elif [ $qt = "qt5" ]; then
+    elif [ $qt = "qt5" ]; then
 
-      defines="QT_5 QT_OLD QT_NEW"
-   else
-      defines="QT_6 QT_NEW"
-   fi
+        defines="QT_5 QT_OLD QT_NEW"
+    else
+        defines="QT_6 QT_NEW"
+    fi
 
-   if [ $os = "windows" ]; then
+    if [ $os = "windows" ]; then
 
-       defines="$defines DESKTOP WINDOWS WINDOW_NATIVE"
+        defines="$defines DESKTOP WINDOWS WINDOW_NATIVE"
 
-   elif [ $1 = "macOS" ]; then
+    elif [ $1 = "macOS" ]; then
 
-       defines="$defines DESKTOP MAC"
+        defines="$defines DESKTOP MAC"
 
-   elif [ $1 = "iOS" ]; then
+    elif [ $1 = "iOS" ]; then
 
-       defines="$defines MOBILE IOS NO_TORRENT"
+        defines="$defines MOBILE IOS NO_TORRENT"
 
-   elif [ $1 = "linux" ]; then
+    elif [ $1 = "linux" ]; then
 
-       defines="$defines DESKTOP LINUX"
-   else
-       defines="$defines MOBILE ANDROID"
-   fi
+        defines="$defines DESKTOP LINUX"
+    else
+        defines="$defines MOBILE ANDROID"
+    fi
 
-   if [ "$2" = "deploy" ]; then
+    defines="$defines DEPLOY"
 
-       defines="$defines DEPLOY"
-   fi
-
-   "$Sky"/deploy/qmlGenerator "$1" "$1" "$defines"
+    "$Sky"/deploy/qmlGenerator "$2" "$2" "$defines"
 }
 
 clone()
@@ -733,6 +730,21 @@ echo "-------------"
 echo ""
 
 #--------------------------------------------------------------------------------------------------
+# tools
+#--------------------------------------------------------------------------------------------------
+
+echo "COPYING tools"
+
+if [ $os = "windows" ]; then
+
+    cp "$path"/qmlGenerator.exe deploy
+
+elif [ $os != "mobile" ]; then
+
+    cp "$path"/qmlGenerator deploy
+fi
+
+#--------------------------------------------------------------------------------------------------
 # sky
 #--------------------------------------------------------------------------------------------------
 
@@ -830,7 +842,7 @@ if [ $os != "mobile" ]; then
 
     copyFolder "$run" "$path" "*.sky" "+x"
 
-    generateQml "$path"
+    generateQml $1 "$path"
     echo ""
 
     echo "COPYING bash"

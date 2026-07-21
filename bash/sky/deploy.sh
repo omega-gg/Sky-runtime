@@ -23,6 +23,13 @@ set -e
 #==================================================================================================
 
 #--------------------------------------------------------------------------------------------------
+# Settings
+#--------------------------------------------------------------------------------------------------
+# environment
+
+qt="qt6"
+
+#--------------------------------------------------------------------------------------------------
 # Functions
 #--------------------------------------------------------------------------------------------------
 
@@ -71,6 +78,43 @@ copyFolderLite()
     done
 }
 
+generateQml()
+{
+    if [ $qt = "qt4" ]; then
+
+        defines="QT_4 QT_OLD"
+
+    elif [ $qt = "qt5" ]; then
+
+        defines="QT_5 QT_OLD QT_NEW"
+    else
+        defines="QT_6 QT_NEW"
+    fi
+
+    if [ $1 = "win32" -o $1 = "win64" ]; then
+
+        defines="$defines DESKTOP WINDOWS WINDOW_NATIVE"
+
+    elif [ $1 = "macOS" ]; then
+
+        defines="$defines DESKTOP MAC"
+
+    elif [ $1 = "iOS" ]; then
+
+        defines="$defines MOBILE IOS NO_TORRENT"
+
+    elif [ $1 = "linux" ]; then
+
+        defines="$defines DESKTOP LINUX"
+    else
+        defines="$defines MOBILE ANDROID"
+    fi
+
+    defines="$defines DEPLOY"
+
+    "$SKY_PATH_RUNTIME"/qmlGenerator "$2" "$2" "$defines"
+}
+
 getSky()
 {
     if [ -z "$SKY_PATH_BIN" ]; then
@@ -104,12 +148,18 @@ getPath()
 # Syntax
 #--------------------------------------------------------------------------------------------------
 
-if [ $# != 2 -a $# != 3 ] || [ $# = 3 -a "$3" != "src" -a "$3" != "all" ]; then
+if [ $# != 3 -a $# != 4 ] \
+   || \
+   [ $1 != "win32" -a $1 != "win64" -a $1 != "macOS" -a $1 != "iOS" -a $1 != "linux" -a \
+     $1 != "android" ] \
+   || \
+   [ $# = 4 -a "$4" != "src" -a "$4" != "all" ]; then
 
-    echo "Usage: deploy <folder> <name> [src | all]"
+    echo "Usage: deploy <win32 | win64 | macOS | iOS | linux | android>"
+    echo "              <folder> <name> [src | all]"
     echo ""
     echo "example:"
-    echo "    deploy path/to/turbopixel turbopixel"
+    echo "    deploy linux path/to/turbopixel turbopixel"
 
     exit 1
 fi
@@ -118,9 +168,16 @@ fi
 # Configuration
 #--------------------------------------------------------------------------------------------------
 
+if [ -z "$SKY_PATH_RUNTIME" ]; then
+
+    echo "SKY_PATH_RUNTIME is not set" >&2
+
+    exit 1
+fi
+
 skz="$(getSky)/../skz"
 
-input=$(getPath "$1")
+input=$(getPath "$2")
 
 # NOTE windows: Ensure we use the proper find.
 if [ -x /usr/bin/find ]; then
@@ -132,15 +189,15 @@ fi
 
 run="$skz/run"
 
-src="$skz/src/$2"
+src="$skz/src/$3"
 
-bash="$skz/bash/$2"
+bash="$skz/bash/$3"
 
-locale="$skz/locale/$2"
+locale="$skz/locale/$3"
 
-doc="$skz/doc/$2"
+doc="$skz/doc/$3"
 
-if [ "$3" = "src" -o "$3" = "all" ]; then
+if [ "$4" = "src" -o "$4" = "all" ]; then
 
     copy="src"
 else
@@ -151,16 +208,18 @@ fi
 # Create folder
 #--------------------------------------------------------------------------------------------------
 
-echo "DEPLOYING $2"
+echo "DEPLOYING $3"
 
-mkdir -p "$run"
+temp="$run/temp"
+
+mkdir -p "$temp"
 
 if [ $copy = "src" ]; then
 
     mkdir -p "$src"
 fi
 
-if [ "$3" = "all" ]; then
+if [ "$4" = "all" ]; then
 
     mkdir -p "$bash"
     mkdir -p "$locale"
@@ -176,9 +235,11 @@ if [ $copy = "src" ]; then
     copyFolder "$input/src" "$src" "*.qml" "+x"
 
     cp -f "$input/src/qmldir" "$src"
+
+    generateQml $1 "$src"
 fi
 
-if [ "$3" = "all" ]; then
+if [ "$4" = "all" ]; then
 
     copyFolder "$input/bash"   "$bash"   "*.sh"  "+x"
     copyFolder "$input/locale" "$locale" "*.qm"
@@ -186,7 +247,13 @@ if [ "$3" = "all" ]; then
 fi
 
 # NOTE: Copy .sky(s) at the end so we trigger the reload in Sky-runtime after copying everything.
-copyFolderLite "$input/run" "$run" "*.sky" "+x"
+copyFolderLite "$input/run" "$temp" "*.sky" "+x"
+
+generateQml $1 "$temp"
+
+mv "$temp"/* "$run"
+
+rm -rf "$temp"
 
 #--------------------------------------------------------------------------------------------------
 # Clean files
@@ -194,14 +261,14 @@ copyFolderLite "$input/run" "$run" "*.sky" "+x"
 
 # NOTE: Convert Windows CRLF line endings to Unix LF.
 
-$find "$run" -type f \( -iname "$2*.sky" \) -exec perl -i -pe 's/\r//g' {} +
+$find "$run" -type f \( -iname "$3*.sky" \) -exec perl -i -pe 's/\r//g' {} +
 
 if [ $copy = "src" ]; then
 
     $find "$src" -type f \( -iname "*.qml" \) -exec perl -i -pe 's/\r//g' {} +
 fi
 
-if [ "$3" = "all" ]; then
+if [ "$4" = "all" ]; then
 
     $find "$bash" -type f \( -iname "*.sh" \) -exec perl -i -pe 's/\r//g' {} +
 fi
@@ -219,7 +286,7 @@ if [ $copy = "src" ]; then
     set -e
 fi
 
-if [ "$3" = "all" ]; then
+if [ "$4" = "all" ]; then
 
     set +e
 
