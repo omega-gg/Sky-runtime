@@ -319,6 +319,9 @@ private: // Functions
 
     void loadFolder(QList<QFileInfo> & entries, const QString & path);
 
+    void generateQml(QStringList & scripts, const QString & path,
+                                            const QString & folder, QString & log) const;
+
     void renderItem(QPainter          & painter,
                     WDeclarativeImage * item,
                     const QRectF      & rect, qreal x, qreal y, qreal scale) const;

@@ -1008,14 +1008,19 @@ ControllerCore::ControllerCore() : WController()
 
     QStringList list = WUnzipper::getFileNames(filePath);
 
-    //QStringList scripts;
+    QStringList run;
+    QStringList src;
 
     foreach (const QString & string, list)
     {
-        /*if (string.startsWith("run/"))
+        if (string.startsWith("run/") && string.endsWith("sky", Qt::CaseInsensitive))
         {
-            scripts.append(string);
-        }*/
+            run.append(string);
+        }
+        else if (string.startsWith("src/") && string.endsWith("qml", Qt::CaseInsensitive))
+        {
+            src.append(string);
+        }
 
         log.append(QString(tr("cp %1\n")).arg(string));
     }
@@ -1030,16 +1035,10 @@ ControllerCore::ControllerCore() : WController()
 //    defines.append("DEPLOY");
 //#endif
 
-    //scripts.removeOne("run/");
+    updateDefines();
 
-    /*foreach (const QString & script, scripts)
-    {
-        QString fileName = path + script;
-
-        log.append(QString(tr("generate %1\n")).arg(script));
-
-        WControllerFile::writeQml(fileName, fileName, defines);
-    }*/
+    generateQml(run, path, "run", log);
+    generateQml(src, path, "src", log);
 
     // NOTE: Apply executable permissions on bash scripts.
     WControllerFile::setPermissionFiles(path + "bash",
@@ -2201,6 +2200,34 @@ void ControllerCore::loadFolder(QList<QFileInfo> & entries, const QString & path
         if (info.suffix().toLower() != "sky") continue;
 
         entries.append(info);
+    }
+}
+
+void ControllerCore::generateQml(QStringList   & scripts,
+                                 const QString & path,
+                                 const QString & folder, QString & log) const
+{
+    if (scripts.isEmpty()) return;
+
+    QString base = path + folder + "/base";
+
+    WControllerFile::deleteFolder(base);
+    WControllerFile::createFolder(base);
+
+    foreach (const QString & script, scripts)
+    {
+        QString fileName = path + script;
+
+        QString baseName = base + '/' + WControllerFile::fileName(script);
+
+        WControllerFile::renameFile(fileName, baseName);
+
+        log.append(QString(tr("generate %1\n")).arg(script));
+
+        if (WControllerFile::writeQml(baseName, fileName, _defines) == false)
+        {
+            qWarning("ControllerCore::generateQml: Failed to generate %s", fileName.C_STR);
+        }
     }
 }
 
