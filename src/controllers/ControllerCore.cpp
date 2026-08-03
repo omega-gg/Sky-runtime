@@ -1459,15 +1459,20 @@ ControllerCore::ControllerCore() : WController()
 //-------------------------------------------------------------------------------------------------
 // Storage
 
-/* Q_INVOKABLE */ bool ControllerCore::createStorage(const QString & name, bool asynchronous)
+/* Q_INVOKABLE */ bool ControllerCore::createPath(const QString & path, bool asynchronous)
 {
     if (asynchronous)
     {
-        wControllerFile->startCreatePath(getPathStorage(name));
+        wControllerFile->startCreatePath(path);
 
         return true;
     }
-    else return WControllerFile::createPath(getPathStorage(name));
+    else return WControllerFile::createPath(path);
+}
+
+/* Q_INVOKABLE */ bool ControllerCore::createStorage(const QString & name, bool asynchronous)
+{
+    return createPath(getPathStorage(name), asynchronous);
 }
 
 /* Q_INVOKABLE */ QVariantMap ControllerCore::loadJson(const QString & name,
@@ -2041,7 +2046,7 @@ ControllerCore::ControllerCore() : WController()
 
 void ControllerCore::help() const
 {
-    createPath(_path);
+    createFolder(_path);
 
     // FIXME Qt4.8.7: qInstallMsgHandler breaks QML 'Keys' events.
 #ifndef QT_4
@@ -2071,11 +2076,11 @@ void ControllerCore::applyPaths()
     qputenv("SKY_PATH_BIN", _pathBin.toUtf8());
 }
 
-bool ControllerCore::createPath(const QString & path) const
+bool ControllerCore::createFolder(const QString & path) const
 {
     if (QFile::exists(path) || QDir().mkpath(path)) return true;
 
-    qWarning("ControllerCore::createPath: Failed to create folder %s.", path.C_STR);
+    qWarning("ControllerCore::createFolder: Failed to create folder %s.", path.C_STR);
 
     return false;
 }

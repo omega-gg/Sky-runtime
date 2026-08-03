@@ -222,6 +222,7 @@ public: // Interface
 
     // Storage
 
+    Q_INVOKABLE bool createPath   (const QString & path, bool asynchronous = true);
     Q_INVOKABLE bool createStorage(const QString & name, bool asynchronous = true);
 
     Q_INVOKABLE QVariantMap loadJson(const QString & name,
@@ -309,7 +310,7 @@ private: // Functions
 
     void applyPaths();
 
-    bool createPath(const QString & path) const;
+    bool createFolder(const QString & path) const;
 
     void createIndex();
 
