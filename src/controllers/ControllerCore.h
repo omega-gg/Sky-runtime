@@ -287,6 +287,8 @@ public: // Static functions
 
     Q_INVOKABLE static bool renameFile(const QString & oldPath, const QString & newPath);
 
+    Q_INVOKABLE static bool writeFile(const QString & fileName, const QString & text);
+
     Q_INVOKABLE static QString getOpenFileName(const QString & title,
                                                const QString & filter = QString(),
                                                const QString & path   = QString());
@@ -294,6 +296,10 @@ public: // Static functions
     Q_INVOKABLE static QString getOpenFileUrl(const QString & title,
                                               const QString & filter = QString(),
                                               const QString & path   = QString());
+
+    Q_INVOKABLE static QString getSaveFileName(const QString & title,
+                                               const QString & filter = QString(),
+                                               const QString & path   = QString());
 
     Q_INVOKABLE static QString getExistingDirectory(const QString & title,
                                                     const QString & path = QString());

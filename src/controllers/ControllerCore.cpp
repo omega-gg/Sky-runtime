@@ -1917,6 +1917,12 @@ ControllerCore::ControllerCore() : WController()
     return WControllerFile::renameFile(oldPath, newPath);
 }
 
+/* Q_INVOKABLE static */ bool ControllerCore::writeFile(const QString & fileName,
+                                                        const QString & text)
+{
+    return WControllerFile::writeFile(fileName, text.toUtf8());
+}
+
 /* Q_INVOKABLE static */ QString ControllerCore::getOpenFileName(const QString & title,
                                                                  const QString & filter,
                                                                  const QString & path)
@@ -1944,6 +1950,23 @@ ControllerCore::ControllerCore() : WController()
     if (output.isEmpty()) return QString();
 
     return WControllerFile::fileUrl(output);
+#else
+    Q_UNUSED(title); Q_UNUSED(filter); Q_UNUSED(path);
+
+    return QString();
+#endif
+}
+
+/* Q_INVOKABLE static */ QString ControllerCore::getSaveFileName(const QString & title,
+                                                                 const QString & filter,
+                                                                 const QString & path)
+{
+#ifdef SK_DESKTOP
+    QString output = QFileDialog::getSaveFileName(NULL, title, path, filter);
+
+    if (output.isEmpty()) return QString();
+
+    return output;
 #else
     Q_UNUSED(title); Q_UNUSED(filter); Q_UNUSED(path);
 
