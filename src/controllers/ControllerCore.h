@@ -188,7 +188,7 @@ public: // Interface
                                const QColor       & background   = Qt::transparent,
                                bool                 asynchronous = true);
 
-    Q_INVOKABLE bool saveImage(const QString & name,
+    Q_INVOKABLE bool saveImage(const QString & fileName,
                                const QImage  & image, bool asynchronous = true);
 
     Q_INVOKABLE bool saveShot(const QString & name,

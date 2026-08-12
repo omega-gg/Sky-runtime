@@ -1307,20 +1307,18 @@ ControllerCore::ControllerCore() : WController()
     return saveImage(fileName, result, asynchronous);
 }
 
-/* Q_INVOKABLE */ bool ControllerCore::saveImage(const QString & name,
+/* Q_INVOKABLE */ bool ControllerCore::saveImage(const QString & fileName,
                                                  const QImage  & image, bool asynchronous)
 {
-    QString fileName = QDir::fromNativeSeparators(name);
-
     QString path = QFileInfo(fileName).absolutePath();
 
     if (QFile::exists(path) || QDir().mkpath(path))
     {
-        QString extension = WControllerNetwork::extractUrlExtension(name);
+        QString extension = WControllerNetwork::extractUrlExtension(fileName);
 
-        QString path = wControllerFile->pathPictures() + '/' + this->name() + "/temp_"
-                       +
-                       sk->currentDateString() + "." + extension;
+        // NOTE: This is useful when we want to replace an existing image without corrupting the
+        //       old during the image save.
+        path.append("/temp_" + sk->currentDateString() + "." + extension);
 
         if (asynchronous)
         {
@@ -1346,11 +1344,9 @@ ControllerCore::ControllerCore() : WController()
         }
         else if (image.save(path, "png"))
         {
-            QFile::remove(name);
+            QFile::remove(fileName);
 
-            WControllerFile::renameFile(path, name);
-
-            return true;
+            return WControllerFile::renameFile(path, fileName);
         }
         else return false;
     }
