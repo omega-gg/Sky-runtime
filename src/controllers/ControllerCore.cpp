@@ -1415,6 +1415,11 @@ ControllerCore::ControllerCore() : WController()
     _watcher.addFile(fileName);
 }
 
+/* Q_INVOKABLE */ void ControllerCore::removeWatcher(const QString & fileName)
+{
+    _watcher.removePath(fileName);
+}
+
 /* Q_INVOKABLE */ void ControllerCore::clearWatchers()
 {
     _watcher.clearFiles();

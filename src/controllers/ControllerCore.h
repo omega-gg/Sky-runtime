@@ -211,7 +211,8 @@ public: // Interface
 
     Q_INVOKABLE void clearScripts();
 
-    Q_INVOKABLE void addWatcher(const QString & fileName);
+    Q_INVOKABLE void addWatcher   (const QString & fileName);
+    Q_INVOKABLE void removeWatcher(const QString & fileName);
 
     Q_INVOKABLE void clearWatchers();
 
