@@ -117,7 +117,8 @@ Item
 
     function check()
     {
-        if (isReady == false) return;
+        // NOTE: A check can start over a running one because onCheck stops the previous script.
+        if (script == "" || isProcessing) return;
 
         stateCheck = ControllerCore.StateCheck;
 
