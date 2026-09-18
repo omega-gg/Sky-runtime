@@ -2608,7 +2608,11 @@ QString ControllerCore::getPathLocale(const QString & name) const
     qmlRegisterType(QUrl("qrc:/PageScript.qml"),        "Sky", 1, 0, "PageScript");
     qmlRegisterType(QUrl("qrc:/PageScriptDefault.qml"), "Sky", 1, 0, "PageScriptDefault");
 #else
+#ifdef Q_OS_MACOS
+    QDir dir(QDir::currentPath() + "/../../..");
+#else
     QDir dir(QDir::currentPath());
+#endif
 
     QStringList list = dir.entryList(QStringList() << "*.qml", QDir::Files);
 
