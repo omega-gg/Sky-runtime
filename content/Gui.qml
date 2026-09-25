@@ -814,10 +814,12 @@ Item
 
     function pTakeShot() // Desktop
     {
-        var width = 1024;
+        var width = 1920;
 
         window.width  = width;
         window.height = width * 0.5625; // 16:9 ratio
+
+        st.ratio = 1.4;
 
         sk.wait(1000);
 
@@ -826,6 +828,8 @@ Item
         window.saveShot(path);
 
         window.compressShot(path);
+
+        window.close();
     }
 //#END
 
