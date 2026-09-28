@@ -376,6 +376,8 @@ signals:
 
     void bashFinished(const QVariantMap & map);
 
+    void imageSaved(bool ok, const QString & fileName);
+
     void recentsChanged();
 
     void sourceChanged();

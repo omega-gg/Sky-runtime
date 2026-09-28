@@ -2722,13 +2722,18 @@ void ControllerCore::onComplete(bool ok)
 
     ControllerCoreFile file = _replies.take(reply);
 
-    if (ok == false) return;
-
     QString target = file.target;
 
-    QFile::remove(target);
+    if (ok)
+    {
+        QFile::remove(target);
 
-    WControllerFile::renameFile(file.origin, target);
+        ok = WControllerFile::renameFile(file.origin, target);
+    }
+
+    // NOTE: An asynchronous save is done once the file sits under its name, so whoever reads it
+    //       is told here rather than when the save started.
+    emit imageSaved(ok, target);
 }
 
 void ControllerCore::onRecent(const QStringList & recents)
