@@ -110,7 +110,11 @@ generateQml()
         defines="$defines MOBILE ANDROID"
     fi
 
-    defines="$defines DEPLOY"
+    # NOTE: SKY_DEV keeps the qml #!DEPLOY blocks.
+    if [ "$SKY_DEV" != "1" ]; then
+
+        defines="$defines DEPLOY"
+    fi
 
     "$SKY_PATH_RUNTIME"/qmlGenerator "$2" "$2" "$defines"
 }
