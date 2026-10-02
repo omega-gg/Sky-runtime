@@ -23,8 +23,6 @@
 import QtQuick 1.0
 import Sky     1.0
 
-// NOTE: A cursor at the size of the interface, which the native one does not follow, for a
-//       showcase. Each shape it draws has its native cursor blanked while it is on.
 CursorSvg
 {
     //---------------------------------------------------------------------------------------------
@@ -39,8 +37,7 @@ CursorSvg
 
     width: st.dp64
 
-    // NOTE: A shape we have no image for keeps its native cursor, like the edges of the window.
-    visible: (active && source != "" && sk.cursorVisible && window.isEntered)
+    visible: (sk.cursorVisible && window.isEntered && active)
 
     source: (active) ? pGetSource(window.mouseCursor) : ""
 

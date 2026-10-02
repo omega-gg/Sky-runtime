@@ -1049,7 +1049,6 @@ Item
     }
 
 //#!DEPLOY
-    // NOTE: Last, so it draws over the application and the console.
     ItemCursor { id: itemCursor }
 //#END
 }
