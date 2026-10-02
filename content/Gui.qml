@@ -754,6 +754,12 @@ Item
 
             pTakeShot();
         }
+        else if (event.key == Qt.Key_Asterisk)
+        {
+            event.accepted = true;
+
+            itemCursor.toggle();
+        }
 //#END
     }
 
@@ -1041,4 +1047,9 @@ Item
             }
         }
     }
+
+//#!DEPLOY
+    // NOTE: Last, so it draws over the application and the console.
+    ItemCursor { id: itemCursor }
+//#END
 }

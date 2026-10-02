@@ -328,6 +328,7 @@ OTHER_FILES += environment.sh \
                content/PageWelcome.qml \
                content/PageBrowse.qml \
                content/PageConsole.qml \
+               content/ItemCursor.qml \
                content/PageScript.qml \
                content/PageScriptDefault.qml \
                run/sky-hello.sky \
