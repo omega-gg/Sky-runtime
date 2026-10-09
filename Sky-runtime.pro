@@ -27,8 +27,6 @@ contains(QT_MAJOR_VERSION, 4) {
 } else {
     QT += opengl quick network xml svg multimedia core5compat quickcontrols2 quick3d
 
-    !win32-g++:QT += webview
-
     #----------------------------------------------------------------------------------------------
     # NOTE Qt6.3: We need the widgets for QApplication and QFileDialog(s).
 
@@ -37,8 +35,6 @@ contains(QT_MAJOR_VERSION, 4) {
     macx:QT += widgets
 
     unix:!android:QT += widgets
-
-    !win32-g++:!ios:!android:QT += webenginequick
 }
 
 greaterThan(QT_MAJOR_VERSION, 4) {
@@ -321,7 +317,6 @@ OTHER_FILES += environment.sh \
                content/TextEditCopy.qml \
                content/RowRecent.qml \
                content/RowCheck.qml \
-               content/WebViewer.qml \
                content/PanelAssociate.qml \
                content/PanelInstall.qml \
                content/PageDefault.qml \
@@ -334,11 +329,9 @@ OTHER_FILES += environment.sh \
                run/sky-hello.sky \
                run/sky-player.sky \
                run/sky-3d.sky \
-               run/sky-web-view.sky \
                test/sky-hello.sky \
                test/sky-player.sky \
                test/sky-3d.sky \
-               test/sky-web-view.sky \
                include/generate.sh \
                dist/sky.rc \
                dist/script/start.sh \

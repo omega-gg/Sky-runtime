@@ -83,11 +83,6 @@ deployMacOS()
 {
     installMacOS "$target" ""
 
-    if [ -f "QtWebEngineProcess" ]; then
-
-        installMacOS "QtWebEngineProcess" ""
-    fi
-
     for file in *.dylib; do
 
         [ -e "$file" ] || continue
@@ -103,9 +98,6 @@ deployMacOS()
           QtQuick3D \
           QtQml \
           QtMultimedia \
-          QtWebView \
-          QtWebEngine \
-          QtWebChannel \
     -name "*.dylib" | while read -r plugin; do
 
         case "$plugin" in
@@ -310,15 +302,6 @@ if [ $qt != "qt4" ]; then
 
         mkdir -p $deploy/QtQml/WorkerScript
         mkdir -p $deploy/QtQuick3D
-
-        if [ $compiler != "mingw" ]; then
-
-            mkdir -p $deploy/QtWebView
-            mkdir -p $deploy/QtWebEngine
-            mkdir -p $deploy/QtWebChannel
-
-            cp -r "$path"/webview $deploy
-        fi
     fi
 fi
 
@@ -355,14 +338,6 @@ if [ $os = "windows" ]; then
             cp "$path"/libEGL.dll    deploy
             cp "$path"/libGLESv2.dll deploy
         else
-            if [ $compiler != "mingw" ]; then
-
-                # NOTE: Required for the webview.
-                cp -r "$path"/resources $deploy
-
-                cp "$path"/QtWebEngineProcess* $deploy
-            fi
-
             # FFmpeg
             cp "$path"/av*.dll deploy
             cp "$path"/sw*.dll deploy
@@ -389,12 +364,6 @@ if [ $os = "windows" ]; then
             cp "$path/$QtX"Core5Compat.dll $deploy
             cp "$path/$QtX"QmlMeta.dll     $deploy
             cp "$path/$QtX"ShaderTools.dll $deploy
-
-            if [ $compiler != "mingw" ]; then
-
-                cp "$path/$QtX"Positioning.dll $deploy
-                cp "$path/$QtX"Web*.dll        $deploy
-            fi
         fi
 
         if [ -f "$path/$QtX"QmlModels.dll ]; then
@@ -429,28 +398,12 @@ if [ $os = "windows" ]; then
 
             copyQml QtQml/WorkerScript dll
             copyQml QtQuick3D          dll
-
-            if [ $compiler != "mingw" ]; then
-
-                copyQml QtWebView    dll
-                copyQml QtWebEngine  dll
-                copyQml QtWebChannel dll
-            fi
         fi
     fi
 
 elif [ $1 = "macOS" ]; then
 
     if [ $qt != "qt4" ]; then
-
-        if [ $qt = "qt6" ]; then
-
-            # NOTE: Required for the webview.
-            # NOTE: resources have to be copied in the binary folder to be resolved.
-            cp -r "$path"/resources/* $deploy
-
-            cp "$path"/QtWebEngineProcess* $deploy
-        fi
 
         # FIXME Qt 5.14 macOS: We have to copy qt.conf to avoid a segfault.
         cp "$path"/qt.conf $deploy
@@ -477,9 +430,7 @@ elif [ $1 = "macOS" ]; then
             cp "$path"/QtConcurrent.dylib  $deploy
             cp "$path"/QtCore5Compat.dylib $deploy
             cp "$path"/QtQmlMeta.dylib     $deploy
-            cp "$path"/QtPositioning.dylib $deploy
             cp "$path"/QtShaderTools.dylib $deploy
-            cp "$path"/QtWeb*.dylib        $deploy
         fi
 
         if [ -f "$path"/QtQmlModels.dylib ]; then
@@ -517,10 +468,6 @@ elif [ $1 = "macOS" ]; then
 
             copyQml QtQml/WorkerScript dylib
             copyQml QtQuick3D          dylib
-
-            copyQml QtWebView    dylib
-            copyQml QtWebEngine  dylib
-            copyQml QtWebChannel dylib
         fi
     fi
 
@@ -547,15 +494,6 @@ elif [ $1 = "linux" ]; then
         cp "$path"/imageformats/libqsvg.so  $deploy/imageformats
         cp "$path"/imageformats/libqjpeg.so $deploy/imageformats
     else
-        if [ $qt = "qt6" ]; then
-
-            # NOTE: Required for the webview.
-            # NOTE: resources have to be copied in the binary folder to be resolved.
-            cp -r "$path"/resources/* $deploy
-
-            cp "$path"/QtWebEngineProcess* $deploy
-        fi
-
         mkdir $deploy/xcbglintegrations
 
         #cp "$path"/libz.so.* $deploy
@@ -596,9 +534,7 @@ elif [ $1 = "linux" ]; then
             cp "$path/lib$QtX"Concurrent.so.$qx  $deploy
             cp "$path/lib$QtX"Core5Compat.so.$qx $deploy
             cp "$path/lib$QtX"QmlMeta.so.$qx     $deploy
-            cp "$path/lib$QtX"Positioning.so.$qx $deploy
             cp "$path/lib$QtX"ShaderTools.so.$qx $deploy
-            cp "$path/lib$QtX"Web*.so.$qx        $deploy
         fi
 
         if [ -f "$path/lib$QtX"QmlModels.so.$qx ]; then
@@ -639,10 +575,6 @@ elif [ $1 = "linux" ]; then
 
             copyQml QtQml/WorkerScript so
             copyQml QtQuick3D          so
-
-            copyQml QtWebView    so
-            copyQml QtWebEngine  so
-            copyQml QtWebChannel so
         fi
     fi
 fi

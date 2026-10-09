@@ -23,9 +23,6 @@
 // Qt includes
 // NOTE: Required for Q_OS_LINUX.
 #include <QtGlobal>
-#if SK_DESKTOP && QT_6 && defined(__MINGW32__) == false
-#include <QtWebEngineQuick>
-#endif
 
 // Sk includes
 #include <WApplication>
@@ -39,11 +36,6 @@
 
 int main(int argc, char * argv[])
 {
-#if SK_DESKTOP && QT_6 && defined(__MINGW32__) == false
-    // NOTE: This has to be done before creating QGuiApplication.
-    QtWebEngineQuick::initialize();
-#endif
-
 #ifdef QT_4
     QApplication * application = WApplication::create(argc, argv, Sk::Multiple);
 #else

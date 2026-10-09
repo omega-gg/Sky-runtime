@@ -679,11 +679,6 @@ ControllerCore::ControllerCore() : WController()
     }
     else applyPaths();
 
-#ifdef Q_OS_MACOS
-    // FIXME Qt6/macOS: This seems required for the WebView to load when deploying the application.
-    qputenv("QTWEBENGINE_DISABLE_SANDBOX", "1");
-#endif
-
     //---------------------------------------------------------------------------------------------
     // DataLocal
 
@@ -2598,7 +2593,6 @@ QString ControllerCore::getPathLocale(const QString & name) const
     qmlRegisterType(QUrl("qrc:/TextEditCopy.qml"),      "Sky", 1, 0, "TextEditCopy");
     qmlRegisterType(QUrl("qrc:/RowRecent.qml"),         "Sky", 1, 0, "RowRecent");
     qmlRegisterType(QUrl("qrc:/RowCheck.qml"),          "Sky", 1, 0, "RowCheck");
-    qmlRegisterType(QUrl("qrc:/WebViewer.qml"),         "Sky", 1, 0, "WebViewer");
     qmlRegisterType(QUrl("qrc:/PanelAssociate.qml"),    "Sky", 1, 0, "PanelAssociate");
     qmlRegisterType(QUrl("qrc:/PanelInstall.qml"),      "Sky", 1, 0, "PanelInstall");
     qmlRegisterType(QUrl("qrc:/PageDefault.qml"),       "Sky", 1, 0, "PageDefault");
