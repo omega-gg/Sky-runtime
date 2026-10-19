@@ -1,5 +1,6 @@
 <a href="https://omega.gg/Sky"><img src="dist/pictures/Sky-runtime.png" alt="Sky-runtime" width="512px"></a>
 ---
+[![Discord](https://img.shields.io/discord/705770212485496852)](https://omega.gg/discord)
 [![azure](https://dev.azure.com/bunjee/Sky-runtime/_apis/build/status/omega-gg.Sky-runtime)](https://dev.azure.com/bunjee/Sky-runtime/_build)
 [![appveyor](https://ci.appveyor.com/api/projects/status/yto6yi6aepvvl805?svg=true)](https://ci.appveyor.com/project/3unjee/Sky-runtime)
 [![GPLv3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl.html)
