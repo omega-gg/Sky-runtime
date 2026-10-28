@@ -223,6 +223,12 @@ if [ $engine = "ffmpeg" ]; then
         echo "COPYING FFmpeg"
 
         cp -P "$deploy"/libsk-* bin
+
+    elif [ $1 = "android" ]; then
+
+        echo "COPYING FFmpeg"
+
+        copyAndroid "$deploy"/ffmpeg
     fi
 fi
 
