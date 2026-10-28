@@ -79,8 +79,12 @@
 #include <WAbstractTab>
 #include <WTabsTrack>
 #include <WTabTrack>
+#ifdef SK_VLC
 #include <WVlcEngine>
 #include <WBackendVlc>
+#else
+#include <WBackendFfmpeg>
+#endif
 #include <WBackendSubtitle>
 #include <WBackendIndex>
 #include <WBackendTorrent>
@@ -588,7 +592,11 @@ ControllerCore::ControllerCore() : WController()
     qmlRegisterUncreatableType<WBackendIndex>("Sky", 1,0, "BackendIndex",
                                               "BackendIndex is not creatable");
 
+#ifdef SK_VLC
     qmlRegisterType<WBackendVlc>     ("Sky", 1,0, "BackendVlc");
+#else
+    qmlRegisterType<WBackendFfmpeg>  ("Sky", 1,0, "BackendFfmpeg");
+#endif
     qmlRegisterType<WBackendSubtitle>("Sky", 1,0, "BackendSubtitle");
 
 #ifndef QT_4
@@ -708,7 +716,7 @@ ControllerCore::ControllerCore() : WController()
 
     W_CREATE_CONTROLLER(WControllerPlaylist);
 
-#ifdef Q_OS_WIN
+#if defined(SK_VLC) && defined(Q_OS_WIN)
     QStringList options = WVlcEngine::getOptions();
 
     // NOTE VLC Windows: This is useful if we want a specific volume for each player.
