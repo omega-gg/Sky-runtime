@@ -1187,22 +1187,37 @@ ControllerCore::ControllerCore() : WController()
 
         Qt::AspectRatioMode ratio = WDeclarativeImage::ratioFromFill(item->fillMode());
 
-        image = image.scaled(qRound(sizeX),
-                             qRound(sizeY), ratio, Qt::SmoothTransformation);
+        QSizeF target = QSizeF(image.size()).scaled(sizeX, sizeY, ratio);
 
-        qreal positionX = (x + item->x() * scale) * upscale + (sizeX - image.width ()) / 2;
-        qreal positionY = (y + item->y() * scale) * upscale + (sizeY - image.height()) / 2;
+        // NOTE: A layer at its size or larger is scaled to whole pixels, and the painter draws it
+        //       on whole pixels too, except a rotated one, which it places exactly. A reduction is
+        //       drawn on the exact rectangle it covers, since whole pixels would move it by up to
+        //       half a pixel of the output. A source over twice the target is scaled to twice it
+        //       first, so that draw stays sharp.
+        if (target.width() >= image.width())
+        {
+            image = image.scaled(qRound(sizeX),
+                                 qRound(sizeY), ratio, Qt::SmoothTransformation);
+
+            target = image.size();
+        }
+        else if (target.width() * 2 < image.width())
+        {
+            image = image.scaled((target * 2).toSize(), Qt::IgnoreAspectRatio,
+                                 Qt::SmoothTransformation);
+        }
+
+        qreal positionX = (x + item->x() * scale) * upscale + (sizeX - target.width ()) / 2;
+        qreal positionY = (y + item->y() * scale) * upscale + (sizeY - target.height()) / 2;
 
 #ifdef QT_OLD
-        painter.drawImage(QPoint(qRound(positionX),
-                                 qRound(positionY)), image);
+        painter.drawImage(QRectF(QPointF(positionX, positionY), target), image);
 #else
         qreal rotation = item->rotation();
 
         if (rotation)
         {
-            painter.translate(qRound(positionX),
-                              qRound(positionY));
+            painter.translate(positionX, positionY);
 
 #ifdef QT_5
             int rotateX = qRound(sizeX * 0.5);
@@ -1220,10 +1235,9 @@ ControllerCore::ControllerCore() : WController()
 
             painter.translate(-rotateX, -rotateY);
 
-            painter.drawImage(QPoint(0, 0), image);
+            painter.drawImage(QRectF(QPointF(0, 0), target), image);
         }
-        else painter.drawImage(QPoint(qRound(positionX),
-                                      qRound(positionY)), image);
+        else painter.drawImage(QRectF(QPointF(positionX, positionY), target), image);
 
         painter.restore();
 #endif
