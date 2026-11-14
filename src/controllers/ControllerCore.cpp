@@ -1327,45 +1327,26 @@ ControllerCore::ControllerCore() : WController()
 /* Q_INVOKABLE */ bool ControllerCore::saveImage(const QString & fileName,
                                                  const QImage  & image, bool asynchronous)
 {
-    QString path = QFileInfo(fileName).absolutePath();
+    QString path = getFileNameTemp(fileName);
 
-    if (QFile::exists(path) || QDir().mkpath(path))
+    if (path.isEmpty()) return false;
+
+    if (asynchronous)
     {
-        QString extension = WControllerNetwork::extractUrlExtension(fileName);
-
-        // NOTE: This is useful when we want to replace an existing image without corrupting the
-        //       old during the image save.
-        path.append("/temp_" + sk->currentDateString() + "." + extension);
-
-        if (asynchronous)
+        if (_replies.count() > 10)
         {
-            if (_replies.count() > 10)
-            {
-                qWarning("ControllerCore::saveImage: Too many asynchronous requests");
+            qWarning("ControllerCore::saveImage: Too many asynchronous requests");
 
-                return false;
-            }
-
-            ControllerCoreFile file;
-
-            file.origin = path;
-            file.target = fileName;
-
-            WControllerFileReply * reply = wControllerView->startWriteImage(path, image);
-
-            _replies.insert(reply, file);
-
-            connect(reply, SIGNAL(complete(bool)), this, SLOT(onComplete(bool)));
-
-            return true;
+            return false;
         }
-        else if (image.save(path, "png"))
-        {
-            QFile::remove(fileName);
 
-            return WControllerFile::renameFile(path, fileName);
-        }
-        else return false;
+        addReply(wControllerView->startWriteImage(path, image), path, fileName);
+
+        return true;
+    }
+    else if (image.save(path, "png"))
+    {
+        return replaceFile(path, fileName);
     }
     else return false;
 }
@@ -1395,6 +1376,26 @@ ControllerCore::ControllerCore() : WController()
     if (player == NULL) return false;
 
     return saveImage(name, player->getFrame(), asynchronous);
+}
+
+/* Q_INVOKABLE */ bool ControllerCore::copyImage(const QString & fileName,
+                                                 const QString & newName, bool asynchronous)
+{
+    QString path = getFileNameTemp(newName);
+
+    if (path.isEmpty()) return false;
+
+    if (asynchronous)
+    {
+        addReply(wControllerFile->startCopyFile(fileName, path), path, newName);
+
+        return true;
+    }
+    else if (WControllerFile::copyFile(fileName, path))
+    {
+        return replaceFile(path, newName);
+    }
+    else return false;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -2378,6 +2379,19 @@ void ControllerCore::updateDefines()
 #endif
 }
 
+void ControllerCore::addReply(WControllerFileReply * reply, const QString & origin,
+                                                            const QString & target)
+{
+    ControllerCoreFile file;
+
+    file.origin = origin;
+    file.target = target;
+
+    _replies.insert(reply, file);
+
+    connect(reply, SIGNAL(complete(bool)), this, SLOT(onComplete(bool)));
+}
+
 //-------------------------------------------------------------------------------------------------
 
 QString ControllerCore::getPathRun(const QString & name) const
@@ -2407,8 +2421,30 @@ QString ControllerCore::getPathLocale(const QString & name) const
 #endif
 }
 
+// NOTE: This is useful when we want to replace an existing image without corrupting the old
+//       during the image save.
+QString ControllerCore::getFileNameTemp(const QString & fileName) const
+{
+    QString path = QFileInfo(fileName).absolutePath();
+
+    if (QFile::exists(path) == false && QDir().mkpath(path) == false) return QString();
+
+    QString extension = WControllerNetwork::extractUrlExtension(fileName);
+
+    return path + "/temp_" + sk->currentDateString() + "." + extension;
+}
+
 //-------------------------------------------------------------------------------------------------
 // Private static functions
+//-------------------------------------------------------------------------------------------------
+
+/* static */ bool ControllerCore::replaceFile(const QString & origin, const QString & target)
+{
+    QFile::remove(target);
+
+    return WControllerFile::renameFile(origin, target);
+}
+
 //-------------------------------------------------------------------------------------------------
 // QML
 
@@ -2740,12 +2776,7 @@ void ControllerCore::onComplete(bool ok)
 
     QString target = file.target;
 
-    if (ok)
-    {
-        QFile::remove(target);
-
-        ok = WControllerFile::renameFile(file.origin, target);
-    }
+    if (ok) ok = replaceFile(file.origin, target);
 
     // NOTE: An asynchronous save is done once the file sits under its name, so whoever reads it
     //       is told here rather than when the save started.

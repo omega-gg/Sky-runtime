@@ -204,6 +204,9 @@ public: // Interface
     Q_INVOKABLE bool saveFrame(const QString      & name,
                                WDeclarativePlayer * player, bool asynchronous = true);
 
+    Q_INVOKABLE bool copyImage(const QString & fileName,
+                               const QString & newName, bool asynchronous = true);
+
     Q_INVOKABLE void updateBackends() const;
     Q_INVOKABLE void resetBackends () const;
 
@@ -340,11 +343,17 @@ private: // Functions
 
     void updateDefines();
 
+    void addReply(WControllerFileReply * reply, const QString & origin, const QString & target);
+
     QString getPathRun   (const QString & name) const;
     QString getPathBash  (const QString & name) const;
     QString getPathLocale(const QString & name) const;
 
+    QString getFileNameTemp(const QString & fileName) const;
+
 private: // Static functions
+    static bool replaceFile(const QString & origin, const QString & target);
+
     // QML
 
     static void registerTypes();
