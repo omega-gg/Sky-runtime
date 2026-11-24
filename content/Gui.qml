@@ -272,7 +272,7 @@ Item
     {
         core.bashClear();
 
-        if (sk.cli && code) core.code = code;
+        if (code != undefined) core.code = code;
 
         window.close();
     }
