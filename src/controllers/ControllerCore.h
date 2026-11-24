@@ -95,7 +95,11 @@ class ControllerCore : public WController
 
 #ifdef SK_DESKTOP
     Q_PROPERTY(QString argument READ argument CONSTANT)
+
+    Q_PROPERTY(QStringList arguments READ arguments CONSTANT)
 #endif
+
+    Q_PROPERTY(int code READ code WRITE setCode)
 
     Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
 
@@ -400,7 +404,12 @@ signals:
 public: // Properties
 #ifdef SK_DESKTOP
     QString argument() const;
+
+    QStringList arguments() const;
 #endif
+
+    int  code() const;
+    void setCode(int code);
 
     QString source() const;
     void    setSource(const QString & source);
@@ -424,6 +433,10 @@ public: // Properties
 
 private: // Variables
     QString _argument;
+
+    QStringList _arguments;
+
+    int _code;
 
     QString _source;
 

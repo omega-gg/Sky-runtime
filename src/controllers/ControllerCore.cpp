@@ -387,6 +387,8 @@ public: // Variables
 
 ControllerCore::ControllerCore() : WController()
 {
+    _code = 0;
+
     _online = NULL;
     _script = NULL;
 
@@ -643,24 +645,25 @@ ControllerCore::ControllerCore() : WController()
     {
         QString string = argv[i];
 
-        if (string.startsWith("--"))
+        QString name = string.toLower();
+
+        if (name == "--cli")
         {
-            QString name = string;
-
-            name = name.remove(0, 2).toLower();
-
-            if (name == "cli")
-            {
-                sk->setCli(true);
-            }
-            else if (name == "help")
-            {
-                help();
-
-                return 0;
-            }
+            sk->setCli(true);
         }
-        else _argument = string;
+        else if (name == "--help")
+        {
+            help();
+
+            return 0;
+        }
+        // NOTE: The first argument that is not an option is the script, and the ones after it
+        //       are its own, options included: it reads them as 'arguments'.
+        else if (_argument.isEmpty() == false)
+        {
+            _arguments.append(string);
+        }
+        else if (string.startsWith("--") == false) _argument = string;
     }
 
     return -1;
@@ -2102,7 +2105,9 @@ void ControllerCore::help() const
           "Where <script> is a .sky script or a .skz archive.\n"
           "\n"
           "--help    Print the help\n"
-          "--cli     Run the script headless");
+          "--cli     Run the script headless\n"
+          "\n"
+          "The options after <script> are its own, it reads them as core.arguments.");
 }
 
 void ControllerCore::applyPaths()
@@ -2829,7 +2834,22 @@ QString ControllerCore::argument() const
     return _argument;
 }
 
+QStringList ControllerCore::arguments() const
+{
+    return _arguments;
+}
+
 #endif
+
+int ControllerCore::code() const
+{
+    return _code;
+}
+
+void ControllerCore::setCode(int code)
+{
+    _code = code;
+}
 
 QString ControllerCore::source() const
 {

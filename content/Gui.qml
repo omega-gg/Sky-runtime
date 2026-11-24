@@ -37,6 +37,8 @@ Item
 
     /* read */ property bool ui: false
 
+    property bool hold: false
+
     property bool expandConsole: false
 
     property int topMargin: st.dp40
@@ -148,8 +150,9 @@ Item
 
         pFocus();
 
-        // NOTE: When it's a command line interface run we quit right away.
-        if (sk.cli) exit();
+        // NOTE: When it's a command line interface run we quit right away, unless the script
+        //       holds it.
+        if (sk.cli && hold == false) exit();
     }
 
     function bash(fileName)
@@ -265,9 +268,11 @@ Item
         }
     }
 
-    function exit()
+    function exit(code)
     {
         core.bashClear();
+
+        if (sk.cli && code) core.code = code;
 
         window.close();
     }

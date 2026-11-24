@@ -35,6 +35,8 @@ applications. These underlying scripts can be run independently from the UI.
     --help    Print the help
     --cli     Run the script headless
 
+    The options after <script> are its own, it reads them as core.arguments.
+
 ## Technology
 
 Sky-runtime is built in C++ with [Sky kit](https://omega.gg/Sky/sources).<br>

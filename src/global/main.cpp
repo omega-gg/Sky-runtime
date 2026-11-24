@@ -69,6 +69,8 @@ int main(int argc, char * argv[])
 
     int result = application->exec();
 
+    if (result == 0) result = core->code();
+
     delete application;
 
     return result;
