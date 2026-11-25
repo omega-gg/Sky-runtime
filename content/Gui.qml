@@ -666,6 +666,8 @@ Item
             if (object.onRefreshCheck && object.onRefreshCheck(fileNames)) return;
         }
 
+        console.debug("REFRESH " + fileNames.join(", "));
+
         refresh();
     }
 
