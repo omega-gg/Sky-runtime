@@ -842,6 +842,7 @@ ControllerCore::ControllerCore() : WController()
     wControllerDeclarative->setContextProperty("controllerNetwork",  wControllerNetwork);
     wControllerDeclarative->setContextProperty("controllerView",     wControllerView);
     wControllerDeclarative->setContextProperty("controllerPlaylist", wControllerPlaylist);
+    wControllerDeclarative->setContextProperty("controllerMedia",    wControllerMedia);
 
     wControllerDeclarative->setContextProperty("online", _online);
 
